@@ -1,5 +1,5 @@
-import axios from 'axios'
 import localForage from 'localforage'
+import axios from 'axios'
 import {isEmpty} from 'lodash'
 
 export const state = () => ({
@@ -18,13 +18,17 @@ export const mutations = {
 
 export const actions = {
 	setToken({commit}, {token}) {
-		console.log('setToken')
-		return localForage.setItem('authtoken', token).then(() => {
-			axios.defaults.headers.common['Authorization'] = "Bearer " + token;
-			commit('setToken', token)
-		}).catch((err) => {
-			console.log(err)
-		})
+		console.log('setToken action')
+		if (isEmpty(token)) {
+			return Promise.reject('TOKEN TO BE SET IS NULL')
+		} else {
+			return localForage.setItem('authtoken', token).then(() => {
+				axios.defaults.headers.common['Authorization'] = "Bearer " + token;
+				commit('setToken', token)
+			}).catch((err) => {
+				console.log(err)
+			})
+		}
 	},
 	clearToken({commit}) {
 		console.log('clearToken')

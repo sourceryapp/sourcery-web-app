@@ -7,7 +7,7 @@
 			<input type="password" name="password" v-model="password" placeholder="Password"
 			       class="border-2 block mt-2">
 			<span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
-			<input type="submit" class="block bg-blue p-2 text-white mt-2 hover:bg-blue-dark">
+			<input type="submit" class="block bg-blue p-2 text-white mt-2 hover:bg-blue-dark mb-8">
 			<nuxt-link :to="{name: 'register'}" class="bg-blue p-2 text-white mt-2 hover:bg-blue-dark ">Register</nuxt-link>
 		</form>
 	</main>
