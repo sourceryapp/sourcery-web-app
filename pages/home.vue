@@ -2,27 +2,31 @@
 	<div>
 		<h1>Home</h1>
 		<h2>Requests</h2>
+		<nuxt-link :to="{name:'request-create'}">Create Request</nuxt-link>
 		<h3>Pending</h3>
-		<ul v-if="user">
-			<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'pending'">
-				<nuxt-link :to="{name: 'request-id', params: {id: request.id}}">{{request.label}}</nuxt-link>
-			</li>
-			<li v-else><em>No Pending Requests</em></li>
-		</ul>
+		<div v-if="user !== null">
+			<ul>
+				<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'pending'">
+					<nuxt-link :to="{name: 'request-id', params: {id: request.id}}">{{request.label}}</nuxt-link>
+				</li>
+			</ul>
+		</div>
 		<h3>Picked Up</h3>
-		<ul v-if="user">
-			<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'picked_up'">
-				{{request.label}}
-			</li>
-			<li v-else><em>No Picked Up Requests</em></li>
-		</ul>
+		<div v-if="user !== null">
+			<ul>
+				<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'picked_up'">
+					<nuxt-link :to="{name: 'request-id', params: {id: request.id}}">{{request.label}}</nuxt-link>
+				</li>
+			</ul>
+		</div>
 		<h3>Completed</h3>
-		<ul v-if="user">
-			<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'completed'">
-				{{request.label}}
-			</li>
-			<li v-else><em>No Completed Requests</em></li>
-		</ul>
+		<div v-if="user !== null">
+			<ul>
+				<li v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'completed'">
+					<nuxt-link :to="{name: 'request-id', params: {id: request.id}}">{{request.label}}</nuxt-link>
+				</li>
+			</ul>
+		</div>
 		<h3>History</h3>
 		<ul>
 			<li v-for="(request, index) in user.client_requests" :key="index">

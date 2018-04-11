@@ -2,7 +2,7 @@
 	<div>
 		<h1>Register - Client</h1>
 		<a href="#" @click.prevent="openStripe" v-if="!paymentAccepted">Enter Credit Card Information</a>
-		<nuxt-link :to="{name: 'testing'}" v-else>Finish</nuxt-link>
+		<nuxt-link :to="{name: 'home'}" v-else>Finish</nuxt-link>
 		<p class="text-red">{{error}}</p>
 		<script src="https://checkout.stripe.com/checkout.js"></script>
 	</div>
@@ -30,12 +30,11 @@
 						locale: 'auto',
 						panelLabel: 'Add Credit Card',
 						token: function (token) {
+							console.log(token.id)
 							this.error = ''
 
 							axios.post(process.env.API_URL + 'auth/register/client', {
-								data: {
-									token: token.id
-								}
+								token: token.id
 							}).then((res) => {
 								_this.paymentAccepted = true
 								console.log(res)

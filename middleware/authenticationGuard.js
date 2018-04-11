@@ -5,7 +5,9 @@ export default ({store, redirect, route}) => {
 		console.log('middleware')
 		return axios.patch(process.env.API_URL + 'auth/refresh').then((res) => {
 			store.dispatch('auth/setToken', {token: res.data.data.token}).then(() => {
-				return Promise.resolve()
+				store.dispatch('auth/setUser').then(() => {
+					return Promise.resolve()
+				})
 			})
 		}).then(() => {
 			const user = store.state.auth.user
@@ -25,6 +27,10 @@ export default ({store, redirect, route}) => {
 					redirect('/register/client')
 				}
 			}
+		}).catch(err => {
+			store.dispatch('auth/logout').then(() => {
+				redirect({name: 'login'})
+			})
 		})
 	}
 }

@@ -2,8 +2,24 @@
 	<div>
 		<div class="info" v-if="request !== null">
 			<h1>{{request.label}}</h1>
-			<p>{{request.due_date }}</p>
-			<p>Status: {{request.status}}</p>
+			<p>Citation:</p>
+			<pre class="mb-2">{{request.citation}}</pre>
+			<p>Repository: <strong>{{request.repository}}</strong></p>
+			<p>Status: <strong>{{request.status}}</strong></p>
+			<div v-if="request.status === 'picked_up' || request.status === 'completed'">
+				<p>Vendor: <strong>{{request.vendor.name}}</strong></p>
+			</div>
+			<div v-if="request.status === 'completed'">
+				<h1>Images: </h1>
+				<ul>
+					<li v-for="(image, index) in request.attachments" :key="index">
+						<img :src="image.file" :alt="`Request Result ${index}`">
+					</li>
+				</ul>
+			</div>
+			<p>
+				<nuxt-link :to="{name: 'home'}">Back</nuxt-link>
+			</p>
 		</div>
 	</div>
 </template>

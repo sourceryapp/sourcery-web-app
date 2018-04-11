@@ -61,5 +61,11 @@ export const actions = {
 				commit('setUser', null)
 			})
 		})
+	},
+	setUser({commit}) {
+		return axios.get(process.env.API_URL + 'auth/user').then((res) => {
+			commit('setUser', res.data.data)
+			return Promise.resolve()
+		})
 	}
 }
