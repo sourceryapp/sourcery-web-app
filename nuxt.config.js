@@ -1,3 +1,5 @@
+const path = require('path');
+
 let env = require('./config/development.js')
 
 if (process.env.NODE_ENV === 'production') {
@@ -22,7 +24,7 @@ module.exports = {
 	/*
 	** CSS File
 	*/
-	css: ['~/assets/styles/app.css'],
+	css: [],
 	/*
 	** Env File
 	*/
@@ -31,8 +33,12 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
-		{src: '~/plugins/localforage.js', ssr: false},
+		{
+			src: '~/plugins/localforage.js',
+			ssr: false
+		},
 		'~/plugins/authenticationGuard.js',
+		'~/plugins/vuetify.js'
 	],
 	/*
 	** Customize the progress bar color
@@ -63,16 +69,16 @@ module.exports = {
 			}
 		},
 		/*
-		** Configure Postcss to use Tailwind
+		** Configure Postcss
 		*/
 		postcss: [
-			require('tailwindcss')('./tailwind.js'),
 			require('autoprefixer'),
 		],
 
 		vendor: [
 			'axios',
 			'localforage',
+			'vuetify'
 		]
 	}
 }

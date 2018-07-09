@@ -1,29 +1,33 @@
 {
-	"name": "nuxt-tailwind-starter",
-	"version": "1.0.0",
-	"description": "A starter template with nuxt.js and tailwind.css",
-	"author": "Tim Morris <timthewebguy@gmail.com>",
-	"private": true,
-	"scripts": {
-		"dev": "nuxt",
-		"build": "nuxt build",
-		"start": "nuxt start",
-		"generate": "nuxt generate",
-		"lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-		"precommit": "npm run lint"
-	},
-	"dependencies": {
-		"axios": "^0.18.0",
-		"localforage": "^1.6.0",
-		"nuxt": "^1.0.0",
-		"tailwindcss": "^0.4.3"
-	},
-	"devDependencies": {
-		"babel-eslint": "^8.2.1",
-		"babel-plugin-transform-object-rest-spread": "^6.26.0",
-		"eslint": "^4.15.0",
-		"eslint-friendly-formatter": "^3.0.0",
-		"eslint-loader": "^1.7.1",
-		"eslint-plugin-vue": "^4.0.0"
-	}
+  "name": "tube-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "dev": "nuxt",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "localforage": "^1.6.0",
+    "nuxt": "^1.0.0",
+    "vuetify": "^1.0.19"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.0.0-beta.49",
+    "babel-eslint": "^8.2.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "eslint": "^4.15.0",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^1.7.1",
+    "eslint-plugin-vue": "^4.0.0"
+  },
+  "description": "Frontend application for Tube",
+  "author": "Tim Morris <timthewebguy@gmail.com>",
+  "contributors": [
+    "Brian Daley <brian@uconn.edu>"
+  ]
 }

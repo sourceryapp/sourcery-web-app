@@ -21,8 +21,8 @@
 		layout: 'guest',
 		data() {
 			return {
-				email: 'timthewebguy@gmail.com',
-				password: 'password',
+				email: 'brian@uconn.edu',
+				password: 'Research1!',
 				errors: {
 					password: [],
 					email: []
