@@ -18,7 +18,7 @@
 
 	export default {
 		name: "login",
-		layout: 'guest',
+		layout: 'default',
 		data() {
 			return {
 				email: 'brian@uconn.edu',

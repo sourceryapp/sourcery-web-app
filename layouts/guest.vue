@@ -1,17 +1,14 @@
 <template>
-	<container>
-		<nuxt/>
-	</container>
+    <div>
+        Guest view
+        <nuxt/>
+    </div>
 </template>
 
 <script>
-	import * as grid from '~/components/grid'
 
 	export default {
 		name: "guest",
-		components: {
-			...grid,
-		}
 	}
 </script>
 
