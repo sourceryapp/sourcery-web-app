@@ -25,7 +25,8 @@
     "eslint-loader": "^1.7.1",
     "eslint-plugin-vue": "^4.0.0",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2"
+    "stylus-loader": "^3.0.2",
+    "vue-loader": "^13.7.2"
   },
   "description": "Frontend application for Tube",
   "author": "Tim Morris <timthewebguy@gmail.com>",
