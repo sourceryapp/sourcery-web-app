@@ -4,7 +4,7 @@ import {isEmpty} from 'lodash'
 
 export const state = () => ({
 	token: '',
-	user: {}
+	user: false
 })
 
 export const mutations = {

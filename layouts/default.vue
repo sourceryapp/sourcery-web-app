@@ -24,6 +24,7 @@
 				app
 				class="primary"
 				dark
+                v-if="user"
 		>
 			<v-toolbar flat class="transparent">
 				<v-list class="pa-0">
@@ -81,14 +82,14 @@
 		<v-toolbar color="white" light fixed app>
 			<v-layout row wrap justify-space-between>
 				<v-flex text-xs-left>
-					<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+					<v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon>
 				</v-flex>
 				<v-flex text-xs-center>
 					<v-toolbar-title><a href="/#/"><img src="/img/logo.svg" id="logo"></a></v-toolbar-title>
 
 				</v-flex>
 				<v-flex text-xs-right>
-					<v-btn fab dark small color="primary" href="/#/add">
+					<v-btn fab dark small color="primary" href="/request/create" v-if="user">
 						<v-icon dark>add</v-icon>
 					</v-btn>
 				</v-flex>
