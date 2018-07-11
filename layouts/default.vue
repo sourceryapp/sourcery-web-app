@@ -30,10 +30,10 @@
 				<v-list class="pa-0">
 					<v-list-tile avatar>
 						<v-list-tile-avatar>
-							<img src="https://randomuser.me/api/portraits/men/85.jpg">
+							<img v-bind:src="gravatar">
 						</v-list-tile-avatar>
 						<v-list-tile-content>
-							<v-list-tile-title>John Smith</v-list-tile-title>
+							<v-list-tile-title>{{user.name}}</v-list-tile-title>
 						</v-list-tile-content>
 					</v-list-tile>
 				</v-list>
@@ -68,14 +68,23 @@
 					</v-list-tile-content>
 				</v-list-tile>
 
-				<v-list-tile href="/#/about">
-					<v-list-tile-action>
-						<v-icon>settings</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Settings</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
+                <v-list-tile>
+                    <v-list-tile-action>
+                        <v-icon>settings</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Settings</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
+                <v-list-tile @click="logout()">
+                    <v-list-tile-action>
+                        <v-icon>settings</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>Logout</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
 
 			</v-list>
 		</v-navigation-drawer>
@@ -113,6 +122,7 @@
 </template>
 
 <script>
+    import md5 from 'md5'
 
 	export default {
 		components: {
@@ -121,7 +131,10 @@
 		computed: {
 			user() {
 				return this.$store.state.auth.user
-			}
+			},
+            gravatar() {
+                return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + 'd=mp';
+            }
 		},
 		methods: {
 			logout() {
