@@ -1,20 +1,15 @@
 <template>
-	<main role="main">
-		<h1>Tube - Register</h1>
-		<form @submit.prevent="registerSubmit">
-			<input type="text" name="name" v-model="name" placeholder="Name" class="border-2 block mt-2">
-			<span class="text-red" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
-			<input type="email" name="email" v-model="email" placeholder="Email" class="border-2 block mt-2">
-			<span class="text-red" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
-			<input type="password" name="password" v-model="password" placeholder="Password"
-			       class="border-2 block mt-2">
-			<span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
-			<input type="password" name="confirm_password" v-model="confirm_password" placeholder="Confirm Password"
-			       class="border-2 block mt-2">
-			<span class="text-red" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
-			<input type="submit" class="block bg-blue p-2 text-white mt-2 hover:bg-blue-dark" value="Next">
-		</form>
-	</main>
+	<v-form @submit.prevent="registerSubmit">
+		<h1>Register</h1>
+		<v-text-field type="text" name="name" v-model="name" placeholder="Name"></v-text-field>
+		<span class="red--text" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
+		<v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
+		<span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
+		<v-text-field type="password" name="password" v-model="password" placeholder="Password" autocomplete="false" hint="At least 8 characters"></v-text-field>
+		<v-text-field type="password" name="confirm_password" v-model="confirm_password" placeholder="Confirm Password"></v-text-field>
+		<span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
+		<v-btn type="submit" value="Next" color="primary">Next</v-btn>
+	</v-form>
 </template>
 
 <script>
@@ -22,7 +17,6 @@
 
 	export default {
 		name: "register",
-		layout: 'guest',
 		data() {
 			return {
 				name: '',
