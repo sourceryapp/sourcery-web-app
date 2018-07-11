@@ -1,7 +1,6 @@
 <template>
 	<div>
-		<h1>Home</h1>
-		<h2>Requests</h2>
+		<h1>Requests</h1>
 		<nuxt-link :to="{name:'request-create'}">Create Request</nuxt-link>
 		<h3>Pending</h3>
 		<div v-if="user !== null">

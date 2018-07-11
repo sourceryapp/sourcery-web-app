@@ -98,9 +98,12 @@
 
 				</v-flex>
 				<v-flex text-xs-right>
-					<v-btn fab dark small color="primary" href="/request/create" v-if="user">
-						<v-icon dark>add</v-icon>
-					</v-btn>
+                    <v-tooltip bottom>
+                        <v-btn fab dark small color="primary" slot="activator" href="/request/create" v-if="user">
+                            <v-icon dark>add</v-icon>
+                        </v-btn>
+                        <span>New Request</span>
+                    </v-tooltip>
 				</v-flex>
 			</v-layout>
 
