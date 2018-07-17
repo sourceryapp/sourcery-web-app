@@ -26,7 +26,7 @@
 				dark
                 v-if="user"
 		>
-			<v-toolbar flat class="transparent">
+			<v-toolbar  class="transparent">
 				<v-list class="pa-0">
 					<v-list-tile avatar>
 						<v-list-tile-avatar>
@@ -39,18 +39,27 @@
 				</v-list>
 			</v-toolbar>
 			<v-divider></v-divider>
-			<v-list dense>
+			<v-list >
 
-				<v-list-tile href="/#/about">
+				<v-list-tile to="/home" nuxt active-class>
+					<v-list-tile-action>
+						<v-icon>dashboard</v-icon>
+					</v-list-tile-action>
+					<v-list-tile-content>
+						<v-list-tile-title>Dashboard</v-list-tile-title>
+					</v-list-tile-content>
+				</v-list-tile>
+
+				<v-list-tile to="/profile"  nuxt active-class>
 					<v-list-tile-action>
 						<v-icon>contact_mail</v-icon>
 					</v-list-tile-action>
 					<v-list-tile-content>
-						<v-list-tile-title>My Profile</v-list-tile-title>
+						<v-list-tile-title>Profile</v-list-tile-title>
 					</v-list-tile-content>
 				</v-list-tile>
 
-				<v-list-tile href="/#/about">
+				<v-list-tile to="/payment" nuxt active-class>
 					<v-list-tile-action>
 						<v-icon>credit_card</v-icon>
 					</v-list-tile-action>
@@ -59,7 +68,7 @@
 					</v-list-tile-content>
 				</v-list-tile>
 
-				<v-list-tile href="/#/about">
+				<v-list-tile to="/help" nuxt active-class>
 					<v-list-tile-action>
 						<v-icon>help</v-icon>
 					</v-list-tile-action>
@@ -68,7 +77,7 @@
 					</v-list-tile-content>
 				</v-list-tile>
 
-                <v-list-tile>
+                <v-list-tile to="/settings" nuxt active-class>
                     <v-list-tile-action>
                         <v-icon>settings</v-icon>
                     </v-list-tile-action>
@@ -77,14 +86,6 @@
                     </v-list-tile-content>
                 </v-list-tile>
 
-                <v-list-tile @click="logout()">
-                    <v-list-tile-action>
-                        <v-icon>settings</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>Logout</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
 
 			</v-list>
 		</v-navigation-drawer>
@@ -94,12 +95,12 @@
 					<v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon>
 				</v-flex>
 				<v-flex text-xs-center>
-					<v-toolbar-title><a href="/"><img src="/img/logo.svg" id="logo"></a></v-toolbar-title>
+					<v-toolbar-title><nuxt-link to="/home"><img src="/img/logo.svg" id="logo"></nuxt-link></v-toolbar-title>
 
 				</v-flex>
 				<v-flex text-xs-right>
                     <v-tooltip bottom>
-                        <v-btn fab dark small color="primary" slot="activator" href="/request/create" v-if="user">
+                        <v-btn fab dark small color="primary" slot="activator" to="/request/create" v-if="user">
                             <v-icon dark>add</v-icon>
                         </v-btn>
                         <span>New Request</span>
