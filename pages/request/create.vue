@@ -37,34 +37,176 @@
                 Where is your document located?
             </v-stepper-step>
             <v-stepper-content step="1">
-                <v-select
+                <v-autocomplete
+                        v-model="location"
                         :items="items"
-                        v-model="e1"
-                        label="Select"
-                        single-line
-                ></v-select>
+                        label="Type to search"
+                        :clearable="true"
+                        type="text"
+                        value="something"
+                        required
+                        :cache-items="true"
+                        :open-on-click=false
+                        @update:searchInput="storeQuery"
+
+
+                >
+                    <template slot="no-data">
+                        <v-list>
+                            <v-list-tile
+                            >
+                                <v-list-tile-content>
+                                    <v-list-tile-title>Uh oh...</v-list-tile-title>
+                                    <v-list-tile-sub-title>We don't serve this location yet.</v-list-tile-sub-title>
+                                </v-list-tile-content>
+
+
+
+                                <v-list-tile-content>
+                                    <v-btn color="primary" @click.stop="dialog=true">Learn More</v-btn>
+                                </v-list-tile-content>
+                            </v-list-tile>
+                        </v-list>
+                    </template>
+                </v-autocomplete>
+                <template>
+                    <div class="text-xs-center">
+                        <v-dialog
+                                v-model="dialog"
+                                fullscreen
+                        >
+
+                            <v-card>
+                                <v-card-title
+                                        class="headline grey lighten-3"
+                                        primary-title
+
+                                >
+                                    Service Areas
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    <p><strong>Would you like to submit {{ query }} for consideration?</strong></p>
+                                    <v-text-field type="text" :value="query" label="Loation Suggestion"></v-text-field>
+                                </v-card-text>
+
+                                <v-divider></v-divider>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+
+                                    <v-btn
+                                            color="primary"
+
+                                            @click="dialog = false"
+                                    >
+                                        Submit
+                                    </v-btn>
+                                    <v-btn
+                                            color="primary"
+
+                                            @click="dialog = false"
+                                    >
+                                        Close
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </template>
                 <v-btn color="primary" @click.native="e6 = 2">Continue</v-btn>
-                <v-btn flat>Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-step :complete="e6 > 2" step="2">What is the citation for your document?</v-stepper-step>
             <v-stepper-content step="2">
                 <v-textarea
-                        id="testing"
-                        name="input-1"
-                        label="Moar details..."
+                        id="citation"
+                        name="citation"
                         multi-line="true"
+                        auto-grow
+                        placeholder="Example:
+
+Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.2013-070, Box 3, Folder 9. Budge Wilson fonds. Dalhousie University Archives, Halifax, Nova Scotia, Canada."
                 ></v-textarea>
                 <v-btn color="primary" @click.native="e6 = 3">Continue</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn  @click="e6--">Back</v-btn>
+                <v-btn color="orange" style="float:right" left  @click.stop="citationDialog=true">Need Help?</v-btn>
+                <template>
+                    <div class="text-xs-center">
+                        <v-dialog
+                                v-model="citationDialog"
+                                fullscreen
+                        >
+
+                            <v-card>
+                                <v-card-title
+                                        class="headline grey lighten-3"
+                                        primary-title
+
+                                >
+                                    Citations
+                                </v-card-title>
+
+                                <v-card-text>
+                                    <p>Best practices regarding citations...</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                    <ul>
+                                        <li>Collection</li>
+                                        <li>Call Number</li>
+                                        <li>Box/Folder Number</li>
+                                        <li>Microfilm Reel</li>
+                                        <li>Creator</li>
+                                        <li>Title</li>
+                                        <li>Date</li>
+                                        <li>Pages</li>
+                                    </ul>
+                                </v-card-text>
+
+                                <v-divider></v-divider>
+
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                            color="primary"
+
+                                            @click="citationDialog = false"
+                                    >
+                                        Close
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </div>
+                </template>
+
             </v-stepper-content>
             <v-stepper-step :complete="e6 > 3" step="3">Estimated Cost</v-stepper-step>
             <v-stepper-content step="3">
+                <p class="caption">
+                    The cost of your request is partially determined by the number of pages that are delivered to you.
+                    Please indicate the maximum number of pages that you would be willing to pay for.
+                </p>
+
+                    <v-layout>
+                    <v-flex xs6 >
+                        <!--<p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>-->
+                        <v-select
+                                v-model="numPages"
+                                :items="pages"
+                                label="Maximum Pages"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex xs5 offset-xs1>
+                        <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
+                        <h1 class="pt0">$ {{ numPages + 15 }}</h1>
+                    </v-flex>
+                </v-layout>
+
                 <div>
-                    <p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>
-                    <img src="/img/cost.svg" alt="Cost">
+
                 </div>
                 <v-btn color="primary" @click.native="e6 = 4">Accept</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn  @click="e6--">Back</v-btn>
             </v-stepper-content>
             <v-stepper-step step="4">Agree to Terms</v-stepper-step>
             <v-stepper-content step="4">
@@ -75,7 +217,7 @@
                         required
                 ></v-checkbox>
                 <v-btn color="primary" @click.native="e6 = 1">Submit</v-btn>
-                <v-btn flat>Cancel</v-btn>
+                <v-btn  @click="e6--">Back</v-btn>
             </v-stepper-content>
         </v-stepper>
 	</div>
@@ -88,6 +230,9 @@
 		name: "create",
 		data() {
 			return {
+			    query: "",
+			    dialog: false,
+                citationDialog: false,
 				label: '',
 				repository: '',
 				suggestions: [],
@@ -100,6 +245,18 @@
 				},
                 e6: 1,
                 e1: null,
+                location: "",
+                locationCache: null,
+                numPages: 0,
+                pages: [
+                    5,
+                    10,
+                    15,
+                    20,
+                    25,
+                    30,
+                    "Unlimited"
+                ],
                 items: [
                     'Boston University',
                     'Southern New Hampshire University',
@@ -156,6 +313,12 @@
 			}
 		},
 		methods: {
+		    storeQuery(val) {
+		        console.log(typeof val);
+		        if(typeof val == 'string' && val.length>0){
+                    this.query = val;
+                }
+            },
 			updateQuery() {
 				axios.post(process.env.API_URL + 'repositories/search', {
 					data: {
