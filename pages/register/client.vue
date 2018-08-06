@@ -1,10 +1,14 @@
 <template>
 	<div>
-		<h1>Register - Client</h1>
-		<a href="#" @click.prevent="openStripe" v-if="!paymentAccepted">Enter Credit Card Information</a>
+		<h1>Registration</h1>
+		<v-subheader>Payment Information</v-subheader>
+		<v-btn color="primary" @click.prevent="openStripe" v-if="!paymentAccepted">Enter Credit Card Information</v-btn>
 		<nuxt-link :to="{name: 'home'}" v-else>Finish</nuxt-link>
 		<p class="text-red">{{error}}</p>
-		<script src="https://checkout.stripe.com/checkout.js"></script>
+		<script src="https://checkout.stripe.com/checkout.js"
+
+
+		></script>
 	</div>
 </template>
 
@@ -48,7 +52,7 @@
 				}
 
 				this.handler.open({
-					name: 'Demo Site',
+					name: 'Tube',
 					description: '2 widgets',
 				});
 			}
