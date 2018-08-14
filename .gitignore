@@ -12,3 +12,6 @@ dist
 
 # PHP Storm
 /.idea
+
+# Service worker
+sw.*

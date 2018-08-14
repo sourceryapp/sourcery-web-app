@@ -3,7 +3,6 @@ import axios from 'axios'
 import {isEmpty} from 'lodash'
 
 export default (({route, redirect, store}) => {
-	console.log('plugin')
 	localForage.getItem('authtoken').then(token => {
 		console.log('setting token from plugin')
 		return store.dispatch('auth/setToken', {token: token}).then(() => {
