@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "nuxt build --spa",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "dev": "nuxt",
     "start": "nuxt start",

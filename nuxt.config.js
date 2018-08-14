@@ -89,5 +89,6 @@ module.exports = {
             '~/plugins/vuetify.js'
 		],
         extractCSS: true,
+		mode: 'spa'
 	}
 }
