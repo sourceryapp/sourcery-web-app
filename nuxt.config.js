@@ -36,7 +36,7 @@ module.exports = {
 	** CSS File
 	*/
 	css: [
-	    '@/assets/styles/app.styl'
+	    '~/assets/styles/app.styl'
     ],
 	/*
 	** Env File
@@ -91,7 +91,7 @@ module.exports = {
 		vendor: [
 			'axios',
 			'localforage',
-            '~/plugins/vuetify.js'
+            // '~/plugins/vuetify.js'
 		],
         postcss: {
             plugins: {
