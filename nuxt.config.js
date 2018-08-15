@@ -1,4 +1,5 @@
 const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader')
 
 let env = require('./config/development.js')
 
@@ -57,6 +58,7 @@ module.exports = {
 	** Customize the progress bar color
 	*/
 	loading: {color: '#3B8070'},
+
 	/*
 	** Router
 	*/
@@ -73,6 +75,7 @@ module.exports = {
 	*/
 
 	build: {
+
 		/*
 		** Run ESLint on save
 		*/
@@ -87,11 +90,17 @@ module.exports = {
 			}
 		},
 
+        /**
+		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
+         */
+		plugins: [
+            new VueLoaderPlugin()
+		],
 
 		vendor: [
 			'axios',
 			'localforage',
-            // '~/plugins/vuetify.js'
+            '~/plugins/vuetify.js'
 		],
         postcss: {
             plugins: {
