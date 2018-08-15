@@ -12,25 +12,12 @@ module.exports = {
 	** Headers of the page
 	*/
 	head: {
-		title: 'Tube',
+		title: 'Tube Research',
 		meta: [
-			{charset: 'utf-8'},
-			{name: 'viewport', content: 'width=device-width, initial-scale=1'},
-            {hid: 'description', name: 'description', content: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'},
             {"http-equiv": "x-ua-compatible", content: "ie=edge" },
-            // {"name": "apple-mobile-web-app-title", "content": "Tube"},
-            // {"name": "application-name","content": "Tube"},
-            // {"name": "msapplication-TileColor", "content": "#da532c"},
-            // {"name": "theme-color","content": "#ffffff"}
 		],
 		link: [
-			{rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico'},
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
-            // {"rel": "apple-touch-icon","sizes": "180x180","href": "/img/apple-touch-icon.png"},
-            // {"rel": "icon","type": "image/png","sizes": "32x32","href": "/img/icons/favicon-32x32.png"},
-            // {"rel": "icon","type": "image/png","sizes": "16x16","href": "/img/icons/favicon-16x16.png"},
-            // {"rel": "manifest","href": "/manifest.orig.json"},
-            // {"rel": "mask-icon","href": "/img/icons/safari-pinned-tab.svg","color": "#5bbad5"}
         ]
 	},
 	/*
@@ -43,6 +30,32 @@ module.exports = {
 	** Env File
 	*/
 	env: env,
+
+    /**
+	 * PWA Icons
+	 * @url https://pwa.nuxtjs.org/modules/icon.html
+     */
+	icon: {
+		iconSrc: 'assets/images/app-icon.png'
+	},
+
+    /**
+	 * Meta
+	 * @url https://pwa.nuxtjs.org/modules/meta.html
+     */
+    meta: {
+        name: 'Tube Research',
+        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'
+    },
+
+    /**
+	 * Workbox
+	 * @url https://pwa.nuxtjs.org/modules/workbox.html
+     */
+    workbox: {
+
+    },
+
 	/*
 	** Plugins
 	*/
