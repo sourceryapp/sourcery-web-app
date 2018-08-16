@@ -20,16 +20,20 @@ module.exports = {
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
         ]
 	},
+
 	/*
 	** CSS File
 	*/
 	css: [
 	    '~/assets/styles/app.styl'
     ],
+
+
 	/*
 	** Env File
 	*/
 	env: env,
+
 
     /**
 	 * PWA Icons
@@ -38,6 +42,7 @@ module.exports = {
 	icon: {
 		iconSrc: 'assets/images/app-icon.png'
 	},
+
 
     /**
 	 * Meta
@@ -48,6 +53,7 @@ module.exports = {
         description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'
     },
 
+
     /**
 	 * Workbox
 	 * @url https://pwa.nuxtjs.org/modules/workbox.html
@@ -55,6 +61,7 @@ module.exports = {
     workbox: {
 
     },
+
 
 	/*
 	** Plugins
@@ -67,10 +74,17 @@ module.exports = {
 		'~/plugins/authenticationGuard.js',
 		'~/plugins/vuetify.js'
 	],
-	/*
-	** Customize the progress bar color
-	*/
-	loading: {color: '#3B8070'},
+
+
+    /**
+	 * Customize the loading bar
+	 * @url https://nuxtjs.org/api/configuration-loading/
+     */
+	loading: {
+		color: '#3B8070',
+		height: '5px'
+	},
+
 
 	/*
 	** Router
@@ -80,9 +94,12 @@ module.exports = {
 		mode: 'history'
 	},
 
+
     modules: [
         '@nuxtjs/pwa',
     ],
+
+
 	/*
 	** Build configuration
 	*/
