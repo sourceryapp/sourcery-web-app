@@ -1,12 +1,12 @@
 <template>
 	<v-form @submit.prevent="registerSubmit">
 		<h1>Register</h1>
-		<v-text-field type="text" name="name" v-model="name" placeholder="Name"></v-text-field>
+		<v-text-field type="text" name="name" v-model="name" label="Name"></v-text-field>
 		<span class="red--text" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
-		<v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
+		<v-text-field type="email" name="email" v-model="email" label="Email"></v-text-field>
 		<span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
-		<v-text-field type="password" name="password" v-model="password" placeholder="Password" autocomplete="false" hint="At least 8 characters"></v-text-field>
-		<v-text-field type="password" name="confirm_password" v-model="confirm_password" placeholder="Confirm Password"></v-text-field>
+		<v-text-field type="password" name="password" v-model="password" label="Password" autocomplete="false" hint="At least 8 characters"></v-text-field>
+		<v-text-field type="password" name="confirm_password" v-model="confirm_password" label="Confirm Password"></v-text-field>
 		<span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
 		<v-btn type="submit" value="Next" color="primary">Next</v-btn>
 	</v-form>
@@ -17,6 +17,11 @@
 
 	export default {
 		name: "register",
+
+        /**
+		 * Don't require auth for this page.
+         */
+		auth: false,
 		data() {
 			return {
 				name: '',
