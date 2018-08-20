@@ -137,7 +137,7 @@ module.exports = {
 		},
 		redirect: {
 			login: '/login',
-			logout: '/',
+			logout: '/login',
 			user: '/',
 			home: '/home'
 		}

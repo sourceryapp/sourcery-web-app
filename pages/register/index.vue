@@ -47,14 +47,15 @@
 						password: this.password,
 					}).then(res => {
 						this.errors = {name: [], password: [], email: []}
-						axios.post(process.env.API_URL + 'auth/login', {
-							email: this.email,
-							password: this.password,
+
+						this.$auth.loginWith('local', {
+						    data: {
+						        email: this.email,
+								password: this.password
+							}
 						}).then(() => {
-							this.$store.dispatch('auth/login', {token: res.data.data.token}).then(() => {
-								this.$router.push({name: 'test'})
-							})
-						})
+						  	this.$router.push('/register/client');
+                        })
 					}).catch(err => {
 						this.errors.name = err.response.data.name || []
 						this.errors.email = err.response.data.email || []
