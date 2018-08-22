@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === 'production') {
 	env = require('./config/production.js')
 }
 
+
 module.exports = {
 	/*
 	** Headers of the page
@@ -67,11 +68,11 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
-		{
-			src: '~/plugins/localforage.js',
-			ssr: false
-		},
-		'~/plugins/authenticationGuard.js',
+		// {
+		// 	src: '~/plugins/localforage.js',
+		// 	ssr: false
+		// },
+		// '~/plugins/authenticationGuard.js',
 		'~/plugins/vuetify.js'
 	],
 
@@ -90,14 +91,57 @@ module.exports = {
 	** Router
 	*/
 	router: {
-		middleware: 'authenticationGuard',
+		middleware: ['auth'],
 		mode: 'history'
 	},
 
 
     modules: [
         '@nuxtjs/pwa',
+        '@nuxtjs/axios',
+        '@nuxtjs/auth'
     ],
+
+    /**
+	 * Axios
+	 * @url https://axios.nuxtjs.org/options.html
+     */
+    axios: {
+    	baseURL: env.API_URL
+	},
+
+    /**
+	 * Options for @nuxtjs/auth
+	 * @url https://auth.nuxtjs.org/options.html
+     */
+	auth: {
+		strategies: {
+			local: {
+                endpoints: {
+                    login: {
+                        url: '/auth/login',
+                        method: 'post',
+                        propertyName: 'data.token'
+                    },
+                    user: {
+                    	url: '/auth/user',
+						method: 'get',
+						propertyName: 'data'
+                    },
+					logout: {
+                    	url: '/auth/invalidate',
+						method: 'delete'
+					}
+                }
+			}
+		},
+		redirect: {
+			login: '/login',
+			logout: '/login',
+			user: '/',
+			home: '/home'
+		}
+	},
 
 
 	/*
@@ -129,7 +173,6 @@ module.exports = {
 
 		vendor: [
 			'axios',
-			'localforage',
             '~/plugins/vuetify.js'
 		],
         postcss: {
