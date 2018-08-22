@@ -48,7 +48,7 @@
 
 							<v-divider></v-divider>
 
-							<v-list-tile  v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'pending'" >
+							<v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'pending'" >
 								<v-list-tile-action>
                                     <v-icon>send</v-icon>
 								</v-list-tile-action>
@@ -65,7 +65,7 @@
 
                             <v-divider></v-divider>
 
-                            <v-list-tile  v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'picked_up'">
+                            <v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'picked_up'">
                                 <v-list-tile-action>
                                     <v-icon>alarm</v-icon>
                                 </v-list-tile-action>
@@ -82,7 +82,7 @@
 
                             <v-divider></v-divider>
 
-                            <v-list-tile  v-for="(request, index) in user.client_requests" :key="index" v-if="request.status === 'completed'">
+                            <v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'completed'">
                                 <v-list-tile-action>
                                     <v-icon>done</v-icon>
                                 </v-list-tile-action>
@@ -110,9 +110,14 @@
 		},
 		data: function(){
 		    return {
-
+                requests: null
 			}
-		}
+		},
+        mounted(){
+            this.$axios
+                .$get('/requests')
+                .then(response => (this.requests = response.data));
+        }
 	}
 </script>
 
