@@ -41,7 +41,7 @@
 				if (this.password !== this.confirm_password) {
 					this.errors.confirm_password = ['Passwords must be the same']
 				} else {
-					axios.post(process.env.API_URL + 'auth/register', {
+					this.$axios.$post('/auth/register', {
 						name: this.name,
 						email: this.email,
 						password: this.password,
