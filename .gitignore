@@ -9,3 +9,9 @@ npm-debug.log
 
 # Nuxt generate
 dist
+
+# PHP Storm
+/.idea
+
+# Service worker
+sw.*

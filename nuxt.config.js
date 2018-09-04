@@ -1,54 +1,155 @@
+const path = require('path');
+const { VueLoaderPlugin } = require('vue-loader')
+
 let env = require('./config/development.js')
 
 if (process.env.NODE_ENV === 'production') {
 	env = require('./config/production.js')
 }
 
+
 module.exports = {
 	/*
 	** Headers of the page
 	*/
 	head: {
-		title: 'Tube',
+		title: 'Tube Research',
 		meta: [
-			{charset: 'utf-8'},
-			{name: 'viewport', content: 'width=device-width, initial-scale=1'},
-			{hid: 'description', name: 'description', content: 'Tube client frontend '}
+            {"http-equiv": "x-ua-compatible", content: "ie=edge" },
 		],
 		link: [
-			{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
-		]
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
+        ]
 	},
+
 	/*
 	** CSS File
 	*/
-	css: ['~/assets/styles/app.css'],
+	css: [
+	    '~/assets/styles/app.styl'
+    ],
+
+
 	/*
 	** Env File
 	*/
 	env: env,
+
+
+    /**
+	 * PWA Icons
+	 * @url https://pwa.nuxtjs.org/modules/icon.html
+     */
+	icon: {
+		iconSrc: 'assets/images/app-icon.png'
+	},
+
+
+    /**
+	 * Meta
+	 * @url https://pwa.nuxtjs.org/modules/meta.html
+     */
+    meta: {
+        name: 'Tube Research',
+        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'
+    },
+
+
+    /**
+	 * Workbox
+	 * @url https://pwa.nuxtjs.org/modules/workbox.html
+     */
+    workbox: {
+
+    },
+
+
 	/*
 	** Plugins
 	*/
 	plugins: [
-		{src: '~/plugins/localforage.js', ssr: false},
-		'~/plugins/authenticationGuard.js',
+		// {
+		// 	src: '~/plugins/localforage.js',
+		// 	ssr: false
+		// },
+		// '~/plugins/authenticationGuard.js',
+		'~/plugins/vuetify.js'
 	],
-	/*
-	** Customize the progress bar color
-	*/
-	loading: {color: '#3B8070'},
+
+
+    /**
+	 * Customize the loading bar
+	 * @url https://nuxtjs.org/api/configuration-loading/
+     */
+	loading: {
+		color: '#3B8070',
+		height: '5px'
+	},
+
+
 	/*
 	** Router
 	*/
 	router: {
-		middleware: 'authenticationGuard',
+		middleware: ['auth'],
+		mode: 'history'
 	},
+
+
+    modules: [
+        '@nuxtjs/pwa',
+        '@nuxtjs/axios',
+        '@nuxtjs/auth'
+    ],
+
+    /**
+	 * Axios
+	 * @url https://axios.nuxtjs.org/options.html
+     */
+    axios: {
+    	baseURL: env.API_URL
+	},
+
+    /**
+	 * Options for @nuxtjs/auth
+	 * @url https://auth.nuxtjs.org/options.html
+     */
+	auth: {
+		strategies: {
+			local: {
+                endpoints: {
+                    login: {
+                        url: '/auth/login',
+                        method: 'post',
+                        propertyName: 'data.token'
+                    },
+                    user: {
+                    	url: '/auth/user',
+						method: 'get',
+						propertyName: 'data'
+                    },
+					logout: {
+                    	url: '/auth/invalidate',
+						method: 'delete'
+					}
+                }
+			}
+		},
+		redirect: {
+			login: '/login',
+			logout: '/login',
+			user: '/',
+			home: '/home'
+		}
+	},
+
+
 	/*
 	** Build configuration
 	*/
 
 	build: {
+
 		/*
 		** Run ESLint on save
 		*/
@@ -62,17 +163,25 @@ module.exports = {
 				})
 			}
 		},
-		/*
-		** Configure Postcss to use Tailwind
-		*/
-		postcss: [
-			require('tailwindcss')('./tailwind.js'),
-			require('autoprefixer'),
+
+        /**
+		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
+         */
+		plugins: [
+            new VueLoaderPlugin()
 		],
 
 		vendor: [
 			'axios',
-			'localforage',
-		]
+            '~/plugins/vuetify.js'
+		],
+        postcss: {
+            plugins: {
+                'autoprefixer': {},
+            }
+        },
+        extractCSS: true,
+		cssSourceMap: true,
+		mode: 'spa'
 	}
 }

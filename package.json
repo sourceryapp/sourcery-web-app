@@ -1,29 +1,49 @@
 {
-	"name": "nuxt-tailwind-starter",
-	"version": "1.0.0",
-	"description": "A starter template with nuxt.js and tailwind.css",
-	"author": "Tim Morris <timthewebguy@gmail.com>",
-	"private": true,
-	"scripts": {
-		"dev": "nuxt",
-		"build": "nuxt build",
-		"start": "nuxt start",
-		"generate": "nuxt generate",
-		"lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-		"precommit": "npm run lint"
-	},
-	"dependencies": {
-		"axios": "^0.18.0",
-		"localforage": "^1.6.0",
-		"nuxt": "^1.0.0"
-	},
-	"devDependencies": {
-		"babel-eslint": "^8.2.1",
-		"babel-plugin-transform-object-rest-spread": "^6.26.0",
-		"eslint": "^4.15.0",
-		"eslint-friendly-formatter": "^3.0.0",
-		"eslint-loader": "^1.7.1",
-		"eslint-plugin-vue": "^4.0.0",
-		"tailwindcss": "^0.4.3"
-	}
+  "name": "tube-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build --spa",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "dev": "nuxt",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxtjs/auth": "^4.5.1",
+    "@nuxtjs/axios": "^5.3.1",
+    "@nuxtjs/pwa": "^2.0.8",
+    "axios": "^0.18.0",
+    "localforage": "^1.7.2",
+    "md5": "^2.2.1",
+    "nuxt": "^1.4.1",
+    "vuetify": "^1.1.4"
+  },
+  "devDependencies": {
+    "@babel/polyfill": "^7.0.0-beta.54",
+    "babel-eslint": "^8.2.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "css-loader": "^1.0.0",
+    "eslint": "^5.3.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.1.0",
+    "eslint-plugin-html": "^4.0.5",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "eslint-plugin-vue": "^4.7.0",
+    "sass-loader": "^7.0.3",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-loader": "^15.3.0",
+    "webpack": "^4.16.5"
+  },
+  "description": "Frontend application for Tube",
+  "author": "Tim Morris <timthewebguy@gmail.com>",
+  "contributors": [
+    "Brian Daley <brian@uconn.edu>"
+  ]
 }

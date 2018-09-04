@@ -15,7 +15,7 @@
 <script>
 	export default {
 		name: 'home',
-		layout: 'guest',
+		layout: 'default',
 		components: {},
 		mounted() {
 			if (process.browser) {
