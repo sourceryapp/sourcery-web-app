@@ -47,11 +47,13 @@ module.exports = {
 
     /**
 	 * Meta
+	 * @todo Add proper meta for FB and Twitter
 	 * @url https://pwa.nuxtjs.org/modules/meta.html
      */
     meta: {
         name: 'Tube Research',
-        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'
+        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
+        mobileAppIOS: true
     },
 
 
@@ -63,16 +65,20 @@ module.exports = {
 
     },
 
+    /**
+	 * PWA Manifest
+	 * @url
+     */
+    manifest: {
+    	name: 'Tube Research',
+        lang: 'en'
+    },
+
 
 	/*
 	** Plugins
 	*/
 	plugins: [
-		// {
-		// 	src: '~/plugins/localforage.js',
-		// 	ssr: false
-		// },
-		// '~/plugins/authenticationGuard.js',
 		'~/plugins/vuetify.js'
 	],
 
