@@ -146,7 +146,8 @@ module.exports = {
 			logout: '/login',
 			user: '/',
 			home: '/home'
-		}
+		},
+        rewriteRedirects: true
 	},
 
 
