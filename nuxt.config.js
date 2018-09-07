@@ -52,7 +52,6 @@ module.exports = {
      */
     meta: {
         name: 'Tube Research',
-		short_name: 'Tube',
         description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true
     },
@@ -68,10 +67,11 @@ module.exports = {
 
     /**
 	 * PWA Manifest
-	 * @url
+	 * @url https://pwa.nuxtjs.org/modules/manifest.html
      */
     manifest: {
     	name: 'Tube Research',
+        short_name: 'Tube',
         lang: 'en-US',
 		orientation: 'portrait'
     },
