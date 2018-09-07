@@ -52,6 +52,7 @@ module.exports = {
      */
     meta: {
         name: 'Tube Research',
+		short_name: 'Tube',
         description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true
     },
@@ -71,7 +72,8 @@ module.exports = {
      */
     manifest: {
     	name: 'Tube Research',
-        lang: 'en'
+        lang: 'en-US',
+		orientation: 'portrait'
     },
 
 
