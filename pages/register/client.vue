@@ -6,7 +6,7 @@
 			<p class="text-red">{{error}}</p>
 
 			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aliquam amet consequatur delectus deleniti eaque eligendi explicabo in ipsa ipsam ipsum itaque neque optio ratione reprehenderit similique totam, velit voluptates.</p>
-			<v-btn color="primary" @click="openStripe()">Add Credit Card</v-btn><v-btn color="primary" href="/home">I'll Do it later</v-btn>
+			<v-btn color="primary" @click="openStripe()">Add Credit Card</v-btn><v-btn color="primary" href="/">I'll Do it later</v-btn>
 			<script src="https://checkout.stripe.com/checkout.js"></script>
 		</v-flex>
 	</v-layout>
@@ -41,7 +41,7 @@
 								token: token.id
 							}).then((res) => {
 								_this.paymentAccepted = true;
-								_this.$router.push('/home');
+								_this.$router.push('/');
 								console.log(res)
 							}).catch((err) => {
 								console.log(err)

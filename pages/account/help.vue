@@ -19,7 +19,7 @@
 
 <script>
 	export default {
-		name: "home",
+		name: "help",
 		computed: {
 			user() {
 				return this.$store.state.auth.user

@@ -21,16 +21,28 @@
             :value="true"
             dark
             app
-            v-if="user"
+            v-if="this.$auth.user"
         >
             <v-btn
                 flat
                 value="user"
                 color="primary"
                 to="/account"
+                v-if="this.$route.path!='/account'"
             >
                 <span>Account</span>
                 <v-icon>person</v-icon>
+            </v-btn>
+
+            <v-btn
+                flat
+                value="dashboard"
+                color="primary"
+                to="/"
+                v-if="this.$route.path=='/account'"
+            >
+                <span>Dashboard</span>
+                <v-icon>dashboard</v-icon>
             </v-btn>
 
             <v-btn
@@ -61,17 +73,10 @@
 
 	export default {
 		computed: {
-			user() {
-                return this.$auth.user
-			},
-            gravatar() {
-                return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + '?d=mp';
-            }
+
 		},
 		methods: {
-			logout() {
-                return this.$auth.logout()
-			}
+
 		},
         data: () => ({
             drawer: null,

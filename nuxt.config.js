@@ -193,4 +193,4 @@ module.exports = {
 		cssSourceMap: true,
 		mode: 'spa'
 	}
-}
+};
