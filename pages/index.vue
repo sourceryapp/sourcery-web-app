@@ -37,64 +37,24 @@
 
 			<v-flex xs12 sm6 offset-sm3>
                 <h1>Dashboard</h1>
-                <h3>Requests</h3>
-				<v-card>
 
 					<v-list two-line>
-						<template>
-							<v-subheader>
-								Pending
-							</v-subheader>
-
-							<v-divider></v-divider>
-
-							<v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'pending'" >
-								<v-list-tile-action>
-                                    <v-icon>send</v-icon>
-								</v-list-tile-action>
-
-								<v-list-tile-content >
-                                    <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ request.citation }}</v-list-tile-sub-title>
-								</v-list-tile-content>
-							</v-list-tile>
-
                             <v-subheader>
-                                Picked Up
+                                Requests
                             </v-subheader>
-
                             <v-divider></v-divider>
 
-                            <v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'picked_up'">
-                                <v-list-tile-action>
-                                    <v-icon>alarm</v-icon>
-                                </v-list-tile-action>
+                            <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
 
+                            <v-list-tile :key="index">
                                 <v-list-tile-content >
                                     <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ request.citation }}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ request.citation }} {{request.status}}</v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </v-list-tile>
-
-                            <v-subheader>
-                                Completed
-                            </v-subheader>
-
-                            <v-divider></v-divider>
-
-                            <v-list-tile  v-for="(request, index) in requests" :key="index" v-if="request.status === 'completed'">
-                                <v-list-tile-action>
-                                    <v-icon>done</v-icon>
-                                </v-list-tile-action>
-
-                                <v-list-tile-content >
-                                    <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ request.citation }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </v-list-tile>
-						</template>
+                            <v-divider :key="index"></v-divider>
+                            </template>
 					</v-list>
-				</v-card>
 			</v-flex>
 		</v-layout>
 
