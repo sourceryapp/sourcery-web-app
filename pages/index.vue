@@ -37,14 +37,15 @@
 
 			<v-flex xs12 sm6 offset-sm3>
                 <h1>Dashboard</h1>
-
 					<v-list two-line>
                             <v-subheader>
                                 Requests
                             </v-subheader>
                             <v-divider></v-divider>
+                            <v-chip v-if="requests == null">Loading...</v-chip>
 
-                            <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
+
+                        <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
 
                             <v-list-tile :key="index" :to="{ name: 'request-id', params: {id: request.id}}">
                                 <v-list-tile-content >
