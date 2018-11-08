@@ -46,15 +46,20 @@
 
                             <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
 
-                            <v-list-tile :key="index">
+                            <v-list-tile :key="index" :to="{ name: 'request-id', params: {id: request.id}}">
                                 <v-list-tile-content >
                                     <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-                                    <v-list-tile-sub-title>{{ request.citation }} {{request.status}}</v-list-tile-sub-title>
+                                    <v-list-tile-sub-title>{{ request.citation }} </v-list-tile-sub-title>
                                 </v-list-tile-content>
+                                <v-chip color="secondary" text-color="white">{{request.status.replace('_', ' ')}}</v-chip>
                             </v-list-tile>
-                            <v-divider :key="index"></v-divider>
+                            <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
                             </template>
 					</v-list>
+
+                <div class="text-xs-center">
+                    <v-btn color="primary" to="/request/history">View History</v-btn>
+                </div>
 			</v-flex>
 		</v-layout>
 
@@ -62,7 +67,7 @@
 
 <script>
 	export default {
-		name: "home",
+		name: "dashboard",
 		computed: {
 			user() {
 				return this.$store.state.auth.user
