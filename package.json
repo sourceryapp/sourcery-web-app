@@ -17,6 +17,7 @@
     "axios": "^0.18.0",
     "css-loader": "^1.0.0",
     "localforage": "^1.7.2",
+    "material-design-icons-iconfont": "^4.0.2",
     "md5": "^2.2.1",
     "nuxt": "^1.4.1",
     "vuetify": "^1.2.9"
