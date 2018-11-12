@@ -22,6 +22,7 @@
             dark
             app
             v-if="this.$auth.user"
+            color="white"
         >
             <v-btn
                 flat
