@@ -47,6 +47,7 @@
             <v-list-tile
                 v-for="item in items2"
                 :key="item.title"
+                :to = "item.link"
             >
                 <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -68,15 +69,15 @@
       return {
         items1: [
           { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
-          { title: 'Notifications', icon: 'notifications', link: '/account/profile'},
-          { title: 'History', icon: 'hourglass_full', link: '/account/profile'},
-          { title: 'Privacy', icon: 'enhanced_encryption', link: '/account/profile'}
+          { title: 'Notifications', icon: 'notifications', link: '/settings/notifications'},
+          { title: 'History', icon: 'hourglass_full', link: '/request/history'},
+          { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
         ],
         items2: [
-          { title: 'Terms and Conditions', icon: 'subject', link: '/account/profile'},
-          { title: 'Helpful Information', icon: 'list', link: '/account/profile'},
-          { title: 'Feedback', icon: 'feedback', link: '/account/profile'},
-          { title: 'Rate', icon: 'star', link: '/account/profile'},
+          { title: 'Terms and Conditions', icon: 'subject', link: '/settings/terms_conditions'},
+          { title: 'Helpful Information', icon: 'help', link: '/settings/helpful_info'},
+          { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
+          { title: 'Rate', icon: 'star', link: ''},
         ],
         right: null
       }
