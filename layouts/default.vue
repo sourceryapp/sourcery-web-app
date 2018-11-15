@@ -1,155 +1,83 @@
 <template>
-	<!--<div>-->
-		<!--<nav>-->
-			<!--<ul>-->
-				<!--<li>-->
-					<!--<a href="#" @click.prevent="logout">Log Out</a>-->
-				<!--</li>-->
-				<!--<li>-->
-					<!--<nuxt-link :to="{name: 'home'}" v-if="user">Home</nuxt-link>-->
-				<!--</li>-->
-				<!--<li>-->
-					<!--<nuxt-link :to="{name: 'vendor'}" v-if="user && user.vendor == true">Vendor Area</nuxt-link>-->
-					<!--<nuxt-link :to="{name: 'register-vendor'}" v-else>Become a Vendor</nuxt-link>-->
-				<!--</li>-->
-			<!--</ul>-->
-		<!--</nav>-->
-		<!--<nuxt/>-->
-	<!--</div>-->
-
 	<v-app id="tube">
-		<v-navigation-drawer
-				v-model="drawer"
-				fixed
-				app
-				class="primary"
-				dark
-                v-if="user"
-		>
-			<v-toolbar  class="transparent">
-				<v-list class="pa-0">
-					<v-list-tile avatar>
-						<v-list-tile-avatar>
-							<img v-bind:src="gravatar">
-						</v-list-tile-avatar>
-						<v-list-tile-content>
-							<v-list-tile-title>{{user.name}}</v-list-tile-title>
-						</v-list-tile-content>
-					</v-list-tile>
-				</v-list>
-			</v-toolbar>
-			<v-divider></v-divider>
-			<v-list >
-
-				<v-list-tile to="/home" nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>dashboard</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Dashboard</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile to="/profile"  nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>contact_mail</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Profile</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile to="/payment" nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>credit_card</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Payment Options</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile to="/help" nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>help</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Help</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile to="/settings" nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>settings</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Settings</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-				<v-list-tile @click="logout()" nuxt active-class>
-					<v-list-tile-action>
-						<v-icon>power_settings_new</v-icon>
-					</v-list-tile-action>
-					<v-list-tile-content>
-						<v-list-tile-title>Log Out</v-list-tile-title>
-					</v-list-tile-content>
-				</v-list-tile>
-
-
-			</v-list>
-		</v-navigation-drawer>
 		<v-toolbar color="white" light fixed app>
 			<v-layout row wrap justify-space-between>
-				<v-flex text-xs-left>
-					<v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon>
-				</v-flex>
 				<v-flex text-xs-center>
-					<v-toolbar-title><nuxt-link to="/home"><img src="/img/logo.svg" id="logo"></nuxt-link></v-toolbar-title>
-
-				</v-flex>
-				<v-flex text-xs-right>
-                    <v-tooltip bottom>
-                        <v-btn fab dark small color="primary" slot="activator" to="/request/create" v-if="user">
-                            <v-icon dark>add</v-icon>
-                        </v-btn>
-                        <span>New Request</span>
-                    </v-tooltip>
+					<v-toolbar-title><nuxt-link to="/"><img src="/img/logo.svg" id="logo"></nuxt-link></v-toolbar-title>
 				</v-flex>
 			</v-layout>
 
 		</v-toolbar>
-		<v-content>
-			<v-container fluid fill-height>
+		<v-content pa-0>
+			<v-container fluid fill-height pa-0>
 				<v-layout
 						justify-center
-						align-center
 				>
 					<nuxt/>
 				</v-layout>
 			</v-container>
 		</v-content>
-		<!--<v-footer color="teal" app>-->
-		<!--<span class="white&#45;&#45;text">&copy; 2017</span>-->
-		<!--</v-footer>-->
-	</v-app>
+        <v-bottom-nav
+            :value="true"
+            dark
+            app
+            v-if="this.$auth.user"
+            color="white"
+        >
+            <v-btn
+                flat
+                value="user"
+                color="primary"
+                to="/account"
+                v-if="this.$route.path!='/account'"
+            >
+                <span>Account</span>
+                <v-icon>person</v-icon>
+            </v-btn>
+
+            <v-btn
+                flat
+                value="dashboard"
+                color="primary"
+                to="/"
+                v-if="this.$route.path=='/account'"
+            >
+                <span>Dashboard</span>
+                <v-icon>dashboard</v-icon>
+            </v-btn>
+
+            <v-btn
+                flat
+                value="add"
+                color="primary"
+                to="/request/create"
+            >
+                <span>New Request</span>
+                <v-icon>add_circle</v-icon>
+            </v-btn>
+
+            <v-btn
+                flat
+                color="primary"
+                value="search"
+                to="/jobs"
+            >
+                <span>Find Jobs</span>
+                <v-icon>search</v-icon>
+            </v-btn>
+        </v-bottom-nav>
+
+    </v-app>
 </template>
 
 <script>
-    import md5 from 'md5'
 
 	export default {
 		computed: {
-			user() {
-                return this.$auth.user
-			},
-            gravatar() {
-                return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + '?d=mp';
-            }
+
 		},
 		methods: {
-			logout() {
-                return this.$auth.logout()
-			}
+
 		},
         data: () => ({
             drawer: null,
@@ -168,9 +96,10 @@
 		height: auto;
 	}
 
-	main .container {
-		background-image: url("/img/top-left-graphic.png"), url("/img/bottom-right-graphic.png");
-		background-position: top left, bottom right;
+	#tube {
+		/*background-image: url("/img/top-left-graphic.png"), url("/img/bottom-right-graphic.png");*/
+		/*background-position: top left, bottom right;*/
+        /*background-repeat: no-repeat;*/
 	}
 
 	.teal {

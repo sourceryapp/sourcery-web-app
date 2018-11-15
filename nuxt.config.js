@@ -18,7 +18,7 @@ module.exports = {
             {"http-equiv": "x-ua-compatible", content: "ie=edge" },
 		],
 		link: [
-            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' },
         ]
 	},
 
@@ -26,7 +26,8 @@ module.exports = {
 	** CSS File
 	*/
 	css: [
-	    '~/assets/styles/app.styl'
+	    '~/assets/styles/app.styl',
+        'material-design-icons-iconfont/dist/material-design-icons.css'
     ],
 
 
@@ -147,7 +148,7 @@ module.exports = {
 			login: '/login',
 			logout: '/login',
 			user: '/',
-			home: '/home'
+			home: '/'
 		},
         rewriteRedirects: true
 	},
@@ -193,4 +194,4 @@ module.exports = {
 		cssSourceMap: true,
 		mode: 'spa'
 	}
-}
+};

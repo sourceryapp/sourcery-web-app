@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="info" v-if="request !== null">
+		<div v-if="request !== null">
 			<h1>{{request.label}}</h1>
 			<p>Citation:</p>
 			<pre class="mb-2">{{request.citation}}</pre>
@@ -17,15 +17,17 @@
 					</li>
 				</ul>
 			</div>
-			<p>
-				<nuxt-link :to="{name: 'home'}">Back</nuxt-link>
+			<p class="text-xs-center">
+
+        <v-btn color="primary" to="/"><v-icon dark>arrow_back_ios</v-icon> Back</v-btn>
+                <v-btn color="primary" to="/">Edit</v-btn>
+                <v-btn color="primary" to="/">Delete?</v-btn>
 			</p>
 		</div>
 	</div>
 </template>
 
 <script>
-	import axios from "axios";
 
 	export default {
 		name: "request-id",
@@ -37,8 +39,7 @@
 		mounted() {
 			if (process.browser) {
 				console.log('requesting request')
-				//console.log(axios.defaults.headers.common['Authorization'])
-				axios.get(process.env.API_URL + 'request/' + this.$route.params.id).then(res => {
+				this.$axios.get('/requests/' + this.$route.params.id).then(res => {
 					this.request = res.data
 				}).catch(err => {
 					console.log(err)
