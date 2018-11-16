@@ -6,7 +6,7 @@
 			<pre class="mb-2">{{request.citation}}</pre>
 			<p>Repository: <strong>{{request.repository}}</strong></p>
 			<p>Status: <strong>{{request.status}}</strong></p>
-			<div v-if="request.status === 'picked_up' || request.status === 'completed'">
+			<div v-if="request.vendor !== null">
 				<p>Vendor: <strong>{{request.vendor.name}}</strong></p>
 			</div>
 			<div v-if="request.status === 'completed'">
