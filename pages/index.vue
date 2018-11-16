@@ -47,7 +47,7 @@
 
                         <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
 
-                            <v-list-tile :key="index" :to="{ name: 'request-id', params: {id: request.id}}">
+                            <v-list-tile :key="index" :to="'/request/' + request.id">
                                 <v-list-tile-content >
                                     <v-list-tile-title>{{ request.label }}</v-list-tile-title>
                                     <v-list-tile-sub-title>{{ request.citation }} </v-list-tile-sub-title>
