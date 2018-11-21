@@ -29,128 +29,88 @@
 		<!--</div>-->
         <v-layout row>
 
+
+
+
+
+
+
             <v-flex xs12 sm8 offset-sm2>
+
+
+
                 <h1 style="width:100%">Create Request</h1>
-                <v-tabs
-                        v-model="active"
-                        :left="true"
-                        :grow="true"
-                        dark
-                        slider-color="primary"
-                        show-arrows
-                >
-                    <v-tab ripple >
-                        <v-badge left bottom>
-                            <span slot="badge">1</span>
-                        </v-badge>
-                        &nbsp; Location
-                    </v-tab>
-                    <v-tab-item>
-                        <v-card flat>
-                            <v-card-title>Where is your document located?</v-card-title>
-                            <v-card-text>
-                                <v-text-field
-                                        label="Search for locations"
-                                        type="search"
-                                        append-icon="search"
-                                        placeholder="Boston"
-                                ></v-text-field>
 
-                                <v-radio-group column >
-                                    <v-layout row wrap class="light--text">
-                                        <v-flex xs6 v-for="item in items" :key="item">
-                                            <v-radio :label="item" :value="item"></v-radio>
-                                        </v-flex>
-                                    </v-layout>
-                                </v-radio-group>
-                            </v-card-text>
-                            <v-btn color="primary" @click="next">Continue</v-btn>
 
-                        </v-card>
-                    </v-tab-item>
-                    <v-tab ripple >
-                        <v-badge left bottom>
-                            <span slot="badge">2</span>
-                        </v-badge>
-                        &nbsp; Citation
-                    </v-tab>
-                    <v-tab-item>
-                        <v-card flat>
-                            <v-card-title style="width:100%">What is the citation for your document?</v-card-title>
-                            <v-card-text>
-                                <v-textarea
-                                        id="citation"
-                                        name="citation"
-                                        multi-line="true"
-                                        auto-grow
-                                        placeholder="Example:
+                <v-alert
+                    :value="true"
+                    type="info"
+                    class="mt-4 mb-4"
+                    >
+                    Message about our limited service area?
+                </v-alert>
 
-Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.2013-070, Box 3, Folder 9. Budge Wilson fonds. Dalhousie University Archives, Halifax, Nova Scotia, Canada."
-                                ></v-textarea>
-                            </v-card-text>
-                            <v-btn color="primary" @click="next">Continue</v-btn>
+                <label for="location" class="title">
+                    1. Choose a location
+                </label>
+                <v-select
+                id="location"
+                name="location"
+                :items="repositories"
+                item-text="name"
+                item-value="id"
+                label="Choose a location"
+                v-model="request.repository_id"
+                >Loading...</v-select>
 
-                        </v-card>
-                    </v-tab-item>
-                    <v-tab ripple >
-                        <v-badge left bottom>
-                            <span slot="badge">3</span>
-                        </v-badge>
-                        &nbsp; Cost
-                    </v-tab>
-                    <v-tab-item>
-                        <v-card flat>
-                            <v-card-title>Estimate your cost:</v-card-title>
 
-                            <v-card-text>
-                                <p class="caption">
-                                    The cost of your request is partially determined by the number of pages that are delivered to you.
-                                    Please indicate the maximum number of pages that you would be willing to pay for.
-                                </p>
+                <v-divider class="mt-4 mb-4"></v-divider>
 
-                                <v-layout>
-                                    <v-flex xs6 >
-                                        <!--<p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>-->
-                                        <v-select
-                                                v-model="numPages"
-                                                :items="pages"
-                                                label="Maximum Pages"
-                                        ></v-select>
-                                    </v-flex>
-                                    <v-flex xs5 offset-xs1>
-                                        <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                                        <h1 class="pt0">$ {{ numPages + 15 }}</h1>
-                                    </v-flex>
-                                </v-layout>
-                            </v-card-text>
 
-                            <v-btn color="primary" @click="next">Continue</v-btn>
+                <label for="citation"  class="title">
+                    2. What is the citation for your document?
+                </label>
+                <v-textarea
+                    style="font-family: Times"
+                    id="citation"
+                    name="citation"
+                    label="Citation"
+                    multi-line="true"
+                    placeholder="Example: Howard, Richard, translator. Madness and Civilization: A History of Insanity in the Age of Reason. By Michel Foucault, Vintage-Random House, 1988."
+                    v-model="request.citation"
+                    auto-grow
+                ></v-textarea>
 
-                        </v-card>
-                    </v-tab-item>
-                    <v-tab ripple >
-                        <v-badge left bottom>
-                            <span slot="badge">4</span>
-                        </v-badge>
-                        &nbsp; Terms
-                    </v-tab>
-                    <v-tab-item>
-                        <v-card flat>
-                            <v-card-title>Agree to terms:</v-card-title>
-                            <v-card-text>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id posuere urna, ac maximus quam. Nullam condimentum nec turpis vitae consectetur. Proin in erat maximus, posuere elit sit amet, dignissim odio. Aliquam egestas, urna in convallis imperdiet, massa massa mollis dui, a mollis eros nulla vitae ex. Integer viverra hendrerit dolor, ut pellentesque metus pulvinar sit amet. Proin fringilla nibh pharetra felis aliquam, nec porttitor quam dictum. Curabitur scelerisque tortor congue felis condimentum ullamcorper. Cras pellentesque gravida mattis. Praesent commodo ultrices libero et viverra. </p>
-                                <v-checkbox
-                                        name="agree"
-                                        label="I agree to these terms."
-                                        required
-                                ></v-checkbox>
-                            </v-card-text>
-                            <v-btn color="primary" @click="next">Continue</v-btn>
 
-                        </v-card>
-                    </v-tab-item>
-                </v-tabs>
+                <v-divider class="mt-4 mb-4"></v-divider>
 
+                <label for="pages"  class="title">
+                    3. Number of Pages Requested
+                </label>
+                <v-layout>
+                    <v-flex xs6 >
+                        <p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>
+                        <v-select
+                            id="pages"
+                            name="pages"
+                            v-model="request.pages"
+                            :items="pages"
+                            label="Maximum Pages"
+                        ></v-select>
+                    </v-flex>
+                    <v-flex xs5 offset-xs1>
+                        <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
+                        <h1 class="pt-0">$ {{ estimatedCost }}</h1>
+                    </v-flex>
+                </v-layout>
+
+                    <v-btn
+                    :disabled="loading"
+                    @click="submitRequest"
+                    class="primary"
+                    >
+                    Submit
+                    </v-btn>
 
             </v-flex>
 
@@ -163,30 +123,24 @@ Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.20
 </template>
 
 <script>
-	import axios from 'axios'
 
 	export default {
 		name: "create",
 		data() {
 			return {
+                repositories: ["Loading..."],
+                request: {
+                    pages: 0,
+                    citation: 'Wysocki, Anne Frances, et al. Writing New Media: Theory and Applications for Expanding the Teaching of Composition. Utah State UP, 2004.'
+                },
 			    active: null,
-			    query: "",
-			    dialog: false,
-                citationDialog: false,
-				label: '',
-				repository: '',
 				suggestions: [],
-				citation: '',
 				loading: false,
 				errors: {
 					label: [],
 					repository: [],
 					citation: [],
 				},
-                e6: 1,
-                e1: null,
-                location: "",
-                locationCache: null,
                 numPages: 0,
                 pages: [
                     5,
@@ -196,17 +150,22 @@ Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.20
                     25,
                     30,
                     "Unlimited"
-                ],
-                items: [
-                    'Boston University',
-                    'Northeastern University',
-                    'Boston College',
-                    'University of Massachusetts Lowell',
-                    'Massachusetts Institute of Technology',
-                    'University of Massachusetts Boston',
-                    'Tufts University',
                 ]
 
+			}
+        },
+        computed: {
+            estimatedCost: function(){
+                return this.request.pages + 15;
+            }
+        },
+        mounted() {
+			if (process.browser) {
+				this.$axios.get('/repositories').then(res => {
+                    this.repositories = res.data.repositories
+				}).catch(err => {
+					console.log(err)
+				})
 			}
 		},
 		methods: {
@@ -217,7 +176,7 @@ Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.20
                 }
             },
 			updateQuery() {
-				axios.post(process.env.API_URL + 'repositories/search', {
+				this.$axios.post('/repositories/search', {
 					data: {
 						query: this.query
 					}
@@ -234,21 +193,26 @@ Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.20
 				this.repository = suggestion
 			},
 			submitRequest() {
+                // Generate a label for the request
+                this.request.label = this.request.citation.match(/^(\w(\s*))+/)[0];
+
 				this.errors.citation = []
 				this.errors.repository = []
 				this.errors.label = []
 				this.loading = true
-				axios.post(process.env.API_URL + 'requests', {
-					label: this.label,
-					repository: this.repository,
-					citation: this.citation,
+				this.$axios.post('/requests', {
+                    label: this.request.label,
+                    pages: this.request.pages,
+					repository_id: this.request.repository_id,
+					citation: this.request.citation,
+                    estimated_cost_usd: this.estimatedCost,
 					client_id: this.$store.state.auth.user.id,
 				}).then(res => {
 					this.loading = false
 					console.log(res)
-					this.$store.dispatch('auth/setUser').then(() => {
-						this.$router.push({name: 'home'})
-					})
+					// this.$store.dispatch('auth/setUser').then(() => {
+						this.$router.push('/')
+					// })
 				}).catch(err => {
 					this.loading = false
 					console.log(err)
@@ -260,16 +224,7 @@ Wilson, Budge. Typescript of short story Brothers and Sisters. 2000. MS-2-650.20
 						this.errors.label = errors.label
 					}
 				})
-			},
-            next () {
-                const active = parseInt(this.active)
-                this.active = (active < 3 ? active + 1 : 0)
-            },
-            previous(){
-                const active = parseInt(this.active)
-                this.active = this.active - 1
-
-            }
+			}
 		}
 	}
 </script>
