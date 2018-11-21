@@ -60,7 +60,7 @@
                 item-text="name"
                 item-value="id"
                 label="Choose a location"
-                v-model="request.repository"
+                v-model="request.repository_id"
                 >Loading...</v-select>
 
 
@@ -100,7 +100,7 @@
                     </v-flex>
                     <v-flex xs5 offset-xs1>
                         <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                        <h1 class="pt-0">$ {{ request.pages + 15 }}</h1>
+                        <h1 class="pt-0">$ {{ estimatedCost }}</h1>
                     </v-flex>
                 </v-layout>
 
@@ -154,6 +154,11 @@
 
 			}
         },
+        computed: {
+            estimatedCost: function(){
+                return this.request.pages + 15;
+            }
+        },
         mounted() {
 			if (process.browser) {
 				this.$axios.get('/repositories').then(res => {
@@ -198,8 +203,9 @@
 				this.$axios.post('/requests', {
                     label: this.request.label,
                     pages: this.request.pages,
-					repository: this.request.repository,
+					repository_id: this.request.repository_id,
 					citation: this.request.citation,
+                    estimated_cost_usd: this.estimatedCost,
 					client_id: this.$store.state.auth.user.id,
 				}).then(res => {
 					this.loading = false

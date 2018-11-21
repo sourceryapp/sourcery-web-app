@@ -2,9 +2,14 @@
 	<div>
 		<div v-if="request !== null">
 			<h1>{{request.label}}</h1>
+            <v-img
+                src="https://via.placeholder.com/250?text=Google+Map?"
+                aspect-ratio="1"
+                class="grey lighten-2"
+            ></v-img>
 			<p>Citation:</p>
-			<pre class="mb-2">{{request.citation}}</pre>
-			<p>Repository: <strong>{{request.repository}}</strong></p>
+			<p class="mb-2">{{request.citation}}</p>
+			<p>Repository: <strong>{{request.repository.name}}</strong> [ <a :href="`https://www.google.com/maps/@${request.repository.lat},${request.repository.long},16z`">View on Google Maps</a> ]</p>
 			<p>Status: <strong>{{request.status}}</strong></p>
 			<div v-if="request.vendor !== null">
 				<p>Vendor: <strong>{{request.vendor.name}}</strong></p>
