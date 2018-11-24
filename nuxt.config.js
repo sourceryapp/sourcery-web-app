@@ -1,5 +1,4 @@
 const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader')
 
 let env = require('./config/development.js')
 
@@ -178,12 +177,11 @@ module.exports = {
 		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
          */
 		plugins: [
-            new VueLoaderPlugin()
-		],
+
+        ],
 
 		vendor: [
 			'axios',
-            // '~/plugins/vuetify.js'
 		],
         postcss: {
             plugins: {
