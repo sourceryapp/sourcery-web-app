@@ -183,7 +183,7 @@ module.exports = {
 
 		vendor: [
 			'axios',
-            '~/plugins/vuetify.js'
+            // '~/plugins/vuetify.js'
 		],
         postcss: {
             plugins: {

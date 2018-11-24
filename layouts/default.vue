@@ -96,11 +96,11 @@
 		height: auto;
 	}
 
-	#tube {
-		/*background-image: url("/img/top-left-graphic.png"), url("/img/bottom-right-graphic.png");*/
-		/*background-position: top left, bottom right;*/
-        /*background-repeat: no-repeat;*/
-	}
+	/* #tube {
+		background-image: url("/img/top-left-graphic.png"), url("/img/bottom-right-graphic.png");
+		background-position: top left, bottom right;
+        background-repeat: no-repeat;
+	} */
 
 	.teal {
 		background-color: #4DADA9;
