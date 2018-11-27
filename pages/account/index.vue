@@ -76,7 +76,7 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-tile @click="$auth.logout()" nuxt active-class>
+                    <v-list-tile @click="logout()" nuxt active-class>
                         <v-list-tile-action>
                             <v-icon>power_settings_new</v-icon>
                         </v-list-tile-action>
@@ -109,7 +109,9 @@
             }
         },
         methods: {
-
+            async logout() {
+                return await this.$auth.logout();
+            }
         }
     }
 </script>

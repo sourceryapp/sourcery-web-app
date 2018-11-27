@@ -100,7 +100,6 @@ module.exports = {
 	*/
 	router: {
 		middleware: ['auth'],
-		mode: 'history'
 	},
 
 
@@ -149,7 +148,8 @@ module.exports = {
 			user: '/',
 			home: '/'
 		},
-        rewriteRedirects: true
+        rewriteRedirects: true,
+        resetOnError: true,
 	},
 
 

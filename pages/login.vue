@@ -64,8 +64,8 @@
 			// }
 
             async login() {
-                this.error = null
-                return this.$auth
+                this.error = null;
+                return await this.$auth
                     .loginWith('local', {
                         data: {
                             email: this.email,
