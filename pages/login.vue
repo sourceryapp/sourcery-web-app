@@ -8,7 +8,7 @@
         <div>
             <nuxt-link  :to="{name: 'password'}">Forgot your password?</nuxt-link>
         </div>
-        <v-btn type="submit" color="primary" @click.prevent="login">Log In</v-btn>
+        <v-btn type="submit" color="primary">Log In</v-btn>
 
         <v-divider class="mt-3 mb-3"></v-divider>
 
