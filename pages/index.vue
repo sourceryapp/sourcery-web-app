@@ -39,13 +39,13 @@
                 <h1>Dashboard</h1>
 					<v-list two-line>
                             <v-subheader>
-                                Requests
+                                Your Requests
                             </v-subheader>
                             <v-divider></v-divider>
                             <v-chip v-if="requests == null">Loading...</v-chip>
 
 
-                        <template v-for="(request, index) in requests" v-if="request.status !== 'completed'">
+                        <template v-for="(request, index) in requests" v-if="request.status !== 'completed' && request.client && request.client.id === user.id">
 
                             <v-list-tile :key="index" :to="'/request/' + request.id">
                                 <v-list-tile-content >
@@ -57,6 +57,30 @@
                             <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
                             </template>
 					</v-list>
+
+                    <v-divider></v-divider>
+
+                    <v-list two-line>
+                        <v-subheader>
+                            Your Jobs
+                        </v-subheader>
+                        <v-divider></v-divider>
+                        <v-chip v-if="requests == null">Loading...</v-chip>
+
+
+                        <template v-for="(request, index) in requests" v-if="request.status !== 'completed' && request.vendor && request.vendor.id === user.id">
+
+                            <v-list-tile :key="index" :to="'/request/' + request.id">
+                                <v-list-tile-content >
+                                    <v-list-tile-title>{{ request.label }}</v-list-tile-title>
+                                    <v-list-tile-sub-title>{{ request.citation }} </v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-chip color="secondary" text-color="white">{{request.status.replace('_', ' ')}}</v-chip>
+                            </v-list-tile>
+                            <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
+                        </template>
+                    </v-list>
+
 
                 <div class="text-xs-center">
                     <v-btn color="primary" to="/request/history">View History</v-btn>
