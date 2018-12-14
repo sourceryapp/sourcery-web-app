@@ -10,11 +10,17 @@
     "generate": "nuxt generate",
     "precommit": "npm run lint"
   },
+  "husky": {
+      "hooks": {
+          "pre-commit": "npm run lint",
+          "post-checkout": "post-checkout"
+      }
+  },
   "dependencies": {
-    "cross-env": "^5.2.0",
     "@nuxtjs/auth": "^4.5.1",
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/pwa": "^2.0.8",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "material-design-icons-iconfont": "^4.0.2",
     "md5": "^2.2.1",
@@ -30,7 +36,8 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-loader": "^15.3.0",
-    "webpack": "4.26.0"
+    "webpack": "4.26.0",
+    "husky": "^1.2.1"
   },
   "description": "Frontend application for Tube",
   "author": "Tim Morris <timthewebguy@gmail.com>",
