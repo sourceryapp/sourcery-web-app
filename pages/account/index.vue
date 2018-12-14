@@ -76,7 +76,7 @@
 
                     <v-divider></v-divider>
 
-                    <v-list-tile @click="logout()" nuxt active-class>
+                    <v-list-tile @click="dialog=true" nuxt active-class>
                         <v-list-tile-action>
                             <v-icon>power_settings_new</v-icon>
                         </v-list-tile-action>
@@ -86,8 +86,42 @@
                     </v-list-tile>
                 </v-list>
 
+                <v-dialog
+                    v-model="dialog"
+                    max-width="290"
+                    >
+                    <v-card>
+
+                        <v-card-title class="headline">
+                        Are you sure you want to log out?
+                        </v-card-title>
+
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            color="green darken-1"
+                            flat="flat"
+                            @click="$auth.logout()" nuxt active-class
+                        >
+                            Log Out
+                        </v-btn>
+
+                        <v-btn
+                            color="green darken-1"
+                            flat="flat"
+                            @click="dialog = false"
+                        >
+                            Back
+                        </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
             </v-flex>
         </v-layout>
+
+
 
 </template>
 
@@ -98,7 +132,7 @@
         layout: 'default',
         data() {
             return {
-
+                dialog: false,
             }
         },
         computed: {
