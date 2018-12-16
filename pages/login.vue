@@ -28,7 +28,7 @@
 		data() {
 			return {
 				email: 'brian@uconn.edu',
-				password: 'Research1!',
+				password: 'Bri121D',
 				errors: {
 					password: [],
 					email: []
@@ -64,17 +64,11 @@
 			// }
 
             async login() {
-                this.error = null;
-                return await this.$auth
-                    .loginWith('local', {
-                        data: {
-                            email: this.email,
-                            password: this.password
-                        }
-                    })
-                    .catch(e => {
-                        this.error = e + ''
-                    })
+                await this.$store.dispatch('signIn', {
+                    email: this.email,
+                    password: this.password
+                });
+                this.$router.replace('/')
             }
 		}
 	}

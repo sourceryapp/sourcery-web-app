@@ -41,7 +41,6 @@
 
                 <h1 style="width:100%">Create Request</h1>
 
-
                 <v-alert
                     :value="true"
                     type="info"
@@ -50,13 +49,24 @@
                     Message about our limited service area?
                 </v-alert>
 
-                <label for="location" class="title">
-                    1. Choose a location
+                <label for="area" class="title">
+                    1. Where is your document located?
                 </label>
+                <v-select
+                id="area"
+                name="area"
+                :items="areaSelections"
+                item-text="value"
+                item-value="key"
+                label="City, State"
+                v-model="area"
+                >Loading...</v-select>
+
                 <v-select
                 id="location"
                 name="location"
                 :items="repositories"
+                v-if="area"
                 item-text="name"
                 item-value="id"
                 label="Choose a location"
@@ -124,6 +134,8 @@
 
 <script>
 
+import { db } from '~/plugins/firebase-client-init.js'
+
 	export default {
 		name: "create",
 		data() {
@@ -150,9 +162,29 @@
                     25,
                     30,
                     "Unlimited"
-                ]
-
+                ],
+                area: null
 			}
+        },
+        async asyncData ({ params }) {
+            let areaSelections = [];
+            let areas = await db.collection('areas')
+                .where('country', '==', 'US')
+                .orderBy('state')
+                .orderBy('city')
+                .get()
+                .then((snapshot) => {
+                    snapshot.docs.forEach(doc => {
+                        areaSelections.push({
+                            key: doc.data().city,
+                            value: `${doc.data().city}, ${doc.data().state}`
+                        })
+                    });
+                })
+
+            return {
+                areaSelections: areaSelections
+            }
         },
         computed: {
             estimatedCost: function(){
@@ -160,13 +192,7 @@
             }
         },
         mounted() {
-			if (process.browser) {
-				this.$axios.get('/repositories').then(res => {
-                    this.repositories = res.data.repositories
-				}).catch(err => {
-					console.log(err)
-				})
-			}
+
 		},
 		methods: {
 		    storeQuery(val) {

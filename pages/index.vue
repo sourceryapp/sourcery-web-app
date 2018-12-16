@@ -95,7 +95,7 @@
 		name: "dashboard",
 		computed: {
 			user() {
-				return this.$store.state.auth.user
+				return this.$store.getters.activeUser
 			}
 		},
 		data: function(){
@@ -104,9 +104,9 @@
 			}
 		},
         mounted(){
-            this.$axios
-                .$get('/requests')
-                .then(response => (this.requests = response.data));
+            // this.$axios
+            //     .$get('/requests')
+            //     .then(response => (this.requests = response.data));
         }
 	}
 </script>

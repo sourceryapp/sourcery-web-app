@@ -81,7 +81,8 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
-		'~/plugins/vuetify.js'
+        '~/plugins/vuetify.js',
+        '~/plugins/firebase-client-init.js',
 	],
 
 
@@ -100,13 +101,16 @@ module.exports = {
 	*/
 	router: {
 		middleware: ['auth'],
-	},
+    },
+
+    serverMiddleware: [
+        '~/serverMiddleware/validate-token',
+    ],
 
 
     modules: [
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
-        '@nuxtjs/auth'
     ],
 
     /**
@@ -116,42 +120,6 @@ module.exports = {
     axios: {
     	baseURL: env.API_URL
 	},
-
-    /**
-	 * Options for @nuxtjs/auth
-	 * @url https://auth.nuxtjs.org/options.html
-     */
-	auth: {
-		strategies: {
-			local: {
-                endpoints: {
-                    login: {
-                        url: '/auth/login',
-                        method: 'post',
-                        propertyName: 'data.token'
-                    },
-                    user: {
-                    	url: '/auth/user',
-						method: 'get',
-						propertyName: 'data'
-                    },
-					logout: {
-                    	url: '/auth/invalidate',
-						method: 'delete'
-					}
-                }
-			}
-		},
-		redirect: {
-			login: '/login',
-			logout: '/login',
-			user: '/',
-			home: '/'
-		},
-        rewriteRedirects: true,
-        resetOnError: true,
-	},
-
 
 	/*
 	** Build configuration
@@ -190,6 +158,6 @@ module.exports = {
         },
         extractCSS: true,
 		cssSourceMap: true,
-		mode: 'spa'
+		mode: 'universal'
 	}
 };
