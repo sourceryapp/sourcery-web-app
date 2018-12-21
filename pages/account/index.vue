@@ -14,7 +14,7 @@
                             <v-list-tile-avatar>
                                 <img v-bind:src="gravatar">
                             </v-list-tile-avatar>
-                            <v-list-tile-content>
+                            <v-list-tile-content v-if="this.user">
                                 <v-list-tile-title>{{this.user.name}}</v-list-tile-title>
                                 <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
                             </v-list-tile-content>
@@ -140,7 +140,7 @@
                 return this.$store.getters.activeUser
             },
             gravatar() {
-                if(this.user.email !== undefined){
+                if(this.user !== null){
                     return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + '?d=mp';
                 }
             }
@@ -148,7 +148,7 @@
         methods: {
             async logout() {
                 await this.$store.dispatch('signOut');
-                // this.$router.replace('/login')
+                this.$router.replace('/login')
             }
         }
     }
