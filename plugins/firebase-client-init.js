@@ -9,6 +9,7 @@ export default !firebase.apps.length ? firebase.initializeApp(process.env.FIREBA
 let firestore = firebase.firestore();
 firestore.settings({ timestampsInSnapshots: true });
 export const db = firestore;
+export const GeoPoint = firebase.Geopoint;
 
 // Auth
 export const Auth = firebase.auth()
