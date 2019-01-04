@@ -71,7 +71,8 @@
                 item-value="id"
                 label="Choose a location"
                 v-model="request.repository_id"
-                >Loading...</v-select>
+                :loading="loadingLocations"
+                ></v-select>
 
 
                 <v-divider class="mt-4 mb-4"></v-divider>
@@ -137,7 +138,8 @@
 import { db } from '~/plugins/firebase-client-init.js'
 
 	export default {
-		name: "create",
+        name: "create",
+        auth: true,
 		data() {
 			return {
                 repositories: ["Loading..."],
@@ -163,7 +165,8 @@ import { db } from '~/plugins/firebase-client-init.js'
                     30,
                     "Unlimited"
                 ],
-                area: null
+                area: null,
+                loadingLocations: true
 			}
         },
         async asyncData ({ params }) {
@@ -193,31 +196,31 @@ import { db } from '~/plugins/firebase-client-init.js'
         },
         mounted() {
 
-		},
+        },
+        watch: {
+            /**
+             * Update repositories after the Area field changes
+             */
+            area: async function (newArea, oldArea) {
+                this.loadingLocations = true;
+                let repositoriesList = [];
+                let repQuery = await db.collection('repositories')
+                    .where('city', '==', newArea)
+                    .orderBy('name')
+                    .get()
+                    .then((snapshot) => {
+                        snapshot.docs.forEach(doc => {
+                            repositoriesList.push({
+                                id: doc.id,
+                                name: `${doc.data().name}, ${doc.data().institution}`
+                            })
+                        });
+                    })
+                this.loadingLocations = false;
+                this.repositories = repositoriesList;
+            }
+        },
 		methods: {
-		    storeQuery(val) {
-		        console.log(typeof val);
-		        if(typeof val == 'string' && val.length>0){
-                    this.query = val;
-                }
-            },
-			updateQuery() {
-				this.$axios.post('/repositories/search', {
-					data: {
-						query: this.query
-					}
-				}).then(res => {
-					this.suggestions = res.data.repositories
-				}).catch(err => {
-					this.suggestions = []
-					console.log(err)
-					console.log(err.response)
-				})
-			},
-			selectSuggestion(suggestion) {
-				this.suggestions = []
-				this.repository = suggestion
-			},
 			submitRequest() {
                 // Generate a label for the request
                 this.request.label = this.request.citation.match(/^(\w(\s*))+/)[0];
@@ -225,31 +228,26 @@ import { db } from '~/plugins/firebase-client-init.js'
 				this.errors.citation = []
 				this.errors.repository = []
 				this.errors.label = []
-				this.loading = true
-				this.$axios.post('/requests', {
+                this.loading = true
+
+                db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,
 					repository_id: this.request.repository_id,
 					citation: this.request.citation,
                     estimated_cost_usd: this.estimatedCost,
-					client_id: this.$store.state.auth.user.id,
-				}).then(res => {
-					this.loading = false
-					console.log(res)
-					// this.$store.dispatch('auth/setUser').then(() => {
-						this.$router.push('/')
-					// })
-				}).catch(err => {
-					this.loading = false
-					console.log(err)
-					console.log(err.response)
-					if (err.response.status === 422) {
-						const errors = err.response.data
-						this.errors.citation = errors.citation
-						this.errors.repository = errors.repository
-						this.errors.label = errors.label
-					}
-				})
+                    client_id: this.$store.getters.activeUser.uid,
+                    status: "pending",
+                    attachments: {}
+                })
+                .then(function(ref){
+                    console.log(`Imported "${ref.id}"`);
+					this.$router.push('/')
+
+                })
+                .catch(function(error){
+                    console.error(error);
+                })
 			}
 		}
 	}
