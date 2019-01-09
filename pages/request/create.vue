@@ -240,6 +240,7 @@ import { db } from '~/plugins/firebase-client-init.js'
                     estimated_cost_usd: this.estimatedCost,
                     client_id: this.$store.getters.activeUser.uid,
                     status: "pending",
+                    created_at: new Date(),
                     attachments: {}
                 })
                 .then(function(ref){
