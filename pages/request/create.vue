@@ -230,6 +230,8 @@ import { db } from '~/plugins/firebase-client-init.js'
 				this.errors.label = []
                 this.loading = true
 
+                let router = this.$router;
+
                 db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,
@@ -242,7 +244,7 @@ import { db } from '~/plugins/firebase-client-init.js'
                 })
                 .then(function(ref){
                     console.log(`Imported "${ref.id}"`);
-					this.$router.push('/')
+					router.push('/')
 
                 })
                 .catch(function(error){
