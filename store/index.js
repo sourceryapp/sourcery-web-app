@@ -51,14 +51,17 @@ const createStore = () => {
                 if (req.headers.cookie) {
                     const parsed = cookieParser.parse(req.headers.cookie)
 
-                    const { user_id, email } = jwt_decode(parsed.token);
+                    if(parsed.token){
+                        const { user_id, email } = jwt_decode(parsed.token);
 
-                    commit('setUser', buildUserObject({
-                        user: {
-                            email: email,
-                            uid: user_id,
-                        }
-                    }))
+                        commit('setUser', buildUserObject({
+                            user: {
+                                email: email,
+                                uid: user_id,
+                            }
+                        }))
+                    }
+
                 }
             },
 
