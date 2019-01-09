@@ -45,7 +45,7 @@
                             <v-chip v-if="requests == null">Loading...</v-chip>
 
 
-                        <template v-for="(request, index) in requests" v-if="request.status !== 'completed' && request.client && request.client.id === user.id">
+                        <template v-for="(request, index) in requests">
 
                             <v-list-tile :key="index" :to="'/request/' + request.id">
                                 <v-list-tile-content >
@@ -91,8 +91,28 @@
 </template>
 
 <script>
+import { db } from '~/plugins/firebase-client-init.js'
 	export default {
-		name: "dashboard",
+        name: "dashboard",
+        async asyncData ({params, store}) {
+            if(store.getters.activeUser.uid){
+                let requests = [];
+                let requestsRef = await db.collection('requests')
+                    .where('client_id', '==', store.getters.activeUser.uid)
+                    .where('status', '==', 'pending')
+                    .orderBy('created_at', 'desc')
+                    .get()
+                    .then((snapshot) => {
+                        snapshot.docs.forEach(function(doc){
+
+                            requests.push(Object.assign({id:doc.id}, doc.data()));
+                        })
+                    })
+                return {
+                    requests: requests
+                }
+            }
+        },
 		computed: {
 			user() {
 				return this.$store.getters.activeUser
@@ -102,7 +122,7 @@
 		    return {
                 requests: null
 			}
-		},
+        },
         mounted(){
             // this.$axios
             //     .$get('/requests')
