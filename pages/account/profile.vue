@@ -64,12 +64,12 @@
                 npassword1: '',     // New password
                 npassword2: '',     // New password confirmed
             }
+        },
+        computed: {
+            user() {
+                return this.$store.getters.activeUser
+            }
 		},
-        mounted: function(){
-		    let user = this.$store.state.auth.user;
-		    this.name = user.name;
-		    this.email = user.email;
-        }
 	}
 </script>
 

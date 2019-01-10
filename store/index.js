@@ -79,6 +79,7 @@ const createStore = () => {
                 Cookies.set('token', token);
                 commit('setUser', buildUserObject(authData));
                 commit('setLoading', false);
+                return "Someone";
             },
 
             async signOut({ commit }) {

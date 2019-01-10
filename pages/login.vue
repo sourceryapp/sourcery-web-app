@@ -13,7 +13,7 @@
         <v-divider class="mt-3 mb-3"></v-divider>
 
         <h3>Don't Have an Account?</h3>
-        <v-btn :to="{name: 'register'}">Register</v-btn>
+        <v-btn to="/register">Register</v-btn>
 
 
 	</v-form>
@@ -27,8 +27,8 @@
 		layout: 'default',
 		data() {
 			return {
-				email: 'brian@uconn.edu',
-				password: 'Bri121D',
+				email: '',
+				password: '',
 				errors: {
 					password: [],
 					email: []
