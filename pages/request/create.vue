@@ -241,6 +241,7 @@ import { db } from '~/plugins/firebase-client-init.js'
                     client_id: this.$store.getters.activeUser.uid,
                     status: "pending",
                     created_at: new Date(),
+                    vendor_id: "",
                     attachments: {}
                 })
                 .then(function(ref){
