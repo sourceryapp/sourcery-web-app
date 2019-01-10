@@ -34,7 +34,6 @@
         </template>
       </v-list>
 
-      <v-divider></v-divider>
 
       <v-list two-line class="mt-5">
         <v-subheader>Your Jobs</v-subheader>
@@ -64,7 +63,7 @@
         </template>
       </v-list>
 
-      <div class="text-xs-center">
+      <div class="text-xs-center mt-5">
         <v-btn color="primary" to="/request/history">View History</v-btn>
       </div>
     </v-flex>
