@@ -47,12 +47,12 @@
               <v-flex xs12 sm6 lg4 xl3 v-bind:key="index">
                 <v-card class="ma-2">
                   <v-card-title primary-title>
-                    <adiv>
+                    <div>
                       <h3
                         class="headline mb-0"
                       >{{ job.data().repository.name }}, {{ job.data().repository.city }}</h3>
                       <p class="grey--text text--darken-1">{{ job.data().citation }}</p>
-                    </adiv>
+                    </div>
                   </v-card-title>
                   <v-container fill-height fluid>
                     <v-layout fill-height>
