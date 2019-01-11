@@ -25,6 +25,7 @@
     "css-loader": "^1.0.0",
     "firebase": "^5.7.0",
     "firebaseui": "^3.5.0",
+    "geolib": "^2.0.24",
     "js-cookie": "^2.2.0",
     "jwt-decode": "^2.2.0",
     "material-design-icons-iconfont": "^4.0.2",

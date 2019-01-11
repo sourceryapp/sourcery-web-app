@@ -9,7 +9,7 @@
 
 		</v-toolbar>
 		<v-content pa-0>
-			<v-container fluid fill-height pa-0>
+			<v-container fill-height>
 				<v-layout
 						justify-center
 				>

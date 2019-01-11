@@ -221,7 +221,7 @@ import { db } from '~/plugins/firebase-client-init.js'
             }
         },
 		methods: {
-			submitRequest() {
+			async submitRequest() {
                 // Generate a label for the request
                 this.request.label = this.request.citation.match(/^(\w(\s*))+/)[0];
 
@@ -232,17 +232,18 @@ import { db } from '~/plugins/firebase-client-init.js'
 
                 let router = this.$router;
 
-                db.collection("requests").add({
+                await db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,
-					repository_id: this.request.repository_id,
+                    repository_id: this.request.repository_id,
+                    repository: await this.getRepository( this.request.repository_id ),
 					citation: this.request.citation,
                     estimated_cost_usd: this.estimatedCost,
                     client_id: this.$store.getters.activeUser.uid,
                     status: "pending",
                     created_at: new Date(),
                     vendor_id: "",
-                    attachments: {}
+                    attachments: {},
                 })
                 .then(function(ref){
                     console.log(`Imported "${ref.id}"`);
@@ -252,7 +253,15 @@ import { db } from '~/plugins/firebase-client-init.js'
                 .catch(function(error){
                     console.error(error);
                 })
-			}
+            },
+            async getRepository(id){
+                return await db.collection('repositories')
+                    .doc(id)
+                    .get()
+                    .then((doc) => {
+                        return doc.data();
+                    })
+            }
 		}
 	}
 </script>
