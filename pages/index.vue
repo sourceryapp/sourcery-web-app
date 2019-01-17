@@ -52,7 +52,7 @@
         </v-list-tile>
 
         <template v-for="(job, index) in jobs">
-          <v-list-tile v-if="job.status !== 'completed'" :key="index" :to="'/request/' + job.id">
+          <v-list-tile v-if="job.status !== 'completed'" :key="index" :to="'/jobs/' + job.id">
             <v-list-tile-content>
               <v-list-tile-title>{{ job.label }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ job.citation }}</v-list-tile-sub-title>

@@ -75,7 +75,7 @@
                     </v-layout>
                   </v-container>
                   <v-card-actions>
-                    <v-btn color="primary" @click="claim()">Claim</v-btn>
+                    <v-btn color="primary" @click="claim(job.id)">Claim</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -106,11 +106,20 @@ export default {
         };
     },
     methods: {
-        claim() {
-            /**
-             * @todo all dis
-             */
-            alert("Not so fast, my friend.");
+        claim(id) {
+            let router = this.$router;
+            let uid = this.user.uid;
+            db.collection("requests")
+                .doc(id)
+                .set({
+                    vendor_id: uid,
+                    status: "picked_up"
+                }, {
+                    merge: true
+                })
+                .then(function(ref) {
+                    router.push("/");
+                });
         },
         getLocation() {
             if (navigator.geolocation) {
@@ -152,14 +161,20 @@ export default {
                                 "mi",
                                 distanceMeters
                             );
-                            if (miles <= this.distance) {
+                            // Don't allow users to claim their own (disabling for testing)
+                            // if ( (miles <= this.distance) && (doc.data().client_id != this.user.uid) ) {
+                            if ( (miles <= this.distance) ) {
                                 jobs.push(doc);
                             }
                         }
                     });
-                    console.log(jobs);
                     return jobs;
                 });
+        }
+    },
+    computed: {
+        user() {
+            return this.$store.getters.activeUser;
         }
     },
     mounted() {}
