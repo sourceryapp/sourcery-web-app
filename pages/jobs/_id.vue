@@ -51,6 +51,8 @@
         </v-card>
       </v-dialog>
     </div>
+    <h2>Add File Test</h2>
+    <input type="file">
   </div>
 </template>
 
