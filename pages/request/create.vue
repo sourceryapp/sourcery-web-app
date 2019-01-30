@@ -41,7 +41,6 @@
 
                 <h1 style="width:100%">Create Request</h1>
 
-
                 <v-alert
                     :value="true"
                     type="info"
@@ -50,18 +49,30 @@
                     Message about our limited service area?
                 </v-alert>
 
-                <label for="location" class="title">
-                    1. Choose a location
+                <label for="area" class="title">
+                    1. Where is your document located?
                 </label>
+                <v-select
+                id="area"
+                name="area"
+                :items="areaSelections"
+                item-text="value"
+                item-value="key"
+                label="City, State"
+                v-model="area"
+                >Loading...</v-select>
+
                 <v-select
                 id="location"
                 name="location"
                 :items="repositories"
+                v-if="area"
                 item-text="name"
                 item-value="id"
                 label="Choose a location"
                 v-model="request.repository_id"
-                >Loading...</v-select>
+                :loading="loadingLocations"
+                ></v-select>
 
 
                 <v-divider class="mt-4 mb-4"></v-divider>
@@ -124,8 +135,11 @@
 
 <script>
 
+import { db } from '~/plugins/firebase-client-init.js'
+
 	export default {
-		name: "create",
+        name: "create",
+        auth: true,
 		data() {
 			return {
                 repositories: ["Loading..."],
@@ -150,9 +164,30 @@
                     25,
                     30,
                     "Unlimited"
-                ]
-
+                ],
+                area: null,
+                loadingLocations: true
 			}
+        },
+        async asyncData ({ params }) {
+            let areaSelections = [];
+            let areas = await db.collection('areas')
+                .where('country', '==', 'US')
+                .orderBy('state')
+                .orderBy('city')
+                .get()
+                .then((snapshot) => {
+                    snapshot.docs.forEach(doc => {
+                        areaSelections.push({
+                            key: doc.data().city,
+                            value: `${doc.data().city}, ${doc.data().state}`
+                        })
+                    });
+                })
+
+            return {
+                areaSelections: areaSelections
+            }
         },
         computed: {
             estimatedCost: function(){
@@ -160,71 +195,73 @@
             }
         },
         mounted() {
-			if (process.browser) {
-				this.$axios.get('/repositories').then(res => {
-                    this.repositories = res.data.repositories
-				}).catch(err => {
-					console.log(err)
-				})
-			}
-		},
+
+        },
+        watch: {
+            /**
+             * Update repositories after the Area field changes
+             */
+            area: async function (newArea, oldArea) {
+                this.loadingLocations = true;
+                let repositoriesList = [];
+                let repQuery = await db.collection('repositories')
+                    .where('city', '==', newArea)
+                    .orderBy('name')
+                    .get()
+                    .then((snapshot) => {
+                        snapshot.docs.forEach(doc => {
+                            repositoriesList.push({
+                                id: doc.id,
+                                name: `${doc.data().name}, ${doc.data().institution}`
+                            })
+                        });
+                    })
+                this.loadingLocations = false;
+                this.repositories = repositoriesList;
+            }
+        },
 		methods: {
-		    storeQuery(val) {
-		        console.log(typeof val);
-		        if(typeof val == 'string' && val.length>0){
-                    this.query = val;
-                }
-            },
-			updateQuery() {
-				this.$axios.post('/repositories/search', {
-					data: {
-						query: this.query
-					}
-				}).then(res => {
-					this.suggestions = res.data.repositories
-				}).catch(err => {
-					this.suggestions = []
-					console.log(err)
-					console.log(err.response)
-				})
-			},
-			selectSuggestion(suggestion) {
-				this.suggestions = []
-				this.repository = suggestion
-			},
-			submitRequest() {
+			async submitRequest() {
                 // Generate a label for the request
                 this.request.label = this.request.citation.match(/^(\w(\s*))+/)[0];
 
 				this.errors.citation = []
 				this.errors.repository = []
 				this.errors.label = []
-				this.loading = true
-				this.$axios.post('/requests', {
+                this.loading = true
+
+                let router = this.$router;
+
+                await db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,
-					repository_id: this.request.repository_id,
+                    repository_id: this.request.repository_id,
+                    repository: await this.getRepository( this.request.repository_id ),
 					citation: this.request.citation,
                     estimated_cost_usd: this.estimatedCost,
-					client_id: this.$store.state.auth.user.id,
-				}).then(res => {
-					this.loading = false
-					console.log(res)
-					// this.$store.dispatch('auth/setUser').then(() => {
-						this.$router.push('/')
-					// })
-				}).catch(err => {
-					this.loading = false
-					console.log(err)
-					console.log(err.response)
-					if (err.response.status === 422) {
-						const errors = err.response.data
-						this.errors.citation = errors.citation
-						this.errors.repository = errors.repository
-						this.errors.label = errors.label
-					}
-				})
-			}
+                    client_id: this.$store.getters.activeUser.uid,
+                    status: "pending",
+                    created_at: new Date(),
+                    vendor_id: "",
+                    attachments: {},
+                })
+                .then(function(ref){
+                    console.log(`Imported "${ref.id}"`);
+					router.push('/')
+
+                })
+                .catch(function(error){
+                    console.error(error);
+                })
+            },
+            async getRepository(id){
+                return await db.collection('repositories')
+                    .doc(id)
+                    .get()
+                    .then((doc) => {
+                        return doc.data();
+                    })
+            }
 		}
 	}
 </script>

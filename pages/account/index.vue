@@ -14,9 +14,9 @@
                             <v-list-tile-avatar>
                                 <img v-bind:src="gravatar">
                             </v-list-tile-avatar>
-                            <v-list-tile-content>
-                                <v-list-tile-title>{{this.$auth.user.name}}</v-list-tile-title>
-                                <v-list-tile-sub-title>{{this.$auth.user.email}}</v-list-tile-sub-title>
+                            <v-list-tile-content v-if="this.user">
+                                <v-list-tile-title>{{this.user.name}}</v-list-tile-title>
+                                <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list>
@@ -102,7 +102,7 @@
                         <v-btn
                             color="green darken-1"
                             flat="flat"
-                            @click="$auth.logout()" nuxt active-class
+                            @click="logout()" nuxt active-class
                         >
                             Log Out
                         </v-btn>
@@ -136,15 +136,19 @@
             }
         },
         computed: {
+            user(){
+                return this.$store.getters.activeUser
+            },
             gravatar() {
-                if(this.$auth.user.email !== undefined){
-                    return 'https://www.gravatar.com/avatar/' + md5(this.$auth.user.email) + '?d=mp';
+                if(this.user !== null){
+                    return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + '?d=mp';
                 }
             }
         },
         methods: {
             async logout() {
-                return await this.$auth.logout();
+                await this.$store.dispatch('signOut');
+                this.$router.replace('/login')
             }
         }
     }

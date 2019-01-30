@@ -13,7 +13,7 @@
         <v-divider class="mt-3 mb-3"></v-divider>
 
         <h3>Don't Have an Account?</h3>
-        <v-btn :to="{name: 'register'}">Register</v-btn>
+        <v-btn to="/register">Register</v-btn>
 
 
 	</v-form>
@@ -27,8 +27,8 @@
 		layout: 'default',
 		data() {
 			return {
-				email: 'brian@uconn.edu',
-				password: 'Research1!',
+				email: '',
+				password: '',
 				errors: {
 					password: [],
 					email: []
@@ -64,17 +64,11 @@
 			// }
 
             async login() {
-                this.error = null;
-                return await this.$auth
-                    .loginWith('local', {
-                        data: {
-                            email: this.email,
-                            password: this.password
-                        }
-                    })
-                    .catch(e => {
-                        this.error = e + ''
-                    })
+                await this.$store.dispatch('signIn', {
+                    email: this.email,
+                    password: this.password
+                });
+                this.$router.replace('/')
             }
 		}
 	}

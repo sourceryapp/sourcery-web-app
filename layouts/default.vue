@@ -9,7 +9,7 @@
 
 		</v-toolbar>
 		<v-content pa-0>
-			<v-container fluid fill-height pa-0>
+			<v-container fill-height>
 				<v-layout
 						justify-center
 				>
@@ -21,7 +21,7 @@
             :value="true"
             dark
             app
-            v-if="this.$auth.user"
+            v-if="user"
             color="white"
         >
             <v-btn
@@ -74,18 +74,22 @@
 
 	export default {
 		computed: {
-
+            user() {
+                return this.$store.getters.activeUser
+            }
 		},
 		methods: {
 
 		},
         data: () => ({
             drawer: null,
-
         }),
 
         props: {
             source: String
+        },
+        mounted() {
+            // console.log('Firebase: ', firebase);
         }
 	}
 </script>

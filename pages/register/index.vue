@@ -15,7 +15,7 @@
 <script>
 
 	export default {
-		name: "register",
+		name: "register_old",
 
         /**
 		 * Don't require auth for this page.
