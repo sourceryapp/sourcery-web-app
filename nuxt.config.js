@@ -1,5 +1,4 @@
 const path = require('path');
-const { VueLoaderPlugin } = require('vue-loader')
 
 let env = require('./config/development.js')
 
@@ -15,10 +14,11 @@ module.exports = {
 	head: {
 		title: 'Tube Research',
 		meta: [
-            {"http-equiv": "x-ua-compatible", content: "ie=edge" },
+            { "http-equiv": "x-ua-compatible", content: "ie=edge" },
+            { "name": "viewport", content: "width=device-width, initial-scale=1" }
 		],
 		link: [
-            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' },
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' },
         ]
 	},
 
@@ -26,7 +26,8 @@ module.exports = {
 	** CSS File
 	*/
 	css: [
-	    '~/assets/styles/app.styl'
+	    '~/assets/styles/app.styl',
+        'material-design-icons-iconfont/dist/material-design-icons.css'
     ],
 
 
@@ -47,11 +48,13 @@ module.exports = {
 
     /**
 	 * Meta
+	 * @todo Add proper meta for FB and Twitter
 	 * @url https://pwa.nuxtjs.org/modules/meta.html
      */
     meta: {
         name: 'Tube Research',
-        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.'
+        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
+        mobileAppIOS: true
     },
 
 
@@ -63,17 +66,24 @@ module.exports = {
 
     },
 
+    /**
+	 * PWA Manifest
+	 * @url https://pwa.nuxtjs.org/modules/manifest.html
+     */
+    manifest: {
+    	name: 'Tube Research',
+        short_name: 'Tube',
+        lang: 'en-US',
+		orientation: 'portrait'
+    },
+
 
 	/*
 	** Plugins
 	*/
 	plugins: [
-		// {
-		// 	src: '~/plugins/localforage.js',
-		// 	ssr: false
-		// },
-		// '~/plugins/authenticationGuard.js',
-		'~/plugins/vuetify.js'
+        '~/plugins/vuetify.js',
+        '~/plugins/firebase-client-init.js',
 	],
 
 
@@ -92,14 +102,16 @@ module.exports = {
 	*/
 	router: {
 		middleware: ['auth'],
-		mode: 'history'
-	},
+    },
+
+    serverMiddleware: [
+        '~/serverMiddleware/validate-token',
+    ],
 
 
     modules: [
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
-        '@nuxtjs/auth'
     ],
 
     /**
@@ -109,40 +121,6 @@ module.exports = {
     axios: {
     	baseURL: env.API_URL
 	},
-
-    /**
-	 * Options for @nuxtjs/auth
-	 * @url https://auth.nuxtjs.org/options.html
-     */
-	auth: {
-		strategies: {
-			local: {
-                endpoints: {
-                    login: {
-                        url: '/auth/login',
-                        method: 'post',
-                        propertyName: 'data.token'
-                    },
-                    user: {
-                    	url: '/auth/user',
-						method: 'get',
-						propertyName: 'data'
-                    },
-					logout: {
-                    	url: '/auth/invalidate',
-						method: 'delete'
-					}
-                }
-			}
-		},
-		redirect: {
-			login: '/login',
-			logout: '/login',
-			user: '/',
-			home: '/home'
-		}
-	},
-
 
 	/*
 	** Build configuration
@@ -168,12 +146,11 @@ module.exports = {
 		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
          */
 		plugins: [
-            new VueLoaderPlugin()
-		],
+
+        ],
 
 		vendor: [
 			'axios',
-            '~/plugins/vuetify.js'
 		],
         postcss: {
             plugins: {
@@ -182,6 +159,6 @@ module.exports = {
         },
         extractCSS: true,
 		cssSourceMap: true,
-		mode: 'spa'
+		mode: 'universal'
 	}
-}
+};

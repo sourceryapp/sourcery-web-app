@@ -1,19 +1,25 @@
 <template>
 	<v-form @submit.prevent="login">
-		<h1>Login</h1>
+         <h1>Log In</h1>
+        <v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
+        <span class="text-red" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
+        <v-text-field type="password" name="password" v-model="password" placeholder="Password"></v-text-field>
+        <span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
+        <div>
+            <nuxt-link  :to="{name: 'password'}">Forgot your password?</nuxt-link>
+        </div>
+        <v-btn type="submit" color="primary">Log In</v-btn>
 
-		<v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
-			<span class="text-red" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
-				<v-text-field type="password" name="password" v-model="password" placeholder="Password"></v-text-field>
-			<span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
-		<v-btn type="submit" color="primary">Submit</v-btn>
-			<nuxt-link :to="{name: 'register'}">Register</nuxt-link>
+        <v-divider class="mt-3 mb-3"></v-divider>
+
+        <h3>Don't Have an Account?</h3>
+        <v-btn to="/register">Register</v-btn>
+
+
 	</v-form>
 </template>
 
 <script>
-	import axios from 'axios'
-
 	export default {
 		name: "login",
 		// auth: false,
@@ -21,8 +27,8 @@
 		layout: 'default',
 		data() {
 			return {
-				email: 'brian@uconn.edu',
-				password: 'Research1!',
+				email: '',
+				password: '',
 				errors: {
 					password: [],
 					email: []
@@ -58,17 +64,11 @@
 			// }
 
             async login() {
-                this.error = null
-                return this.$auth
-                    .loginWith('local', {
-                        data: {
-                            email: this.email,
-                            password: this.password
-                        }
-                    })
-                    .catch(e => {
-                        this.error = e + ''
-                    })
+                await this.$store.dispatch('signIn', {
+                    email: this.email,
+                    password: this.password
+                });
+                this.$router.replace('/')
             }
 		}
 	}
