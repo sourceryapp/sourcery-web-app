@@ -1,32 +1,4 @@
 <template>
-		<!--<div>-->
-			<!--<p>Give a label for this request</p>-->
-			<!--<input type="text" v-model="label" class="border-2">-->
-			<!--<p class="text-red" v-for="(err, index) in errors.label" :key="index">{{err}}</p>-->
-		<!--</div>-->
-		<!--<div>-->
-			<!--<p>Where is your document located?</p>-->
-			<!--<p><input type="text" v-model="repository" @keyup="updateQuery" class="border-2"></p>-->
-			<!--<ul v-if="suggestions.length > 0 && repository !== ''">-->
-				<!--<li v-for="(suggestion, index) in suggestions" :key="index">-->
-					<!--<a href="#" @click.prevent="selectSuggestion(suggestion)">{{suggestion}}</a>-->
-				<!--</li>-->
-			<!--</ul>-->
-			<!--<p class="text-red" v-for="(err, index) in errors.repository" :key="index">{{err}}</p>-->
-		<!--</div>-->
-		<!--<div>-->
-			<!--<p class="mt-2">What is the citation for your document?</p>-->
-			<!--<textarea name="citation" id="citation" cols="30" rows="10" v-model="citation" class="border-2"></textarea>-->
-			<!--<p class="text-red" v-for="(err, index) in errors.citation" :key="index">{{err}}</p>-->
-		<!--</div>-->
-		<!--<div>-->
-			<!--<p>By clicking this button, you agree to pay the base rate of <strong>$5</strong>.</p>-->
-			<!--<p>Once picked up, it is estimated that your request will cost around <strong>$10</strong>, making your-->
-				<!--total cost <strong>$15.</strong></p>-->
-			<!--<p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>-->
-			<!--<p v-if="loading"><strong>Loading...</strong></p>-->
-			<!--<button @click.prevent="submitRequest" class="p-2 bg-blue text-white" v-else>Submit</button>-->
-		<!--</div>-->
         <v-layout row>
 
 
@@ -185,8 +157,23 @@ import { db } from '~/plugins/firebase-client-init.js'
                     });
                 })
 
+                let citations = [
+                    'James P. Quentin to Sally Quentin, 12 Jan. 1876, Springfield Collection.',
+                    'Manuscript Miscellany, Scribe: anon., various hands, 287 pp., paper, c. 1640.',
+                    'Mass. General Statutes, 1842-7, Vol. 23, pp 18-29.',
+                    'L.V. Beethoven, 5th Symphony, autograph MS, 1808.',
+                    'P.D.Q. Hoagland Collection, Administrative records, clippings, correspondence, ephemera, 1963-1964, 1967-1969, 42pp.',
+                ]
+
             return {
-                areaSelections: areaSelections
+                areaSelections: areaSelections,
+
+                // Set a random citation during development.
+                // @todo Remove random citations before launch.
+                request: {
+                    pages: 0,
+                    citation: citations[Math.floor(Math.random()*citations.length)]
+                }
             }
         },
         computed: {
