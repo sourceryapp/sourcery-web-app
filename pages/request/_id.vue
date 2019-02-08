@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <div v-if="request !== null">
+  <v-layout>
+    <v-flex xs12 sm8 offset-sm2 v-if="request !== null">
       <h1>{{request.label}}</h1>
-      <v-img
-        src="https://via.placeholder.com/250?text=Google+Map?"
-        aspect-ratio="1"
-        class="grey lighten-2"
-      ></v-img>
+      <StaticMap
+        :alt="`Satellite image of ${repository.name}`"
+        :lat="repository.geo._lat"
+        :long="repository.geo._long"
+        ></StaticMap>
       <p>Citation:</p>
       <p class="mb-2">{{request.citation}}</p>
       <p>
@@ -51,12 +51,14 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
-  </div>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
 import { db } from "~/plugins/firebase-client-init.js";
+import StaticMap from '~/components/static-map'
+
 
 export default {
     name: "request-id",
@@ -92,6 +94,9 @@ export default {
             };
         }
 
+    },
+    components: {
+        StaticMap,
     },
     data() {
         return {

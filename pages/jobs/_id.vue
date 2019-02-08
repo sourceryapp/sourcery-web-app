@@ -1,11 +1,12 @@
 <template>
-  <div>
-    <div v-if="request !== null">
+  <v-layout>
+    <v-flex xs12 sm8 offset-sm2 v-if="request !== null">
       <h1>{{request.label}}</h1>
-      <v-img
-        src="https://via.placeholder.com/250x100?text=Google+Map?"
-        class="grey lighten-2"
-      ></v-img>
+      <StaticMap
+        :alt="`Satellite image of ${repository.name}`"
+        :lat="repository.geo._lat"
+        :long="repository.geo._long"
+        ></StaticMap>
       <p>Citation:</p>
       <p class="mb-2">{{request.citation}}</p>
       <p>
@@ -48,8 +49,9 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-    </div>
-    <h2>Add Images:</h2>
+
+
+          <h2>Add Images:</h2>
       <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
         <div class="dropbox">
           <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
@@ -63,12 +65,15 @@
         </div>
       </form>
         <p v-if="isSuccess">File(s) uploaded successfully!</p>
+    </v-flex>
 
-  </div>
+
+  </v-layout>
 </template>
 
 <script>
 import { db, storage } from "~/plugins/firebase-client-init.js";
+import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
 export default {
@@ -119,6 +124,9 @@ export default {
       isFailed() {
         return this.currentStatus === STATUS_FAILED;
       }
+    },
+    components: {
+        StaticMap,
     },
     methods: {
       reset() {
