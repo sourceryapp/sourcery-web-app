@@ -12,6 +12,7 @@ firestore.settings({ timestampsInSnapshots: true });
 export const db = firestore;
 export const GeoPoint = firebase.Geopoint;
 export const storage = firebase.storage();
+export const FieldValue = firebase.firestore.FieldValue;
 
 // Auth
 export const Auth = firebase.auth()

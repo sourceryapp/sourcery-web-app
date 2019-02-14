@@ -65,6 +65,39 @@
         </div>
       </form>
         <p v-if="isSuccess">File(s) uploaded successfully!</p>
+
+
+        <v-card v-if="request.attachments.length">
+            <v-container grid-list-sm fluid>
+                <v-layout row wrap>
+                    <v-flex
+                    v-for="n in request.attachments"
+                    :key="n"
+                    xs4
+                    d-flex
+                    >
+                        <v-card flat tile class="d-flex">
+                            <v-img
+                            :src="n"
+                            :lazy-src="n"
+                            aspect-ratio="1"
+                            class="grey lighten-2"
+                            >
+                            <v-layout
+                                slot="placeholder"
+                                fill-height
+                                align-center
+                                justify-center
+                                ma-0
+                            >
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                            </v-layout>
+                            </v-img>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-card>
     </v-flex>
 
 
@@ -72,7 +105,7 @@
 </template>
 
 <script>
-import { db, storage } from "~/plugins/firebase-client-init.js";
+import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
 import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
@@ -141,28 +174,44 @@ export default {
         let storageRef = storage.ref(`jobs/${this.request.id}/images/`);
         this.currentStatus = STATUS_SAVING;
         let files = this.$refs.upload.files;
+        let uploaded = this.uploadedFiles;
+
         for (var i = 0; i < files.length; i++) {
 
             let file = files[i]
             let imageRef = storageRef.child(file.name);
-            let uploaded = this.uploadedFiles;
-            await imageRef.put(file).then(function(snapshot){
-                uploaded.push(file);
-            })
+            let uploadTask = imageRef.put(file);
+            let request = this.request.id;
 
+            uploadTask.on('state_changed', // or 'state_changed'
+                function(snapshot) {
+                    // Update progress here... if you want
+                }, function(error) {
+
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+
+                    case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+                    case 'storage/unknown':
+                    // Unknown error occurred, inspect error.serverResponse
+                    break;
+                }
+                }, async function() {
+                    // Upload completed successfully, now we can get the download URL
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        db.collection('requests').doc(request).update({
+                            attachments: FieldValue.arrayUnion(downloadURL)
+                        });
+                    });
+            });
         }
         this.currentStatus = STATUS_SUCCESS;
-
-
-// upload(this.request.id, formData)
-        //   .then(x => {
-        //     this.uploadedFiles = [].concat(x);
-        //     this.currentStatus = STATUS_SUCCESS;
-        //   })
-        //   .catch(err => {
-        //     this.uploadError = err.response;
-        //     this.currentStatus = STATUS_FAILED;
-        //   });
       },
       filesChange(fieldName, fileList) {
         // handle file changes
@@ -191,6 +240,16 @@ export default {
             currentStatus: null,
             uploadFieldName: 'photos'
         };
+    },
+    created(){
+        // Listen for updates
+        let request = this.request;
+        db.collection("requests").doc(request.id).onSnapshot(function(doc) {
+            if(doc.data().attachments.length){
+                console.log(request, doc.data());
+                request.attachments = doc.data().attachments;
+            }
+        });
     },
     mounted() {
         this.reset();
