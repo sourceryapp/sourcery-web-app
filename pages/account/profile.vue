@@ -12,32 +12,58 @@
                     General
                 </v-tab>
                 <v-tab-item class="pt-2">
+                    
+                    <v-card flat height="140px">
+                        <v-card-title primary-title>
+                            <div>
+                                <h3 class="headline mb-0"> Current Information </h3>
+                                    <p>Name: {{this.user.name}}</p>
+                                    <p>Email: {{this.user.email}}</p>
+                            </div>
+                        </v-card-title>
+                    </v-card>
+
                     <v-card flat>
-                        <v-form @submit.prevent="registerSubmit">
-                            <v-text-field type="text" name="name" label="Name" v-model="name"></v-text-field>
-                            <span class="red--text" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
-                            <v-text-field type="email" name="email" label="Email Address" v-model="email" :autocomplete="false"></v-text-field>
-                            <span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
-                            <v-btn type="submit" value="Save" color="primary">Save</v-btn>
+                        <v-card-title primary-title>
+                            <h3 class="headline mb-0"> Change Name </h3>
+                        </v-card-title>
+                        <v-form @submit.prevent="changeUserName">
+                            <v-layout>
+                                <v-flex>
+                                    <v-text-field 
+                                        label="Enter Name"
+                                        name="name"
+                                        id="name"
+                                        v-model="name">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout>
+                                <v-flex>
+                                    <v-btn 
+                                    :disabled="!nameIsValid"
+                                    type="submit"
+                                    >
+                                    Submit
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
                         </v-form>
                     </v-card>
                 </v-tab-item>
                 <v-tab ripple>
-                    Change Password
+                    Password
                 </v-tab>
                 <v-tab-item class="pt-2">
                     <v-card flat>
-                        <v-form @submit.prevent="registerSubmit">
-
-                            <v-text-field type="password" name="cpassword" v-model="cpassword"  autocomplete="false" label="Current Password"></v-text-field>
-                            <span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
-
-                            <v-text-field type="password" name="npassword1" v-model="npassword1"  autocomplete="false" label="New Password"></v-text-field>
-                            <span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
-                            <v-text-field type="password" name="npassword2" v-model="npassword2"  autocomplete="false" label="Confirm New Password"></v-text-field>
-                            <span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
-                            <v-btn type="submit" value="Update" color="primary">Update</v-btn>
-                        </v-form>
+                    </v-card>
+                </v-tab-item>
+                <v-tab ripple>
+                    Email
+                </v-tab>
+                <v-tab-item class="pt-2">
+                    <v-card flat>
+                        <h3>Hello</h3>
                     </v-card>
                 </v-tab-item>
             </v-tabs>
@@ -47,6 +73,7 @@
 </template>
 
 <script>
+    import {user} from '~/store/index.js'
 	export default {
 		name: "profile",
 		data: function() {
@@ -54,20 +81,19 @@
 		    return {
                 name: '',
                 email: '',
-                errors: {
-                    name: [],
-                    email: [],
-                    password: [],
-                    confirm_password: [],
-                },
-                cpassword: '',      // Current Password
-                npassword1: '',     // New password
-                npassword2: '',     // New password confirmed
+            }
+        },
+        methods: {
+            changeUserName(name) {
+                console.log(this.$store.state.user.name);
             }
         },
         computed: {
             user() {
                 return this.$store.getters.activeUser
+            },
+            nameIsValid() {
+                return this.name !== "";
             }
 		},
 	}

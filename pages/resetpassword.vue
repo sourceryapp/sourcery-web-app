@@ -64,6 +64,8 @@
                 var newPasswprd = this.password();
                 firebase.auth().confirmPasswordReset(code, newPassword)
                     .then(function() {
+                        console.log(success)
+
                     // Success
                     })
                     .catch(function() {

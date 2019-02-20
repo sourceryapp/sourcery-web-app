@@ -1,8 +1,9 @@
 <template>
     <v-layout>
         <v-flex xs12 sm6 offset-sm3>
-            <h3>Password Reset Page</h3>
-            <form @submit.prevent="resetPass">
+            <h3>Reset Password</h3>
+            <p>Enter your email address and click submit. An email instructing you of how to change your password will be sent shortly.<p>
+            <form @submit.prevent="resetPassEmail">
                 <v-layout>
                     <v-flex>
                         <v-text-field 
@@ -27,7 +28,7 @@
             <v-flex>
                 <span v-if="success">An email has been sent to the provided address.</span>
             </v-flex>
-            <v-btn to="/resetpassword?test=01">Testing</v-btn>
+            <v-btn to="/login">Back</v-btn>
         </v-flex>
     </v-layout>
 </template>
@@ -41,6 +42,7 @@
             return {
                 email: '',
                 success: false,
+
             }
         },
         computed: {
@@ -49,11 +51,16 @@
             }
         },
         methods: {
-            resetPass() {
+            resetPassEmail() {
+                var error_msg = true;
                 var emailAddress = this.email;
                 Auth.sendPasswordResetEmail(emailAddress).then(function() {
+                    error_msg = false;
+                    console.log("success")
                  //Email sent.
                 }).catch(function(error) {
+                    if (error_msg == true)
+                        console.log("oops")
                  //An error happened.
                 });
                 return
