@@ -9,49 +9,6 @@
 
             >
                 <v-tab ripple>
-                    General
-                </v-tab>
-                <v-tab-item class="pt-2">
-                    
-                    <v-card flat height="140px">
-                        <v-card-title primary-title>
-                            <div>
-                                <h3 class="headline mb-0"> Current Information </h3>
-                                    <p>Name: {{this.user.name}}</p>
-                                    <p>Email: {{this.user.email}}</p>
-                            </div>
-                        </v-card-title>
-                    </v-card>
-
-                    <v-card flat>
-                        <v-card-title primary-title>
-                            <h3 class="headline mb-0"> Change Name </h3>
-                        </v-card-title>
-                        <v-form @submit.prevent="changeUserName">
-                            <v-layout>
-                                <v-flex>
-                                    <v-text-field 
-                                        label="Enter Name"
-                                        name="name"
-                                        id="name"
-                                        v-model="name">
-                                    </v-text-field>
-                                </v-flex>
-                            </v-layout>
-                            <v-layout>
-                                <v-flex>
-                                    <v-btn 
-                                    :disabled="!nameIsValid"
-                                    type="submit"
-                                    >
-                                    Submit
-                                    </v-btn>
-                                </v-flex>
-                            </v-layout>
-                        </v-form>
-                    </v-card>
-                </v-tab-item>
-                <v-tab ripple>
                     Password
                 </v-tab>
                 <v-tab-item class="pt-2">
@@ -63,6 +20,7 @@
                             <v-layout>
                                 <v-flex>
                                     <v-text-field
+                                        type="password"
                                         label="Enter Old Password"
                                         name="oldpassword"
                                         id="oldpassword"
@@ -73,6 +31,7 @@
                             <v-layout>
                                 <v-flex>
                                     <v-text-field
+                                        type="password"
                                         label="Enter New Password"
                                         name="newpassword"
                                         id="newpassword"
@@ -83,6 +42,7 @@
                             <v-layout>
                                 <v-flex>
                                     <v-text-field
+                                        type="password"
                                         label="Confirm New Password"
                                         name="confirmpassword"
                                         id="confirmpassword"
@@ -96,14 +56,30 @@
                                     :disabled="!passwordIsValid"
                                     type="submit">
                                     Submit
-                                    </v-btn>
-                                </v-flex>    
+                                    </v-btn> 
+                                </v-flex> 
+                                <v-flex v-if="!passwordIsValid">
+                                    <span>New Passwords do Not Match.</span>
+                                </v-flex>
                             </v-layout>  
                         </form>
+                        <v-btn @click = "forgotLog">Forgot Password?</v-btn>
+                        
                     </v-card>
                     <v-alert
                         :value = passSuccess
                         type="success">
+                        <span color="white">Password successfully changed.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = passFail
+                        type="error">
+                        <span color="white">Old Password Incorrect.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = passError
+                        type="error">
+                        <span color="white">An Error Has Occurred. Please Try Again Later.</span>
                     </v-alert>
                     
                 </v-tab-item>
@@ -115,21 +91,32 @@
                         <v-card-title primary-title>
                             <h3 class="headline mb-0"> Change Email </h3>
                         </v-card-title>
-                        <v-form @submit.prevent="changeUserName">
+                        <v-form @submit.prevent="changeUserEmail">
                             <v-layout>
                                 <v-flex>
                                     <v-text-field 
-                                        label="Enter Name"
-                                        name="name"
-                                        id="name"
-                                        v-model="name">
+                                        label="Enter New Email"
+                                        name="email"
+                                        id="email"
+                                        v-model="email">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout>
+                                <v-flex>
+                                    <v-text-field
+                                        type = "password"
+                                        label="Enter Password"
+                                        name="epass"
+                                        id="epass"
+                                        v-model="epass">
                                     </v-text-field>
                                 </v-flex>
                             </v-layout>
                             <v-layout>
                                 <v-flex>
                                     <v-btn 
-                                    :disabled="!nameIsValid"
+                                    :disabled="!emailIsValid"
                                     type="submit"
                                     >
                                     Submit
@@ -138,6 +125,21 @@
                             </v-layout>
                         </v-form>
                     </v-card>
+                    <v-alert
+                        :value = emailSuccess
+                        type="success">
+                        <span color="white">Email successfully updated.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = emailFail
+                        type="error">
+                        <span color="white">Password Incorrect.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = emailError
+                        type="error">
+                        <span color="white">An Error Has Occurred. Please Try Again Later.</span>
+                    </v-alert>
                 </v-tab-item>
             </v-tabs>
 
@@ -155,12 +157,19 @@
 
 		    return {
                 name: '',
-                email: '',
-                oldpassword: 'passwordtest01',
-                newpassword: 'passwordtest01',
-                confirmpassword: 'passwordtest01',
-                passSuccess: false,
 
+                email: '',
+                epass: '',
+                emailSuccess: false,
+                emailFail: false,
+                emailError: false,
+
+                oldpassword: '',
+                newpassword: '',
+                confirmpassword: '',
+                passSuccess: false,
+                passFail: false,
+                passError: false
             }
         },
         methods: {
@@ -194,12 +203,42 @@
 
                         // Update successful.
                         }).catch(function(error) {
+                            console.log("unknown error")
+                            this.passError = true;
                         // An error happened.
                         });
                     }
-                ).catch(function(error) {
-
+                ).catch(error => {
+                    //console.log("error")
+                    this.passFail = true;
                 });
+            },
+            changeUserEmail() {
+                firebase.auth().currentUser.reauthenticateAndRetrieveDataWithCredential(
+                firebase.auth.EmailAuthProvider.credential(
+                    firebase.auth().currentUser.email, 
+                    this.epass
+                    )
+                ).then(
+                    success => {
+                        var user = firebase.auth().currentUser;
+                        user.updateEmail(this.email).then(
+                            success => {
+                            this.emailSuccess = true;
+                            //console.log("email updated")
+                        // Update successful.
+                        }).catch(function(error) {
+                            //console.log("error after reauthenticate")
+                        });
+                    }
+                ).catch(error => {
+                    this.emailFail = true;
+                    //console.log("error before reauthenticate")
+                });
+            },
+            async forgotLog() {
+                await this.$store.dispatch('signOut');
+                this.$router.replace('/password')
             }
 
         },
@@ -226,25 +265,18 @@
                         //this.password == this.confirmpassword;
        
             },
-            //reAuthenticate() {
-                //var user = firebase.auth().currentUser;
-                //var credential = firebase.auth.EmailAuthProvider.credential(
-                 //   this.user.email,
-                //    oldpassword
-                //);
-
-                // Prompt the user to re-provide their sign-in credentials
-
-               // user.reauthenticateAndRetrieveDataWithCredential(credential).then(
-               //     success => {
-                //        return true 
-                //}).catch(function(error) {
-                //        return false
-                // An error happened.
-               // });
-
-            //}
-		},
+            emailIsValid() {
+                return this.email !== "" && this.password != "";
+            },
+            giveEmail() {
+                var user = firebase.auth().currentUser;
+                return this.user.email
+            },
+            giveName() {
+                console.log("name:", this.user.name)
+                return this.user.name
+            }
+		}
 	}
 </script>
 

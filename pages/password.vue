@@ -50,6 +50,9 @@
                 return this.email !== '';
             }
         },
+            user() {
+                return this.$store.getters.activeUser
+        },
         methods: {
             resetPassEmail() {
                 var error_msg = true;
@@ -67,6 +70,13 @@
             },
             emailSuccess() {
                 this.success = true;
+            },
+            returnAndLog() {
+                //console.log(this.user)
+                //if (this.user) {
+                    this.$store.dispatch('signOut')
+                //  }
+                this.$router.replace('/login')
             }
         }
 
