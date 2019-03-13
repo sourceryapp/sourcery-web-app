@@ -1,4 +1,5 @@
 <template>
+	<v-layout align-center justify-start column fill-height>
 	<v-form @submit.prevent="login">
          <h1>Log In</h1>
         <v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
@@ -17,6 +18,13 @@
 
 
 	</v-form>
+	<v-alert
+        :value = loginError
+        type="warning"
+        dismissible>
+        <span color="white">Invalid login, please try again.</span>
+    </v-alert>
+	</v-layout>
 </template>
 
 <script>
@@ -29,6 +37,7 @@
 			return {
 				email: '',
 				password: '',
+				loginError: false,
 				errors: {
 					password: [],
 					email: []
@@ -67,7 +76,12 @@
                 await this.$store.dispatch('signIn', {
                     email: this.email,
                     password: this.password
-                });
+                }).then(function() {
+					//console.log('success');
+				}).catch(error => {
+					//console.log("error");
+					this.loginError = true;
+				});
                 this.$router.replace('/')
             }
 		}
