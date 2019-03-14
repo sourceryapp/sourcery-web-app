@@ -15,3 +15,6 @@ dist
 
 # Service worker
 sw.*
+
+# Stupid mac files
+.DS_Store
