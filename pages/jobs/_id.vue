@@ -51,27 +51,26 @@
       </v-dialog>
 
 
-          <h2>Add Images:</h2>
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+          <h2>Images</h2>
+      <form enctype="multipart/form-data" novalidate >
         <div class="dropbox">
           <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
             accept="image/*" class="input-file">
             <p v-if="isInitial">
-              Drag your file(s) here to begin<br> or click to browse
+              <!-- Drag your file(s) here to begin<br> or click to browse -->
             </p>
             <p v-if="isSaving">
               Uploading {{ fileCount }} files...
             </p>
         </div>
       </form>
-        <p v-if="isSuccess">File(s) uploaded successfully!</p>
 
 
         <v-card v-if="request.attachments.length">
             <v-container grid-list-sm fluid>
                 <v-layout row wrap>
                     <v-flex
-                    v-for="n in request.attachments"
+                    v-for="n in request.attachments.slice().reverse()"
                     :key="n"
                     xs4
                     d-flex
@@ -91,13 +90,71 @@
                                 ma-0
                             >
                                 <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+
                             </v-layout>
+
+                            <v-layout
+                                row
+                                fill-height
+                                justify-end
+                                ma-0
+                            >
+
+                                <v-menu bottom right offset-y>
+                                    <template>
+                                        <v-btn fab small class="ma-0 pa-0" color="grey lighten-2" icon slot="activator">
+                                            <v-icon>more_vert</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-tile @click="viewUpload(n)">
+                                            <v-list-tile-title>View</v-list-tile-title>
+                                        </v-list-tile>
+                                        <v-list-tile>
+                                            <v-list-tile-title>Delete</v-list-tile-title>
+                                        </v-list-tile>
+                                    </v-list>
+                                </v-menu>
+
+                            </v-layout>
+
                             </v-img>
                         </v-card>
                     </v-flex>
                 </v-layout>
             </v-container>
         </v-card>
+
+        <!-- Upload Dialog -->
+        <v-layout row justify-center>
+
+            <v-dialog
+            v-model="uploadDialog"
+            >
+            <v-card>
+                <v-img :src="currentImage" v-if="currentImage"></v-img>
+
+                <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    color="primary"
+                    @click="uploadDialog = false"
+                >
+                    Close
+                </v-btn>
+
+                <!-- <v-btn
+                    color="green darken-1"
+                    flat="flat"
+                    @click="uploadDialog = false"
+                >
+                    Agree
+                </v-btn> -->
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
+        </v-layout>
     </v-flex>
 
 
@@ -228,6 +285,10 @@ export default {
 
         // save it
         this.save(formData);
+      },
+      viewUpload(image){
+          this.currentImage = image;
+          this.uploadDialog = true;
       }
     },
     data() {
@@ -238,7 +299,9 @@ export default {
             uploadedFiles: [],
             uploadError: null,
             currentStatus: null,
-            uploadFieldName: 'photos'
+            uploadFieldName: 'photos',
+            currentImage: null,
+            uploadDialog: false,
         };
     },
     created(){
@@ -258,32 +321,10 @@ export default {
 </script>
 
 <style scoped>
-  .dropbox {
-    outline: 2px dashed grey; /* the dash box */
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    min-height: 200px; /* minimum height */
-    position: relative;
-    cursor: pointer;
-  }
+
 
   .input-file {
-    opacity: 0; /* invisible but it's there! */
-    width: 100%;
-    height: 200px;
-    position: absolute;
     cursor: pointer;
   }
 
-  .dropbox:hover {
-    background: lightblue; /* when mouse over to the drop zone, change color */
-  }
-
-  .dropbox p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  }
 </style>
