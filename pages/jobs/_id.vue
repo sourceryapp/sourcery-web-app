@@ -51,20 +51,110 @@
       </v-dialog>
 
 
-          <h2>Add Images:</h2>
-      <form enctype="multipart/form-data" novalidate v-if="isInitial || isSaving">
+          <h2>Images</h2>
+      <form enctype="multipart/form-data" novalidate ref="uploadForm" >
         <div class="dropbox">
           <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
             accept="image/*" class="input-file">
             <p v-if="isInitial">
-              Drag your file(s) here to begin<br> or click to browse
+              <!-- Drag your file(s) here to begin<br> or click to browse -->
             </p>
             <p v-if="isSaving">
               Uploading {{ fileCount }} files...
             </p>
         </div>
       </form>
-        <p v-if="isSuccess">File(s) uploaded successfully!</p>
+
+
+        <v-card v-if="request.attachments.length">
+            <v-container grid-list-sm fluid>
+                <v-layout row wrap>
+                    <v-flex
+                    v-for="n in request.attachments.slice().reverse()"
+                    :key="n"
+                    xs4
+                    d-flex
+                    >
+                        <v-card flat tile class="d-flex">
+                            <v-img
+                            :src="n"
+                            :lazy-src="n"
+                            aspect-ratio="1"
+                            class="grey lighten-2"
+                            >
+                            <v-layout
+                                slot="placeholder"
+                                fill-height
+                                align-center
+                                justify-center
+                                ma-0
+                            >
+                                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+
+                            </v-layout>
+
+                            <v-layout
+                                row
+                                fill-height
+                                justify-end
+                                ma-0
+                            >
+
+                                <v-menu bottom right offset-y>
+                                    <template>
+                                        <v-btn fab small class="ma-0 pa-0" color="grey lighten-2" icon slot="activator">
+                                            <v-icon>more_vert</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-tile @click="viewUpload(n)">
+                                            <v-list-tile-title>View</v-list-tile-title>
+                                        </v-list-tile>
+                                        <v-list-tile @click="deleteUpload(n)">
+                                            <v-list-tile-title>Delete</v-list-tile-title>
+                                        </v-list-tile>
+                                    </v-list>
+                                </v-menu>
+
+                            </v-layout>
+
+                            </v-img>
+                        </v-card>
+                    </v-flex>
+                </v-layout>
+            </v-container>
+        </v-card>
+
+        <!-- Upload Dialog -->
+        <v-layout row justify-center>
+
+            <v-dialog
+            v-model="uploadDialog"
+            >
+            <v-card>
+                <v-img :src="currentImage" v-if="currentImage"></v-img>
+
+                <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    color="primary"
+                    @click="uploadDialog = false"
+                >
+                    Close
+                </v-btn>
+
+                <!-- <v-btn
+                    color="green darken-1"
+                    flat="flat"
+                    @click="uploadDialog = false"
+                >
+                    Agree
+                </v-btn> -->
+                </v-card-actions>
+            </v-card>
+            </v-dialog>
+        </v-layout>
     </v-flex>
 
 
@@ -72,7 +162,7 @@
 </template>
 
 <script>
-import { db, storage } from "~/plugins/firebase-client-init.js";
+import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
 import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
@@ -134,6 +224,7 @@ export default {
         this.currentStatus = STATUS_INITIAL;
         this.uploadedFiles = [];
         this.uploadError = null;
+        this.$refs.uploadForm.reset();
       },
       async save(formData) {
         // upload data to the server
@@ -141,28 +232,47 @@ export default {
         let storageRef = storage.ref(`jobs/${this.request.id}/images/`);
         this.currentStatus = STATUS_SAVING;
         let files = this.$refs.upload.files;
+        let uploaded = this.uploadedFiles;
+
         for (var i = 0; i < files.length; i++) {
 
             let file = files[i]
             let imageRef = storageRef.child(file.name);
-            let uploaded = this.uploadedFiles;
-            await imageRef.put(file).then(function(snapshot){
-                uploaded.push(file);
-            })
+            let uploadTask = imageRef.put(file);
+            let request = this.request.id;
 
+            uploadTask.on('state_changed', // or 'state_changed'
+                function(snapshot) {
+                    // Update progress here... if you want
+                }, function(error) {
+
+                // @todo Handle upload error messages
+                // A full list of error codes is available at
+                // https://firebase.google.com/docs/storage/web/handle-errors
+                switch (error.code) {
+                    case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+
+                    case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+                    case 'storage/unknown':
+                    // Unknown error occurred, inspect error.serverResponse
+                    break;
+                }
+                }, async () => {
+                    // Upload completed successfully, now we can get the download URL
+                    uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                        db.collection('requests').doc(request).update({
+                            attachments: FieldValue.arrayUnion(downloadURL)
+                        });
+                    });
+                    this.reset();
+                }
+            );
         }
         this.currentStatus = STATUS_SUCCESS;
-
-
-// upload(this.request.id, formData)
-        //   .then(x => {
-        //     this.uploadedFiles = [].concat(x);
-        //     this.currentStatus = STATUS_SUCCESS;
-        //   })
-        //   .catch(err => {
-        //     this.uploadError = err.response;
-        //     this.currentStatus = STATUS_FAILED;
-        //   });
       },
       filesChange(fieldName, fileList) {
         // handle file changes
@@ -179,7 +289,27 @@ export default {
 
         // save it
         this.save(formData);
-      }
+      },
+      viewUpload(image){
+          this.currentImage = image;
+          this.uploadDialog = true;
+      },
+      deleteUpload(image){
+          if(confirm("Are you sure you want to delete this image?")){
+
+            // Get the index of the attachment to delete
+            let index = this.request.attachments.indexOf(image);
+
+            // Remove the attachment from the array
+            this.request.attachments.splice(index,1)
+
+            // Save the new array of images
+            db.collection('requests').doc(this.request.id).update({
+                attachments: this.request.attachments
+            });
+          }
+
+      },
     },
     data() {
         return {
@@ -189,8 +319,20 @@ export default {
             uploadedFiles: [],
             uploadError: null,
             currentStatus: null,
-            uploadFieldName: 'photos'
+            uploadFieldName: 'photos',
+            currentImage: null,
+            uploadDialog: false,
         };
+    },
+    created(){
+        // Listen for updates
+        let request = this.request;
+        db.collection("requests").doc(request.id).onSnapshot(function(doc) {
+            if(doc.data().attachments.length){
+                console.log(request, doc.data());
+                request.attachments = doc.data().attachments;
+            }
+        });
     },
     mounted() {
         this.reset();
@@ -199,32 +341,10 @@ export default {
 </script>
 
 <style scoped>
-  .dropbox {
-    outline: 2px dashed grey; /* the dash box */
-    outline-offset: -10px;
-    background: lightcyan;
-    color: dimgray;
-    padding: 10px 10px;
-    min-height: 200px; /* minimum height */
-    position: relative;
-    cursor: pointer;
-  }
+
 
   .input-file {
-    opacity: 0; /* invisible but it's there! */
-    width: 100%;
-    height: 200px;
-    position: absolute;
     cursor: pointer;
   }
 
-  .dropbox:hover {
-    background: lightblue; /* when mouse over to the drop zone, change color */
-  }
-
-  .dropbox p {
-    font-size: 1.2em;
-    text-align: center;
-    padding: 50px 0;
-  }
 </style>
