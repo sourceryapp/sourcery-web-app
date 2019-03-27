@@ -52,7 +52,7 @@
 
 
           <h2>Images</h2>
-      <form enctype="multipart/form-data" novalidate >
+      <form enctype="multipart/form-data" novalidate ref="uploadForm" >
         <div class="dropbox">
           <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
             accept="image/*" class="input-file">
@@ -110,7 +110,7 @@
                                         <v-list-tile @click="viewUpload(n)">
                                             <v-list-tile-title>View</v-list-tile-title>
                                         </v-list-tile>
-                                        <v-list-tile>
+                                        <v-list-tile @click="deleteUpload(n)">
                                             <v-list-tile-title>Delete</v-list-tile-title>
                                         </v-list-tile>
                                     </v-list>
@@ -224,6 +224,7 @@ export default {
         this.currentStatus = STATUS_INITIAL;
         this.uploadedFiles = [];
         this.uploadError = null;
+        this.$refs.uploadForm.reset();
       },
       async save(formData) {
         // upload data to the server
@@ -245,6 +246,7 @@ export default {
                     // Update progress here... if you want
                 }, function(error) {
 
+                // @todo Handle upload error messages
                 // A full list of error codes is available at
                 // https://firebase.google.com/docs/storage/web/handle-errors
                 switch (error.code) {
@@ -259,14 +261,16 @@ export default {
                     // Unknown error occurred, inspect error.serverResponse
                     break;
                 }
-                }, async function() {
+                }, async () => {
                     // Upload completed successfully, now we can get the download URL
                     uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                         db.collection('requests').doc(request).update({
                             attachments: FieldValue.arrayUnion(downloadURL)
                         });
                     });
-            });
+                    this.reset();
+                }
+            );
         }
         this.currentStatus = STATUS_SUCCESS;
       },
@@ -289,7 +293,23 @@ export default {
       viewUpload(image){
           this.currentImage = image;
           this.uploadDialog = true;
-      }
+      },
+      deleteUpload(image){
+          if(confirm("Are you sure you want to delete this image?")){
+
+            // Get the index of the attachment to delete
+            let index = this.request.attachments.indexOf(image);
+
+            // Remove the attachment from the array
+            this.request.attachments.splice(index,1)
+
+            // Save the new array of images
+            db.collection('requests').doc(this.request.id).update({
+                attachments: this.request.attachments
+            });
+          }
+
+      },
     },
     data() {
         return {
