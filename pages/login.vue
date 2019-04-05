@@ -6,10 +6,14 @@
         <span class="text-red" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
         <v-text-field type="password" name="password" v-model="password" placeholder="Password"></v-text-field>
         <span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
-        <div>
-            <nuxt-link  :to="{name: 'password'}">Forgot your password?</nuxt-link>
-        </div>
-        <v-btn type="submit" color="primary">Log In</v-btn>
+        
+		<v-btn type="submit" color="primary">Log In</v-btn>
+
+		<v-divider class="mt-3 mb-3"></v-divider>
+
+		<h3>Forgot Your Password?</h3>
+        <v-btn to="/password">Reset Password</v-btn>
+       
 
         <v-divider class="mt-3 mb-3"></v-divider>
 
@@ -73,6 +77,7 @@
 			// }
 
             async login() {
+				this.loginError = false;
                 await this.$store.dispatch('signIn', {
                     email: this.email,
                     password: this.password
