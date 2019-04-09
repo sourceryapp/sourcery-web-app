@@ -34,7 +34,6 @@
 <script>
 	export default {
 		name: "login",
-		// auth: false,
 		middleware: ['auth'],
 		layout: 'default',
 		data() {
@@ -48,33 +47,7 @@
 				},
 			}
 		},
-		// computed: {
-         //    redirect() {
-         //        return (
-         //            this.$route.query.redirect &&
-         //            decodeURIComponent(this.$route.query.redirect)
-         //        )
-         //    }
-		// },
 		methods: {
-			// loginSubmit() {
-			// 	axios.post(process.env.API_URL + 'auth/login', {
-			// 		email: this.email,
-			// 		password: this.password
-			// 	}).then(res => {
-			// 		this.errors = {password: [], email: []}
-			// 		this.$store.dispatch('auth/login', {token: res.data.data.token}).then(() => {
-			// 			this.$router.push({name: 'home'})
-			// 		})
-			// 	}).catch(err => {
-			// 		if (err.response.status === 401) {
-			// 			this.errors.password = ['Invalid Username and/or Password']
-			// 		} else if (err.response.status === 422) {
-			// 			this.errors.email = err.response.data.email || []
-			// 			this.errors.password = err.response.data.password || []
-			// 		}
-			// 	})
-			// }
 
             async login() {
 				this.loginError = false;
