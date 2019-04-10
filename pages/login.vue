@@ -1,4 +1,5 @@
 <template>
+	<v-layout align-center justify-start column fill-height>
 	<v-form @submit.prevent="login">
          <h1>Log In</h1>
         <v-text-field type="email" name="email" v-model="email" placeholder="Email"></v-text-field>
@@ -21,57 +22,44 @@
 
 
 	</v-form>
+	<v-alert
+        :value = loginError
+        type="warning"
+        dismissible>
+        <span color="white">Invalid login, please try again.</span>
+    </v-alert>
+	</v-layout>
 </template>
 
 <script>
 	export default {
 		name: "login",
-		// auth: false,
 		middleware: ['auth'],
 		layout: 'default',
 		data() {
 			return {
 				email: '',
 				password: '',
+				loginError: false,
 				errors: {
 					password: [],
 					email: []
 				},
 			}
 		},
-		// computed: {
-         //    redirect() {
-         //        return (
-         //            this.$route.query.redirect &&
-         //            decodeURIComponent(this.$route.query.redirect)
-         //        )
-         //    }
-		// },
 		methods: {
-			// loginSubmit() {
-			// 	axios.post(process.env.API_URL + 'auth/login', {
-			// 		email: this.email,
-			// 		password: this.password
-			// 	}).then(res => {
-			// 		this.errors = {password: [], email: []}
-			// 		this.$store.dispatch('auth/login', {token: res.data.data.token}).then(() => {
-			// 			this.$router.push({name: 'home'})
-			// 		})
-			// 	}).catch(err => {
-			// 		if (err.response.status === 401) {
-			// 			this.errors.password = ['Invalid Username and/or Password']
-			// 		} else if (err.response.status === 422) {
-			// 			this.errors.email = err.response.data.email || []
-			// 			this.errors.password = err.response.data.password || []
-			// 		}
-			// 	})
-			// }
 
             async login() {
+				this.loginError = false;
                 await this.$store.dispatch('signIn', {
                     email: this.email,
                     password: this.password
-                });
+                }).then(function() {
+					//console.log('success');
+				}).catch(error => {
+					//console.log("error");
+					this.loginError = true;
+				});
                 this.$router.replace('/')
             }
 		}
