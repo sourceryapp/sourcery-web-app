@@ -1,10 +1,11 @@
 import { db } from '../firebase-client-init'
 
+let collection = 'requests';
 export default {
     /**
      * Set the Request status to "complete"
      */
     markAsComplete: async (id) => {
-        console.log('It works!!!');
+        return await db.collection(collection).doc(id).update({ status: 'complete' });
     }
 }

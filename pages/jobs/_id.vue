@@ -154,10 +154,12 @@
                 </v-card-actions>
             </v-card>
             </v-dialog>
+
+        <v-btn color="primary" @click="requestModel.markAsComplete(request.id)">All Done?</v-btn>
+
         </v-layout>
     </v-flex>
 
-        <v-btn color="primary" @click="requestModel.markAsComplete()">All Done?</v-btn>
   </v-layout>
 </template>
 
@@ -338,7 +340,6 @@ export default {
     },
     mounted() {
         this.reset();
-        console.log(Request);
     }
 };
 </script>
