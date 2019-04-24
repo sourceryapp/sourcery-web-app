@@ -1,37 +1,32 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 offset-sm2 v-if="request !== null">
-      <h1>{{request.label}}</h1>
-      <StaticMap
-        :alt="`Satellite image of ${repository.name}`"
-        :lat="repository.geo._lat"
-        :long="repository.geo._long"
-        ></StaticMap>
-      <p>Citation:</p>
-      <p class="mb-2">{{request.citation}}</p>
-      <p>
-        Repository:
-        <strong>{{repository}}</strong> [
+      <v-card>
+        <StaticMap
+            :alt="`Satellite image of ${repository.name}`"
+            :lat="repository.geo._lat"
+            :long="repository.geo._long"
+            ></StaticMap>
+        <v-card-title>
+            <div>
+                <div class="headline">{{request.label}}</div>
 
-      </p>
-      <p>
-        Status:
-        <strong>{{request.status}}</strong>
-      </p>
+                <span class="grey--text text--darken-4 citation">{{request.citation}}</span>
 
-      <div v-if="request.status === 'completed'">
-        <h1>Images:</h1>
-        <ul>
-          <li v-for="(image, index) in request.attachments" :key="index">
-            <img :src="image.file" :alt="`Request Result ${index}`">
-          </li>
-        </ul>
-      </div>
-      <p class="text-xs-center">
-        <v-btn color="primary" to="/">
-          <v-icon dark>arrow_back_ios</v-icon>Back
-        </v-btn>
-      </p>
+                <v-divider class="mt-3 mb-3"></v-divider>
+
+                <div class=""><strong>Status</strong>: {{request.status}}</div>
+                <div class=""><strong>Repository</strong>: {{request.repository.institution}}</div>
+            </div>
+        </v-card-title>
+        <v-card-actions>
+          <!-- <v-btn color="primary" to="/">Edit</v-btn>
+          <v-btn color="primary" @click="message=true">Delete</v-btn> -->
+          <!-- <v-btn color="primary" to="/" v-if="request.status=='complete'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
+        </v-card-actions>
+      </v-card>
+
+
       <v-dialog v-model="message" width="500">
         <v-card>
           <v-card-title class="headline grey lighten-2" primary-title>What are the options?</v-card-title>
@@ -51,22 +46,25 @@
       </v-dialog>
 
 
-          <h2>Images</h2>
-      <form enctype="multipart/form-data" novalidate ref="uploadForm" >
-        <div class="dropbox">
-          <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
-            accept="image/*" class="input-file">
-            <p v-if="isInitial">
-              <!-- Drag your file(s) here to begin<br> or click to browse -->
-            </p>
-            <p v-if="isSaving">
-              Uploading {{ fileCount }} files...
-            </p>
-        </div>
-      </form>
 
 
-        <v-card v-if="request.attachments.length">
+
+        <v-card v-if="request.attachments.length" class=mt-3>
+            <v-card-title primary-title class="headline">Images</v-card-title>
+            <v-card-text  v-if="request.status!='complete'">
+                <form enctype="multipart/form-data" novalidate ref="uploadForm">
+                    <div class="dropbox">
+                    <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
+                        accept="image/*" class="input-file">
+                        <p v-if="isInitial">
+                        <!-- Drag your file(s) here to begin<br> or click to browse -->
+                        </p>
+                        <p v-if="isSaving">
+                        Uploading {{ fileCount }} files...
+                        </p>
+                    </div>
+                </form>
+            </v-card-text>
             <v-container grid-list-sm fluid>
                 <v-layout row wrap>
                     <v-flex
@@ -110,7 +108,7 @@
                                         <v-list-tile @click="viewUpload(n)">
                                             <v-list-tile-title>View</v-list-tile-title>
                                         </v-list-tile>
-                                        <v-list-tile @click="deleteUpload(n)">
+                                        <v-list-tile @click="deleteUpload(n)"  v-if="request.status!='complete'">
                                             <v-list-tile-title>Delete</v-list-tile-title>
                                         </v-list-tile>
                                     </v-list>
@@ -155,7 +153,7 @@
             </v-card>
             </v-dialog>
 
-        <v-btn color="primary" @click="requestModel.markAsComplete(request.id)">All Done?</v-btn>
+        <v-btn color="primary" @click="completeJob" v-if="request.status!='complete'">All Done?</v-btn>
 
         </v-layout>
     </v-flex>
@@ -298,7 +296,7 @@ export default {
           this.uploadDialog = true;
       },
       deleteUpload(image){
-          if(confirm("Are you sure you want to delete this image?")){
+        if(confirm("Are you sure you want to delete this image?")){
 
             // Get the index of the attachment to delete
             let index = this.request.attachments.indexOf(image);
@@ -310,9 +308,16 @@ export default {
             db.collection('requests').doc(this.request.id).update({
                 attachments: this.request.attachments
             });
-          }
-
-      }
+        }
+      },
+        /**
+         * Marks job as complete in firestore.
+         * Reloads page to refresh the interface.
+         */
+        async completeJob(){
+            await this.requestModel.markAsComplete(this.request.id);
+            window.location.reload();
+        }
     },
     data() {
         return {
@@ -339,7 +344,7 @@ export default {
         });
     },
     mounted() {
-        this.reset();
+        if(this.request.status!='complete') this.reset();
     }
 };
 </script>
@@ -351,4 +356,7 @@ export default {
     cursor: pointer;
   }
 
+.citation {
+    font-family: 'Courier New', Courier, monospace;
+}
 </style>
