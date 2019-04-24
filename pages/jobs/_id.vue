@@ -154,15 +154,18 @@
                 </v-card-actions>
             </v-card>
             </v-dialog>
+
+        <v-btn color="primary" @click="requestModel.markAsComplete(request.id)">All Done?</v-btn>
+
         </v-layout>
     </v-flex>
-
 
   </v-layout>
 </template>
 
 <script>
 import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
+import Request from "~/plugins/requests/index.js";
 import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
@@ -309,7 +312,7 @@ export default {
             });
           }
 
-      },
+      }
     },
     data() {
         return {
@@ -322,6 +325,7 @@ export default {
             uploadFieldName: 'photos',
             currentImage: null,
             uploadDialog: false,
+            requestModel: Request
         };
     },
     created(){
