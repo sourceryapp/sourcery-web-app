@@ -163,6 +163,7 @@
 
 <script>
 import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
+import Mail from "~/modules/message.js";
 import Request from "~/plugins/requests/index.js";
 import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
@@ -316,6 +317,11 @@ export default {
          */
         async completeJob(){
             await this.requestModel.markAsComplete(this.request.id);
+            await Mail.send({
+              to: 'brian.daley@uconn.edu',
+              subject: 'The Job is Done!',
+              text: 'Woot!',
+            });
             window.location.reload();
         }
     },
