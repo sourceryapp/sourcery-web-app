@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "predeploy": [
+    //   "firebase functions:config:get > .runtimeconfig.json"
+        "echo 'hello'"
+    ]
+  }
+}
