@@ -27,3 +27,6 @@ sw.*
 
 #  debug logs
 /firestore-debug.log
+
+# Firestore hosting cache
+/.firebase

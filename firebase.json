@@ -1,8 +1,22 @@
 {
   "functions": {
     "predeploy": [
-    //   "firebase functions:config:get > .runtimeconfig.json"
-        "echo 'hello'"
+      "echo 'hello'"
+    ],
+    "source": "functions"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
     ]
   }
 }
