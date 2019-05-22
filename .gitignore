@@ -21,3 +21,12 @@ sw.*
 
 # No np lock files
 /package-lock.json
+
+# Environment variables
+.env
+
+#  debug logs
+/firestore-debug.log
+
+# Firestore hosting cache
+/.firebase
