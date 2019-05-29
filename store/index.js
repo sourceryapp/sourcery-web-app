@@ -4,20 +4,23 @@ import Cookies from 'js-cookie'
 import cookieParser from 'cookieparser'
 import jwt_decode from 'jwt-decode'
 
+Auth.onAuthStateChanged(firebaseUser => {
+    console.log("User state changed", firebaseUser);
+})
 
 export function getUserFromSession(req) {
     console.log('[CHECK-AUTH] - checking if user is stored in session')
     return req.session ? req.session.userId : null
 }
-function buildUserObject(authData) {
-    let { email, displayName, uid, photoURL } = authData.user
-    let user = {}
-    user['email'] = email
-    user['name'] = displayName
-    user['uid'] = uid
-    user['picture'] = photoURL
-    return user
-}
+// function buildUserObject(authData) {
+//     let { email, displayName, uid, photoURL } = authData.user
+//     let user = {}
+//     user['email'] = email
+//     user['name'] = displayName
+//     user['uid'] = uid
+//     user['picture'] = photoURL
+//     return user
+// }
 
 const createStore = () => {
     return new Vuex.Store({
@@ -37,7 +40,8 @@ const createStore = () => {
 
         mutations: {
             setUser(state, payload) {
-                state.user = payload
+                state.user = Auth.currentUser;
+                // state.user = Object.assign(state.user || {}, payload);
             },
             setLoading(state, payload) {
                 state.loading = payload
@@ -52,14 +56,18 @@ const createStore = () => {
                     const parsed = cookieParser.parse(req.headers.cookie)
 
                     if(parsed.token){
+
+                        console.log("Parsing user data from JWT");
                         const { user_id, email } = jwt_decode(parsed.token);
 
-                        commit('setUser', buildUserObject({
-                            user: {
-                                email: email,
-                                uid: user_id,
-                            }
-                        }))
+
+                        commit('setUser', {
+                            email: email,
+                            uid: user_id,
+                        })
+
+                        // console.log(jwt_decode(parsed.token));
+
                     }
 
                 }
@@ -68,7 +76,7 @@ const createStore = () => {
             async signInWithGooglePopup({ commit }) {
                 commit('setLoading', true)
                 let authData = await Auth.signInWithPopup(GoogleAuthProvider);
-                commit('setUser', buildUserObject(authData));
+                commit('setUser', Auth.currentUser);
                 commit('setLoading', false);
             },
 
@@ -77,7 +85,7 @@ const createStore = () => {
                 let authData = await Auth.signInWithEmailAndPassword(email, password);
                 const token = await Auth.currentUser.getIdToken(true)
                 Cookies.set('token', token);
-                commit('setUser', buildUserObject(authData));
+                commit('setUser', Auth.currentUser);
                 commit('setLoading', false);
                 return "Someone";
             },

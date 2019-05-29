@@ -9,6 +9,57 @@
 
             >
                 <v-tab ripple>
+                   User
+                </v-tab>
+                <v-tab-item class="pt-2">
+                    <v-card flat>
+                        <!-- <v-card-title primary-title>
+                            <h3 class="headline ma-0 pa-0">User </h3>
+                        </v-card-title> -->
+                        <v-form @submit.prevent="updateDetails" ref="detailsForm">
+                            <v-layout>
+                                <v-flex>
+                                    <v-text-field
+                                        type="text"
+                                        label="Your Name"
+                                        name="displayName"
+                                        id="displayName"
+                                        :rules="[rules.required]"
+                                        v-model="name">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout>
+                                <v-flex>
+                                    <v-btn
+                                    type="submit"
+                                    color="primary">
+                                    Save
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </v-form>
+
+                    </v-card>
+                    <v-alert
+                        :value = passSuccess
+                        type="success">
+                        <span color="white">Password successfully changed.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = passFail
+                        type="error">
+                        <span color="white">Old Password Incorrect.</span>
+                    </v-alert>
+                    <v-alert
+                        :value = passError
+                        type="error">
+                        <span color="white">An Error Has Occurred. Please Try Again Later.</span>
+                    </v-alert>
+
+                </v-tab-item>
+
+                <v-tab ripple>
                     Password
                 </v-tab>
                 <v-tab-item class="pt-2">
@@ -56,15 +107,15 @@
                                     :disabled="!passwordIsValid"
                                     type="submit">
                                     Submit
-                                    </v-btn> 
-                                </v-flex> 
+                                    </v-btn>
+                                </v-flex>
                                 <v-flex v-if="!passwordIsValid">
                                     <span>New Passwords do Not Match.</span>
                                 </v-flex>
-                            </v-layout>  
+                            </v-layout>
                         </form>
                         <v-btn @click = "forgotLog">Forgot Password?</v-btn>
-                        
+
                     </v-card>
                     <v-alert
                         :value = passSuccess
@@ -81,7 +132,7 @@
                         type="error">
                         <span color="white">An Error Has Occurred. Please Try Again Later.</span>
                     </v-alert>
-                    
+
                 </v-tab-item>
                 <v-tab ripple>
                     Email
@@ -94,7 +145,7 @@
                         <v-form @submit.prevent="changeUserEmail">
                             <v-layout>
                                 <v-flex>
-                                    <v-text-field 
+                                    <v-text-field
                                         label="Enter New Email"
                                         name="email"
                                         id="email"
@@ -115,7 +166,7 @@
                             </v-layout>
                             <v-layout>
                                 <v-flex>
-                                    <v-btn 
+                                    <v-btn
                                     :disabled="!emailIsValid"
                                     type="submit"
                                     >
@@ -152,13 +203,14 @@
     import firebase from 'firebase/app'
 
 	export default {
-		name: "profile",
+        name: "profile",
 		data: function() {
 
 		    return {
-                name: '',
+                name: this.$store.getters.activeUser.displayName || null,
 
-                email: '',
+                email: this.$store.getters.activeUser.email,
+                // phone: this.$store.getters.activeUser.phoneNumber || null,
                 epass: '',
                 emailSuccess: false,
                 emailFail: false,
@@ -169,26 +221,40 @@
                 confirmpassword: '',
                 passSuccess: false,
                 passFail: false,
-                passError: false
+                passError: false,
+                rules: {
+                    required: value => !!value || 'Required.',
+                    counter: value => value.length <= 20 || 'Max 20 characters',
+                    email: value => {
+                        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        return pattern.test(value) || 'Invalid e-mail.'
+                    }
+                }
             }
         },
         methods: {
-            changeUserName() {
-                var user = firebase.auth().currentUser;
-                console.log(this.user.name);
-                user.updateProfile({
-                    displayName: name,
-                }).then(function() {
-                // Update successful.
-                }).catch(function(error) {
-                // An error happened.
-                });
-                console.log(this.user.displayName);
+            async updateDetails() {
+                if(this.$refs.detailsForm.validate()){
+                    // console.log(this.phone, this.name);
+                    let user = Auth.currentUser;
+
+                    /**
+                     * Can't set phoneNumber here
+                     * @url https://www.reddit.com/r/Firebase/comments/70slpi/can_you_update_phonenumber_from_userprofile/
+                     */
+                    await user.updateProfile({
+                        displayName: this.name,
+                        // phoneNumber: this.phone,
+                    });
+                    this.$store.commit('setUser');
+                    this.$toast.success('Profile Saved!');
+                }
+
             },
             resetPass() {
                 firebase.auth().currentUser.reauthenticateAndRetrieveDataWithCredential(
                 firebase.auth.EmailAuthProvider.credential(
-                    firebase.auth().currentUser.email, 
+                    firebase.auth().currentUser.email,
                     this.oldpassword
                     )
                 ).then(
@@ -216,7 +282,7 @@
             changeUserEmail() {
                 firebase.auth().currentUser.reauthenticateAndRetrieveDataWithCredential(
                 firebase.auth.EmailAuthProvider.credential(
-                    firebase.auth().currentUser.email, 
+                    firebase.auth().currentUser.email,
                     this.epass
                     )
                 ).then(
@@ -244,7 +310,7 @@
         },
         computed: {
             user() {
-                return this.$store.getters.activeUser
+                return Auth.currentUser;
             },
             nameIsValid() {
                 return this.name !== "";
@@ -259,11 +325,11 @@
                 //else return true
                 else
                     return true;
-                 
+
                  //return this.password !== '' &&
                         //this.confirmpassword !== '' &&
                         //this.password == this.confirmpassword;
-       
+
             },
             emailIsValid() {
                 return this.email !== "" && this.password != "";
@@ -276,7 +342,10 @@
                 console.log("name:", this.user.name)
                 return this.user.name
             }
-		}
+        },
+        mounted() {
+            // console.log(Auth.currentUser);
+        }
 	}
 </script>
 
