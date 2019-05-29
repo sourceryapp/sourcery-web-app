@@ -1,5 +1,6 @@
 <template>
   <v-app id="tube">
+      <!--
         <v-card width="375px">
             <v-card-title class="headline">Payment Options</v-card-title>
             <v-list>
@@ -45,6 +46,12 @@
           <v-card-title class="headline">Agent Payment Destinations</v-card-title>
           <v-btn><span>Add New Payment Destination</span></v-btn>
         </v-card>
+        -->
+        <v-card>
+            <h1>Setup Payments</h1>
+
+            <v-btn :href="stripeURL">Stripe</v-btn>
+        </v-card>
   </v-app>
 </template>
 
@@ -76,6 +83,23 @@
           }
         ]
       }
+    },
+    computed: {
+        stripeURL: () => {
+            const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
+            const params = {
+                redirect_uri: 'https://stripe.com/connect/default/oauth/test',
+                client_id: process.env.STRIPE_CLIENT_ID,
+                state: Date.now(),
+                'stripe_user[email]': 'someemail'
+
+
+            }
+            return baseURL + Object.keys(params).map(key => key + '=' + params[key]).join('&');
+        }
+    },
+    mounted() {
+        console.log(this.$store.getters.activeUser);
     }
   }
 </script>

@@ -20,6 +20,7 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
     "@nuxtjs/pwa": "^2.0.8",
+    "@nuxtjs/toast": "^3.2.1",
     "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
@@ -39,7 +40,7 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.3.0",
     "eslint-loader": "^2.1.0",
-     "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-vue": "^4.0.0",
     "husky": "^1.2.1",
     "sass-loader": "^7.0.3",

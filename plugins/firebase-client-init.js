@@ -15,5 +15,6 @@ export const storage = firebase.storage();
 export const FieldValue = firebase.firestore.FieldValue;
 
 // Auth
+firebase.auth().useDeviceLanguage();
 export const Auth = firebase.auth()
 export const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()

@@ -112,7 +112,21 @@ module.exports = {
     modules: [
         // '@nuxtjs/pwa',
         '@nuxtjs/axios',
+        '@nuxtjs/toast',
     ],
+
+    /**
+     * Nuxt Toasted
+     * @url https://github.com/nuxt-community/modules/tree/master/packages/toast#toast
+     *
+     * Options
+     * @url https://github.com/shakee93/vue-toasted
+     */
+    toast: {
+        position: 'top-center',
+        duration: 3000,
+
+    },
 
     /**
 	 * Axios
