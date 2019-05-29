@@ -3,7 +3,7 @@
 		<v-toolbar color="white" light fixed app>
 			<v-layout row wrap justify-space-between>
 				<v-flex text-xs-center>
-					<v-toolbar-title><nuxt-link to="/"><img src="/img/logo.svg" id="logo"></nuxt-link></v-toolbar-title>
+					<v-toolbar-title>Sourcery</v-toolbar-title>
 				</v-flex>
 			</v-layout>
 
