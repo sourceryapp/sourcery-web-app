@@ -40,8 +40,7 @@ const createStore = () => {
 
         mutations: {
             setUser(state, payload) {
-                state.user = Auth.currentUser;
-                // state.user = Object.assign(state.user || {}, payload);
+                state.user = payload;
             },
             setLoading(state, payload) {
                 state.loading = payload
@@ -57,16 +56,18 @@ const createStore = () => {
 
                     if(parsed.token){
 
-                        console.log("Parsing user data from JWT");
-                        const { user_id, email } = jwt_decode(parsed.token);
+                        // console.log("Parsing user data from JWT", jwt_decode(parsed.token));
+                        const { name, picture, user_id, email } = jwt_decode(parsed.token);
+                        // console.log("Parsed:", user_id, email);
 
 
                         commit('setUser', {
                             email: email,
                             uid: user_id,
+                            displayName: name,
+                            photoURL: picture
                         })
 
-                        // console.log(jwt_decode(parsed.token));
 
                     }
 
@@ -93,6 +94,7 @@ const createStore = () => {
             async signOut({ commit }) {
                 await Auth.signOut()
                 Cookies.remove('token');
+                Cookies.remove('user');
                 commit('setUser', null)
             }
         }
