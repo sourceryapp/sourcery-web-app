@@ -93,17 +93,16 @@
 		</v-content>
         <v-bottom-nav
             :value="true"
-            dark
             app
             fixed
             v-if="user"
-            color="white"
         >
             <v-btn
                 flat
                 value="dashboard"
-                color="primary"
                 to="/"
+                color="primary"
+
             >
                 <span>Dashboard</span>
                 <v-icon>dashboard</v-icon>
@@ -112,8 +111,8 @@
             <v-btn
                 flat
                 value="add"
-                color="primary"
                 to="/request/create"
+                color="primary"
             >
                 <span>New Request</span>
                 <v-icon>add_circle</v-icon>
@@ -121,9 +120,10 @@
 
             <v-btn
                 flat
-                color="primary"
                 value="search"
                 to="/jobs"
+                color="primary"
+
             >
                 <span>Find Jobs</span>
                 <v-icon>search</v-icon>
@@ -218,9 +218,5 @@
 		width: 200px;
         max-width: 100%;
 		height: auto;
-	}
-
-	.teal {
-		background-color: #4DADA9;
 	}
 </style>
