@@ -92,7 +92,7 @@ module.exports = {
 	 * @url https://nuxtjs.org/api/configuration-loading/
      */
 	loading: {
-		color: '#3B8070',
+        color: '#654fa1',
 		height: '5px'
 	},
 
