@@ -12,13 +12,13 @@ module.exports = {
 	** Headers of the page
 	*/
 	head: {
-		title: 'Tube Research',
+		title: 'Sourcery',
 		meta: [
             { "http-equiv": "x-ua-compatible", content: "ie=edge" },
             { "name": "viewport", content: "width=device-width, initial-scale=1" }
 		],
 		link: [
-            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' },
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
         ]
 	},
 
@@ -26,7 +26,7 @@ module.exports = {
 	** CSS File
 	*/
 	css: [
-	    '~/assets/styles/app.styl',
+	    '~/assets/styles/sourcery.css',
         'material-design-icons-iconfont/dist/material-design-icons.css'
     ],
 
@@ -42,7 +42,7 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/icon.html
      */
 	icon: {
-		iconSrc: 'assets/images/app-icon.png'
+		iconSrc: 'assets/images/sourcery-cauldron.png'
 	},
 
 
@@ -82,8 +82,6 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
-        '~/plugins/vuetify.js',
-        '~/plugins/firebase-client-init.js',
 	],
 
 
@@ -92,7 +90,7 @@ module.exports = {
 	 * @url https://nuxtjs.org/api/configuration-loading/
      */
 	loading: {
-		color: '#3B8070',
+        color: '#654fa1',
 		height: '5px'
 	},
 
@@ -110,10 +108,24 @@ module.exports = {
 
 
     modules: [
-        // '@nuxtjs/pwa',
+        '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
+        '@nuxtjs/vuetify'
     ],
+
+    /**
+     * Settings for @nuxtjs/vuetify
+     * @url https://github.com/nuxt-community/vuetify-module/
+     */
+    vuetify: {
+        theme: {
+            primary: '#654EA3',
+            secondary: '#4E4B51',
+            accent: '#53AFAC',
+            error: '#b71c1c'
+        },
+    },
 
     /**
      * Nuxt Toasted

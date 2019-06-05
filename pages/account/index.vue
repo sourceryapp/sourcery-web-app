@@ -86,37 +86,6 @@
                     </v-list-tile>
                 </v-list>
 
-                <v-dialog
-                    v-model="dialog"
-                    max-width="290"
-                    >
-                    <v-card>
-
-                        <v-card-title class="headline">
-                        Are you sure you want to log out?
-                        </v-card-title>
-
-                        <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn
-                            color="green darken-1"
-                            flat="flat"
-                            @click="logout()" nuxt active-class
-                        >
-                            Log Out
-                        </v-btn>
-
-                        <v-btn
-                            color="green darken-1"
-                            flat="flat"
-                            @click="dialog = false"
-                        >
-                            Back
-                        </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
 
             </v-flex>
         </v-layout>
