@@ -52,8 +52,8 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/meta.html
      */
     meta: {
-        name: 'Tube Research',
-        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
+        name: 'Sourcery',
+        description: 'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true
     },
 
