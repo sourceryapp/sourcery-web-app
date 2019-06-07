@@ -18,9 +18,16 @@
 
                     </v-card>
 
-                    <h2>Debugging:</h2>
+                    <v-divider class="mt-3"></v-divider>
+                    <h2 class="mt-3">Debugging:</h2>
+                    <h3 class="mt-3">Connect URL</h3>
                     <div class="dont-break">
                         {{stripeURL}}
+                    </div>
+
+                    <h3 class="mt-3" v-if="success">New Customer Connected!!!</h3>
+                    <div class="dont-break">
+                        {{success}}
                     </div>
                 </v-flex>
             </v-layout>
@@ -80,8 +87,39 @@
 <script>
 import { Utils } from "~/modules/utilities"
   export default {
+
+    async asyncData ({ query, $axios }){
+
+        if(process.server){
+            console.log("Server is processing...")
+            // query.code: Code returned from Stripe
+            // query.state: The "state" value that was passed to Stripe
+            if(query.code){
+                // User has registered with Stripe
+                try{
+                    let { data } = await $axios.post('https://connect.stripe.com/oauth/token', {
+                        client_secret: process.env.STRIPE_CLIENT_SECRET,
+                        code: query.code,
+                        grant_type:'authorization_code'
+                    });
+                    console.log("Stripe Response", data);
+                    return { success: data }
+                }catch(error){
+                    return { error: error.message }
+                }
+
+
+            }else {
+                // Normal page render
+                console.log('Normal page render')
+                return { success: "normal page render"}
+            }
+        }
+    },
     data () {
       return {
+        error: null,
+        success: null,
         items: [
           {
             avatar: "/img/mastercard_2.jpg",
@@ -111,7 +149,9 @@ import { Utils } from "~/modules/utilities"
         stripeURL: function() {
             const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
             const params = {
-                redirect_uri: 'https://stripe.com/connect/default/oauth/test',
+
+                // Uses stripe default if run from server-side
+                redirect_uri: process.client ? location.protocol + '//' + location.host + location.pathname : null,
                 client_id: process.env.STRIPE_CLIENT_ID,
                 state: Date.now(),
 
@@ -129,7 +169,8 @@ import { Utils } from "~/modules/utilities"
         }
     },
     mounted() {
-        console.log(this.stripeURL);
+        console.log("Success:", this.success);
+        console.log("Error:", this.error);
     }
   }
 </script>

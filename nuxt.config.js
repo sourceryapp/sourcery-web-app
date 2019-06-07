@@ -71,8 +71,8 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/manifest.html
      */
     manifest: {
-    	name: 'Tube Research',
-        short_name: 'Tube',
+    	name: 'Sourcery',
+        short_name: 'Sourcery',
         lang: 'en-US',
 		orientation: 'portrait'
     },
@@ -90,7 +90,7 @@ module.exports = {
 	 * @url https://nuxtjs.org/api/configuration-loading/
      */
 	loading: {
-        color: '#654fa1',
+        color: '#654EA3',
 		height: '5px'
 	},
 
