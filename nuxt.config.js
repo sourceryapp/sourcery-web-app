@@ -125,6 +125,9 @@ module.exports = {
             accent: '#53AFAC',
             error: '#b71c1c'
         },
+        options: {
+            customProperties: true
+        }
     },
 
     /**
