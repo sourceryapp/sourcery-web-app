@@ -86,6 +86,7 @@
 
 <script>
 import { Utils } from "~/modules/utilities"
+import { UserMeta } from "~/modules/user-meta"
   export default {
 
     async asyncData ({ query, $axios }){
@@ -96,6 +97,7 @@ import { Utils } from "~/modules/utilities"
             // query.state: The "state" value that was passed to Stripe
             if(query.code){
                 // User has registered with Stripe
+
                 try{
                     let { data } = await $axios.post('https://connect.stripe.com/oauth/token', {
                         client_secret: process.env.STRIPE_CLIENT_SECRET,
@@ -112,7 +114,7 @@ import { Utils } from "~/modules/utilities"
             }else {
                 // Normal page render
                 console.log('Normal page render')
-                return { success: "normal page render"}
+                return { success: null}
             }
         }
     },
@@ -171,6 +173,14 @@ import { Utils } from "~/modules/utilities"
     mounted() {
         console.log("Success:", this.success);
         console.log("Error:", this.error);
+
+        /**
+         * Store the stripe info on successful connection to Stripe:Connect
+         */
+        if(this.success){
+            let meta = new UserMeta( this.$store.getters.activeUser.uid );
+            meta.set('stripe', this.success);
+        }
     }
   }
 </script>
