@@ -1,5 +1,14 @@
 {
   "projects": {
-    "default": "sourcery"
+    "default": "tube-1542818590717"
+  },
+  "targets": {
+    "tube-1542818590717": {
+      "hosting": {
+        "sourcery-web-app": [
+          "sourcery"
+        ]
+      }
+    }
   }
 }
