@@ -13,86 +13,29 @@
                         </v-card-text>
 
                         <v-card-actions>
-                            <v-btn :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="!stripeDashboardURL" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="stripeDashboardURL" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
                         </v-card-actions>
 
                     </v-card>
 
-                    <v-divider class="mt-3"></v-divider>
-                    <h2 class="mt-3">Debugging:</h2>
-                    <h3 class="mt-3">Connect URL</h3>
-                    <div class="dont-break">
-                        {{stripeURL}}
-                    </div>
-
-                    <h3 class="mt-3" v-if="success">New Customer Connected!!!</h3>
-                    <div class="dont-break">
-                        {{success}}
-                    </div>
                 </v-flex>
             </v-layout>
        </v-flex>
-
-      <!--
-        <v-card width="375px">
-            <v-card-title class="headline">Payment Options</v-card-title>
-            <v-list>
-                <template v-for="(item) in items">
-                    <v-list-tile
-                    :key="item.title"
-                    avatar
-                    :to = "item.link"
-                    >
-                    <v-list-tile-avatar>
-                        <img :src="item.avatar">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title><span class='text--primary'>Card Number: &emsp; ****{{item.title}}</span></v-list-tile-title>
-                        <v-list-tile-sub-title><span class='text--primary'>Added: &emsp; {{item.subtitle}}</span></v-list-tile-sub-title>
-                    </v-list-tile-content>
-                    </v-list-tile>
-                </template>
-            </v-list>
-            <v-btn to="/payment/new_card"><span>Add a New Card</span></v-btn>
-        </v-card>
-        <v-card width="375px" style="top: 30px">
-          <v-card-title class="headline">Promotions</v-card-title>
-          <v-list>
-                <template v-for="(item) in promotions">
-                    <v-list-tile
-                    :key="item.title"
-                    avatar
-                    :to = "item.link"
-                    >
-                    <v-list-tile-avatar>
-                        <img :src="item.avatar">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title><span class='text--primary'>{{item.title}}</span></v-list-tile-title>
-                        <v-list-tile-sub-title><span class='text--primary'>Valid until: &emsp; {{item.subtitle}}</span></v-list-tile-sub-title>
-                    </v-list-tile-content>
-                    </v-list-tile>
-                </template>
-            </v-list>
-        </v-card>
-        <v-card width="375px" style="top: 60px">
-          <v-card-title class="headline">Agent Payment Destinations</v-card-title>
-          <v-btn><span>Add New Payment Destination</span></v-btn>
-        </v-card>
-        -->
 
   </v-app>
 </template>
 
 <script>
 import { Utils } from "~/modules/utilities"
-import { UserMeta } from "~/modules/user-meta"
   export default {
 
-    async asyncData ({ query, $axios }){
+    async asyncData ({ query, $axios, store }){
 
         if(process.server){
             console.log("Server is processing...")
+
+            let error, success, usermeta;
             // query.code: Code returned from Stripe
             // query.state: The "state" value that was passed to Stripe
             if(query.code){
@@ -105,46 +48,32 @@ import { UserMeta } from "~/modules/user-meta"
                         grant_type:'authorization_code'
                     });
                     console.log("Stripe Response", data);
-                    return { success: data }
-                }catch(error){
-                    return { error: error.message }
+                    success = data
+                }catch(err){
+                    error = err
                 }
 
 
             }else {
                 // Normal page render
                 console.log('Normal page render')
-                return { success: null}
+                success =  null
+            }
+
+
+            return {
+                success: success,
+                error: error,
+                usermeta: await Utils.getUserMeta( store.getters.activeUser.uid )
             }
         }
     },
     data () {
       return {
+        stripeConnect: null,
         error: null,
         success: null,
-        items: [
-          {
-            avatar: "/img/mastercard_2.jpg",
-            title: '0000',
-            subtitle: '00/00',
-            link: "/payment/view_card"
-          },
-          {
-            avatar: "/img/social-share.jpg",
-            title: '0001',
-            subtitle: '02/52',
-            link: "/payment/view_card"
-          },
-
-        ],
-        promotions: [
-          {
-            avatar: "/img/logo.jpg",
-            title: "5% Off First 10 Requests",
-            subtitle: "00/00",
-            link: "/payment/promotion"
-          }
-        ]
+        usermeta: null,
       }
     },
     computed: {
@@ -168,18 +97,22 @@ import { UserMeta } from "~/modules/user-meta"
 
             }
             return baseURL + Utils.buildQueryString(params);
+        },
+        stripeDashboardURL: function() {
+            return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
         }
     },
-    mounted() {
+    async mounted() {
         console.log("Success:", this.success);
         console.log("Error:", this.error);
+
+        console.log("Stripe URL:", this.stripeURL)
 
         /**
          * Store the stripe info on successful connection to Stripe:Connect
          */
         if(this.success){
-            let meta = new UserMeta( this.$store.getters.activeUser.uid );
-            meta.set('stripe', this.success);
+            this.$meta.set('stripe', this.success);
         }
     }
   }

@@ -1,8 +1,7 @@
 import Vuex from 'vuex'
 import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
 import Cookies from 'js-cookie'
-import cookieParser from 'cookieparser'
-import jwt_decode from 'jwt-decode'
+import { Utils } from '~/modules/utilities.js';
 
 Auth.onAuthStateChanged(firebaseUser => {
     console.log("User state changed", firebaseUser);
@@ -24,10 +23,10 @@ export function getUserFromSession(req) {
 
 const createStore = () => {
     return new Vuex.Store({
-        state: {
+        state: () => ({
             user: null,
             loading: false
-        },
+        }),
 
         getters: {
             activeUser: (state, getters) => {
@@ -49,28 +48,11 @@ const createStore = () => {
 
         actions: {
             async nuxtServerInit({ commit }, { req }) {
+                console.log('nuxtServerInit Running')
                 if (!req.headers.cookie) return
 
                 if (req.headers.cookie) {
-                    const parsed = cookieParser.parse(req.headers.cookie)
-
-                    if(parsed.token){
-
-                        // console.log("Parsing user data from JWT", jwt_decode(parsed.token));
-                        const { name, picture, user_id, email } = jwt_decode(parsed.token);
-                        // console.log("Parsed:", user_id, email);
-
-
-                        commit('setUser', {
-                            email: email,
-                            uid: user_id,
-                            displayName: name,
-                            photoURL: picture
-                        })
-
-
-                    }
-
+                    commit('setUser', Utils.getUserFromCookie(req.headers.cookie))
                 }
             },
 

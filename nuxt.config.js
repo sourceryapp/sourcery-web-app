@@ -19,6 +19,9 @@ module.exports = {
 		],
 		link: [
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
+        ],
+        script: [
+            // { src: 'https://js.stripe.com/v3/', async: true }
         ]
 	},
 
@@ -82,6 +85,8 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
+        // { src: '~/plugins/stripe', mode: 'client' },
+        // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
 	],
 
 
@@ -99,11 +104,14 @@ module.exports = {
 	** Router
 	*/
 	router: {
-		middleware: ['auth'],
+		middleware: [
+            'auth'
+        ],
     },
 
     serverMiddleware: [
-        '~/serverMiddleware/validate-token',
+        { path: '/stripe', handler: '~/server/auth.js' },
+        '~/server/stripe/index.js'
     ],
 
 
@@ -175,7 +183,6 @@ module.exports = {
 		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
          */
 		plugins: [
-
         ],
 
 		vendor: [
