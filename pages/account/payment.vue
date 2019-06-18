@@ -32,10 +32,11 @@ import { Utils } from "~/modules/utilities"
 
     async asyncData ({ query, $axios, store }){
 
+        let error, success;
+
         if(process.server){
             console.log("Server is processing...")
 
-            let error, success, usermeta;
             // query.code: Code returned from Stripe
             // query.state: The "state" value that was passed to Stripe
             if(query.code){
@@ -60,12 +61,12 @@ import { Utils } from "~/modules/utilities"
                 success =  null
             }
 
+        }
 
-            return {
-                success: success,
-                error: error,
-                usermeta: await Utils.getUserMeta( store.getters.activeUser.uid )
-            }
+        return {
+            success: success,
+            error: error,
+            usermeta: await Utils.getUserMeta( store.getters.activeUser.uid )
         }
     },
     data () {
@@ -73,7 +74,6 @@ import { Utils } from "~/modules/utilities"
         stripeConnect: null,
         error: null,
         success: null,
-        usermeta: null,
       }
     },
     computed: {
