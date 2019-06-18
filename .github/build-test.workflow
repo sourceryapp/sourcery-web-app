@@ -1,6 +1,6 @@
 workflow "Build Test" {
   on = "push"
-  resolves = ["nuxt/actions-yarn@master"]
+  resolves = ["Run Build Process"]
 }
 
 action "Is a feature branch?" {
@@ -8,17 +8,17 @@ action "Is a feature branch?" {
   args = "branch feature/*"
 }
 
-action "https://github.com/nuxt/actions-yarn" {
+action "Install dependencies" {
   uses = "nuxt/actions-yarn@master"
   needs = ["Is a feature branch?"]
   args = "install"
 }
 
-action "nuxt/actions-yarn@master" {
+action "Run Build Process" {
   uses = "nuxt/actions-yarn@master"
-  needs = ["https://github.com/nuxt/actions-yarn"]
   args = "run heroku-postbuild"
   env = {
     NODE_ENV = "production"
   }
+  needs = ["Install dependencies"]
 }
