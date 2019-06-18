@@ -13,66 +13,15 @@
                         </v-card-text>
 
                         <v-card-actions>
-                            <v-btn :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="!stripeDashboardURL" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="stripeDashboardURL" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
                         </v-card-actions>
 
                     </v-card>
 
-                    <h2>Debugging:</h2>
-                    <div class="dont-break">
-                        {{stripeURL}}
-                    </div>
                 </v-flex>
             </v-layout>
        </v-flex>
-
-      <!--
-        <v-card width="375px">
-            <v-card-title class="headline">Payment Options</v-card-title>
-            <v-list>
-                <template v-for="(item) in items">
-                    <v-list-tile
-                    :key="item.title"
-                    avatar
-                    :to = "item.link"
-                    >
-                    <v-list-tile-avatar>
-                        <img :src="item.avatar">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title><span class='text--primary'>Card Number: &emsp; ****{{item.title}}</span></v-list-tile-title>
-                        <v-list-tile-sub-title><span class='text--primary'>Added: &emsp; {{item.subtitle}}</span></v-list-tile-sub-title>
-                    </v-list-tile-content>
-                    </v-list-tile>
-                </template>
-            </v-list>
-            <v-btn to="/payment/new_card"><span>Add a New Card</span></v-btn>
-        </v-card>
-        <v-card width="375px" style="top: 30px">
-          <v-card-title class="headline">Promotions</v-card-title>
-          <v-list>
-                <template v-for="(item) in promotions">
-                    <v-list-tile
-                    :key="item.title"
-                    avatar
-                    :to = "item.link"
-                    >
-                    <v-list-tile-avatar>
-                        <img :src="item.avatar">
-                    </v-list-tile-avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title><span class='text--primary'>{{item.title}}</span></v-list-tile-title>
-                        <v-list-tile-sub-title><span class='text--primary'>Valid until: &emsp; {{item.subtitle}}</span></v-list-tile-sub-title>
-                    </v-list-tile-content>
-                    </v-list-tile>
-                </template>
-            </v-list>
-        </v-card>
-        <v-card width="375px" style="top: 60px">
-          <v-card-title class="headline">Agent Payment Destinations</v-card-title>
-          <v-btn><span>Add New Payment Destination</span></v-btn>
-        </v-card>
-        -->
 
   </v-app>
 </template>
@@ -80,38 +29,60 @@
 <script>
 import { Utils } from "~/modules/utilities"
   export default {
+
+    async asyncData ({ query, $axios, store }){
+
+        let error, success;
+
+        if(process.server){
+            console.log("Server is processing...")
+
+            // query.code: Code returned from Stripe
+            // query.state: The "state" value that was passed to Stripe
+            if(query.code){
+                // User has registered with Stripe
+
+                try{
+                    let { data } = await $axios.post('https://connect.stripe.com/oauth/token', {
+                        client_secret: process.env.STRIPE_CLIENT_SECRET,
+                        code: query.code,
+                        grant_type:'authorization_code'
+                    });
+                    console.log("Stripe Response", data);
+                    success = data
+                }catch(err){
+                    error = err
+                }
+
+
+            }else {
+                // Normal page render
+                console.log('Normal page render')
+                success =  null
+            }
+
+        }
+
+        return {
+            success: success,
+            error: error,
+            usermeta: await Utils.getUserMeta( store.getters.activeUser.uid )
+        }
+    },
     data () {
       return {
-        items: [
-          {
-            avatar: "/img/mastercard_2.jpg",
-            title: '0000',
-            subtitle: '00/00',
-            link: "/payment/view_card"
-          },
-          {
-            avatar: "/img/social-share.jpg",
-            title: '0001',
-            subtitle: '02/52',
-            link: "/payment/view_card"
-          },
-
-        ],
-        promotions: [
-          {
-            avatar: "/img/logo.jpg",
-            title: "5% Off First 10 Requests",
-            subtitle: "00/00",
-            link: "/payment/promotion"
-          }
-        ]
+        stripeConnect: null,
+        error: null,
+        success: null,
       }
     },
     computed: {
         stripeURL: function() {
             const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
             const params = {
-                redirect_uri: 'https://stripe.com/connect/default/oauth/test',
+
+                // Uses stripe default if run from server-side
+                redirect_uri: process.client ? location.protocol + '//' + location.host + location.pathname : null,
                 client_id: process.env.STRIPE_CLIENT_ID,
                 state: Date.now(),
 
@@ -126,10 +97,23 @@ import { Utils } from "~/modules/utilities"
 
             }
             return baseURL + Utils.buildQueryString(params);
+        },
+        stripeDashboardURL: function() {
+            return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
         }
     },
-    mounted() {
-        console.log(this.stripeURL);
+    async mounted() {
+        console.log("Success:", this.success);
+        console.log("Error:", this.error);
+
+        console.log("Stripe URL:", this.stripeURL)
+
+        /**
+         * Store the stripe info on successful connection to Stripe:Connect
+         */
+        if(this.success){
+            this.$meta.set('stripe', this.success);
+        }
     }
   }
 </script>

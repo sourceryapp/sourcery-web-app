@@ -6,6 +6,7 @@
     "source": "functions"
   },
   "hosting": {
+    "target": "sourcery-web-app",
     "public": "dist",
     "ignore": [
       "firebase.json",
@@ -18,5 +19,8 @@
         "destination": "/index.html"
       }
     ]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }

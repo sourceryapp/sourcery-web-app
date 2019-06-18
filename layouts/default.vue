@@ -27,6 +27,8 @@
                     v-for="item in items1"
                     :key="item.title"
                     :to = "item.link"
+                    nuxt
+                    active-class="accent accent--text text--lighten-5"
                 >
                     <v-list-tile-action>
                     <v-icon>{{ item.icon }}</v-icon>
@@ -43,6 +45,8 @@
                     v-for="item in items2"
                     :key="item.title"
                     :to = "item.link"
+                    nuxt
+                    active-class="accent accent--text text--lighten-5"
                 >
                     <v-list-tile-action>
                     <v-icon>{{ item.icon }}</v-icon>

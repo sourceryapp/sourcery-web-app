@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nuxt build --spa",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "dev": "nuxt",
+    "dev": "nodemon --watch server --exec \"nuxt\"",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "precommit": "npm run lint",
@@ -25,6 +25,7 @@
     "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
+    "express": "^4.17.1",
     "firebase": "^6.1.0",
     "firebase-tools": "^6",
     "firebaseui": "^4.0.0",
@@ -35,6 +36,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
     "nuxt": "2",
+    "stripe": "^7.1.0",
     "vuetify-loader": "^1.2.2"
   },
   "devDependencies": {
@@ -44,6 +46,7 @@
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-vue": "^5.2.2",
     "husky": "^2.4.0",
+    "nodemon": "^1.19.1",
     "sass-loader": "^7.0.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
