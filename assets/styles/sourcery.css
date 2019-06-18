@@ -1,0 +1,9 @@
+body {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+/* Toast styles */
+.toasted {
+    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    opacity: .85 !important;
+}

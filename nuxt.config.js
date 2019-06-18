@@ -12,13 +12,16 @@ module.exports = {
 	** Headers of the page
 	*/
 	head: {
-		title: 'Tube Research',
+		title: 'Sourcery',
 		meta: [
             { "http-equiv": "x-ua-compatible", content: "ie=edge" },
             { "name": "viewport", content: "width=device-width, initial-scale=1" }
 		],
 		link: [
-            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700' },
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
+        ],
+        script: [
+            // { src: 'https://js.stripe.com/v3/', async: true }
         ]
 	},
 
@@ -26,7 +29,7 @@ module.exports = {
 	** CSS File
 	*/
 	css: [
-	    '~/assets/styles/app.styl',
+	    '~/assets/styles/sourcery.css',
         'material-design-icons-iconfont/dist/material-design-icons.css'
     ],
 
@@ -42,7 +45,7 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/icon.html
      */
 	icon: {
-		iconSrc: 'assets/images/app-icon.png'
+		iconSrc: 'assets/images/sourcery-cauldron.png'
 	},
 
 
@@ -52,8 +55,8 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/meta.html
      */
     meta: {
-        name: 'Tube Research',
-        description: 'Tube is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
+        name: 'Sourcery',
+        description: 'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true
     },
 
@@ -71,8 +74,8 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/manifest.html
      */
     manifest: {
-    	name: 'Tube Research',
-        short_name: 'Tube',
+    	name: 'Sourcery',
+        short_name: 'Sourcery',
         lang: 'en-US',
 		orientation: 'portrait'
     },
@@ -82,8 +85,8 @@ module.exports = {
 	** Plugins
 	*/
 	plugins: [
-        '~/plugins/vuetify.js',
-        '~/plugins/firebase-client-init.js',
+        // { src: '~/plugins/stripe', mode: 'client' },
+        // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
 	],
 
 
@@ -92,7 +95,7 @@ module.exports = {
 	 * @url https://nuxtjs.org/api/configuration-loading/
      */
 	loading: {
-		color: '#3B8070',
+        color: '#654EA3',
 		height: '5px'
 	},
 
@@ -101,18 +104,52 @@ module.exports = {
 	** Router
 	*/
 	router: {
-		middleware: ['auth'],
+		middleware: [
+            'auth'
+        ],
     },
 
     serverMiddleware: [
-        '~/serverMiddleware/validate-token',
+        { path: '/stripe', handler: '~/server/auth.js' },
+        '~/server/stripe/index.js'
     ],
 
 
     modules: [
-        // '@nuxtjs/pwa',
+        '@nuxtjs/pwa',
         '@nuxtjs/axios',
+        '@nuxtjs/toast',
+        '@nuxtjs/vuetify'
     ],
+
+    /**
+     * Settings for @nuxtjs/vuetify
+     * @url https://github.com/nuxt-community/vuetify-module/
+     */
+    vuetify: {
+        theme: {
+            primary: '#654EA3',
+            secondary: '#4E4B51',
+            accent: '#53AFAC',
+            error: '#b71c1c'
+        },
+        options: {
+            customProperties: true
+        }
+    },
+
+    /**
+     * Nuxt Toasted
+     * @url https://github.com/nuxt-community/modules/tree/master/packages/toast#toast
+     *
+     * Options
+     * @url https://github.com/shakee93/vue-toasted
+     */
+    toast: {
+        position: 'top-center',
+        duration: 3000,
+
+    },
 
     /**
 	 * Axios
@@ -146,7 +183,6 @@ module.exports = {
 		 * @link https://vue-loader.vuejs.org/migrating.html#a-plugin-is-now-required
          */
 		plugins: [
-
         ],
 
 		vendor: [

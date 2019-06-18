@@ -15,7 +15,7 @@
                                 <img v-bind:src="gravatar">
                             </v-list-tile-avatar>
                             <v-list-tile-content v-if="this.user">
-                                <v-list-tile-title>{{this.user.name}}</v-list-tile-title>
+                                <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                                 <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
                             </v-list-tile-content>
                         </v-list-tile>
@@ -86,37 +86,6 @@
                     </v-list-tile>
                 </v-list>
 
-                <v-dialog
-                    v-model="dialog"
-                    max-width="290"
-                    >
-                    <v-card>
-
-                        <v-card-title class="headline">
-                        Are you sure you want to log out?
-                        </v-card-title>
-
-                        <v-card-actions>
-                        <v-spacer></v-spacer>
-
-                        <v-btn
-                            color="green darken-1"
-                            flat="flat"
-                            @click="logout()" nuxt active-class
-                        >
-                            Log Out
-                        </v-btn>
-
-                        <v-btn
-                            color="green darken-1"
-                            flat="flat"
-                            @click="dialog = false"
-                        >
-                            Back
-                        </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
 
             </v-flex>
         </v-layout>
@@ -140,9 +109,7 @@
                 return this.$store.getters.activeUser
             },
             gravatar() {
-                if(this.user !== null){
-                    return 'https://www.gravatar.com/avatar/' + md5(this.user.email) + '?d=mp';
-                }
+                return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
             }
         },
         methods: {
