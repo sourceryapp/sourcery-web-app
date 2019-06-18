@@ -1,5 +1,5 @@
 workflow "Build Test" {
-  on = "push"
+  on = "pull_request"
   resolves = ["Run Build Process"]
 }
 
