@@ -3,18 +3,19 @@
        <v-flex xs12 sm6 offset-sm3>
             <v-layout column fill-height>
                 <v-flex>
-                    <v-card>
+                    <v-card width="100%">
                         <v-card-title>
                             <h1>Payment Options</h1>
                         </v-card-title>
 
                         <v-card-text>
-                            <p>Sourcery uses Stripe to enable our users to easily send and receive payments... Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, libero? Vitae dolorem itaque ducimus aliquam odit nihil exercitationem totam, minima voluptatem officiis quasi repellendus hic deleniti possimus eius tempora nisi?</p>
+                            <p v-if="!usermeta.stripe.stripe_user_id">Before using Sourcery, you must configure your payment options. </p>
+                            <p v-if="usermeta.stripe.stripe_user_id">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
                         </v-card-text>
 
                         <v-card-actions>
-                            <v-btn v-if="!stripeDashboardURL" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
-                            <v-btn v-if="stripeDashboardURL" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
+                            <v-btn v-if="!usermeta.stripe.stripe_user_id" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="usermeta.stripe.stripe_user_id" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
                         </v-card-actions>
 
                     </v-card>
@@ -78,25 +79,30 @@ import { Utils } from "~/modules/utilities"
     },
     computed: {
         stripeURL: function() {
-            const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
-            const params = {
+            if(this.$store.getters.activeUser){
+                const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
+                const params = {
 
-                // Uses stripe default if run from server-side
-                redirect_uri: process.client ? location.protocol + '//' + location.host + location.pathname : null,
-                client_id: process.env.STRIPE_CLIENT_ID,
-                state: Date.now(),
+                    // Uses stripe default if run from server-side
+                    redirect_uri: process.client ? location.protocol + '//' + location.host + location.pathname : null,
+                    client_id: process.env.STRIPE_CLIENT_ID,
+                    state: Date.now(),
 
-                // @url https://stripe.com/docs/connect/express-accounts#additional-oauth
-                // @url https://stripe.com/docs/connect/oauth-reference#express-account-differences
-                'stripe_user[email]': this.$store.getters.activeUser.email,
-                'stripe_user[phone_number]': this.$store.getters.activeUser.phoneNumber || null,
-                // 'stripe_user[business_type]': 'individual',
-                'stripe_user[first_name]': Utils.getFirstName(this.$store.getters.activeUser.displayName),
-                'stripe_user[last_name]': Utils.getLastName(this.$store.getters.activeUser.displayName),
-                'stripe_user[url]': 'https://research.tube/'
+                    // @url https://stripe.com/docs/connect/express-accounts#additional-oauth
+                    // @url https://stripe.com/docs/connect/oauth-reference#express-account-differences
+                    'stripe_user[email]': this.$store.getters.activeUser.email,
+                    'stripe_user[phone_number]': this.$store.getters.activeUser.phoneNumber || null,
+                    // 'stripe_user[business_type]': 'individual',
+                    'stripe_user[first_name]': Utils.getFirstName(this.$store.getters.activeUser.displayName),
+                    'stripe_user[last_name]': Utils.getLastName(this.$store.getters.activeUser.displayName),
+                    'stripe_user[url]': 'https://research.tube/'
 
+                }
+                return baseURL + Utils.buildQueryString(params);
+            }else {
+                return "#";
             }
-            return baseURL + Utils.buildQueryString(params);
+
         },
         stripeDashboardURL: function() {
             return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;

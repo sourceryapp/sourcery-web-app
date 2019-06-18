@@ -49,7 +49,7 @@ export const Utils = {
     getUserMeta: async (uid) => {
         console.log("getUserMeta", uid)
         let doc = await db.collection("user-meta").doc(uid).get();
-        return doc.data();
+        return Promise.resolve(doc.data());
     }
 
 }
