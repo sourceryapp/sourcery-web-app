@@ -105,12 +105,13 @@ module.exports = {
 	*/
 	router: {
 		middleware: [
-            'auth'
+            'auth',
+            'stripe-check'
         ],
     },
 
     serverMiddleware: [
-        { path: '/stripe', handler: '~/server/auth.js' },
+        // { path: '/stripe', handler: '~/server/auth.js' },
         '~/server/stripe/index.js'
     ],
 
