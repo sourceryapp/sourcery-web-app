@@ -1,23 +1,40 @@
 import express from 'express';
 import Stripe from 'stripe';
 
-let env = require('../../config/development.js')
 
+/**
+ * Load environment variables
+ */
+let env = require('../../config/development.js')
 if (process.env.NODE_ENV === 'production') {
     env = require('../../config/production.js')
 }
 
-
+/**
+ * Create a new express app
+ */
 const app = express();
 
+/**
+ * Initialize the stripe client
+ */
+const stripe = Stripe(env.STRIPE_CLIENT_SECRET);
+
+
+/**
+ * Responds to /stripe
+ */
 app.get('/', (req, res, next) => {
     console.log("Running Express middleware")
 
     res.send('This does nothing at all');
 });
 
+/**
+ * Responds to /stripe/dashboard
+ * Redirects the user to their dashboard URL (given acct number)
+ */
 app.get('/dashboard', async (req, res, next) => {
-    const stripe = Stripe(env.STRIPE_CLIENT_SECRET);
 
     let acct = req.query.acct;
 
@@ -33,6 +50,28 @@ app.get('/dashboard', async (req, res, next) => {
 });
 
 
+/**
+ * Responds to /stripe/dashboard
+ * Returns the dashboard URL for the given acct number
+ */
+app.get('/balance', async (req, res, next) => {
+
+    let acct = req.query.acct;
+
+    if (acct) {
+        let balance = await stripe.balance.retrieve({
+            stripe_account: acct
+        });
+        res.send(balance);
+    } else {
+        res.send("Invalid Request");
+    }
+
+});
+
+/**
+ * Initializes this express middleware for Nuxt
+ */
 export default {
     path: '/stripe',
     handler: app
