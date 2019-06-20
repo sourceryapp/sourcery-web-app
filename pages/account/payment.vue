@@ -11,7 +11,7 @@
                         <v-card-text>
                             <p v-if="!usermeta.stripe.stripe_user_id">Before using Sourcery, you must configure your payment options. </p>
                             <p v-if="usermeta.stripe.stripe_user_id">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
-                            <p v-if="balance">Current Balance: ${{ balance.available[0].amount }} </p>
+                            <p v-if="balance">Current Balance: {{ balanceFormatted(this.balance.available[0].amount) }} </p>
                         </v-card-text>
 
                         <v-card-actions>
@@ -127,7 +127,10 @@ import { Utils } from "~/modules/utilities"
         },
         stripeDashboardURL: function() {
             return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
-        }
+        },
+    },
+    methods: {
+        balanceFormatted: (balance) => Utils.currencyFormat( balance )
     },
     async mounted() {
         console.log("Success:", this.success);

@@ -50,6 +50,17 @@ export const Utils = {
         console.log("getUserMeta", uid)
         let doc = await db.collection("user-meta").doc(uid).get();
         return Promise.resolve(doc.data());
-    }
+    },
 
+    /**
+     * Simple Currency Formatter
+     * Assumes USD
+     */
+    currencyFormat: (cents) => {
+        let currency = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD'
+        })
+        return currency.format( cents/100 );
+    }
 }

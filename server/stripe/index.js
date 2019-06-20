@@ -14,6 +14,8 @@ if (process.env.NODE_ENV === 'production') {
  * Create a new express app
  */
 const app = express();
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 /**
  * Initialize the stripe client
@@ -63,6 +65,37 @@ app.get('/balance', async (req, res, next) => {
             stripe_account: acct
         });
         res.send(balance);
+    } else {
+        res.send("Invalid Request");
+    }
+
+});
+
+
+
+/**
+ * Returns the dashboard URL for the given acct number
+ * @todo Move charges to cloud functions
+ */
+app.post('/charges/direct', async (req, res, next) => {
+
+    let acct = req.body.acct;
+    let amount = req.body.amount;
+    let source = req.body.source;
+
+
+    if (acct) {
+        try{
+            let charge = await stripe.charges.create({
+                amount: amount,
+                currency: 'usd',
+                source: acct,
+                description: "Testing initial charges"
+            })
+            res.json(charge);
+        }catch(err){
+            console.log(err);
+        }
     } else {
         res.send("Invalid Request");
     }
