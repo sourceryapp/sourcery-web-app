@@ -11,6 +11,7 @@
                         <v-card-text>
                             <p v-if="!usermeta.stripe.stripe_user_id">Before using Sourcery, you must configure your payment options. </p>
                             <p v-if="usermeta.stripe.stripe_user_id">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
+                            <p v-if="balance">Current Balance: {{ balanceFormatted(this.balance.available[0].amount) }} </p>
                         </v-card-text>
 
                         <v-card-actions>
@@ -33,7 +34,25 @@ import { Utils } from "~/modules/utilities"
 
     async asyncData ({ query, $axios, store }){
 
-        let error, success;
+        let error, success, usermeta, balance;
+
+        // Usermeta can be retrieved on server and client sides
+        usermeta = await Utils.getUserMeta( store.getters.activeUser.uid );
+
+        if(usermeta.stripe.stripe_user_id){
+            console.info("Retrieving User Balance")
+            try{
+                let { data } = await $axios.get('/stripe/balance',{
+                    params: {
+                        acct: usermeta.stripe.stripe_user_id
+                    }
+                });
+                balance = data;
+            }catch(err){
+                console.error(err);
+            }
+
+        }
 
         if(process.server){
             console.log("Server is processing...")
@@ -67,7 +86,8 @@ import { Utils } from "~/modules/utilities"
         return {
             success: success,
             error: error,
-            usermeta: await Utils.getUserMeta( store.getters.activeUser.uid )
+            usermeta: usermeta,
+            balance: balance
         }
     },
     data () {
@@ -75,6 +95,7 @@ import { Utils } from "~/modules/utilities"
         stripeConnect: null,
         error: null,
         success: null,
+        balance: null
       }
     },
     computed: {
@@ -106,13 +127,17 @@ import { Utils } from "~/modules/utilities"
         },
         stripeDashboardURL: function() {
             return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
-        }
+        },
+    },
+    methods: {
+        balanceFormatted: (balance) => Utils.currencyFormat( balance )
     },
     async mounted() {
         console.log("Success:", this.success);
         console.log("Error:", this.error);
 
         console.log("Stripe URL:", this.stripeURL)
+        console.log("User Balance:", this.balance)
 
         /**
          * Store the stripe info on successful connection to Stripe:Connect

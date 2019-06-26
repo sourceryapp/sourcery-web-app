@@ -108,6 +108,7 @@
 <script>
 
 import { db } from '~/plugins/firebase-client-init.js'
+import { Utils } from '~/modules/utilities'
 
 	export default {
         name: "create",
@@ -141,7 +142,7 @@ import { db } from '~/plugins/firebase-client-init.js'
                 loadingLocations: true
 			}
         },
-        async asyncData ({ params }) {
+        async asyncData ({ params, store }) {
             let areaSelections = [];
             let areas = await db.collection('areas')
                 .where('country', '==', 'US')
@@ -173,7 +174,8 @@ import { db } from '~/plugins/firebase-client-init.js'
                 request: {
                     pages: 0,
                     citation: citations[Math.floor(Math.random()*citations.length)]
-                }
+                },
+                usermeta: await Utils.getUserMeta(store.getters.activeUser.uid)
             }
         },
         computed: {
@@ -232,9 +234,17 @@ import { db } from '~/plugins/firebase-client-init.js'
                     vendor_id: "",
                     attachments: {},
                 })
-                .then(function(ref){
+                .then( async (ref) => {
                     console.log(`Imported "${ref.id}"`);
-					router.push('/')
+
+                    // Success - Let's charge the user's account
+                    let response = await this.$axios.post('/stripe/charges/direct', {
+                        acct: this.usermeta.stripe.stripe_user_id,
+                        amount: 500
+                    })
+
+                    console.log(response);
+					// router.push('/')
 
                 })
                 .catch(function(error){
