@@ -8,6 +8,8 @@ if (process.env.NODE_ENV === 'production') {
 
 
 module.exports = {
+    mode: 'spa',
+
 	/*
 	** Headers of the page
 	*/
@@ -112,7 +114,7 @@ module.exports = {
 
     serverMiddleware: [
         // { path: '/stripe', handler: '~/server/auth.js' },
-        '~/server/stripe/index.js'
+        // '~/server/stripe/index.js'
     ],
 
 
@@ -165,6 +167,9 @@ module.exports = {
 	*/
 
 	build: {
+        ssr: false,
+        mode: 'spa',
+
 
 		/*
 		** Run ESLint on save
@@ -195,7 +200,6 @@ module.exports = {
             }
         },
         extractCSS: true,
-		cssSourceMap: true,
-		mode: 'universal'
+		cssSourceMap: true
 	}
 };
