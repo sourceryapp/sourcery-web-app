@@ -159,7 +159,7 @@ module.exports = {
 	 * @url https://axios.nuxtjs.org/options.html
      */
     axios: {
-        // baseURL: env.API_URL
+        baseURL: env.API_URL
 	},
 
 	/*

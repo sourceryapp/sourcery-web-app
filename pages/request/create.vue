@@ -237,15 +237,12 @@ import { Utils } from '~/modules/utilities'
                 .then( async (ref) => {
                     console.log(`Imported "${ref.id}"`);
 
-                    // Success - Let's charge the user's account
-                    let response = await this.$axios.post('/stripe/charges/direct', {
-                        acct: this.usermeta.stripe.stripe_user_id,
-                        amount: 500
+                    // Success
+                    this.$toast.show('Your request was sent.', {
+                        onComplete: () => {
+                            router.push('/')
+                        }
                     })
-
-                    console.log(response);
-					// router.push('/')
-
                 })
                 .catch(function(error){
                     console.error(error);

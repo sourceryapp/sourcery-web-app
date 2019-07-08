@@ -42,7 +42,7 @@ import { Utils } from "~/modules/utilities"
         if(usermeta.stripe.stripe_user_id){
             console.info("Retrieving User Balance")
             try{
-                let { data } = await $axios.get('/stripe/balance',{
+                let { data } = await $axios.get('balance',{
                     params: {
                         acct: usermeta.stripe.stripe_user_id
                     }
@@ -126,7 +126,7 @@ import { Utils } from "~/modules/utilities"
 
         },
         stripeDashboardURL: function() {
-            return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
+            return this.usermeta.stripe.stripe_user_id ? `${process.env.API_URL}dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
         },
     },
     methods: {
