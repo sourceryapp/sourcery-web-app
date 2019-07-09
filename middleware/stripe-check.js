@@ -12,13 +12,15 @@ export default async function ({ store, redirect, route, error, req }) {
     if (store.getters.activeUser && route.path !== paymentRoute){
         console.info('Stripe Middleware Running');
 
-        let { stripe } = await Utils.getUserMeta(store.getters.activeUser.uid);
-
-        if(!stripe.stripe_user_id){
-            console.warn("User has not connected to stripe")
-            return redirect(paymentRoute)
+        try {
+            let meta = await Utils.getUserMeta(store.getters.activeUser.uid);
+            if (!(meta && meta.stripe)) {
+                console.warn("User has not connected to stripe")
+                return redirect(paymentRoute)
+            }
+        } catch (error) {
+            console.error(error);
         }
-
     }
 
 }
