@@ -3,24 +3,6 @@ import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
 import Cookies from 'js-cookie'
 import { Utils } from '~/modules/utilities.js';
 
-Auth.onAuthStateChanged(firebaseUser => {
-    console.log("User state changed", firebaseUser);
-})
-
-export function getUserFromSession(req) {
-    console.log('[CHECK-AUTH] - checking if user is stored in session')
-    return req.session ? req.session.userId : null
-}
-// function buildUserObject(authData) {
-//     let { email, displayName, uid, photoURL } = authData.user
-//     let user = {}
-//     user['email'] = email
-//     user['name'] = displayName
-//     user['uid'] = uid
-//     user['picture'] = photoURL
-//     return user
-// }
-
 const createStore = () => {
     return new Vuex.Store({
         state: () => ({

@@ -89,6 +89,7 @@ module.exports = {
 	plugins: [
         // { src: '~/plugins/stripe', mode: 'client' },
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
+        '~/plugins/firebase-auth.js'
 	],
 
 
