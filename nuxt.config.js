@@ -120,7 +120,7 @@ module.exports = {
 
 
     modules: [
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
         '@nuxtjs/vuetify'
