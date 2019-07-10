@@ -49,10 +49,10 @@
 
 
 
-        <v-card v-if="request.attachments.length" class=mt-3>
+        <v-card v-if="request.status!='complete'" class=mt-3>
             <v-card-title primary-title class="headline">Images</v-card-title>
             <v-card-text  v-if="request.status!='complete'">
-                <form enctype="multipart/form-data" novalidate ref="uploadForm">
+                <v-form enctype="multipart/form-data" novalidate ref="uploadForm">
                     <div class="dropbox">
                     <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
                         accept="image/*" class="input-file">
@@ -63,10 +63,10 @@
                         Uploading {{ fileCount }} files...
                         </p>
                     </div>
-                </form>
+                </v-form>
             </v-card-text>
             <v-container grid-list-sm fluid>
-                <v-layout row wrap>
+                <v-layout row wrap v-if="request.attachments.length">
                     <v-flex
                     v-for="n in request.attachments.slice().reverse()"
                     :key="n"
@@ -221,12 +221,15 @@ export default {
         StaticMap,
     },
     methods: {
-      reset() {
+      resetUploadForm: function () {
         // reset form to initial state
         this.currentStatus = STATUS_INITIAL;
         this.uploadedFiles = [];
         this.uploadError = null;
-        this.$refs.uploadForm.reset();
+        console.log(this, this.$refs);
+        if(this.$refs && this.$refs.uploadForm){
+            this.$refs.uploadForm.reset();
+        }
       },
       async save(formData) {
         // upload data to the server
@@ -270,7 +273,7 @@ export default {
                             attachments: FieldValue.arrayUnion(downloadURL)
                         });
                     });
-                    this.reset();
+                    this.resetUploadForm();
                 }
             );
         }
@@ -339,7 +342,7 @@ export default {
             requestModel: Request
         };
     },
-    created(){
+    created: function(){
         // Listen for updates
         let request = this.request;
         db.collection("requests").doc(request.id).onSnapshot(function(doc) {
@@ -349,8 +352,13 @@ export default {
             }
         });
     },
-    mounted() {
-        if(this.request.status!='complete') this.reset();
+    mounted: function() {
+        console.log('Mounted', this.$refs);
+        this.$nextTick( () => {
+            // Code that will run only after the
+            // entire view has been rendered
+            if(this.request.status!='complete') this.resetUploadForm();
+        })
     }
 };
 </script>

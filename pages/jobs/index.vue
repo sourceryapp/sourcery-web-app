@@ -93,7 +93,7 @@ import { db } from "~/plugins/firebase-client-init.js";
 /**
  * @url https://www.npmjs.com/package/geolib
  */
-import geolib from "geolib";
+import * as geolib from "geolib";
 
 export default {
     name: "jobs",
@@ -157,10 +157,8 @@ export default {
                                         .longitude
                                 }
                             );
-                            let miles = geolib.convertUnit(
-                                "mi",
-                                distanceMeters
-                            );
+                            let miles = geolib.convertDistance(distanceMeters, "mi");
+
                             // Don't allow users to claim their own (disabling for testing)
                             // if ( (miles <= this.distance) && (doc.data().client_id != this.user.uid) ) {
                             if ( (miles <= this.distance) ) {
