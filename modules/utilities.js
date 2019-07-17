@@ -1,6 +1,7 @@
 import { db } from '~/plugins/firebase-client-init.js'
 import cookieParser from 'cookieparser'
 import jwt_decode from 'jwt-decode'
+import { type } from 'os';
 
 export const Utils = {
 
@@ -41,6 +42,14 @@ export const Utils = {
         }
 
 
+    },
+
+    addressToEncodedString: (repository) => {
+        return repository.address1.concat(
+            repository.address2 ? `,${encodeURIComponent(repository.address2)}` : '',
+            `,${encodeURIComponent(repository.city)}`,
+            `,${encodeURIComponent(repository.state)}`
+        );
     },
 
     /**

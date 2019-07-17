@@ -4,8 +4,7 @@
       <v-card>
         <StaticMap
             :alt="`Satellite image of ${repository.name}`"
-            :lat="repository.geo._lat"
-            :long="repository.geo._long"
+            :repository="repository"
             ></StaticMap>
         <v-card-title>
             <div>
