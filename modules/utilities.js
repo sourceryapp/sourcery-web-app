@@ -21,7 +21,7 @@ export const Utils = {
     /**
      * Builds a query string from an object of parameters
      */
-    buildQueryString: params => Object.keys(params).map(key => key + '=' + params[key]).join('&'),
+    buildQueryString: params => Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&'),
 
     getUserFromCookie: (cookie) => {
 

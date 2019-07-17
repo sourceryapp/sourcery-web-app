@@ -25,7 +25,6 @@
     "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
-    "express": "^4.17.1",
     "firebase": "^6.1.0",
     "firebase-tools": "^6",
     "firebaseui": "^4.0.0",
@@ -36,7 +35,6 @@
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
     "nuxt": "2",
-    "stripe": "^7.1.0",
     "vuetify-loader": "^1.2.2"
   },
   "devDependencies": {

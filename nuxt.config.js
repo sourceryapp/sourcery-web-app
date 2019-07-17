@@ -8,6 +8,8 @@ if (process.env.NODE_ENV === 'production') {
 
 
 module.exports = {
+    mode: 'spa',
+
 	/*
 	** Headers of the page
 	*/
@@ -87,6 +89,7 @@ module.exports = {
 	plugins: [
         // { src: '~/plugins/stripe', mode: 'client' },
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
+        '~/plugins/firebase-auth.js'
 	],
 
 
@@ -112,12 +115,12 @@ module.exports = {
 
     serverMiddleware: [
         // { path: '/stripe', handler: '~/server/auth.js' },
-        '~/server/stripe/index.js'
+        // '~/server/stripe/index.js'
     ],
 
 
     modules: [
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
         '@nuxtjs/vuetify'
@@ -157,7 +160,7 @@ module.exports = {
 	 * @url https://axios.nuxtjs.org/options.html
      */
     axios: {
-        // baseURL: env.API_URL
+        baseURL: env.API_URL
 	},
 
 	/*
@@ -165,6 +168,9 @@ module.exports = {
 	*/
 
 	build: {
+        ssr: false,
+        mode: 'spa',
+
 
 		/*
 		** Run ESLint on save
@@ -195,7 +201,6 @@ module.exports = {
             }
         },
         extractCSS: true,
-		cssSourceMap: true,
-		mode: 'universal'
+		cssSourceMap: true
 	}
 };

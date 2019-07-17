@@ -7,16 +7,15 @@
                         <v-card-title>
                             <h1>Payment Options</h1>
                         </v-card-title>
-
                         <v-card-text>
-                            <p v-if="!usermeta.stripe.stripe_user_id">Before using Sourcery, you must configure your payment options. </p>
-                            <p v-if="usermeta.stripe.stripe_user_id">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
+                            <p v-if="!hasStripeID">Before using Sourcery, you must configure your payment options. </p>
+                            <p v-if="hasStripeID">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
                             <p v-if="balance">Current Balance: {{ balanceFormatted(this.balance.available[0].amount) }} </p>
                         </v-card-text>
 
                         <v-card-actions>
-                            <v-btn v-if="!usermeta.stripe.stripe_user_id" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
-                            <v-btn v-if="usermeta.stripe.stripe_user_id" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
+                            <v-btn v-if="!hasStripeID" :href="stripeURL" color="primary">Connect with Stripe</v-btn>
+                            <v-btn v-if="hasStripeID" :href="stripeDashboardURL"  color="primary">Manage Your Payment Options</v-btn>
                         </v-card-actions>
 
                     </v-card>
@@ -30,6 +29,7 @@
 
 <script>
 import { Utils } from "~/modules/utilities"
+import { functions } from "~/plugins/firebase-client-init.js"
   export default {
 
     async asyncData ({ query, $axios, store }){
@@ -39,10 +39,10 @@ import { Utils } from "~/modules/utilities"
         // Usermeta can be retrieved on server and client sides
         usermeta = await Utils.getUserMeta( store.getters.activeUser.uid );
 
-        if(usermeta.stripe.stripe_user_id){
+        if(usermeta && usermeta.stripe && usermeta.stripe.stripe_user_id){
             console.info("Retrieving User Balance")
             try{
-                let { data } = await $axios.get('/stripe/balance',{
+                let { data } = await $axios.get('balance',{
                     params: {
                         acct: usermeta.stripe.stripe_user_id
                     }
@@ -54,34 +54,33 @@ import { Utils } from "~/modules/utilities"
 
         }
 
-        if(process.server){
-            console.log("Server is processing...")
-
-            // query.code: Code returned from Stripe
-            // query.state: The "state" value that was passed to Stripe
-            if(query.code){
-                // User has registered with Stripe
-
-                try{
-                    let { data } = await $axios.post('https://connect.stripe.com/oauth/token', {
-                        client_secret: process.env.STRIPE_CLIENT_SECRET,
-                        code: query.code,
-                        grant_type:'authorization_code'
-                    });
-                    console.log("Stripe Response", data);
-                    success = data
-                }catch(err){
-                    error = err
-                }
 
 
-            }else {
-                // Normal page render
-                console.log('Normal page render')
-                success =  null
+        // query.code: Code returned from Stripe
+        // query.state: The "state" value that was passed to Stripe
+
+        // User has registered with Stripe
+        // Need to finish linking the account
+        if(query.code){
+
+            // Cloud function that finishes linking the accounts
+            let linkStripe = functions.httpsCallable('linkStripe');
+
+            try {
+                let { data } = await linkStripe({ code: query.code });
+                console.log("Success running cloud function", data);
+                success = data;
+            } catch (error) {
+                console.error(error);
+                success = null
             }
 
+        }else {
+            // Normal page render
+            console.info('Normal page render. No codes sent from Stripe')
+            success =  null
         }
+
 
         return {
             success: success,
@@ -99,6 +98,10 @@ import { Utils } from "~/modules/utilities"
       }
     },
     computed: {
+        hasStripeID: function(){
+            console.log("Function executed")
+            return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
+        },
         stripeURL: function() {
             if(this.$store.getters.activeUser){
                 const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
@@ -126,7 +129,7 @@ import { Utils } from "~/modules/utilities"
 
         },
         stripeDashboardURL: function() {
-            return this.usermeta.stripe.stripe_user_id ? `/stripe/dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
+            return (this.usermeta && this.usermeta.stripe.stripe_user_id) ? `${process.env.API_URL}dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
         },
     },
     methods: {
@@ -139,11 +142,18 @@ import { Utils } from "~/modules/utilities"
         console.log("Stripe URL:", this.stripeURL)
         console.log("User Balance:", this.balance)
 
+        console.log(  )
+
         /**
-         * Store the stripe info on successful connection to Stripe:Connect
+         * Stripe information has been stored!
          */
         if(this.success){
-            this.$meta.set('stripe', this.success);
+            this.$toast.show('You\'re linked to Stripe!', {
+                onComplete: () => {
+                    this.$router.go();
+                }
+            });
+
         }
     }
   }
