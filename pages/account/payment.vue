@@ -34,7 +34,7 @@ import { functions } from "~/plugins/firebase-client-init.js"
 
     async asyncData ({ query, $axios, store }){
 
-        let error, success, usermeta, balance;
+        let usermeta, balance;
 
         // Usermeta can be retrieved on server and client sides
         usermeta = await Utils.getUserMeta( store.getters.activeUser.uid );
@@ -54,37 +54,7 @@ import { functions } from "~/plugins/firebase-client-init.js"
 
         }
 
-
-
-        // query.code: Code returned from Stripe
-        // query.state: The "state" value that was passed to Stripe
-
-        // User has registered with Stripe
-        // Need to finish linking the account
-        if(query.code){
-
-            // Cloud function that finishes linking the accounts
-            let linkStripe = functions.httpsCallable('linkStripe');
-
-            try {
-                let { data } = await linkStripe({ code: query.code });
-                console.log("Success running cloud function", data);
-                success = data;
-            } catch (error) {
-                console.error(error);
-                success = null
-            }
-
-        }else {
-            // Normal page render
-            console.info('Normal page render. No codes sent from Stripe')
-            success =  null
-        }
-
-
         return {
-            success: success,
-            error: error,
             usermeta: usermeta,
             balance: balance
         }
@@ -92,25 +62,31 @@ import { functions } from "~/plugins/firebase-client-init.js"
     data () {
       return {
         stripeConnect: null,
-        error: null,
-        success: null,
         balance: null
       }
     },
     computed: {
         hasStripeID: function(){
-            console.log("Function executed")
             return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
         },
         stripeURL: function() {
+            // console.log("Current Route", location.protocol + '//' + location.host + this.$router.currentRoute.path);
             if(this.$store.getters.activeUser){
                 const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
-                const params = {
 
-                    // Uses stripe default if run from server-side
-                    redirect_uri: process.client ? location.protocol + '//' + location.host + location.pathname : null,
+                // Parameters sent to Stripe
+                const params = {
+                    redirect_uri: process.env.API_URL + 'linkStripe',
                     client_id: process.env.STRIPE_CLIENT_ID,
-                    state: Date.now(),
+
+                    /**
+                     * These parameters help us maintain state and are sent to the cloud
+                     * function to complete the connection
+                     */
+                    state: JSON.stringify({
+                        redirect_uri: location.protocol + '//' + location.host + this.$router.currentRoute.path,
+                        user_id: this.$store.getters.activeUser.uid
+                    }),
 
                     // @url https://stripe.com/docs/connect/express-accounts#additional-oauth
                     // @url https://stripe.com/docs/connect/oauth-reference#express-account-differences
@@ -136,25 +112,8 @@ import { functions } from "~/plugins/firebase-client-init.js"
         balanceFormatted: (balance) => Utils.currencyFormat( balance )
     },
     async mounted() {
-        console.log("Success:", this.success);
-        console.log("Error:", this.error);
-
         console.log("Stripe URL:", this.stripeURL)
         console.log("User Balance:", this.balance)
-
-        console.log(  )
-
-        /**
-         * Stripe information has been stored!
-         */
-        if(this.success){
-            this.$toast.show('You\'re linked to Stripe!', {
-                onComplete: () => {
-                    this.$router.go();
-                }
-            });
-
-        }
     }
   }
 </script>
