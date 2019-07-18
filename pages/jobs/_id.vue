@@ -3,8 +3,8 @@
     <v-flex xs12 sm8 offset-sm2 v-if="request !== null">
       <v-card>
         <StaticMap
-            :alt="`Satellite image of ${repository.name}`"
-            :repository="repository"
+            :alt="`Satellite image of ${request.repository.name}`"
+            :repository="request.repository"
             ></StaticMap>
         <v-card-title>
             <div>
