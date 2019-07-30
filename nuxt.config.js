@@ -47,7 +47,7 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/icon.html
      */
 	icon: {
-		iconSrc: 'assets/images/sourcery-cauldron.png'
+		iconSrc: 'static/img/sourcery-cauldron.png'
 	},
 
 
