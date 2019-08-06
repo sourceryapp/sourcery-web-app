@@ -5,7 +5,6 @@
       <v-list two-line>
         <v-subheader>Your Requests</v-subheader>
         <v-divider></v-divider>
-
         <v-list-tile v-if="requests.length == 0" to="/request/create">
           <v-list-tile-content>
             <v-list-tile-title>No Active Requests</v-list-tile-title>
@@ -18,17 +17,18 @@
           </v-list-tile-action>
         </v-list-tile>
 
-        <template v-for="(request, index) in requests">
+
+        <template  v-for="(request, index) in requests">
           <v-list-tile
-            v-if="request.status !== 'completed'"
-            :key="index"
-            :to="'/request/' + request.id"
+          v-if="requests && !request.request().isArchived()"
+          :key="request.id"
+          :to="'/request/' + request.id"
           >
             <v-list-tile-content>
-              <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ request.citation }}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-chip color="secondary" text-color="white">{{request.status.replace('_', ' ')}}</v-chip>
+            <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip>
           </v-list-tile>
           <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
         </template>
@@ -52,12 +52,12 @@
         </v-list-tile>
 
         <template v-for="(job, index) in jobs">
-          <v-list-tile v-if="job.status !== 'completed'" :key="index" :to="'/jobs/' + job.id">
+          <v-list-tile :key="index" :to="'/jobs/' + job.id">
             <v-list-tile-content>
-              <v-list-tile-title>{{ job.label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ job.citation }}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-chip color="secondary" text-color="white">{{job.status.replace('_', ' ')}}</v-chip>
+            <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip>
           </v-list-tile>
           <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`"></v-divider>
         </template>
@@ -76,34 +76,26 @@ export default {
   name: "dashboard",
   async asyncData({ params, store }) {
     if (store.getters.activeUser.uid) {
-      let requests = [];
-      let requestsRef = await db
+
+        let requests = await db
         .collection("requests")
         .where("client_id", "==", store.getters.activeUser.uid)
         .orderBy("created_at", "desc")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(function(doc) {
-            requests.push(Object.assign({ id: doc.id }, doc.data()));
-          });
-        });
+        .get();
 
-      let jobs = [];
-      let jobsRef = await db
+        let jobs = await db
         .collection("requests")
         .where("vendor_id", "==", store.getters.activeUser.uid)
         .orderBy("created_at", "desc")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(function(doc) {
-            jobs.push(Object.assign({ id: doc.id }, doc.data()));
-          });
-        });
+        .get();
 
-      return {
-        requests: requests,
-        jobs: jobs
-      };
+        /**
+         * Filter out archived records
+         */
+        return {
+            requests: requests.docs.filter( doc => !doc.request().isArchived() ),
+            jobs: jobs.docs.filter( doc => !doc.request().isArchived() )
+        };
     }
   },
   computed: {
@@ -118,9 +110,7 @@ export default {
     };
   },
   mounted() {
-    // this.$axios
-    //     .$get('/requests')
-    //     .then(response => (this.requests = response.data));
+
   }
 };
 </script>

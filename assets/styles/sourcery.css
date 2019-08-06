@@ -7,3 +7,9 @@ body {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;
     opacity: .85 !important;
 }
+
+#logo{
+    display: block;
+    min-width: 200px;
+    height: auto;
+}

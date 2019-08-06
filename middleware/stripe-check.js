@@ -7,9 +7,11 @@ import { Utils } from "~/modules/utilities.js"
  */
 export default async function ({ store, redirect, route, error, req }) {
 
+    let routeName = 'account-payment';
     let paymentRoute = '/account/payment';
 
-    if (store.getters.activeUser && route.path !== paymentRoute){
+
+    if (store.getters.activeUser && (route.name !== routeName)){
         console.info('Stripe Middleware Running');
 
         try {

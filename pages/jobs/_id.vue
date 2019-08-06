@@ -1,28 +1,27 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 offset-sm2 v-if="request !== null">
+    <v-flex xs12 sm8 offset-sm2 v-if="record !== null">
       <v-card>
         <StaticMap
-            :alt="`Satellite image of ${repository.name}`"
-            :lat="repository.geo._lat"
-            :long="repository.geo._long"
+            :alt="`Satellite image of ${record.data().repository.name}`"
+            :repository="record.data().repository"
             ></StaticMap>
         <v-card-title>
             <div>
-                <div class="headline">{{request.label}}</div>
+                <div class="headline">{{record.data().label}}</div>
 
-                <span class="grey--text text--darken-4 citation">{{request.citation}}</span>
+                <span class="grey--text text--darken-4 citation">{{record.data().citation}}</span>
 
                 <v-divider class="mt-3 mb-3"></v-divider>
 
-                <div class=""><strong>Status</strong>: {{request.status}}</div>
-                <div class=""><strong>Repository</strong>: {{request.repository.institution}}</div>
+                <div class="" style="text-transform:capitalize"><strong>Status</strong>: {{record.request().prettyStatus()}}</div>
+                <div class=""><strong>Repository</strong>: {{record.data().repository.institution}}</div>
             </div>
         </v-card-title>
         <v-card-actions>
           <!-- <v-btn color="primary" to="/">Edit</v-btn>
           <v-btn color="primary" @click="message=true">Delete</v-btn> -->
-          <!-- <v-btn color="primary" to="/" v-if="request.status=='complete'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
+          <!-- <v-btn color="primary" to="/" v-if="record.request().isComplete()'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
         </v-card-actions>
       </v-card>
 
@@ -49,9 +48,9 @@
 
 
 
-        <v-card v-if="request.status!='complete'" class=mt-3>
+        <v-card v-if="record.request().isPickedUp()" class=mt-3>
             <v-card-title primary-title class="headline">Images</v-card-title>
-            <v-card-text  v-if="request.status!='complete'">
+            <v-card-text  v-if="!record.request().isComplete()">
                 <v-form enctype="multipart/form-data" novalidate ref="uploadForm">
                     <div class="dropbox">
                     <input type="file" multiple ref="upload" :name="uploadFieldName" :disabled="isSaving" @change="filesChange($event.target.name, $event.target.files); fileCount = $event.target.files.length"
@@ -66,9 +65,9 @@
                 </v-form>
             </v-card-text>
             <v-container grid-list-sm fluid>
-                <v-layout row wrap v-if="request.attachments.length">
+                <v-layout row wrap v-if="record.data().attachments.length">
                     <v-flex
-                    v-for="n in request.attachments.slice().reverse()"
+                    v-for="n in record.data().attachments.slice().reverse()"
                     :key="n"
                     xs4
                     d-flex
@@ -108,7 +107,7 @@
                                         <v-list-tile @click="viewUpload(n)">
                                             <v-list-tile-title>View</v-list-tile-title>
                                         </v-list-tile>
-                                        <v-list-tile @click="deleteUpload(n)"  v-if="request.status!='complete'">
+                                        <v-list-tile @click="deleteUpload(n)"  v-if="record.request().isComplete()">
                                             <v-list-tile-title>Delete</v-list-tile-title>
                                         </v-list-tile>
                                     </v-list>
@@ -122,6 +121,27 @@
                 </v-layout>
             </v-container>
         </v-card>
+
+        <template  v-if="record.request().isComplete() || record.request().isArchived()">
+            <v-card class="mt-3">
+                <v-card-title>
+                    <div>
+                        <div class="headline">Download Images</div>
+
+                        <div><span class="grey--text text--darken-4">Click/Touch each image to download.</span></div>
+                    </div>
+                </v-card-title>
+                <v-layout row wrap>
+                <v-flex xs3 v-for="(image, index) in record.data().attachments" :key="index" class="pa-2">
+                    <a :href="image" target="_blank" download>
+                        <v-img :src="image" :alt="`Attachment #${index+1}`" aspect-ratio="1"></v-img>
+                    </a>
+                </v-flex>
+                </v-layout>
+
+            </v-card>
+        </template>
+
 
         <!-- Upload Dialog -->
         <v-layout row justify-center>
@@ -153,7 +173,8 @@
             </v-card>
             </v-dialog>
 
-        <v-btn color="primary" @click="completeJob" v-if="request.status!='complete'">All Done?</v-btn>
+        <v-btn color="primary" @click="completeJob" v-if="record.request().isPickedUp() && record.data().attachments.length">All Done?</v-btn>
+        <v-btn color="primary" @click="archive" v-if="record.request().isComplete()">Archive this Job</v-btn>
 
         </v-layout>
     </v-flex>
@@ -163,8 +184,7 @@
 
 <script>
 import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
-import Mail from "~/modules/message.js";
-import Request from "~/plugins/requests/index.js";
+// import Mail from "~/modules/message.js";
 import StaticMap from '~/components/static-map'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
@@ -172,33 +192,11 @@ export default {
     name: "job-id",
     async asyncData({ params, store, error }) {
         if (store.getters.activeUser.uid) {
-
-            let request = await db
+            return {
+                record: await db
                 .collection("requests")
                 .doc(params.id)
                 .get()
-                .then(doc => {
-                    if (doc.exists) {
-                        return Object.assign({ id: doc.id }, doc.data());
-                    } else {
-                        error({
-                            statusCode: 404,
-                            message: "Request not found"
-                        });
-                    }
-                });
-            let repository = await db
-                .collection("repositories")
-                .doc(request.repository_id)
-                .get()
-                .then(doc => {
-                    if(doc.exists){
-                        return Object.assign({id:doc.id}, doc.data())
-                    }
-                });
-            return {
-                repository: repository,
-                request: request
             };
         }
 
@@ -234,7 +232,7 @@ export default {
       async save(formData) {
         // upload data to the server
 
-        let storageRef = storage.ref(`jobs/${this.request.id}/images/`);
+        let storageRef = storage.ref(`jobs/${this.record.id}/images/`);
         this.currentStatus = STATUS_SAVING;
         let files = this.$refs.upload.files;
         let uploaded = this.uploadedFiles;
@@ -244,7 +242,7 @@ export default {
             let file = files[i]
             let imageRef = storageRef.child(file.name);
             let uploadTask = imageRef.put(file);
-            let request = this.request.id;
+            let request = this.record.id;
 
             uploadTask.on('state_changed', // or 'state_changed'
                 function(snapshot) {
@@ -303,14 +301,14 @@ export default {
         if(confirm("Are you sure you want to delete this image?")){
 
             // Get the index of the attachment to delete
-            let index = this.request.attachments.indexOf(image);
+            let index = this.record.data().attachments.indexOf(image);
 
             // Remove the attachment from the array
-            this.request.attachments.splice(index,1)
+            this.record.data().attachments.splice(index,1)
 
             // Save the new array of images
-            db.collection('requests').doc(this.request.id).update({
-                attachments: this.request.attachments
+            db.collection('requests').doc(this.record.id).update({
+                attachments: this.record.data().attachments
             });
         }
       },
@@ -318,33 +316,36 @@ export default {
          * Marks job as complete in firestore.
          * Reloads page to refresh the interface.
          */
-        async completeJob(){
-            await this.requestModel.markAsComplete(this.request.id);
-            await Mail.send({
-              to: 'brian.daley@uconn.edu',
-              subject: 'The Job is Done!',
-              text: 'Woot!',
-            });
-            window.location.reload();
+        completeJob: async function(){
+            if(confirm("Mark this job complete and send document(s) to the client?")){
+                this.record.request().markComplete()
+            }
+        },
+
+        /**
+         * Marks the jon as archived
+         */
+        archive: async function(){
+            if( confirm('Are you sure you want to archive this item? This action cannot be undone.') ) {
+                this.record.request().markArchived();
+            }
         }
     },
     data() {
         return {
-            request: null,
-            repository: false,
+            record: null,
             message: false,
             uploadedFiles: [],
             uploadError: null,
             currentStatus: null,
             uploadFieldName: 'photos',
             currentImage: null,
-            uploadDialog: false,
-            requestModel: Request
+            uploadDialog: false
         };
     },
     created: function(){
         // Listen for updates
-        let request = this.request;
+        let request = this.record;
         db.collection("requests").doc(request.id).onSnapshot(function(doc) {
             if(doc.data().attachments.length){
                 console.log(request, doc.data());
@@ -357,8 +358,12 @@ export default {
         this.$nextTick( () => {
             // Code that will run only after the
             // entire view has been rendered
-            if(this.request.status!='complete') this.resetUploadForm();
+            if(!this.record.request().isComplete()) this.resetUploadForm();
         })
+
+        //  Listen for changes to this document
+        db.collection("requests").doc(this.record.id).onSnapshot( doc => { this.record = doc });
+
     }
 };
 </script>
