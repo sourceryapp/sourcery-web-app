@@ -3638,11 +3638,6 @@ detect-libc@^1.0.2:
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
   integrity sha1-+hN8S9aY7fVc1c0CrFWfkaTEups=
 
-dialog-polyfill@^0.4.7:
-  version "0.4.10"
-  resolved "https://registry.yarnpkg.com/dialog-polyfill/-/dialog-polyfill-0.4.10.tgz#c4ea68a0deed4abb59a6a2a025c548b278cd532e"
-  integrity sha512-j5yGMkP8T00UFgyO+78OxiN5vC5dzRQF3BEio+LhNvDbyfxWBsi3sfPArDm54VloaJwy2hm3erEiDWqHRC8rzw==
-
 didyoumean@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.1.tgz#e92edfdada6537d484d73c0172fd1eba0c4976ff"
@@ -4512,13 +4507,6 @@ firebase@^6.1.0:
     "@firebase/polyfill" "0.3.14"
     "@firebase/storage" "0.3.0"
     "@firebase/util" "0.2.17"
-
-firebaseui@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-4.0.0.tgz#994547340a62da0b0e55f9f133d8986a37c542e6"
-  integrity sha512-NFlzv/pY64vkFQnGOEZH/FNbkKBFskLn7El9IxeTbyppNtYjWXHs2Ww5OaqnoiK0qfCWVuQqizsnoWpKtF57tA==
-  dependencies:
-    dialog-polyfill "^0.4.7"
 
 flat-arguments@^1.0.0:
   version "1.0.2"

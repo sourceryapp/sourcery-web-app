@@ -2,10 +2,13 @@
   <v-layout>
 
     <v-flex xs12 sm8 offset-sm2>
-      <h1></h1>
-        <v-alert type="error" :value="!record">
-        That request could not be found.
-        </v-alert>
+        <template v-if="!record || !record.exists">
+            <!-- <h1>Not found</h1> -->
+            <v-alert type="error" value=1>
+            The request does not exist or was deleted.
+            </v-alert>
+            <v-btn color="primary" to="/">Dashboard</v-btn>
+        </template>
         <template v-if="record.exists">
             <v-card>
                 <StaticMap
@@ -26,7 +29,7 @@
                 </v-card-title>
                 <v-card-actions>
                 <!-- <v-btn color="primary" v-if="record.request().isPending()" to="/">Edit</v-btn> -->
-                <v-btn color="primary" v-if="record.request().isPending()" @click="message=true">Cancel</v-btn>
+                <v-btn color="primary" v-if="record.request().isPending()" @click="cancel">Cancel</v-btn>
                 <v-btn color="primary" v-if="record.request().isComplete() && !record.request().isArchived()" @click="archive">Archive</v-btn>
                 <!-- <v-btn color="primary" to="/" v-if="record.status=='complete'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
                 </v-card-actions>
@@ -49,23 +52,6 @@
                 </v-layout>
 
             </v-card>
-            <v-dialog v-model="message" width="500">
-                <v-card>
-                <v-card-title class="headline grey lighten-2" primary-title>What are the options?</v-card-title>
-
-                <v-card-text>
-                    <p>Can the user delete or edit?</p>
-                    <p>Maybe conditionally?</p>
-                </v-card-text>
-
-                <v-divider></v-divider>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="primary" flat @click="message = false">Close</v-btn>
-                </v-card-actions>
-                </v-card>
-            </v-dialog>
         </template>
     </v-flex>
   </v-layout>
@@ -97,8 +83,7 @@ export default {
     },
     data() {
         return {
-            record: false,
-            message: false
+            record: false
         };
     },
     methods: {
@@ -108,11 +93,18 @@ export default {
             }else{
                 return false;
             }
+        },
+        cancel: async function(){
+            if( confirm('Are you sure you want to cancel this request? This action cannot be undone.') ) {
+                this.record.request().delete();
+            }
         }
     },
     mounted() {
         //  Listen for changes to this document
-        db.collection("requests").doc(this.record.id).onSnapshot( doc => { this.record = doc });
+        if(this.record && this.record.id){
+            db.collection("requests").doc(this.record.id).onSnapshot( doc => { this.record = doc });
+        }
     }
 };
 </script>

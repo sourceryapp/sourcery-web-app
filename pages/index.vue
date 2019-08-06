@@ -57,7 +57,7 @@
               <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
               <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
-            <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip>
+            <!-- <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip> -->
           </v-list-tile>
           <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`"></v-divider>
         </template>
@@ -86,6 +86,7 @@ export default {
         let jobs = await db
         .collection("requests")
         .where("vendor_id", "==", store.getters.activeUser.uid)
+        .where("status", "==", "picked_up")
         .orderBy("created_at", "desc")
         .get();
 
@@ -94,7 +95,7 @@ export default {
          */
         return {
             requests: requests.docs.filter( doc => !doc.request().isArchived() ),
-            jobs: jobs.docs.filter( doc => !doc.request().isArchived() )
+            jobs: jobs.docs
         };
     }
   },
