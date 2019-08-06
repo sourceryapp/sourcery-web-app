@@ -174,7 +174,6 @@
             </v-dialog>
 
         <v-btn color="primary" @click="completeJob" v-if="record.request().isPickedUp() && record.data().attachments.length">All Done?</v-btn>
-        <v-btn color="primary" @click="archive" v-if="record.request().isComplete()">Archive this Job</v-btn>
 
         </v-layout>
     </v-flex>
@@ -321,15 +320,6 @@ export default {
                 this.record.request().markComplete()
             }
         },
-
-        /**
-         * Marks the jon as archived
-         */
-        archive: async function(){
-            if( confirm('Are you sure you want to archive this item? This action cannot be undone.') ) {
-                this.record.request().markArchived();
-            }
-        }
     },
     data() {
         return {
@@ -362,7 +352,9 @@ export default {
         })
 
         //  Listen for changes to this document
-        db.collection("requests").doc(this.record.id).onSnapshot( doc => { this.record = doc });
+        if(this.record && this.record.id){
+            db.collection("requests").doc(this.record.id).onSnapshot( doc => { this.record = doc });
+        }
 
     }
 };

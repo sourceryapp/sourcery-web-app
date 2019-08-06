@@ -12,7 +12,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <template v-for="(request, index) in requests.docs">
+        <template v-for="(request, index) in requests">
           <v-list-tile :key="index" :to="'/request/' + request.id">
             <v-list-tile-content>
               <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
@@ -34,7 +34,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <template v-for="(job, index) in jobs.docs">
+        <template v-for="(job, index) in jobs">
           <v-list-tile :key="index" :to="'/jobs/' + job.id">
             <v-list-tile-content>
               <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
@@ -58,22 +58,25 @@ export default {
   name: "history",
   async asyncData({ params, store }) {
     if (store.getters.activeUser.uid) {
-      return {
 
-        requests: await db
-        .collection("requests")
-        .where("client_id", "==", store.getters.activeUser.uid)
-        .where("status", "==", "archived")
-        .orderBy("created_at", "desc")
-        .get(),
+        let requests = await db
+                .collection("requests")
+                .where("client_id", "==", store.getters.activeUser.uid)
+                .where("status", "==", "archived")
+                .orderBy("created_at", "desc")
+                .get();
 
-        jobs: await db
-        .collection("requests")
-        .where("vendor_id", "==", store.getters.activeUser.uid)
-        .where("status", "==", "archived")
-        .orderBy("created_at", "desc")
-        .get()
-      };
+        let jobs = await db
+                .collection("requests")
+                .where("vendor_id", "==", store.getters.activeUser.uid)
+                .where("status", "==", "archived")
+                .orderBy("created_at", "desc")
+                .get()
+
+        return {
+            requests: requests.docs,
+            jobs: jobs.docs.filter( doc => doc.request().isArchived() || doc.request().isComplete() )
+        };
     }
   },
   computed: {

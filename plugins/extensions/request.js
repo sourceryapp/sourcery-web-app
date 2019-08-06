@@ -41,17 +41,24 @@ export default function() {
         isArchived: () => this.data().status === 'archived',
 
         /**
-         * eventually
+         * Complete current request
          */
         markComplete: async () => {
             return await db.collection('requests').doc(this.id).update({ status: 'complete' });
         },
 
         /**
-         * eventually
+         * Archive current request
          */
         markArchived: async () => {
             return await db.collection('requests').doc(this.id).update({ status: 'archived' });
+        },
+
+        /**
+         * Delete current request
+         */
+        delete: async () => {
+            return await db.collection('requests').doc(this.id).delete();
         },
 
         /**
