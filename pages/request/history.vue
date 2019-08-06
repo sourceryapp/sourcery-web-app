@@ -12,11 +12,11 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <template v-for="(request, index) in requests">
+        <template v-for="(request, index) in requests.docs">
           <v-list-tile :key="index" :to="'/request/' + request.id">
             <v-list-tile-content>
-              <v-list-tile-title>{{ request.label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ request.citation }}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
@@ -34,11 +34,11 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <template v-for="(job, index) in jobs">
-          <v-list-tile :key="index" :to="'/request/' + job.id">
+        <template v-for="(job, index) in jobs.docs">
+          <v-list-tile :key="index" :to="'/jobs/' + job.id">
             <v-list-tile-content>
-              <v-list-tile-title>{{ job.label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ job.citation }}</v-list-tile-sub-title>
+              <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
+              <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`"></v-divider>
@@ -58,35 +58,21 @@ export default {
   name: "history",
   async asyncData({ params, store }) {
     if (store.getters.activeUser.uid) {
-      let requests = [];
-      let requestsRef = await db
+      return {
+
+        requests: await db
         .collection("requests")
         .where("client_id", "==", store.getters.activeUser.uid)
-        .where("status", "==", "completed")
+        .where("status", "==", "archived")
         .orderBy("created_at", "desc")
-        .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(function(doc) {
-            requests.push(Object.assign({ id: doc.id }, doc.data()));
-          });
-        });
+        .get(),
 
-      let jobs = [];
-      let jobsRef = await db
+        jobs: await db
         .collection("requests")
         .where("vendor_id", "==", store.getters.activeUser.uid)
-        .where("status", "==", "completed")
+        .where("status", "==", "archived")
         .orderBy("created_at", "desc")
         .get()
-        .then(snapshot => {
-          snapshot.docs.forEach(function(doc) {
-            jobs.push(Object.assign({ id: doc.id }, doc.data()));
-          });
-        });
-
-      return {
-        requests: requests,
-        jobs: jobs
       };
     }
   },
@@ -105,6 +91,7 @@ export default {
     // this.$axios
     //     .$get('/requests')
     //     .then(response => (this.requests = response.data));
+    // console.log(this.requests.docs);
   }
 };
 </script>

@@ -1,3 +1,5 @@
+import { db } from '../firebase-client-init'
+
 /**
  * These methods are added to DocumentSnapshot
  * `doc.request().method()`
@@ -42,8 +44,21 @@ export default function() {
          * eventually
          */
         markComplete: async () => {
-            // return await db.collection(collection).doc(id).update({ status: 'complete' });
-        }
+            return await db.collection('requests').doc(this.id).update({ status: 'complete' });
+        },
+
+        /**
+         * eventually
+         */
+        markArchived: async () => {
+            return await db.collection('requests').doc(this.id).update({ status: 'archived' });
+        },
+
+        /**
+         * Returns a human-readable version of status
+         */
+        prettyStatus: () => this.data().status.replace('_', ' '),
+
 
     }
 
