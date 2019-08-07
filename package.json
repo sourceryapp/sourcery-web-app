@@ -1,10 +1,10 @@
 {
-  "name": "tube-frontend",
+  "name": "sourcery-web-app",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "nuxt build --spa",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore . functions",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "dev": "nodemon --watch server --exec \"nuxt\"",
     "start": "nuxt start",
     "generate": "nuxt generate",
