@@ -1,10 +1,4 @@
 {
-  "functions": {
-    "predeploy": [
-      "echo 'hello'"
-    ],
-    "source": "functions"
-  },
   "hosting": {
     "target": "sourcery-web-app",
     "public": "dist",
