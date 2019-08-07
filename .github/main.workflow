@@ -28,14 +28,14 @@ workflow "Deploy" {
   on = "push"
 }
 
-action "Filters for GitHub Actions" {
-  uses = "actions/bin/filter@0dbb077f64d0ec1068a644d25c71b1db66148a24"
+action "Branch Check" {
+  uses = "actions/bin/filter@master"
   args = "branch master"
 }
 
 action "Deploy to Firebase" {
   uses = "w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3"
-  needs = ["Filters for GitHub Actions"]
+  needs = ["Branch Check"]
   runs = "sh -c"
   args = "bin/deploy.sh"
   secrets = ["FIREBASE_TOKEN"]
