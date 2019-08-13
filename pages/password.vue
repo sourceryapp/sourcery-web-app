@@ -6,7 +6,7 @@
             <form @submit.prevent="resetPassEmail">
                 <v-layout>
                     <v-flex>
-                        <v-text-field 
+                        <v-text-field
                             label="Enter Email"
                             name="email"
                             id="email"
@@ -16,7 +16,7 @@
                 </v-layout>
                 <v-layout>
                     <v-flex>
-                        <v-btn 
+                        <v-btn
                         :disabled="!emailIsValid"
                         type="submit"
                         @click="success = true">
@@ -51,7 +51,7 @@
             }
         },
             user() {
-                return this.$store.getters.activeUser
+                return this.$store.getters['auth/activeUser']
         },
         methods: {
             resetPassEmail() {
@@ -74,7 +74,7 @@
             returnAndLog() {
                 //console.log(this.user)
                 //if (this.user) {
-                    this.$store.dispatch('signOut')
+                    this.$store.dispatch('auth/signOut')
                 //  }
                 this.$router.replace('/login')
             }

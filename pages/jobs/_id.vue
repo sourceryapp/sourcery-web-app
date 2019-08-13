@@ -190,7 +190,7 @@ const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED =
 export default {
     name: "job-id",
     async asyncData({ params, store, error }) {
-        if (store.getters.activeUser.uid) {
+        if (store.getters['auth/activeUser'].uid) {
             return {
                 record: await db
                 .collection("requests")

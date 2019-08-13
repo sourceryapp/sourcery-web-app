@@ -172,7 +172,7 @@ export default {
     },
     computed: {
         user() {
-            return this.$store.getters.activeUser;
+            return this.$store.getters['auth/activeUser'];
         }
     },
     mounted() {}

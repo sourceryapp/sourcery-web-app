@@ -174,13 +174,15 @@ import { Utils } from '~/modules/utilities'
                 request: {
                     pages: 0,
                     citation: citations[Math.floor(Math.random()*citations.length)]
-                },
-                usermeta: await Utils.getUserMeta(store.getters.activeUser.uid)
+                }
             }
         },
         computed: {
             estimatedCost: function(){
                 return this.request.pages + 15;
+            },
+            usermeta: function(){
+                return this.$store.state.meta
             }
         },
         mounted() {
@@ -228,7 +230,7 @@ import { Utils } from '~/modules/utilities'
                     repository: await this.getRepository( this.request.repository_id ),
 					citation: this.request.citation,
                     estimated_cost_usd: this.estimatedCost,
-                    client_id: this.$store.getters.activeUser.uid,
+                    client_id: this.$store.getters['auth/activeUser'].uid,
                     status: "pending",
                     created_at: new Date(),
                     vendor_id: "",

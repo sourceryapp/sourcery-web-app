@@ -16,7 +16,7 @@
                     <v-list-tile-content v-if="this.user">
                         <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title>Balance: Coming Soon!</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>Estimated Balance: {{this.balance}}</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -91,6 +91,7 @@
 				<v-layout
 						justify-center
 				>
+
 					<nuxt/>
 				</v-layout>
 			</v-container>
@@ -182,19 +183,21 @@
 
 <script>
     import md5 from 'md5'
-
 	export default {
 		computed: {
             user() {
-                return this.$store.getters.activeUser
+                return this.$store.getters['auth/activeUser']
             },
             gravatar() {
                 return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
+            },
+            balance() {
+                return this.$store.getters['meta/balance'];
             }
 		},
 		methods: {
             async logout() {
-                await this.$store.dispatch('signOut');
+                await this.$store.dispatch('auth/signOut');
                 this.dialog=false;
                 this.$router.replace('/login')
             }
@@ -222,6 +225,8 @@
         },
         mounted() {
             // console.log('Firebase: ', firebase);
+            // console.log(this.$store);
+            // console.log('Meta', this.$store.state.meta)
         }
 	}
 </script>

@@ -207,10 +207,10 @@
 		data: function() {
 
 		    return {
-                name: this.$store.getters.activeUser.displayName || null,
+                name: this.$store.getters['auth/activeUser'].displayName || null,
 
-                email: this.$store.getters.activeUser.email,
-                // phone: this.$store.getters.activeUser.phoneNumber || null,
+                email: this.$store.getters['auth/activeUser'].email,
+                // phone: this.$store.getters['auth/activeUser'].phoneNumber || null,
                 epass: '',
                 emailSuccess: false,
                 emailFail: false,
@@ -246,7 +246,7 @@
                         displayName: this.name,
                         // phoneNumber: this.phone,
                     });
-                    this.$store.commit('setUser');
+                    this.$store.commit('auth/setUser');
                     this.$toast.success('Profile Saved!');
                 }
 
@@ -303,7 +303,7 @@
                 });
             },
             async forgotLog() {
-                await this.$store.dispatch('signOut');
+                await this.$store.dispatch('auth/signOut');
                 this.$router.replace('/password')
             }
 

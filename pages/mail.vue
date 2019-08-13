@@ -14,7 +14,7 @@ export default {
   name: "mail",
   computed: {
     user() {
-      return this.$store.getters.activeUser;
+      return this.$store.getters['auth/activeUser'];
     }
   },
   data: function() {
