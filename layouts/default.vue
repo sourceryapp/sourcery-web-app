@@ -4,7 +4,7 @@
         class="primary"
         v-model="drawer"
         dark
-        left
+        right
         app
         v-if="user"
         >
@@ -72,17 +72,16 @@
         </v-navigation-drawer>
 		<v-toolbar color="white" light fixed app>
 
-            <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon>
+            <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon> -->
 
             <v-toolbar-title style="display:flex; justify-content:center; width: 100%" class="ma-0">
-
                 <nuxt-link to="/" id="wordmark-link">
                     <img src="/img/sourcery-wordmark.svg" id="logo" alt="Sourcery Logo">
                 </nuxt-link>
             </v-toolbar-title>
 
             <!-- Stupid Hack to center align the wordmark -->
-            <v-toolbar-side-icon style="visibility: hidden" v-if="user"></v-toolbar-side-icon>
+            <!-- <v-toolbar-side-icon style="visibility: hidden" v-if="user"></v-toolbar-side-icon> -->
 
 
 		</v-toolbar>
@@ -132,6 +131,19 @@
                 <span>Find Jobs</span>
                 <v-icon>search</v-icon>
             </v-btn>
+
+            <v-btn
+                flat
+                value="settings"
+                color="primary"
+                active-class=""
+                :class="drawer ? 'v-btn--active' :''"
+                @click.stop="drawer = !drawer"
+            >
+                <span>Settings</span>
+                <v-icon>settings</v-icon>
+            </v-btn>
+
         </v-bottom-nav>
 
         <v-dialog
