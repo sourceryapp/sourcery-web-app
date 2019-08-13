@@ -8,14 +8,15 @@
         app
         v-if="user"
         >
-            <v-list class="pa-0">
-                <v-list-tile avatar>
-                    <v-list-tile-avatar>
+            <v-list color="red" class="pa-0" three-line>
+                <v-list-tile>
+                    <v-list-tile-avatar size="50" class="mr-3">
                         <img v-bind:src="gravatar">
                     </v-list-tile-avatar>
                     <v-list-tile-content v-if="this.user">
                         <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>Balance: Coming Soon!</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
