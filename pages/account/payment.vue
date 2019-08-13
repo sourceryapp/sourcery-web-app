@@ -10,7 +10,7 @@
                         <v-card-text>
                             <p v-if="!hasStripeID">Before using Sourcery, you must configure your payment options. </p>
                             <p v-if="hasStripeID">Your payment options have been configured. Use the button below to check your balance, change your payment information, or modify your payout schedule.</p>
-                            <p v-if="balance">Current Balance: {{ balanceFormatted(this.balance.available[0].amount) }} </p>
+                            <p v-if="hasStripeID">Estimated Balance: {{ this.balance }} </p>
                         </v-card-text>
 
                         <v-card-actions>
@@ -31,47 +31,24 @@
 import { Utils } from "~/modules/utilities"
 import { functions } from "~/plugins/firebase-client-init.js"
   export default {
-
-    async asyncData ({ query, $axios, store }){
-
-        let usermeta, balance;
-
-        // Usermeta can be retrieved on server and client sides
-        usermeta = await Utils.getUserMeta( store.getters.activeUser.uid );
-
-        if(usermeta && usermeta.stripe && usermeta.stripe.stripe_user_id){
-            console.info("Retrieving User Balance")
-            try{
-                let { data } = await $axios.get('balance',{
-                    params: {
-                        acct: usermeta.stripe.stripe_user_id
-                    }
-                });
-                balance = data;
-            }catch(err){
-                console.error(err);
-            }
-
-        }
-
-        return {
-            usermeta: usermeta,
-            balance: balance
-        }
-    },
     data () {
       return {
-        stripeConnect: null,
-        balance: null
+        stripeConnect: null
       }
     },
     computed: {
+        usermeta: function(){
+            return this.$store.state.meta;
+        },
+        balance: function(){
+            return this.$store.getters['meta/balance']
+        },
         hasStripeID: function(){
             return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
         },
         stripeURL: function() {
             // console.log("Current Route", location.protocol + '//' + location.host + this.$router.currentRoute.path);
-            if(this.$store.getters.activeUser){
+            if(this.$store.getters['auth/activeUser']){
                 const baseURL = 'https://connect.stripe.com/express/oauth/authorize?';
 
                 // Parameters sent to Stripe
@@ -85,16 +62,16 @@ import { functions } from "~/plugins/firebase-client-init.js"
                      */
                     state: JSON.stringify({
                         redirect_uri: location.protocol + '//' + location.host + this.$router.currentRoute.path,
-                        user_id: this.$store.getters.activeUser.uid
+                        user_id: this.$store.getters['auth/activeUser'].uid
                     }),
 
                     // @url https://stripe.com/docs/connect/express-accounts#additional-oauth
                     // @url https://stripe.com/docs/connect/oauth-reference#express-account-differences
-                    'stripe_user[email]': this.$store.getters.activeUser.email,
-                    'stripe_user[phone_number]': this.$store.getters.activeUser.phoneNumber || null,
+                    'stripe_user[email]': this.$store.getters['auth/activeUser'].email,
+                    'stripe_user[phone_number]': this.$store.getters['auth/activeUser'].phoneNumber || null,
                     // 'stripe_user[business_type]': 'individual',
-                    'stripe_user[first_name]': Utils.getFirstName(this.$store.getters.activeUser.displayName),
-                    'stripe_user[last_name]': Utils.getLastName(this.$store.getters.activeUser.displayName),
+                    'stripe_user[first_name]': Utils.getFirstName(this.$store.getters['auth/activeUser'].displayName),
+                    'stripe_user[last_name]': Utils.getLastName(this.$store.getters['auth/activeUser'].displayName),
                     'stripe_user[url]': 'https://research.tube/'
 
                 }
@@ -108,12 +85,9 @@ import { functions } from "~/plugins/firebase-client-init.js"
             return (this.usermeta && this.usermeta.stripe.stripe_user_id) ? `${process.env.API_URL}dashboard/?acct=${this.usermeta.stripe.stripe_user_id}` : false;
         },
     },
-    methods: {
-        balanceFormatted: (balance) => Utils.currencyFormat( balance )
-    },
     async mounted() {
         console.log("Stripe URL:", this.stripeURL)
-        console.log("User Balance:", this.balance)
+        console.log("User Balance:", this.usermeta.balance)
     }
   }
 </script>

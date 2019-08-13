@@ -106,7 +106,7 @@
         },
         computed: {
             user(){
-                return this.$store.getters.activeUser
+                return this.$store.getters['auth/activeUser']
             },
             gravatar() {
                 return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
@@ -114,7 +114,7 @@
         },
         methods: {
             async logout() {
-                await this.$store.dispatch('signOut');
+                await this.$store.dispatch('auth/signOut');
                 this.$router.replace('/login')
             }
         }

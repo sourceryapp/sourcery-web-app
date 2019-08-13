@@ -65,7 +65,7 @@ import StaticMap from '~/components/static-map'
 export default {
     name: "request-id",
     async asyncData({ params, store, error }) {
-        if (store.getters.activeUser.uid) {
+        if (store.getters['auth/activeUser'].uid) {
             return db.collection("requests").doc(params.id).get()
             .then(doc => {
                 return {

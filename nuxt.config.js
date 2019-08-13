@@ -113,12 +113,6 @@ module.exports = {
         ],
     },
 
-    serverMiddleware: [
-        // { path: '/stripe', handler: '~/server/auth.js' },
-        // '~/server/stripe/index.js'
-    ],
-
-
     modules: [
         // '@nuxtjs/pwa',
         '@nuxtjs/axios',

@@ -73,19 +73,21 @@
 <script>
 import { db } from "~/plugins/firebase-client-init.js";
 export default {
+    middleware: 'user-meta',
+
   name: "dashboard",
   async asyncData({ params, store }) {
-    if (store.getters.activeUser.uid) {
+    if (store.getters['auth/activeUser'].uid) {
 
         let requests = await db
         .collection("requests")
-        .where("client_id", "==", store.getters.activeUser.uid)
+        .where("client_id", "==", store.getters['auth/activeUser'].uid)
         .orderBy("created_at", "desc")
         .get();
 
         let jobs = await db
         .collection("requests")
-        .where("vendor_id", "==", store.getters.activeUser.uid)
+        .where("vendor_id", "==", store.getters['auth/activeUser'].uid)
         .where("status", "==", "picked_up")
         .orderBy("created_at", "desc")
         .get();
@@ -101,7 +103,7 @@ export default {
   },
   computed: {
     user() {
-      return this.$store.getters.activeUser;
+      return this.$store.getters['auth/activeUser'];
     }
   },
   data: function() {
