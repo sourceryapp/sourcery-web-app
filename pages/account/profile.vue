@@ -192,6 +192,55 @@
                         <span color="white">An Error Has Occurred. Please Try Again Later.</span>
                     </v-alert>
                 </v-tab-item>
+                <v-tab ripple>
+                   Phone
+                </v-tab>
+                <v-tab-item class="pt-2">
+                    <v-card flat>
+                        <v-form @submit.prevent="getPhone" ref="detailsForm">
+                            <v-layout>
+                                <v-flex>
+                                    <v-text-field
+                                        type="text"
+                                        label="Your Phone Number"
+                                        name="phoneNumber"
+                                        id="phoneNumber"
+                                        :rules="[rules.required]"
+                                        v-model="phone">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout>
+                                <v-flex>
+                                    <v-text-field
+                                        type="text"
+                                        label="Confirm Phone Number"
+                                        name="confirmPhone"
+                                        id="confirmPhoneNumber"
+                                        :rules="[rules.required]"
+                                        v-model="confirmPhone">
+                                    </v-text-field>
+                                </v-flex>
+                            </v-layout>
+                            <v-layout>
+                                <v-flex>
+                                    <v-btn
+                                    type="submit"
+                                    color="primary">
+                                    Save
+                                    </v-btn>
+                                </v-flex>
+                            </v-layout>
+                        </v-form>
+
+                    </v-card>
+                    <v-alert
+                        :value = phoneSuccess
+                        type="success">
+                        <span color="white">Phone number successfully updated.</span>
+                    </v-alert>
+
+                </v-tab-item>
             </v-tabs>
 
 		</v-flex>
@@ -199,7 +248,7 @@
 </template>
 
 <script>
-    import { Auth } from '~/plugins/firebase-client-init.js'
+    import { Auth, db } from '~/plugins/firebase-client-init.js'
     import firebase from 'firebase/app'
 
 	export default {
@@ -215,6 +264,10 @@
                 emailSuccess: false,
                 emailFail: false,
                 emailError: false,
+                phoneSuccess: false,
+                phone: null,
+                confirmPhone: '',
+
 
                 oldpassword: '',
                 newpassword: '',
@@ -305,7 +358,23 @@
             async forgotLog() {
                 await this.$store.dispatch('auth/signOut');
                 this.$router.replace('/password')
+            },
+            getPhone() {
+                let user = Auth.currentUser;
+                
+                var userRef = db.collection('user-meta').doc(user.uid);
+
+                if (this.phone !== null && (this.phone == this.confirmPhone)) {
+                    var setWithMerge = userRef.set({
+                        phone: this.phone
+                    }, { merge: true });
+                    this.phoneSuccess = true;
+                }
+                else {
+                    console.log("Empty form")
+                }
             }
+
 
         },
         computed: {

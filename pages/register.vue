@@ -1,6 +1,6 @@
 <template>
   <v-layout align-center justify-start column fill-height>
-    <v-card flat height="380px">
+    <v-card flat height="50%" width="18%" color="transparent">
       <v-form @submit.prevent="registerValid">
         <h1>Register</h1>
         <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">{{message}}</v-alert>
@@ -16,7 +16,7 @@
               v-model="password"
               label="Password"
               autocomplete="false"
-              hint="At least 8 characters"
+              hint="At least 8 characters and 1 special character."
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -33,10 +33,23 @@
         <span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
         <v-layout>
           <v-flex>
+            <v-text-field
+              type="phone"
+              name="phone"
+              v-model="phone"
+              label="Phone Number"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout>
+          <v-flex align-center justify-center>
             <v-btn type="submit" value="Register" color="primary">Next</v-btn>
           </v-flex>
         </v-layout>
       </v-form>
+      <v-flex align-center justify-center>
+        <v-btn to="/login">Back</v-btn>
+      </v-flex>
     </v-card>
 
 
@@ -84,6 +97,7 @@ export default {
       email: "",
       password: "",
       confirm_password: "",
+      phone: "",
       message: null,
       execute: true,
 
@@ -113,7 +127,14 @@ export default {
                 displayName: this.name,
                 photoURL: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAACOklEQVR4Ae3ZA2ydURwF8P9s2+bjPSdGo0aN08V+URtbL+a8BbO9xfZs2zaCuW7vbDx8uLfp/3dinw+XopRSSimllFJhYm9TjV08wwdoYB0f8ix2mDkTe0p7YIZxDeto/5I6rjHDxGtdkcc72n8H75CXruKn1CAcpi0cHE4NEv9kp+EubXHB3ew08QuH4hFt8cGj5Ajxx9hePE1bYi6k+4gvMJ+29GCe+CEzhvW0ZaQ+PVZ8wDW0ZWatuJfozrqyC9Qluotr2Sra8pOtEtewMkgBrBLXsC9QgX3iGm4EKnBDXOP7QAXeiWt4G6jAW3ENNwMVuCmu4UCgAgc6/DCqE1miO9+7X0oEgtVlF1gjPkiOKHs5Pbx9b2jme7SlxPmSC5we20v8kRjJh6Vt6jlU/JKZztsBj1XcH2zxGG3h4ERqkPgp0R35AhvMOuQT3cVnyRH/O9wt4zjLzaj00/F6/dfj9WrPj9eVUkqpRPeMMTnMxxbu4fWf5uP3uME93IZ5JpcxHi4lzGjWYgPPsom2cNDIs9jAWjNaXJvaw1RyES/SlpmLXGQqHb0Rgsv5hjaEvOJyIt6lWg4nacMNTppcHMu9LqYGL2ijCZ6bGuki0TEVuEIbbXDFVEgU2JsbaWPKRvYOf6C8SBtjLoY6yKbH4h5tvMHd5DgJR6Ivb9E6yK1EX6c3AMGDlRIcZtG6i5ktQWGpywJYKkHxgtMC5yUo1tM6TL0ERes2WkALaAEtEEm0gFJKKaWUUkp9ABvn3SEbw3cFAAAAAElFTkSuQmCC',
             }).then(() => {
-                this.$store.dispatch('auth/signIn', {
+                
+                var userRef = db.collection('user-meta').doc(user.uid);
+
+                var setWithMerge = userRef.set({
+                    phone: this.phone
+                }, { merge: true });
+  
+                this.$store.dispatch('signIn', {
                     email: this.email,
                     password: this.password
                 }).then(() => {
@@ -139,7 +160,7 @@ export default {
       this.errorSpecial = false;
 
       // (1) text fields not empty
-      if (this.name == "" || this.email == "" || this.password == "" || this.confirm_password == "") {
+      if (this.name == "" || this.email == "" || this.password == "" || this.confirm_password == "" || this.email == "") {
         this.execute = false;
         this.errorEmpty = true;
         //console.log("Empty")
