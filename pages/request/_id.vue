@@ -52,6 +52,25 @@
                 </v-layout>
 
             </v-card>
+            <v-card v-if="record.request().isComplete()" class="mt-3">
+                <v-card-title>
+                    <div class="headline">Rate This Request</div>
+                </v-card-title>
+                <div class="text-center">
+                    <v-rating v-model="rating"
+                    background-color="primary lighten-3"
+                    color="primary"
+                ></v-rating>
+                </div>
+                <v-card-actions>
+                    <v-btn color="primary" @click="setRating">Submit</v-btn>
+                </v-card-actions>
+                <v-alert
+                        :value = ratingSent
+                        type="success">
+                        <span color="white">Rating Submitted.</span>
+                </v-alert>
+            </v-card>
         </template>
     </v-flex>
   </v-layout>
@@ -83,7 +102,9 @@ export default {
     },
     data() {
         return {
-            record: false
+            record: false,
+            rating: 4,
+            ratingSent: false
         };
     },
     methods: {
@@ -98,6 +119,16 @@ export default {
             if( confirm('Are you sure you want to cancel this request? This action cannot be undone.') ) {
                 this.record.request().delete();
             }
+        },
+        setRating: function() {
+
+            var sourceRef = db.collection('requests').doc(this.record.id);
+
+            var setWithMerge = sourceRef.set({
+                userRating: this.rating
+            }, { merge: true });
+
+            this.ratingSent = true;
         }
     },
     mounted() {
