@@ -3,6 +3,7 @@
     "predeploy": "yarn install --ignore-engines && yarn run generate",
     "target": "sourcery-web-app",
     "public": "dist",
+    "trailingSlash": false,
     "ignore": [
       "firebase.json",
       "**/.*",
