@@ -1,0 +1,16 @@
+on: pull_request
+name: Build
+jobs:
+  build:
+    name: Build Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@master
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - run: yarn install
+    - run: yarn run generate
+
