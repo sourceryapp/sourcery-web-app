@@ -10,19 +10,13 @@ export default async function ({ store, redirect, route, error, req }) {
     let routeName = 'account-payment';
     let paymentRoute = '/account/payment';
 
-
-    if (store.getters['auth/activeUser'] && (route.name !== routeName)){
-        console.info('Stripe Middleware Running');
-
-        try {
-            let meta = store.state.meta;
-            if (!(meta && meta.stripe)) {
-                console.warn("User has not connected to stripe")
-                return redirect(paymentRoute)
-            }
-        } catch (error) {
-            console.error(error);
-        }
+    console.group('Stripe Middleware - /middleware/stripe-check.js');
+    if (store.getters['auth/activeUser'] && (route.name !== routeName) && !(store.getters['meta/isset']) ){
+        console.info("User has not connected to stripe. Redirecting.")
+        return redirect(paymentRoute)
+    }else{
+        console.info("User has already connected to Stripe")
     }
+    console.groupEnd();
 
 }

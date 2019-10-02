@@ -2,10 +2,14 @@ import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
 import Cookies from 'js-cookie'
 import { Utils } from '~/modules/utilities.js';
 
-export const state = () => ({
-    user: null,
-    loading: false
-});
+const initialState = () => {
+    return {
+        user: null,
+        loading: false
+    }
+}
+
+export const state = initialState;
 
 export const getters = {
     activeUser: (state, getters) => {
@@ -22,6 +26,12 @@ export const mutations = {
     },
     setLoading(state, payload) {
         state.loading = payload
+    },
+    reset(state) {
+        const s = initialState()
+        Object.keys(s).forEach(key => {
+            state[key] = s[key]
+        })
     }
 };
 
@@ -43,10 +53,13 @@ export const actions = {
         return "Someone";
     },
 
-    async signOut({ commit }) {
+    async signOut({commit, rootState}) {
         await Auth.signOut()
         Cookies.remove('token');
         Cookies.remove('user');
-        commit('setUser', null)
+        commit('reset'); // auth/reset
+
+        // Also reset meta store for this user
+        commit('meta/reset', null, { root: true })
     }
 };

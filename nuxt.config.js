@@ -90,7 +90,6 @@ module.exports = {
         // { src: '~/plugins/stripe', mode: 'client' },
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
         '~/plugins/firebase-auth.js',
-        { src: '~/plugins/vuex-persist', ssr: false }
 	],
 
 
@@ -110,6 +109,7 @@ module.exports = {
 	router: {
 		middleware: [
             'auth',
+            'user-meta',
             'stripe-check'
         ],
     },

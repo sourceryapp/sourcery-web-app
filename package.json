@@ -34,8 +34,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
     "nuxt": "2",
-    "vuetify-loader": "^1.2.2",
-    "vuex-persist": "^2.1.0"
+    "vuetify-loader": "^1.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

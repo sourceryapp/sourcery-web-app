@@ -33,5 +33,6 @@ export const functions = firebase.functions();
 
 // Auth
 firebase.auth().useDeviceLanguage();
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
 export const Auth = firebase.auth()
 export const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()
