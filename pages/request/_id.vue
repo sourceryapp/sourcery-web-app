@@ -52,14 +52,15 @@
                 </v-layout>
 
             </v-card>
-            <v-card v-if="record.request().isComplete()" class="mt-3">
+            <v-card v-if="record.data().userRating == -1 && record.request().isComplete()" class="mt-3">
                 <v-card-title>
                     <div class="headline">Rate This Request</div>
                 </v-card-title>
                 <div class="text-center">
-                    <v-rating v-model="rating"
-                    background-color="primary lighten-3"
-                    color="primary"
+                    <v-rating
+                        v-model="rating"
+                        background-color="primary lighten-3"
+                        color="primary"
                 ></v-rating>
                 </div>
                 <v-card-actions>
@@ -71,6 +72,28 @@
                         <span color="white">Rating Submitted.</span>
                 </v-alert>
             </v-card>
+            <v-card v-if="record.request().isComplete()" class="mt-3">
+                <v-card-title>
+                    <div class="headline">Your Rating of This Request</div>
+                </v-card-title>
+                <div class="text-center">
+                    <v-rating
+                        v-model="record.data().userRating"
+                        background-color="primary lighten-3"
+                        color="primary"
+                        readonly
+                ></v-rating>
+                </div>
+                <v-card-actions>
+                    <v-btn color="primary" @click="resetRating">Change</v-btn>
+                </v-card-actions>
+                <v-alert
+                        :value = ratingSent
+                        type="success">
+                        <span color="white">Rating Submitted.</span>
+                </v-alert>
+            </v-card>
+
         </template>
     </v-flex>
   </v-layout>
@@ -88,7 +111,8 @@ export default {
             return db.collection("requests").doc(params.id).get()
             .then(doc => {
                 return {
-                    record: (doc.exists) ? doc : false
+                    record: (doc.exists) ? doc : false,
+                    pullBool: true
                 }
             })
             .catch((e) => {
@@ -103,7 +127,7 @@ export default {
     data() {
         return {
             record: false,
-            rating: 4,
+            rating: 0,
             ratingSent: false
         };
     },
@@ -129,6 +153,18 @@ export default {
             }, { merge: true });
 
             this.ratingSent = true;
+        },
+        resetRating: function() {
+            var sourceRef = db.collection('requests').doc(this.record.id);
+
+            var setWithMerge = sourceRef.set({
+                userRating: -1
+            }, { merge: true });
+
+            this.ratingSent = false;
+        },
+        testFunction: function() {
+            console.log(this.record.data().userRating)
         }
     },
     mounted() {

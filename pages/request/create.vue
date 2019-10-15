@@ -235,6 +235,7 @@ import { Utils } from '~/modules/utilities'
                     created_at: new Date(),
                     vendor_id: "",
                     attachments: {},
+                    userRating: -1
                 })
                 .then( async (ref) => {
                     console.log(`Imported "${ref.id}"`);

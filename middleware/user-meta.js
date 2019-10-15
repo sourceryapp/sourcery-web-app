@@ -18,6 +18,9 @@ export default async function ({ store, $axios, redirect, route, error }) {
         console.info("Meta retrieved:", usermeta)
         store.commit('meta/setStripe', usermeta.stripe)
         store.commit('meta/setPhone', usermeta.phone)
+        store.commit('meta/setAgent', usermeta.agentUpdates)
+        store.commit('meta/setNews', usermeta.newsUpdates)
+        store.commit('meta/setRequest', usermeta.requestUpdates)
         console.log('Meta Store', store.state.meta);
         if(usermeta && usermeta.stripe && usermeta.stripe.stripe_user_id){
             try{

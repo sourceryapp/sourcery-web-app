@@ -197,7 +197,7 @@
                 </v-tab>
                 <v-tab-item class="pt-2">
                     <v-card flat>
-                        <v-form @submit.prevent="getPhone" ref="detailsForm">
+                        <v-form @submit.prevent="setPhone" ref="detailsForm">
                             <v-layout>
                                 <v-flex>
                                     <v-text-field
@@ -207,18 +207,6 @@
                                         id="phoneNumber"
                                         :rules="[rules.required]"
                                         v-model="phone">
-                                    </v-text-field>
-                                </v-flex>
-                            </v-layout>
-                            <v-layout>
-                                <v-flex>
-                                    <v-text-field
-                                        type="text"
-                                        label="Confirm Phone Number"
-                                        name="confirmPhone"
-                                        id="confirmPhoneNumber"
-                                        :rules="[rules.required]"
-                                        v-model="confirmPhone">
                                     </v-text-field>
                                 </v-flex>
                             </v-layout>
@@ -259,13 +247,13 @@
                 name: this.$store.getters['auth/activeUser'].displayName || null,
 
                 email: this.$store.getters['auth/activeUser'].email,
-                // phone: this.$store.getters['auth/activeUser'].phoneNumber || null,
+                //phone: this.$store.getters['auth/activeUser'].phoneNumber || null,
                 epass: '',
                 emailSuccess: false,
                 emailFail: false,
                 emailError: false,
                 phoneSuccess: false,
-                phone: null,
+                phone: this.$store.state.meta.phone,
                 confirmPhone: '',
 
 
@@ -359,23 +347,19 @@
                 await this.$store.dispatch('auth/signOut');
                 this.$router.replace('/password')
             },
-            getPhone() {
-                let user = Auth.currentUser;
-                
-                var userRef = db.collection('user-meta').doc(user.uid);
-
-                if (this.phone !== null && (this.phone == this.confirmPhone)) {
-                    var setWithMerge = userRef.set({
+            async setPhone() {
+                if (this.phone !== null) {
+                    // Update phone number on the server
+                    await db.collection('user-meta').doc(this.$store.getters['auth/activeUser'].uid).set({
                         phone: this.phone
                     }, { merge: true });
+
+                    // Update in local store
+                    this.$store.commit('meta/setPhone', this.phone)
                     this.phoneSuccess = true;
                 }
-                else {
-                    console.log("Empty form")
-                }
+
             }
-
-
         },
         computed: {
             user() {

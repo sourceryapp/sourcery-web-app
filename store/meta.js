@@ -10,7 +10,10 @@ const initialState = () => {
     return {
         stripe: {},
         balance: {},
-        phone: null
+        phone: null,
+        agentUpdates: null,
+        newsUpdates: null,
+        requestUpdates: null
     }
 }
 
@@ -41,12 +44,21 @@ export const mutations = {
     set(state, obj){
         state = Object.assign(state, obj);
     },
-    setStripe(state, obj) {
+    setStripe(state, obj={}) {
         console.info('New Stripe data being stored to Vuex:', obj)
-        state.stripe = obj ? obj : {};
+        state.stripe = obj;
     },
-    setPhone(state, obj){
-        state.phone = obj ? obj : {};
+    setPhone(state, obj=null){
+        state.phone = obj;
+    },
+    setAgent(state, obj=null) {
+        state.agentUpdates = obj;
+    },
+    setNews(state, obj=null) {
+        state.newsUpdates = obj;
+    },
+    setRequest(state, obj=null) {
+        state.requestUpdates = obj;
     },
     balance(state, obj){
         state.balance = obj
