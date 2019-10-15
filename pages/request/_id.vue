@@ -52,48 +52,22 @@
                 </v-layout>
 
             </v-card>
-            <v-card v-if="record.data().userRating == -1 && record.request().isComplete()" class="mt-3">
+            <v-card class="mt-3">
                 <v-card-title>
-                    <div class="headline">Rate This Request</div>
+                    <div class="headline" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'"></div>
                 </v-card-title>
-                <div class="text-center">
+                <v-card-text>
                     <v-rating
                         v-model="rating"
                         background-color="primary lighten-3"
                         color="primary"
-                ></v-rating>
-                </div>
-                <v-card-actions>
-                    <v-btn color="primary" @click="setRating">Submit</v-btn>
+                        :readonly="isRatingSet"
+                    ></v-rating>
+                </v-card-text>
+                <v-card-actions  v-if="!isRatingSet">
+                    <v-btn color="primary" @click="setRating">Save</v-btn>
                 </v-card-actions>
-                <v-alert
-                        :value = ratingSent
-                        type="success">
-                        <span color="white">Rating Submitted.</span>
-                </v-alert>
             </v-card>
-            <v-card v-if="record.request().isComplete()" class="mt-3">
-                <v-card-title>
-                    <div class="headline">Your Rating of This Request</div>
-                </v-card-title>
-                <div class="text-center">
-                    <v-rating
-                        v-model="record.data().userRating"
-                        background-color="primary lighten-3"
-                        color="primary"
-                        readonly
-                ></v-rating>
-                </div>
-                <v-card-actions>
-                    <v-btn color="primary" @click="resetRating">Change</v-btn>
-                </v-card-actions>
-                <v-alert
-                        :value = ratingSent
-                        type="success">
-                        <span color="white">Rating Submitted.</span>
-                </v-alert>
-            </v-card>
-
         </template>
     </v-flex>
   </v-layout>
@@ -112,7 +86,7 @@ export default {
             .then(doc => {
                 return {
                     record: (doc.exists) ? doc : false,
-                    pullBool: true
+                    rating: (doc.exists) ? doc.data().userRating : 0
                 }
             })
             .catch((e) => {
@@ -127,9 +101,14 @@ export default {
     data() {
         return {
             record: false,
-            rating: 0,
-            ratingSent: false
+            rating: 0
+            // ratingSent: false
         };
+    },
+    computed: {
+        isRatingSet: function() {
+            return Boolean(this.record.data().userRating)
+        }
     },
     methods: {
         archive: async function(){
@@ -144,27 +123,12 @@ export default {
                 this.record.request().delete();
             }
         },
-        setRating: function() {
-
-            var sourceRef = db.collection('requests').doc(this.record.id);
-
-            var setWithMerge = sourceRef.set({
-                userRating: this.rating
-            }, { merge: true });
-
-            this.ratingSent = true;
-        },
-        resetRating: function() {
-            var sourceRef = db.collection('requests').doc(this.record.id);
-
-            var setWithMerge = sourceRef.set({
-                userRating: -1
-            }, { merge: true });
-
-            this.ratingSent = false;
-        },
-        testFunction: function() {
-            console.log(this.record.data().userRating)
+        setRating: async function() {
+            if(confirm(`This action cannot be undone. Would you like to rate this Sourcerer ${this.rating} stars?`)){
+                db.collection('requests').doc(this.record.id).set({
+                    userRating: this.rating
+                }, { merge: true });
+            }
         }
     },
     mounted() {
