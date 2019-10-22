@@ -11,18 +11,15 @@
                 <v-switch
                 label="Receive alerts for nearby jobs."
                 v-model="agentBool"
+                :hint="alertHint"
+                :persistent-hint="true"
                 color="primary"
                 class="mt-0"
+                @change="updateNotifications"
+                :readonly="!deviceHasGeoLocation"
                 ></v-switch>
             </v-card-text>
         </v-card>
-
-        <v-btn @click="updateNotifications" color="primary">Save</v-btn>
-        <v-alert
-            :value = updateSuccess
-             type="success">
-            <span color="white">Notification settings updated.</span>
-        </v-alert>
         </v-container>
     </v-app>
 </template>
@@ -35,20 +32,26 @@
         data () {
             return {
                 agentBool: this.$store.state.meta.agentUpdates,
-                updateSuccess: false
+                updateSuccess: false,
+                alertHint: 'Please choose "Allow" if prompted by your device/browser.',
+                geoError: 'You need to enable location services to use this feature.',
+                deviceHasGeoLocation: false, // Starts as read-only until we confirm geolocation
             }
         },
         computed: {
 
         },
         methods: {
+
             updateNotifications: async function() {
-                await db.collection('user-meta').doc(this.$store.getters['auth/activeUser'].uid).set({
-                    agentUpdates: this.agentBool
-                }, { merge: true });
-                this.$store.commit('meta/setAgent', this.phone)
-                this.updateSuccess = true;
+                this.$store.commit('meta/setAgent', this.agentBool)
+                this.$store.dispatch('meta/save', 'agentUpdates');
+                this.$toast.show('Notification Preference Saved!')
             }
+        },
+        mounted() {
+            // Check if device supports geolocation
+            this.deviceHasGeoLocation = Boolean(navigator.geolocation);
         }
     }
 </script>

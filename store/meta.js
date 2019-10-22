@@ -1,5 +1,6 @@
 import { Utils } from "~/modules/utilities"
-import { get } from "https"
+import firebase from 'firebase/app'
+import { db } from "~/plugins/firebase-client-init.js";
 
 /**
  * Any properties for the meta state should be added
@@ -13,7 +14,8 @@ const initialState = () => {
         phone: null,
         agentUpdates: null,
         newsUpdates: null,
-        requestUpdates: null
+        requestUpdates: null,
+        location: null
     }
 }
 
@@ -60,6 +62,9 @@ export const mutations = {
     setRequest(state, obj=null) {
         state.requestUpdates = obj;
     },
+    setLocation(state, obj=null){
+        state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude);
+    },
     balance(state, obj){
         state.balance = obj
     },
@@ -71,6 +76,38 @@ export const mutations = {
     }
 }
 
-export const actions = {
 
+/**
+ * Available properties within actions
+{
+  state,      // same as `store.state`, or local state if in modules
+  rootState,  // same as `store.state`, only in modules
+  commit,     // same as `store.commit`
+  dispatch,   // same as `store.dispatch`
+  getters,    // same as `store.getters`, or local getters if in modules
+  rootGetters // same as `store.getters`, only in modules
+}
+ */
+export const actions = {
+    save({state, rootGetters}, key){
+        db.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+            [key]: state[key]
+        }, { merge: true });
+    },
+    /**
+     * Updates the current user location
+     */
+    updateCurrentLocation({state, commit, dispatch}){
+        navigator.geolocation.getCurrentPosition( ({coords}) => {
+            commit('setLocation', coords)
+            dispatch('save', 'location');
+        }, () => {
+            // Failed - User won't give access
+            console.info('Geolocation failed in meta.js')
+        });
+    }
+}
+
+export const subscribe = (mutation, state) => {
+    console.log(mutation, state)
 }
