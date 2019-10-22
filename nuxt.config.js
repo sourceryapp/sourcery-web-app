@@ -115,6 +115,10 @@ module.exports = {
     },
 
     modules: [
+        ['@nuxtjs/google-analytics', {
+            id: 'UA-150639074',
+            dev: false, // don't use in dev mode
+        }],
         // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
