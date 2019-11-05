@@ -1,51 +1,45 @@
 <template>
-  <v-flex>
-    <v-layout column fill-height>
-      <v-flex>
+    <v-layout row fill-height>
+      <v-flex xs12 sm8 offset-sm2>
         <h1>Find Jobs</h1>
-        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque unde ipsum perferendis enim illo?</p>
+        <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the Unviersity of Connecticut.</p>
 
         <section class="pa-3" id="search">
           <v-layout row fill-height align-center justify-center wrap>
             <v-flex>
               <h3>Search Radius</h3>
               <v-radio-group v-model="distance" row>
+                <v-radio label="1 mile" :value="1"></v-radio>
+                <v-radio label="5 miles" :value="5"></v-radio>
+                <v-radio label="10 miles" :value="10"></v-radio>
                 <v-radio label="50 miles" :value="50"></v-radio>
-                <v-radio label="75 miles" :value="75"></v-radio>
                 <v-radio label="100 miles" :value="100"></v-radio>
               </v-radio-group>
-              <v-btn dark color="primary" @click="getLocation()">Find Jobs Near Me</v-btn>
+              <v-btn dark color="primary" @click="getLocation()" :disabled="searching">Find Jobs Near Me</v-btn>
             </v-flex>
 
-            <!-- <v-flex xs12 sm4 grow text-xs-center>
-                            OR
-                        </v-flex>
-
-                        <v-flex xs12 sm4 grow text-xs-center >
-                            <v-text-field
-                                solo
-                                label="Postal Code"
-                                :clearable="true"
-                                :hide-details="true"
-                                append-icon="search"
-                                placeholder="coming soon..."
-                                disabled
-                            ></v-text-field>
-            </v-flex>-->
           </v-layout>
         </section>
         <v-divider></v-divider>
 
         <section id="results" v-if="jobs" class="mt-4">
+
+
           <v-alert
-            v-if="jobs.length==0"
+            v-if="jobs.length==0 && !searching"
             :value="true"
             type="info"
           >Nothing found. Please try a larger search radius.</v-alert>
-          <v-layout row wrap fill-height>
+
+
+
+          <v-layout column fill-height>
+
+            <h4 v-if="searching">Searching...</h4>
+
             <template v-for="(job, index) in jobs">
               <v-flex xs12 sm6 lg4 xl3 v-bind:key="index">
-                <v-card class="ma-2">
+                <v-card class="ma-2" :data-id=job.id>
                   <v-card-title primary-title>
                     <div>
                       <h3
@@ -70,7 +64,8 @@
                         <p
                           color="primary--text"
                           class="primary--text display-3"
-                        >${{ job.data().estimated_cost_usd }}</p>
+                          v-html="jobValue(job.data())"
+                        ></p>
                       </v-flex>
                     </v-layout>
                   </v-container>
@@ -84,7 +79,6 @@
         </section>
       </v-flex>
     </v-layout>
-  </v-flex>
 </template>
 
 <script>
@@ -95,6 +89,9 @@ import { db } from "~/plugins/firebase-client-init.js";
  */
 import * as geolib from "geolib";
 
+import { Utils } from '~/modules/utilities'
+
+
 export default {
     name: "jobs",
     data() {
@@ -102,7 +99,8 @@ export default {
             userLat: null,
             userLong: null,
             distance: 50,
-            jobs: null
+            jobs: null,
+            searching: false
         };
     },
     methods: {
@@ -134,6 +132,7 @@ export default {
          *       calculations. Otherwise these queries will get pretty heavy.
          */
         async findJobs({ coords }) {
+            this.searching = true;
             this.userLat = coords.latitude;
             this.userLong = coords.longitude;
 
@@ -166,8 +165,12 @@ export default {
                             }
                         }
                     });
+                    this.searching = false
                     return jobs;
                 });
+        },
+        jobValue(job) {
+            return Utils.jobValue(job);
         }
     },
     computed: {

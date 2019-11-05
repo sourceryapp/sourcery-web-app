@@ -18,82 +18,156 @@
                     type="info"
                     class="mt-4 mb-4"
                     >
-                    Message about our limited service area?
+                    During the beta, users can request documents located in the Boston and New York metro areas, and at the Unviersity of Connecticut.
                 </v-alert>
 
                 <label for="area" class="title">
-                    1. Where is your document located?
+
                 </label>
-                <v-select
-                id="area"
-                name="area"
-                :items="areaSelections"
-                item-text="value"
-                item-value="key"
-                label="City, State"
-                v-model="area"
-                >Loading...</v-select>
 
-                <v-select
-                id="location"
-                name="location"
-                :items="repositories"
-                v-if="area"
-                item-text="name"
-                item-value="id"
-                label="Choose a location"
-                v-model="request.repository_id"
-                :loading="loadingLocations"
-                ></v-select>
+                <v-card v-if="formState===1">
 
+                    <v-card-title primary-title>
+                    <div>
+                        <div class="headline">Where is your document located?</div>
+                        <!-- <span class="grey--text">1,000 miles of wonder</span> -->
+                    </div>
+                    </v-card-title>
 
-                <v-divider class="mt-4 mb-4"></v-divider>
-
-
-                <label for="citation"  class="title">
-                    2. What is the citation for your document?
-                </label>
-                <v-textarea
-                    style="font-family: Times"
-                    id="citation"
-                    name="citation"
-                    label="Citation"
-                    multi-line="true"
-                    placeholder="Example: Howard, Richard, translator. Madness and Civilization: A History of Insanity in the Age of Reason. By Michel Foucault, Vintage-Random House, 1988."
-                    v-model="request.citation"
-                    auto-grow
-                ></v-textarea>
-
-
-                <v-divider class="mt-4 mb-4"></v-divider>
-
-                <label for="pages"  class="title">
-                    3. Number of Pages Requested
-                </label>
-                <v-layout>
-                    <v-flex xs6 >
-                        <p>You will be charged immediately for the base rate, and charged once it is picked up for the rest.</p>
+                    <v-card-text>
                         <v-select
-                            id="pages"
-                            name="pages"
-                            v-model="request.pages"
-                            :items="pages"
-                            label="Maximum Pages"
-                        ></v-select>
-                    </v-flex>
-                    <v-flex xs5 offset-xs1>
-                        <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                        <h1 class="pt-0">$ {{ estimatedCost }}</h1>
-                    </v-flex>
-                </v-layout>
+                        id="area"
+                        name="area"
+                        :items="areaSelections"
+                        item-text="value"
+                        item-value="key"
+                        label="City, State"
+                        v-model="area"
+                        >Loading...</v-select>
 
-                    <v-btn
-                    :disabled="loading"
-                    @click="submitRequest"
-                    class="primary"
-                    >
-                    Submit
-                    </v-btn>
+                        <v-select
+                        id="location"
+                        name="location"
+                        :items="repositories"
+                        v-if="area"
+                        item-text="name"
+                        item-value="id"
+                        label="Choose a location"
+                        v-model="request.repository_id"
+                        :loading="loadingLocations"
+                        ></v-select>
+
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-layout
+                            justify-end
+
+                        >
+                            <v-btn
+                            color="primary"
+                            @click="formState=2"
+                            :disabled="!request.repository_id"
+                            >Next</v-btn>
+
+
+                        </v-layout>
+                    </v-card-actions>
+
+                </v-card>
+
+                <v-card v-if="formState===2">
+
+                    <v-card-title primary-title>
+                    <div>
+                        <div class="headline">What is the citation for your document?</div>
+                        <!-- <span class="grey--text">1,000 miles of wonder</span> -->
+                    </div>
+                    </v-card-title>
+
+                    <v-card-text>
+                        <v-textarea
+                            style="font-family: Times"
+                            id="citation"
+                            name="citation"
+                            label="Citation"
+                            multi-line="true"
+                            placeholder="Example: Howard, Richard, translator. Madness and Civilization: A History of Insanity in the Age of Reason. By Michel Foucault, Vintage-Random House, 1988."
+                            v-model="request.citation"
+                            auto-grow
+                        ></v-textarea>
+
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-layout
+                            justify-space-between
+
+                        >
+
+                            <v-btn
+                            @click="formState=1"
+                            >Previous</v-btn>
+                            <v-btn
+                            color="primary"
+                            @click="formState=3"
+                            >Next</v-btn>
+
+
+                        </v-layout>
+                    </v-card-actions>
+
+                </v-card>
+
+
+
+                <v-card v-if="formState===3">
+
+                    <v-card-title primary-title>
+                    <div>
+                        <div class="headline">Estimated Number of Pages</div>
+                        <span class="grey--text text--darken-1">You will be charged immediately for the base rate, and charged once it is picked up for the rest.</span>
+                    </div>
+                    </v-card-title>
+
+                    <v-card-text>
+
+                        <v-layout>
+                            <v-flex xs6 >
+                                <p></p>
+                                <v-select
+                                    id="pages"
+                                    name="pages"
+                                    v-model="request.pages"
+                                    :items="pages"
+                                    label="Maximum Pages"
+                                ></v-select>
+                            </v-flex>
+                            <v-flex xs5 offset-xs1>
+                                <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
+                                <h1 class="pt-0">{{ estimatedCost }}</h1>
+                            </v-flex>
+                        </v-layout>
+
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-layout
+                            justify-space-between
+
+                        >
+
+                            <v-btn
+                            @click="formState=2"
+                            >Previous</v-btn>
+                            <v-btn
+                            :disabled="loading"
+                            @click="submitRequest"
+                            class="primary"
+                            >
+                            Submit
+                            </v-btn>
+                        </v-layout>
+                    </v-card-actions>
+
+                </v-card>
 
             </v-flex>
 
@@ -138,6 +212,7 @@ import { Utils } from '~/modules/utilities'
                     30,
                     "Unlimited"
                 ],
+                formState: 1,
                 area: null,
                 loadingLocations: true
 			}
@@ -179,7 +254,7 @@ import { Utils } from '~/modules/utilities'
         },
         computed: {
             estimatedCost: function(){
-                return this.request.pages + 15;
+                return Utils.estimatedCost(this.request);
             },
             usermeta: function(){
                 return this.$store.state.meta
@@ -223,6 +298,7 @@ import { Utils } from '~/modules/utilities'
 
                 let router = this.$router;
 
+                // @todo Request should be moved to Vuex and managed thru the store
                 await db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,

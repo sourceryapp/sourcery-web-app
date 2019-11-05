@@ -1,7 +1,8 @@
 import { db } from '~/plugins/firebase-client-init.js'
 import cookieParser from 'cookieparser'
 import jwt_decode from 'jwt-decode'
-import { type } from 'os';
+import accounting from 'accounting-js'
+
 
 export const Utils = {
 
@@ -71,5 +72,23 @@ export const Utils = {
             currency: curr
         })
         return currency.format( cents/100 );
+    },
+
+    /**
+     * Estimate the final cost of a job.
+     * Actual cost will vary slightly based on various factors.
+     *
+     * @todo move to a maintained lib like Dinero (https://github.com/sarahdayan/dinero.js)
+     */
+    estimatedCost: ({ pages }, prefix='$') => {
+        return accounting.formatMoney( (30 + (pages * .5) + Math.random() ) , prefix);
+    },
+
+    /**
+     * Get the value of a job for a Sourcerer
+     */
+    jobValue: (job, prefix='$') => {
+        // User gets 80% of cost.
+        return accounting.formatMoney( accounting.unformat(job.estimated_cost_usd) * .80)
     }
 }
