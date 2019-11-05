@@ -12,7 +12,7 @@
                 label="Receive alerts for nearby jobs."
                 v-model="agentBool"
                 :hint="alertHint"
-                :persistent-hint="true"
+                :persistent-hint="false"
                 color="primary"
                 class="mt-0"
                 @change="updateNotifications"

@@ -208,7 +208,7 @@
             items1: [
                 { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
                 { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
-                { title: 'Notifications', icon: 'notifications', link: '/settings/notifications'},
+                { title: 'Email Notifications', icon: 'notifications', link: '/settings/notifications'},
                 { title: 'History', icon: 'hourglass_full', link: '/request/history'},
                 { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
             ],

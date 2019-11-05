@@ -185,6 +185,7 @@
 import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
 // import Mail from "~/modules/message.js";
 import StaticMap from '~/components/static-map'
+//import { Utils } from '~/modules/utilities'
 const STATUS_INITIAL = 0, STATUS_SAVING = 1, STATUS_SUCCESS = 2, STATUS_FAILED = 3;
 
 export default {
@@ -316,8 +317,10 @@ export default {
          * Reloads page to refresh the interface.
          */
         completeJob: async function(){
+            let router = this.$router;
             if(confirm("Mark this job complete and send document(s) to the client?")){
                 this.record.request().markComplete()
+                router.push('/')
             }
         },
     },

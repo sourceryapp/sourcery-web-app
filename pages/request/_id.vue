@@ -52,7 +52,7 @@
                 </v-layout>
 
             </v-card>
-            <v-card class="mt-3">
+            <v-card v-if="record.request().isComplete()" class="mt-3">
                 <v-card-title>
                     <div class="headline" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'"></div>
                 </v-card-title>
@@ -112,8 +112,10 @@ export default {
     },
     methods: {
         archive: async function(){
+            let router = this.$router;
             if( confirm('Are you sure you want to archive this item? This action cannot be undone.') ) {
                 this.record.request().markArchived();
+                router.push('/')
             }else{
                 return false;
             }
