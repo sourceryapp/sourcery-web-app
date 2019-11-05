@@ -21,6 +21,7 @@ module.exports = {
 		],
 		link: [
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
+            { rel: 'icon', type: 'image/png', href: '/icon-256.png' }
         ],
         script: [
             // { src: 'https://js.stripe.com/v3/', async: true }
