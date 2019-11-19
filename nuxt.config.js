@@ -120,7 +120,7 @@ module.exports = {
             id: 'UA-150639074',
             dev: false, // don't use in dev mode
         }],
-        // '@nuxtjs/pwa',
+        '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
         '@nuxtjs/vuetify'
