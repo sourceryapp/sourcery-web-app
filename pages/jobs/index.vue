@@ -63,9 +63,10 @@
                       <v-flex>
                         <p
                           color="primary--text"
-                          class="primary--text display-3"
+                          class="primary--text display-2"
                           v-html="jobValue(job.data())"
                         ></p>
+                        <p class="grey--text text--darken-1">(Estimated payout for a {{ job.data().pages }} page fulfillment.)</p>
                       </v-flex>
                     </v-layout>
                   </v-container>

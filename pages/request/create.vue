@@ -55,7 +55,13 @@
                         label="Choose a location"
                         v-model="request.repository_id"
                         :loading="loadingLocations"
-                        ></v-select>
+                        >
+                            <template slot="item" slot-scope="data" >
+                                <v-list-tile-content>
+                                    <v-list-tile-title @click="setName(data.item.name)" v-html="data.item.name"></v-list-tile-title>
+                                </v-list-tile-content>
+                            </template>
+                        </v-select>
 
                     </v-card-text>
                     <v-card-actions>
@@ -139,11 +145,12 @@
                                     v-model="request.pages"
                                     :items="pages"
                                     label="Maximum Pages"
+                                    @change="getCost"
                                 ></v-select>
                             </v-flex>
-                            <v-flex xs5 offset-xs1>
+                            <v-flex xs5 offset-xs1 v-if="request.pricing.total">
                                 <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                                <h1 class="pt-0">{{ estimatedCost }}</h1>
+                                <h1 class="pt-0">{{ toDollars(request.pricing.total) }}</h1>
                             </v-flex>
                         </v-layout>
 
@@ -181,7 +188,7 @@
 
 <script>
 
-import { db } from '~/plugins/firebase-client-init.js'
+import { db, functions } from '~/plugins/firebase-client-init.js'
 import { Utils } from '~/modules/utilities'
 
 	export default {
@@ -190,6 +197,7 @@ import { Utils } from '~/modules/utilities'
 		data() {
 			return {
                 repositories: ["Loading..."],
+                repositoryName: null,
                 request: {
                     pages: 0,
                     citation: 'Wysocki, Anne Frances, et al. Writing New Media: Theory and Applications for Expanding the Teaching of Composition. Utah State UP, 2004.'
@@ -210,7 +218,10 @@ import { Utils } from '~/modules/utilities'
                     20,
                     25,
                     30,
-                    "Unlimited"
+                    35,
+                    40,
+                    45,
+                    50
                 ],
                 formState: 1,
                 area: null,
@@ -248,14 +259,14 @@ import { Utils } from '~/modules/utilities'
                 // @todo Remove random citations before launch.
                 request: {
                     pages: 0,
-                    citation: citations[Math.floor(Math.random()*citations.length)]
+                    citation: citations[Math.floor(Math.random()*citations.length)],
+                    pricing: {
+                        total: 0
+                    }
                 }
             }
         },
         computed: {
-            estimatedCost: function(){
-                return Utils.estimatedCost(this.request);
-            },
             usermeta: function(){
                 return this.$store.state.meta
             }
@@ -305,12 +316,12 @@ import { Utils } from '~/modules/utilities'
                     repository_id: this.request.repository_id,
                     repository: await this.getRepository( this.request.repository_id ),
 					citation: this.request.citation,
-                    estimated_cost_usd: this.estimatedCost,
                     client_id: this.$store.getters['auth/activeUser'].uid,
                     status: "pending",
                     created_at: new Date(),
                     vendor_id: "",
-                    attachments: {}
+                    attachments: {},
+                    pricing: this.request.pricing
                 })
                 .then( async (ref) => {
                     console.log(`Imported "${ref.id}"`);
@@ -333,6 +344,20 @@ import { Utils } from '~/modules/utilities'
                     .then((doc) => {
                         return doc.data();
                     })
+            },
+            async getCost(){
+                var cost = functions.httpsCallable('cost');
+                var costObj = await cost({
+                    repository: this.repositoryName,
+                    pages: this.request.pages
+                });
+                this.request.pricing = costObj.data;
+            },
+            setName(name){
+                this.repositoryName = name;
+            },
+            toDollars(cents){
+                return Utils.currencyFormat(cents)
             }
 		}
 	}

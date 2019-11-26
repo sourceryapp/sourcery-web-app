@@ -65,7 +65,7 @@ export const Utils = {
      * Simple Currency Formatter
      * Assumes USD
      */
-    currencyFormat: (cents, curr) => {
+    currencyFormat: (cents, curr='USD') => {
         console.log(__filename, cents);
         let currency = new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -89,6 +89,9 @@ export const Utils = {
      */
     jobValue: (job, prefix='$') => {
         // User gets 80% of cost.
-        return accounting.formatMoney( accounting.unformat(job.estimated_cost_usd) * .80)
+        return (job.pricing && job.pricing !== null) ?
+                Utils.currencyFormat(job.pricing.total * .8) :
+                accounting.formatMoney( accounting.unformat(job.estimated_cost_usd) * .80);
+
     }
 }
