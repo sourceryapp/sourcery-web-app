@@ -329,7 +329,7 @@ import { Utils } from '~/modules/utilities'
                     // Success
                     this.$toast.show('Your request was sent.', {
                         onComplete: () => {
-                            router.push('/')
+                            router.push('/dashboard')
                         }
                     })
                 })

@@ -115,7 +115,7 @@ export default {
             let router = this.$router;
             if( confirm('Are you sure you want to archive this item? This action cannot be undone.') ) {
                 this.record.request().markArchived();
-                router.push('/')
+                router.push('/dashboard')
             }else{
                 return false;
             }

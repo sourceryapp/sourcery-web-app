@@ -320,7 +320,7 @@ export default {
             let router = this.$router;
             if(confirm("Mark this job complete and send document(s) to the client?")){
                 this.record.request().markComplete()
-                router.push('/')
+                router.push('/dashboard')
             }
         },
     },

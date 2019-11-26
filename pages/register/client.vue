@@ -39,7 +39,7 @@
 								token: token.id
 							}).then((res) => {
 								_this.paymentAccepted = true;
-								_this.$router.push('/');
+								_this.$router.push('/dashboard');
 								console.log(res)
 							}).catch((err) => {
 								console.log(err)
