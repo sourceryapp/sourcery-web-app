@@ -117,7 +117,7 @@ export default {
                     merge: true
                 })
                 .then(function(ref) {
-                    router.push("/");
+                    router.push("/dashboard");
                 });
         },
         getLocation() {

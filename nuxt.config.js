@@ -92,7 +92,8 @@ module.exports = {
     	name: 'Sourcery',
         short_name: 'Sourcery',
         lang: 'en-US',
-		orientation: 'portrait'
+        orientation: 'portrait',
+        start_url: '/dashboard'
     },
 
 
