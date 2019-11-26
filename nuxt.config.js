@@ -51,6 +51,18 @@ module.exports = {
 		iconSrc: 'static/img/sourcery-cauldron.png'
 	},
 
+    /**
+     * Paths that don't require authentication
+     */
+    noAuth: [
+        '/login',
+        '/about',
+        '/',
+        '/register',
+        '/password',
+        '/resetpassword',
+        '/index-new'
+    ],
 
     /**
 	 * Meta
@@ -166,7 +178,6 @@ module.exports = {
 	/*
 	** Build configuration
 	*/
-
 	build: {
         ssr: false,
         mode: 'spa',

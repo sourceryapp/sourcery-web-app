@@ -60,7 +60,7 @@
 					//console.log("error");
 					this.loginError = true;
 				});
-                this.$router.replace('/')
+                this.$router.push({ name: 'dashboard' })
             }
 		}
 	}

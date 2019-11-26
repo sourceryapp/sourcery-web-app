@@ -76,7 +76,7 @@
             <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon> -->
 
             <v-toolbar-title style="display:flex; justify-content:center; width: 100%" class="ma-0">
-                <nuxt-link to="/" id="wordmark-link">
+                <nuxt-link :to="{ name: 'dashboard' }" id="wordmark-link">
                     <img src="/img/sourcery-wordmark.svg" id="logo" alt="Sourcery Logo">
                 </nuxt-link>
             </v-toolbar-title>
@@ -105,7 +105,7 @@
             <v-btn
                 flat
                 value="dashboard"
-                to="/"
+                :to="{ name: 'dashboard' }"
                 color="primary"
 
             >

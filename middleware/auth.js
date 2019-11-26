@@ -1,8 +1,9 @@
-export default function ({ store, redirect, route, error }) {
+const config = require('~/nuxt.config.js');
+export default function ({ store, redirect, route, error, app }) {
     console.group('Authentication Middleware - auth.js');
     console.info('Current user data:', store.getters['auth/activeUser']);
 
-    if (!store.getters['auth/activeUser'] && (route.path !== '/login') && (route.path !== '/register') && (route.path !== '/password') && (route.path !== '/resetpassword')) {
+    if (!store.getters['auth/activeUser'] && (config.noAuth.indexOf(route.path) === -1)) {
         console.warn("User not logged in. Redirecting");
         return redirect('/login')
     }else{
