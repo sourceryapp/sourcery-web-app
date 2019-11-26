@@ -14,7 +14,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
-      "post-checkout": "yarn"
+      "post-checkout": "yarn",
+      "post-merge": "git remote prune origin"
     }
   },
   "dependencies": {
