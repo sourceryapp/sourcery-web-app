@@ -236,11 +236,13 @@ export default {
         this.currentStatus = STATUS_SAVING;
         let files = this.$refs.upload.files;
         let uploaded = this.uploadedFiles;
+        let attLength = this.record.data().attachments.length;
 
         for (var i = 0; i < files.length; i++) {
 
             let file = files[i]
-            let imageRef = storageRef.child(file.name);
+            let tempFileName = file.name + (attLength + i).toString()
+            let imageRef = storageRef.child(tempFileName);
             let uploadTask = imageRef.put(file);
             let request = this.record.id;
 
