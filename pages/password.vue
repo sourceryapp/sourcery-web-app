@@ -1,8 +1,23 @@
 <template>
     <v-layout>
         <v-flex xs12 sm6 offset-sm3>
+            <v-alert
+                :value="error"
+                class="my-3"
+                type="error">
+                <span color="white">{{error.message}}</span>
+            </v-alert>
+            <v-alert
+                :value="success"
+                class="my-3"
+                type="success">
+                <span color="white">An email has been sent to the provided address.</span>
+            </v-alert>
+
             <h3>Reset Password</h3>
+
             <p>Enter your email address and click submit. An email instructing you of how to change your password will be sent shortly.<p>
+
             <form @submit.prevent="resetPassEmail">
                 <v-layout>
                     <v-flex>
@@ -14,21 +29,16 @@
                         </v-text-field>
                     </v-flex>
                 </v-layout>
-                <v-layout>
-                    <v-flex>
-                        <v-btn
-                        :disabled="!emailIsValid"
-                        type="submit"
-                        @click="success = true">
-                        Submit
-                        </v-btn>
-                    </v-flex>
+                <v-layout row align-center justify-center>
+                    <v-btn to="/login">Back</v-btn>
+                    <v-btn
+                    type="submit"
+                    color="primary"
+                    >
+                    Submit
+                    </v-btn>
                 </v-layout>
             </form>
-            <v-flex>
-                <span v-if="success">An email has been sent to the provided address.</span>
-            </v-flex>
-            <v-btn to="/login">Back</v-btn>
         </v-flex>
     </v-layout>
 </template>
@@ -42,40 +52,28 @@
             return {
                 email: '',
                 success: false,
-
+                error: false
             }
         },
         computed: {
-            emailIsValid () {
-                return this.email !== '';
-            }
-        },
             user() {
                 return this.$store.getters['auth/activeUser']
+            }
         },
         methods: {
             resetPassEmail() {
-                var error_msg = true;
-                var emailAddress = this.email;
-                Auth.sendPasswordResetEmail(emailAddress).then(function() {
-                    error_msg = false;
-                    console.log("success")
-                 //Email sent.
-                }).catch(function(error) {
-                    if (error_msg == true)
-                        console.log("oops")
-                 //An error happened.
+                this.success = false;
+                this.error = false;
+                Auth.sendPasswordResetEmail(this.email).then(() => {
+                    this.success = true;
+                    this.email = '';
+                }).catch((error) => {
+                    this.error = error;
                 });
                 return
             },
-            emailSuccess() {
-                this.success = true;
-            },
             returnAndLog() {
-                //console.log(this.user)
-                //if (this.user) {
-                    this.$store.dispatch('auth/signOut')
-                //  }
+                this.$store.dispatch('auth/signOut')
                 this.$router.replace('/login')
             }
         }
