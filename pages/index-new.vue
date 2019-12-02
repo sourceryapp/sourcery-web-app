@@ -63,7 +63,7 @@
 			<a href="https://greenhousestudios.uconn.edu/"><img src="/img/gslogoblack.jpg"></a>
 			<div id="links">
 				<a href="/register"><button class="purplebutton" id="button5">Join the Beta</button></a>
-				<a href="mailto:sourceryapp@gmail.com"><button class="purplebutton" id="button6">Contact Us</button></a>
+				<a href="mailto:support@sourceryapp.org"><button class="purplebutton" id="button6">Contact Us</button></a>
 			</div><!--links-->
 		</footer>
 

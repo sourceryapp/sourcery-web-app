@@ -6,7 +6,7 @@
                 <v-card-title class="headline">Need Help?</v-card-title>
                 <v-card>
                 <v-card-text>
-                     <p>Please email us at <a href="mailto:feedback@sourceryapp.org">feedback@sourceryapp.org</a>.</p>
+                     <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
                 </v-card-text>
             </v-card>
             <v-card-title class="headline">FAQ</v-card-title>

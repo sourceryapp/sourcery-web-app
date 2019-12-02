@@ -17,7 +17,7 @@ class Message {
     /**
      * From Address
      */
-    from = 'research.tube.app@gmail.com';
+    from = 'support@sourceryapp.org';
 
     /**
      * Message Subject

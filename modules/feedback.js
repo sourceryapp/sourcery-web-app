@@ -12,7 +12,7 @@ class Feedback {
     /**
      * To: address
      */
-    to = 'sourceryapp@gmail.com';
+    to = 'support@sourceryapp.org';
 
     /**
      * From Address
