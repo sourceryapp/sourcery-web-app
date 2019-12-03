@@ -2,7 +2,7 @@
 	<div id="content" class="site-content">
 
 	<header>
-		<img src="/img/sourcery-wordmark.svg" alt="Sourcery Logo" id="logo">
+		<img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
 		<p id="subhead">Your sources, like magic</p>
 	</header>
 	<div id="section3">

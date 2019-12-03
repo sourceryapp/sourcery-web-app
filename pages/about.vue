@@ -4,7 +4,7 @@
         <div class="w-1/12 sm:w-1/6"></div>
         <div class="w-10/12 sm:w-4/6">
           <a href="/">
-            <img src="/img/sourcery-wordmark.svg">
+            <img src="/img/beta-primary-brian.svg">
           </a>
         </div>
         <div class="w-1/12 sm:w-1/6"></div>

@@ -77,7 +77,7 @@
 
             <v-toolbar-title style="display:flex; justify-content:center; width: 100%" class="ma-0">
                 <nuxt-link :to="{ name: 'dashboard' }" id="wordmark-link">
-                    <img src="/img/sourcery-wordmark.svg" id="logo" alt="Sourcery Logo">
+                    <img src="/img/beta-wordmark-brian.svg" id="logo" alt="Sourcery Logo">
                 </nuxt-link>
             </v-toolbar-title>
 
