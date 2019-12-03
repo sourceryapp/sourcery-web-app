@@ -65,6 +65,11 @@
 				<a href="/register"><button class="purplebutton" id="button5">Join the Beta</button></a>
 				<a href="mailto:support@sourceryapp.org"><button class="purplebutton" id="button6">Contact Us</button></a>
 			</div><!--links-->
+
+            <cookie-law
+            theme="dark-lime"
+            message="This website uses cookies to ensure you get the best experience on our website."
+            ></cookie-law>
 		</footer>
 
 	</div>
@@ -73,6 +78,11 @@
 
 
 <script>
+/**
+ * Cookie Consent
+ * @url https://github.com/apertureless/vue-cookie-law#--vue-cookie-law
+ */
+import CookieLaw from 'vue-cookie-law'
 export default {
   name: 'home',
   layout: 'landing-beta',
@@ -82,6 +92,7 @@ export default {
         // social: social
     }
   },
+  components: { CookieLaw },
   methods: {
     smoothScroll: function(target) {
         var scrollContainer = target;
