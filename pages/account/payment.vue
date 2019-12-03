@@ -68,11 +68,10 @@ import { functions } from "~/plugins/firebase-client-init.js"
                     // @url https://stripe.com/docs/connect/express-accounts#additional-oauth
                     // @url https://stripe.com/docs/connect/oauth-reference#express-account-differences
                     'stripe_user[email]': this.$store.getters['auth/activeUser'].email,
-                    'stripe_user[phone_number]': this.$store.getters['auth/activeUser'].phoneNumber || null,
-                    // 'stripe_user[business_type]': 'individual',
+                    'stripe_user[phone_number]': this.$store.state.meta.phone,
+                    'stripe_user[business_type]': 'individual',
                     'stripe_user[first_name]': Utils.getFirstName(this.$store.getters['auth/activeUser'].displayName),
-                    'stripe_user[last_name]': Utils.getLastName(this.$store.getters['auth/activeUser'].displayName),
-                    'stripe_user[url]': 'https://research.tube/'
+                    'stripe_user[last_name]': Utils.getLastName(this.$store.getters['auth/activeUser'].displayName)
 
                 }
                 return baseURL + Utils.buildQueryString(params);
@@ -86,7 +85,7 @@ import { functions } from "~/plugins/firebase-client-init.js"
         },
     },
     async mounted() {
-        console.log("Stripe URL:", this.stripeURL)
+        console.log("Stripe URL:", this.stripeURL, this.usermeta.phone)
         console.log("User Balance:", this.usermeta.balance)
     }
   }
