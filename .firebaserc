@@ -7,6 +7,9 @@
       "hosting": {
         "sourcery-web-app": [
           "sourcery"
+        ],
+        "sourceryapp.org": [
+          "tube-1542818590717"
         ]
       }
     }
