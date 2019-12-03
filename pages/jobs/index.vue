@@ -136,6 +136,7 @@ export default {
             this.searching = true;
             this.userLat = coords.latitude;
             this.userLong = coords.longitude;
+            let userID = this.user.uid;
 
             this.jobs = await db
                 .collection("requests")
@@ -161,7 +162,7 @@ export default {
 
                             // Don't allow users to claim their own (disabling for testing)
                             // if ( (miles <= this.distance) && (doc.data().client_id != this.user.uid) ) {
-                            if ( (miles <= this.distance) ) {
+                            if ( (miles <= this.distance) && doc.data().client_id != userID) {
                                 jobs.push(doc);
                             }
                         }
