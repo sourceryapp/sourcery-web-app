@@ -150,7 +150,7 @@
                             </v-flex>
                             <v-flex xs5 offset-xs1 v-if="request.pricing.total">
                                 <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                                <h1 class="pt-0">{{ toDollars(request.pricing.total) }}</h1>
+                                <p class="display-1 pt-0 font-weight-bold">{{ toDollars(request.pricing.total) }}</p>
                             </v-flex>
                         </v-layout>
 
@@ -165,7 +165,8 @@
                             @click="formState=2"
                             >Previous</v-btn>
                             <v-btn
-                            :disabled="loading"
+                            :disabled="loadingCost"
+                            :loading="loadingCost"
                             @click="submitRequest"
                             class="primary"
                             >
@@ -204,7 +205,8 @@ import { Utils } from '~/modules/utilities'
                 },
 			    active: null,
 				suggestions: [],
-				loading: false,
+                loading: false,
+                loadingCost: false,
 				errors: {
 					label: [],
 					repository: [],
@@ -306,6 +308,7 @@ import { Utils } from '~/modules/utilities'
 				this.errors.repository = []
 				this.errors.label = []
                 this.loading = true
+                this.loadingCost = true;
 
                 let router = this.$router;
 
@@ -346,12 +349,14 @@ import { Utils } from '~/modules/utilities'
                     })
             },
             async getCost(){
+                this.loadingCost = true;
                 var cost = functions.httpsCallable('cost');
                 var costObj = await cost({
                     repository: this.repositoryName,
                     pages: this.request.pages
                 });
                 this.request.pricing = costObj.data;
+                this.loadingCost = false;
             },
             setName(name){
                 this.repositoryName = name;
