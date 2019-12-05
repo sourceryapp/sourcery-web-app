@@ -8,7 +8,7 @@ set -e
 # yarn --cwd ./functions/ install --ignore-engines
 
 # echo "Connecting to Firebase..."
-firebase use $APP --token $FIREBASE_TOKEN
+firebase use $PROJECT --token $FIREBASE_TOKEN
 
 # echo "Deploying..."
-firebase deploy --token $FIREBASE_TOKEN --project $PROJECT --only "hosting" --message "From: $GITHUB_REF"
+firebase deploy --token $FIREBASE_TOKEN  --only "hosting" --message "From: $GITHUB_REF"
