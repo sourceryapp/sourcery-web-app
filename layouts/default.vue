@@ -39,25 +39,6 @@
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-            </v-list>
-
-            <v-list dense class="pt-0" two-line>
-                <v-list-tile
-                    v-for="item in items2"
-                    :key="item.title"
-                    :to = "item.link"
-                    nuxt
-                    active-class="accent accent--text text--lighten-5"
-                >
-                    <v-list-tile-action>
-                    <v-icon>{{ item.icon }}</v-icon>
-                    </v-list-tile-action>
-
-                    <v-list-tile-content>
-                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-
                 <v-list-tile @click="dialog=true" nuxt active-class>
                     <v-list-tile-action>
                         <v-icon>power_settings_new</v-icon>
@@ -210,10 +191,8 @@
                 { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
                 { title: 'Email Notifications', icon: 'notifications', link: '/settings/notifications'},
                 { title: 'History', icon: 'hourglass_full', link: '/request/history'},
-                { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
-            ],
-            items2: [
-                { title: 'Terms and Conditions', icon: 'subject', link: '/settings/terms_conditions'},
+                { title: 'Privacy Policy', icon: 'enhanced_encryption', link: '/privacy'},
+                { title: 'Terms of Use', icon: 'subject', link: '/terms'},
                 { title: 'Help', icon: 'help', link: '/account/help'},
                 { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
                 // { title: 'Rate', icon: 'star', link: ''},

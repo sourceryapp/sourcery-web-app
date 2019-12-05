@@ -26,7 +26,7 @@
                     ></v-textarea>
             </v-card-text>
             <v-card-actions>
-                <v-btn color="red" dark to="/">Cancel</v-btn>
+                <v-btn color="red" dark to="/dashboard">Cancel</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="teal darken-1" dark type="submit">Submit</v-btn>
             </v-card-actions>

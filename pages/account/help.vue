@@ -2,7 +2,7 @@
     <v-layout row>
         <v-flex xs12 sm6 offset-sm3>
             <h1>Help</h1>
-            
+
                 <v-card-title class="headline">Need Help?</v-card-title>
                 <v-card>
                 <v-card-text>
@@ -18,7 +18,7 @@
                     <div slot="header">{{ item.question }}</div>
                     <v-card>
                         <v-card-text v-if="item.answer">{{ item.answer }}</v-card-text>
-                        
+
                         <!-- who are we -->
                         <v-card-text v-if="item.answer_link">{{ item.answer_link }} <a href="https://greenhousestudios.uconn.edu/">{{ item.answer_link01 }}</a> {{ item.answer_link02 }} <a href="https://greenhousestudios.uconn.edu/projects/">{{ item.answer_link03 }}</a> {{ item.answer_link04 }}</v-card-text>
 
@@ -28,7 +28,6 @@
                         <v-card-text v-if="item.answer2">{{ item.answer2 }}</v-card-text>
                         <v-card-text v-if="item.answer3">{{ item.answer3 }}</v-card-text>
                         <v-card-text v-if="item.answer4">{{ item.answer4 }}</v-card-text>
-                        <v-card-text v-if="item.answer5">{{ item.answer5 }}</v-card-text>
                     </v-card>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -73,7 +72,7 @@
                     },
                     {
                         question: 'Who are we?',
-                        
+
                         answer_link: 'Sourcery is a project of ',
                         answer_link01: 'Greenhouse Studios | Scholarly Communications Design at UConn. ',
                         answer_link02: 'A joint effort of the University of Connecticut’s School of Fine Arts (SFA), University Library, and College of Liberal Arts and Sciences (CLAS), Greenhouse Studios forges diverse and democratic collaborations that build humanities scholarship in new formats to engage new audiences. ',
@@ -88,13 +87,7 @@
                         answer3: 'Along with the inconvenience of learning the request process for each individual archive, scholars also frequently contend with slow turnaround times. On-demand reproduction services are typically considered adjunct to the core functions of the archive and have limited resources. Sourcery lets individual researchers find and pay for someone nearby who has the resources—the time and wherewithal—to help them.',
                         answer4: 'Building image collections represents only one of many stages of the scholarly research process. Sourcery will align with scholars’ existing research workflows and encourage responsible scholarly practices. A 2012 Ithaka S+R report on the changing research practices of historians also advised that scholars need to “seamlessly integrate tools for organizing, annotating, and analyzing primary source materials into their workflows.” Scholars have increasingly adopted citation and document management systems to keep track of and enhance their personal research collections. Where possible, Sourcery will aim to complement and become interoperable with the constellation of common annotation, organization, and analysis tools and systems, such as Zotero, Mendeley, RefWorks, and Tropy. To this end, we have already had preliminary conversations with the project directors for Tropy and Zotero about interoperability with Sourcery and about the potential for developing an integration tool kit for these complementary applications. (The Corporation for Digital Scholarship, which supports Tropy, Omeka, and Zotero, will also support operations of Sourcery, thus laying the groundwork for this kind of close collaboration.)',
                         answer5:'Mobile technology provides means of connecting people with local needs to people with local capacity. “Sharing economy” applications like Uber, AirBnB, and Instacart have demonstrated the promise of mobile technology to connect people who need a ride to people with local capacity (i.e. a car) or people who need groceries with people with local capacity (i.e. time to do the shopping). The connection in these applications is made based on geo-location data from mobile phones. The cost per transaction is determined according to an algorithm tuned to local conditions. In Uber’s case, for example, the pricing algorithm determines the rider’s cost based on variables such as the distance the rider needs to travel, the time of day, traffic conditions on the proposed route, and the proximity and number of available drivers. The growing popularity of these sharing economy applications demonstrates that individuals are sometimes better equipped or better incentivized than large organizations to meet the needs of other individuals. Recognizing the important questions these “gig economy” apps raise for issues of labor equity and responsible regulation, Sourcery nevertheless looks to apply the lessons (positive and negative) and technologies employed by these companies to address needs among library users and libraries themselves.',
-                    },
-                    {
-                        question: 'When is Sourcery coming?',
-                        answer_link1: 'Please ',
-                        answer_link2: 'sign up for our mailing list for updates',
-                        answer_link3: ' as we prepare for the launch of the Sourcery beta in Summer 2019.',
-                    },
+                    }
                 ]
             }
         }

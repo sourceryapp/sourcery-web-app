@@ -69,6 +69,7 @@
             <cookie-law
             theme="dark-lime"
             message="This website uses cookies to ensure you get the best experience on our website."
+            buttonText="OK"
             ></cookie-law>
 		</footer>
 

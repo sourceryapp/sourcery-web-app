@@ -61,7 +61,10 @@ module.exports = {
         '/register',
         '/password',
         '/resetpassword',
-        '/index-new'
+        '/index-new',
+        '/terms',
+        '/privacy',
+        '/cookies-notice'
     ],
 
     /**
