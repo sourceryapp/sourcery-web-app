@@ -11,4 +11,4 @@ set -e
 firebase use $APP --token $FIREBASE_TOKEN
 
 # echo "Deploying..."
-firebase deploy --token $FIREBASE_TOKEN --only "hosting" --message "From: $GITHUB_REF"
+firebase deploy --token $FIREBASE_TOKEN --project $PROJECT --only "hosting" --message "From: $GITHUB_REF"
