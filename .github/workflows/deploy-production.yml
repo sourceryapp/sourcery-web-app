@@ -3,10 +3,11 @@ on:
     # Sequence of patterns matched against refs/heads
     branches:
       - master         # Push events on master branch
+      - develop
 name: Deploy
 jobs:
-  branchCheck:
-    name: Branch Check
+  production:
+    name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master

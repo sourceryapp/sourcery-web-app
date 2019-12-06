@@ -1,0 +1,20 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - develop # Only run on pushes to dev
+name: Deploy to Dev
+jobs:
+  development:
+    name: Deploy to Dev
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@develop
+    - name: Deploy to Firebase
+      uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
+      env:
+        PROJECT: dev
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      with:
+        entrypoint: sh
+        args: -c bin/deploy.sh
