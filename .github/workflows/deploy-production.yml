@@ -1,9 +1,8 @@
 on:
   push:
     # Sequence of patterns matched against refs/heads
-    branches:
-      - master         # Push events on master branch
-      - develop
+    tags:
+      - '**'         # When a release is tagged
 name: Deploy
 jobs:
   production:

@@ -2,7 +2,7 @@ on:
   push:
     # Sequence of patterns matched against refs/heads
     branches:
-      - develop # Only run on pushes to dev
+      - master # Only run on pushes to master
 name: Deploy to Dev
 jobs:
   development:
