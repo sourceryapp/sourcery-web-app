@@ -12,7 +12,11 @@
         ],
         "sourceryapp.org": [
           "tube-1542818590717"
-        ],
+        ]
+      }
+    },
+    "sourcery-dev": {
+      "hosting": {
         "sourcery-dev": [
           "sourcery-dev"
         ]
