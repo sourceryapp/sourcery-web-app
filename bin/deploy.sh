@@ -2,6 +2,7 @@
 
 set -e
 
+echo $NODE_ENV
 # This is run during predeploy
 # See firebase.json and
 # @url https://firebase.google.com/docs/cli#hooks
@@ -11,4 +12,4 @@ set -e
 firebase use $PROJECT --token $FIREBASE_TOKEN
 
 # echo "Deploying..."
-firebase deploy --token $FIREBASE_TOKEN  --only "hosting" --message "From: $GITHUB_REF"
+firebase deploy --token $FIREBASE_TOKEN  --only hosting:$TARGET --message "From: $GITHUB_REF"
