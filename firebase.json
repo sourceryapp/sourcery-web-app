@@ -1,7 +1,6 @@
 {
   "hosting": {
     "predeploy": "yarn install --ignore-engines && yarn run generate",
-    "target": "sourceryapp.org",
     "public": "dist",
     "trailingSlash": false,
     "ignore": [

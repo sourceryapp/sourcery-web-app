@@ -18,6 +18,7 @@ jobs:
       env:
         PROJECT: sourcery-dev
         TARGET: sourcer-dev
+        NODE_ENV: development
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       with:
         entrypoint: sh
