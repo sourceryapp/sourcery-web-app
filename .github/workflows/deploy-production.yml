@@ -9,7 +9,8 @@ jobs:
     name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - name: "Checkout tagged release"
+      uses: actions/checkout@v2-beta
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
       env:

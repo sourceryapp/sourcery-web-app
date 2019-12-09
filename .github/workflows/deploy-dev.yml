@@ -9,7 +9,10 @@ jobs:
     name: Deploy to Dev
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@develop
+    - name: "Checkout master branch"
+      uses: actions/checkout@v2-beta
+      with:
+        ref: 'master'
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
       env:
