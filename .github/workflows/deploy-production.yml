@@ -1,6 +1,5 @@
 on:
-  push:
-    # Sequence of patterns matched against refs/heads
+  create:
     tags:
       - '**'         # When a release is tagged
 name: Deploy
