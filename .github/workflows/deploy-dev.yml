@@ -17,7 +17,7 @@ jobs:
       uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
       env:
         PROJECT: sourcery-dev
-        TARGET: sourcer-dev
+        TARGET: sourcery-dev
         NODE_ENV: development
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
       with:
