@@ -10,7 +10,7 @@
         "sourcery-web-app": [
           "sourcery"
         ],
-        "sourceryapp.org": [
+        "sourcery-prod": [
           "tube-1542818590717"
         ]
       }
