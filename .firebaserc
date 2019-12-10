@@ -2,7 +2,7 @@
   "projects": {
     "default": "tube-1542818590717",
     "sourcery-prod": "tube-1542818590717",
-    "dev": "sourcery-dev"
+    "sourcery-dev": "sourcery-dev"
   },
   "targets": {
     "tube-1542818590717": {
