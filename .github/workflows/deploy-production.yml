@@ -1,7 +1,6 @@
 on:
-  create:
-    tags:
-      - '**'         # When a release is tagged
+  release:
+    types: published
 name: Deploy to Production
 jobs:
   production:
