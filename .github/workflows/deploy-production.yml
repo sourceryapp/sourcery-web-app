@@ -2,10 +2,9 @@ on:
   create:
     tags:
       - '**'         # When a release is tagged
-name: Deploy
+name: Deploy to Production
 jobs:
   production:
-    name: Deploy to Production
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout tagged release"
