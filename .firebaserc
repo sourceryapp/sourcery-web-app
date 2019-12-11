@@ -7,9 +7,6 @@
   "targets": {
     "tube-1542818590717": {
       "hosting": {
-        "sourcery-web-app": [
-          "sourcery"
-        ],
         "sourcery-prod": [
           "tube-1542818590717"
         ]
