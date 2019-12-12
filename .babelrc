@@ -1,6 +1,13 @@
 {
-  "plugins": [
-      "transform-object-rest-spread",
-      "transform-runtime"
+    "env": {
+        "production": {
+            "plugins": [
+                "transform-remove-console"
+            ]
+        }
+    },
+    "plugins": [
+        "transform-object-rest-spread",
+        "transform-runtime"
     ]
 }
