@@ -217,6 +217,15 @@ module.exports = {
             }
         },
         extractCSS: true,
-		cssSourceMap: true
+        cssSourceMap: true,
+
+        /**
+         * Babel Config
+         */
+        babel: {
+            babelrc: false,
+            plugins: (process.env.NODE_ENV === 'production') ? ["transform-remove-console"] : [],
+            cacheDirectory: true
+        }
 	}
 };
