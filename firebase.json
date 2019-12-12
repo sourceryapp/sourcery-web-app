@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "predeploy": "yarn install --ignore-engines && yarn run generate",
+    "predeploy": "yarn install --ignore-engines --production=false && yarn run generate",
     "public": "dist",
     "trailingSlash": false,
     "ignore": [
