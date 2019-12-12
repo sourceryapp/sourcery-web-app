@@ -46,7 +46,7 @@
       </v-list>
 
       <div class="text-xs-center mt-5">
-        <v-btn color="primary" to="/">Back</v-btn>
+        <v-btn color="primary" to="/dashboard">Back</v-btn>
       </div>
     </v-flex>
   </v-layout>

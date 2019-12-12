@@ -8,7 +8,7 @@
                 <v-text-field type="password" name="password" v-model="password" placeholder="Password"></v-text-field>
                 <span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
 
-                <v-btn type="submit" color="primary">Log In</v-btn>
+                <v-btn type="submit" color="primary" :loading=loading>Log In</v-btn>
 
                 <v-divider class="mt-3 mb-3"></v-divider>
 
@@ -38,12 +38,13 @@
 	export default {
 		name: "login",
 		middleware: ['auth'],
-		layout: 'default',
+        layout: 'default',
 		data() {
 			return {
 				email: '',
 				password: '',
-				loginError: false,
+                loginError: false,
+                loading: false,
 				errors: {
 					password: [],
 					email: []
@@ -53,15 +54,17 @@
 		methods: {
 
             async login() {
+                this.loading = true;
 				this.loginError = false;
                 await this.$store.dispatch('auth/signIn', {
                     email: this.email,
                     password: this.password
                 }).then(function() {
-					//console.log('success');
+					console.log('success');
 				}).catch(error => {
-					//console.log("error");
-					this.loginError = true;
+					console.log("Error code:", error.code, "Error message", error.message);
+                    this.loginError = true;
+                    this.loading = false;
 				});
                 this.$router.push({ name: 'dashboard' })
             }

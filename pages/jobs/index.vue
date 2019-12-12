@@ -15,7 +15,7 @@
                 <v-radio label="50 miles" :value="50"></v-radio>
                 <v-radio label="100 miles" :value="100"></v-radio>
               </v-radio-group>
-              <v-btn dark color="primary" @click="getLocation()" :disabled="searching">Find Jobs Near Me</v-btn>
+              <v-btn dark color="primary" @click="getLocation()" :loading="searching">Find Jobs Near Me</v-btn>
             </v-flex>
 
           </v-layout>

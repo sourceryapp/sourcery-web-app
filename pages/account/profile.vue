@@ -283,11 +283,11 @@
                      * Can't set phoneNumber here
                      * @url https://www.reddit.com/r/Firebase/comments/70slpi/can_you_update_phonenumber_from_userprofile/
                      */
-                    await user.updateProfile({
+                    await user.updateProfile({ // @todo Move this to Vuex
                         displayName: this.name,
                         // phoneNumber: this.phone,
                     });
-                    this.$store.commit('auth/setUser');
+                    this.$store.commit('auth/setUser', user);
                     this.$toast.success('Profile Saved!');
                 }
 
