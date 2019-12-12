@@ -68,9 +68,11 @@
 
             <cookie-law
             theme="dark-lime"
-            message="This website uses cookies to ensure you get the best experience on our website."
+            message="We use cookies to ensure you get the best experience on our website."
             buttonText="OK"
-            ></cookie-law>
+            buttonLink="/cookies-notice"
+            >
+            </cookie-law>
 		</footer>
 
 	</div>
@@ -126,6 +128,11 @@ export default {
 </script>
 
 <style>
+.Cookie--dark-lime a.Cookie__button {
+    background-color: grey;
+}
+
+
 body{
 	margin: 0;
 }
