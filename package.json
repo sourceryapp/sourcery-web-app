@@ -38,11 +38,11 @@
     "md5": "^2.2.1",
     "nuxt": "2",
     "vue-cookie-law": "^1.11.0",
-    "vuetify-loader": "^1.2.2"
+    "vuetify-loader": "^1.2.2",
+    "babel-plugin-transform-remove-console": "^6.9.4"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-promise": "^4.1.1",
