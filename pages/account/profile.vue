@@ -110,7 +110,7 @@
                                     </v-btn>
                                 </v-flex>
                                 <v-flex v-if="!passwordIsValid">
-                                    <span>New Passwords do Not Match.</span>
+                                    <span>New passwords do not match.</span>
                                 </v-flex>
                             </v-layout>
                         </form>

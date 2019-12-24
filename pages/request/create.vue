@@ -18,7 +18,7 @@
                     type="info"
                     class="mt-4 mb-4"
                     >
-                    During the beta, users can request documents located in the Boston and New York metro areas, and at the Unviersity of Connecticut.
+                    During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.
                 </v-alert>
 
                 <label for="area" class="title">
@@ -86,18 +86,16 @@
                     <v-card-title primary-title>
                     <div>
                         <div class="headline">What is the citation for your document?</div>
-                        <!-- <span class="grey--text">1,000 miles of wonder</span> -->
+                        <span class="grey--text text--darken-1 body-1">Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).</span>
                     </div>
                     </v-card-title>
 
                     <v-card-text>
                         <v-textarea
-                            style="font-family: Times"
                             id="citation"
                             name="citation"
                             label="Citation"
                             multi-line="true"
-                            placeholder="Example: Howard, Richard, translator. Madness and Civilization: A History of Insanity in the Age of Reason. By Michel Foucault, Vintage-Random House, 1988."
                             v-model="request.citation"
                             auto-grow
                         ></v-textarea>
@@ -261,7 +259,7 @@ import { Utils } from '~/modules/utilities'
                 // @todo Remove random citations before launch.
                 request: {
                     pages: 0,
-                    citation: citations[Math.floor(Math.random()*citations.length)],
+                    citation: null, //citations[Math.floor(Math.random()*citations.length)],
                     pricing: {
                         total: 0
                     }

@@ -2,7 +2,7 @@
     <v-layout row fill-height>
       <v-flex xs12 sm8 offset-sm2>
         <h1>Find Jobs</h1>
-        <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the Unviersity of Connecticut.</p>
+        <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.</p>
 
         <section class="pa-3" id="search">
           <v-layout row fill-height align-center justify-center wrap>

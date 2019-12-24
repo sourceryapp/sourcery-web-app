@@ -5,7 +5,7 @@
 
         <v-card width="350px">
             <v-card-title primary-title>
-                <h3 class="headline mb-0">Job Alerts (agents only)</h3>
+                <h3 class="headline mb-0">Job Alerts (Sourcerers only)</h3>
             </v-card-title>
             <v-card-text>
                 <v-switch
