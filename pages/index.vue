@@ -1,10 +1,6 @@
 <template>
 	<div id="content" class="site-content">
 
-	<header>
-		<img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
-		<p id="subhead">Your sources, like magic</p>
-	</header>
 	<div id="section3">
 		<div class="video-responsive">
 			<iframe width="560" height="315" src="https://www.youtube.com/embed/-PG6UeDhgu8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -15,7 +11,12 @@
 			</p>
 		</aside>
 	</div><!--section3-->
-	<a href="/register"><button class="purplebutton" id="button1">Join the Beta</button></a>
+
+    <div class="buttons">
+        <a href="/register"><button class="purplebutton" id="button1" to="/register">Join the Beta</button></a>
+        <a href="/login"><button class="purplebutton" id="button1" to="/login">Login</button></a>
+    </div>
+
 
 	<div id="section1">
 	<div id="section1top">
@@ -51,7 +52,7 @@
 	<div id="section4">
 			<h1 class="text" id="how" ref="how">How does Sourcery work?</h1>
 		<div id="paragraphs">
-		<p class="text indiv">Sourcery gives researchers access to documents that can't be found online. It aims to streamline the process that researchers go through by providing one simple platform that works at any collecting institution in our service area (New York City, Boston, and Storrs). <span>Just provide the document’s citation information, and Sourcery will do the rest.</span></p>
+		<p class="text indiv">Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them. It aims to streamline the process that researchers go through by providing one simple platform that works at any collecting institution in our service area (currently New York City, Boston, and Storrs; coming soon to Providence, New Haven, Washington, DC, and other cities). <span>Just provide the document’s citation information, and Sourcery will do the rest.</span></p>
 		<p class="text indiv">When you submit a request, the app finds and notifies Sourcery-registered researchers working near the repository where your document is located. One of these remote researchers will claim the job, call the document from the archive, take a picture of it, and <span>send it directly to your desktop or mobile device</span>.</p>
 		<p class="text indiv">Sourcery emerges from the design process of <span><a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a></span> and from the project team’s past work and ongoing interests in research software for the humanities. Greenhouse Studios, an incubator for digital scholarship at the University of Connecticut, is a shared initiative of the <a href="https://lib.uconn.edu/" class="partnerlink">UConn Library</a>, <a href="https://sfa.uconn.edu/" class="partnerlink">School of Fine Arts</a>, and the <a href="https://clas.uconn.edu/" class="partnerlink">College of Liberal Arts and Sciences</a>. Sourcery is a project of the <a href="https://digitalscholar.org/" class="partnerlink"> Corporation for Digital Scholarship</a>, a not-for-profit organization.
 
@@ -63,6 +64,7 @@
 			<a href="https://greenhousestudios.uconn.edu/"><img src="/img/gslogoblack.jpg"></a>
 			<div id="links">
 				<a href="/register"><button class="purplebutton" id="button5">Join the Beta</button></a>
+				<a href="/login" style="padding-top: 1em;"><button class="purplebutton" id="button5">Login</button></a>
 				<a href="mailto:support@sourceryapp.org"><button class="purplebutton" id="button6">Contact Us</button></a>
 			</div><!--links-->
 
@@ -75,6 +77,10 @@
             </cookie-law>
 		</footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js" integrity="sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=" crossorigin="anonymous"></script>
+    <script>
+
+    </script>
 	</div>
 </template>
 
@@ -121,7 +127,6 @@ export default {
     }
   },
   mounted: function(){
-
 
   }
 }
@@ -175,8 +180,7 @@ a{
 
 #logo{
 	width: 90%;
-	margin: 0 auto;
-	margin-top: 5%;
+	margin: 1em auto;
 }
 
 
@@ -184,10 +188,13 @@ a{
 	text-align: center;
 	width: 60%;
 	font-size: 20px;
-	margin: 0 auto;
-	margin-top: 3%;
+	margin: 1em auto;
 	font-family: "Barlow", sans-serif;
 	color: #6c6c6c;
+}
+
+.buttons {
+    margin: 3em;
 }
 
 .purplebutton{
@@ -212,9 +219,7 @@ a{
 #button1{
 	margin: 0 auto;
 	margin-top: 10%;
-	width: 50%;
 	padding: 20px 30px;
-	max-width: 200px;
 }
 
 .text{
@@ -459,6 +464,10 @@ footer > a > img{
 
 @media screen and (min-width: 700px){
 
+    .buttons {
+        display: flex;
+        justify-content: space-around
+    }
 
 	.text{
 		font-size: 16px;
@@ -489,9 +498,6 @@ footer > a > img{
 	#button1{
 		font-size: 28px;
 		margin: 0 auto;
-		margin-top: 8%;
-		width: 40%;
-		max-width: 250px;
 		padding: 16px 25px;
 	}
 
@@ -587,8 +593,7 @@ footer > a > img{
 
 	#logo{
 		width: 75%;
-		margin: 0 auto;
-		margin-top: 3%;
+		margin: 1em auto;
 	}
 
 	#corner{
@@ -597,13 +602,6 @@ footer > a > img{
 
 	#subhead{
 		bottom: 5vw;
-	}
-
-	#button1{
-		width: 30%;
-		margin: 0 auto;
-		margin-top: 7%;
-		font-size: 24px;
 	}
 
 

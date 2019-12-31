@@ -25,6 +25,7 @@
     "@nuxtjs/toast": "^3.2.1",
     "@nuxtjs/vuetify": "^0.5.6",
     "accounting-js": "^1.1.1",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "cookieparser": "^0.1.0",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.1",
@@ -34,12 +35,12 @@
     "global": "^4.3.2",
     "js-cookie": "^2.2.0",
     "jwt-decode": "^2.2.0",
+    "lodash.throttle": "^4.1.1",
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
     "nuxt": "2",
     "vue-cookie-law": "^1.11.0",
-    "vuetify-loader": "^1.2.2",
-    "babel-plugin-transform-remove-console": "^6.9.4"
+    "vuetify-loader": "^1.2.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

@@ -1,10 +1,18 @@
 <template>
   <div>
+      	<header class="sticky" ref="sticky">
+              <a href="/">
+                <img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
+              </a>
+            <p id="subhead">Your sources, like magic</p>
+        </header>
     <nuxt />
   </div>
 </template>
 
 <script>
+import throttle from 'lodash.throttle'
+
 export default {
     name: 'landing-beta',
     head() {
@@ -25,11 +33,54 @@ export default {
 
             ]
         }
+    },
+    data: function() {
+        return {
+            // scrollYPosition:null
+        }
+    },
+    mounted() {
+        // let sticky = this.$refs.sticky;
+        // window.addEventListener('scroll', throttle(function(e) {
+
+        //     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        //         sticky.classList.add('sticky--small')
+
+        //     } else {
+        //         sticky.classList.remove('sticky--small')
+
+        //     }
+        // }, 500));
     }
 }
 </script>
 
 <style>
+
+.sticky {
+    /* position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white; */
+}
+
+.sticky #logo{
+    transition: all .5s;
+
+}
+.sticky--small {
+    filter:drop-shadow(0 4px 2px #eee);
+}
+.sticky--small #logo {
+    width: 50%
+}
+
+.sticky--small #subhead {
+    display:none;
+}
+
+
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
