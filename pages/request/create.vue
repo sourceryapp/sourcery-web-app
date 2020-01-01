@@ -59,6 +59,7 @@
                             <template slot="item" slot-scope="data" >
                                 <v-list-tile-content>
                                     <v-list-tile-title @click="setName(data.item.name)" v-html="data.item.name"></v-list-tile-title>
+                                    <v-list-tile-sub-title v-html="data.item.institution"></v-list-tile-sub-title>
                                 </v-list-tile-content>
                             </template>
                         </v-select>
@@ -195,6 +196,7 @@ import { Utils } from '~/modules/utilities'
         auth: true,
 		data() {
 			return {
+                areas: null,
                 repositories: ["Loading..."],
                 repositoryName: null,
                 request: {
@@ -230,7 +232,8 @@ import { Utils } from '~/modules/utilities'
         },
         async asyncData ({ params, store }) {
             let areaSelections = [];
-            let areas = await db.collection('areas')
+            let areas = new Map();
+            await db.collection('areas')
                 .where('country', '==', 'US')
                 .orderBy('state')
                 .orderBy('city')
@@ -238,9 +241,10 @@ import { Utils } from '~/modules/utilities'
                 .then((snapshot) => {
                     snapshot.docs.forEach(doc => {
                         areaSelections.push({
-                            key: doc.data().city,
+                            key: doc.id,
                             value: `${doc.data().city}, ${doc.data().state}`
                         })
+                        areas.set(doc.id, doc.data())
                     });
                 })
 
@@ -254,6 +258,7 @@ import { Utils } from '~/modules/utilities'
 
             return {
                 areaSelections: areaSelections,
+                areas: areas,
 
                 // Set a random citation during development.
                 // @todo Remove random citations before launch.
@@ -272,25 +277,30 @@ import { Utils } from '~/modules/utilities'
             }
         },
         mounted() {
-
         },
         watch: {
             /**
              * Update repositories after the Area field changes
              */
             area: async function (newArea, oldArea) {
+                let area = this.areas.get(newArea);
                 this.loadingLocations = true;
                 let repositoriesList = [];
                 let repQuery = await db.collection('repositories')
-                    .where('city', '==', newArea)
+                    .where('state', '==', area.state)     // Matches state
+                    .orderBy('institution')
                     .orderBy('name')
                     .get()
                     .then((snapshot) => {
                         snapshot.docs.forEach(doc => {
-                            repositoriesList.push({
-                                id: doc.id,
-                                name: `${doc.data().name}, ${doc.data().institution}`
-                            })
+                            // Check if the result matches the chosen city or nearby cities
+                            if(doc.data().city == area.city || area.includes.indexOf(doc.data().city)){
+                                repositoriesList.push({
+                                    id: doc.id,
+                                    name: doc.data().name,
+                                    institution: doc.data().institution
+                                })
+                            }
                         });
                     })
                 this.loadingLocations = false;
