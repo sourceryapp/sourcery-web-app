@@ -28,7 +28,6 @@
 		<img src="/img/bus.png" alt="bus" id="bus">
 		<aside>
 			<p class="text" id="intro2">...and have your documents delivered to you instead.</p>
-			<button class="purplebutton" id="button2" type="button" @click="smoothScroll($refs.how)">Learn More</button>
 		</aside>
 	</div><!--section1bottom-->
 	</div><!--section1-->
@@ -44,7 +43,6 @@
 				<li>Cut the travel fees</li>
 				<li>Gain efficient, affordable access with <strong>Sourcery</strong></li>
 			</ul>
-			<button class="purplebutton" id="button3" type="button" @click="smoothScroll($refs.how)">Learn More</button>
 		</div> <!--meet-->
 	</div><!--section2-->
 
@@ -64,6 +62,7 @@
 			<a href="https://greenhousestudios.uconn.edu/"><img src="/img/gslogoblack.jpg"></a>
 			<div id="links">
 				<a href="/register"><button class="purplebutton" id="button5">Join the Beta</button></a>
+				<a href="/about" style="padding-top: 1em;"><button class="purplebutton" id="button5">Learn More</button></a>
 				<a href="/login" style="padding-top: 1em;"><button class="purplebutton" id="button5">Login</button></a>
 				<a href="mailto:support@sourceryapp.org"><button class="purplebutton" id="button6">Contact Us</button></a>
 			</div><!--links-->

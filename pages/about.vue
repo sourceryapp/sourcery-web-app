@@ -113,10 +113,9 @@
                         <div class="pl-8 pr-8 pb-5 text-grey-darkest">
                             <ul class="pl-4">
                                 <li class="pb-2">
-                                    Sourcery is a project of Greenhouse Studios | Scholarly Communications Design at UConn. A joint effort of the University of Connecticut’s School of Fine Arts (SFA), University Library, and College of Liberal Arts and Sciences (CLAS), Greenhouse Studios forges diverse and democratic collaborations that build humanities scholarship in new formats to engage new audiences. Our projects include experiments with virtual and augmented reality, mobile applications development, alternative print formats, digital audio and video production, and games. While project work forms the bulk of our visible activity, the ultimate focus of Greenhouse Studios is building a new culture of collaboration. Reforming scholarly workflows for the digital age is less dependent on new products than on new attitudes toward working together. Greenhouse Studios’ primary “product” is thus a community of diverse collaborators comprised of faculty, librarians, editors, designers, developers, students, and others from across and outside the academy. Supported by substantial investments of staff and space from each of its constituent units and with major funding from the Andrew W. Mellon Foundation’s Scholarly Communications Program, Greenhouse Studios is forging a new model of inquiry-driven, collaboration-first scholarly production.
-                                </li>
+                                    Sourcery is a project of the <a href="http://digitalscholar.org/"> Corporation for Digital Scholarship</a>, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with <a href="https://greenhousestudios.uconn.edu/"> Greenhouse Studios | Scholarly Communications Design</a> at the University of Connecticut.
                                 <li class="pb-2">
-                                    The Sourcery leadership team consists of three experienced professionals drawn from the fields necessary to carry Sourcery to a successful outcome: digital humanities tool building; web and mobile application development; and digital archives. Project Director Tom Scheinfeldt is Associate Professor of Digital Humanities and Director of Greenhouse Studios. Scheinfeldt has played a leadership role in the development of several widely-used research and archives software packages, including, most notably, Omeka. Lead Developer Brian Daley is Assistant Professor in Residence in the Department of Digital Media and Design, where he brings nearly 20 years’ experience creating accessible web and mobile platforms for teaching and scholarship. Lead Archivist Greg Colati is Associate University Librarian for Archives, Special Collections, and Digital Curation and a recognized authority on digital archives tools and processes. In addition, Project Manager and Outreach Coordinator Wes Hamrick and Lead Designer Brooke Foti Gemmell bring broad experience in digital humanities research methods and project management and web and graphic design respectively.
+                                    The Sourcery leadership team consists of experienced professionals drawn from the fields that Sourcery draws on: digital humanities tool building; web and mobile application design and development; and digital archives. Project Director Tom Scheinfeldt is Associate Professor of Digital Humanities and Director of Greenhouse Studios. Scheinfeldt has played a leadership role in the development of several widely-used research and archives software packages, including, most notably, Omeka. Development Lead Brian Daley is Assistant Professor in Residence in the Department of Digital Media and Design, where he brings nearly 20 years’ experience creating accessible web and mobile platforms for teaching and scholarship. Greg Colati and Sara Sikes are the projects library and archives leads. Colati is Associate University Librarian for Archives, Special Collections, and Digital Curation and a recognized authority on digital archives tools and processes. Sikes Associate Director of Greenhouse Studios with expertise spanning museums, academic publishing, documentary editing, digital humanities, and public history. Project Manager and Outreach Coordinator Wes Hamrick and Lead Designer Brooke Foti Gemmell bring broad experience in digital humanities research methods and project management and web and graphic design respectively.
                                 </li>
                             </ul>
                         </div>
@@ -164,7 +163,7 @@
                 <div class="border-l-2 border-transparent">
                     <header class="flex justify-between items-center p-5 pl-8 pr-8 cursor-pointer select-none">
                         <span class="text-grey-darkest font-thin text-xl">
-                            When is Sourcery Coming?
+                            Where is Sourcery Available?
                         </span>
                         <div class="rounded-full border border-grey w-7 h-7 flex items-center justify-center">
                             <!-- icon by feathericons.com -->
@@ -178,7 +177,7 @@
                         <div class="pl-8 pr-8 pb-5 text-grey-darkest">
                             <ul class="pl-4">
                                 <li class="pb-2">
-                                    Sign up for <a href="https://sourceryapp.org">our mailing list</a> for updates as we prepare for the launch of the Sourcery beta in Summer 2019.
+                                    Sourcery is currently serving documents from archives in the Boston and New York metro areas. Our expansion plans include Washington, DC, Chicago, Philadelphia and other cities beginning in 2020.
                                 </li>
                             </ul>
                         </div>
