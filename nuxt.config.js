@@ -25,7 +25,7 @@ module.exports = {
             { rel: 'icon', type: 'image/png', href: '/icon-256.png' }
         ],
         script: [
-            // { src: 'https://js.stripe.com/v3/', async: true }
+            { src: 'https://js.stripe.com/v3/', async: true }
         ]
 	},
 
@@ -128,7 +128,8 @@ module.exports = {
 		middleware: [
             'auth',
             'user-meta',
-            'stripe-check'
+            'account-type',
+            'onboarding-complete'
         ],
     },
 

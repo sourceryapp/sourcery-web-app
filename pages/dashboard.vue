@@ -72,6 +72,7 @@
 
 <script>
 import { db } from "~/plugins/firebase-client-init.js";
+import { mapGetters } from 'vuex'
 export default {
     middleware: 'user-meta',
 
@@ -102,9 +103,11 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.$store.getters['auth/activeUser'];
-    }
+      ...mapGetters({
+          user: 'auth/activeUser',
+          isResearcher: 'meta/isResearcher',
+          isSourcerer: 'meta/isSourcerer'
+      })
   },
   data: function() {
     return {

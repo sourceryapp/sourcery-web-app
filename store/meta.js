@@ -15,7 +15,12 @@ const initialState = () => {
         agentUpdates: null,
         newsUpdates: null,
         requestUpdates: null,
-        location: null
+        location: null,
+        onboardingComplete: false,
+        researcher: false,
+        sourcerer: false,
+        stripeCustomerId: false,
+        cards: false,
     }
 }
 
@@ -35,9 +40,34 @@ export const getters = {
         }
     },
     /**
-     * Check to see if this store has been populated.
+     * Check to see if Stripe Connect has been linked
      */
-    isset: (state, getters) => (typeof state.stripe.access_token !== 'undefined')
+    isset: (state, getters) => ((typeof state.stripe.access_token) !== 'undefined'),
+
+    /**
+     * Is this user a sourcerer?
+     */
+    isSourcerer: (state, getters) => (state.sourcerer === true || getters.isset),
+
+    /**
+     * Is this user a researcher?
+     */
+    isResearcher: (state, getters) => (state.researcher === true),
+
+    /**
+     * Can the user receive payments?
+     */
+    canReceivePayments: (state, getters) => (typeof state.stripe.access_token !== 'undefined'),
+
+    /**
+     * Can the user make payments?
+     */
+    canMakePayments: (state, getters) => (state.stripeCustomerId !== null && typeof state.stripeCustomerId !== 'undefined'),
+
+    /**
+     * Has the user completed onboarding?
+     */
+    onboardingComplete: (state, getters) => (state.onboardingComplete === true),
 }
 
 
@@ -65,8 +95,20 @@ export const mutations = {
     setLocation(state, obj=null){
         state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude);
     },
+    setSourcerer(state, val){
+        state.sourcerer = val;
+    },
+    setResearcher(state, val) {
+        state.researcher = val;
+    },
     balance(state, obj){
         state.balance = obj
+    },
+    setOnboardingComplete(state, val){
+        state.onboardingComplete = val;
+    },
+    setStripeCustomerId(state, id){
+        state.stripeCustomerId = id;
     },
     reset(state) {
         const s = initialState()
@@ -89,8 +131,8 @@ export const mutations = {
 }
  */
 export const actions = {
-    save({state, rootGetters}, key){
-        db.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+    async save({state, rootGetters}, key){
+        return await db.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
         }, { merge: true });
     },

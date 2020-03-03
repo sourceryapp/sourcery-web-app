@@ -16,7 +16,6 @@
                     <v-list-tile-content v-if="this.user">
                         <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title>Estimated Balance: {{this.balance}}</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -163,18 +162,21 @@
 </template>
 
 <script>
-    import md5 from 'md5'
-	export default {
+import { mapGetters } from 'vuex'
+import md5 from 'md5'
+
+    export default {
 		computed: {
-            user() {
-                return this.$store.getters['auth/activeUser']
-            },
             gravatar() {
                 return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
             },
-            balance() {
-                return this.$store.getters['meta/balance'];
-            }
+            ...mapGetters({
+                user: 'auth/activeUser',
+                isResearcher: 'meta/isResearcher',
+                isSourcerer: 'meta/isSourcerer',
+                balance: 'meta/balance',
+                canMakePayments: 'meta/canMakePayments'
+            })
 		},
 		methods: {
             async logout() {
@@ -188,14 +190,14 @@
             dialog: false,
             items1: [
                 { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
-                { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
+                { title: 'Payouts', icon: 'account_balance', link: '/account/payouts'},
+                { title: 'Payments', icon: 'credit_card', link: '/account/credit-cards'},
                 { title: 'Email Notifications', icon: 'notifications', link: '/settings/notifications'},
                 { title: 'History', icon: 'hourglass_full', link: '/request/history'},
                 { title: 'Privacy Policy', icon: 'enhanced_encryption', link: '/privacy'},
                 { title: 'Terms of Use', icon: 'subject', link: '/terms'},
                 { title: 'Help', icon: 'help', link: '/account/help'},
                 { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
-                // { title: 'Rate', icon: 'star', link: ''},
             ],
         }),
 

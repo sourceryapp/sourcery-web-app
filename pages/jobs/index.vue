@@ -4,6 +4,20 @@
         <h1>Find Jobs</h1>
         <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.</p>
 
+
+        <v-alert
+            :value="!canReceivePayments"
+            type="warning"
+            class="mt-4 mb-4"
+            >
+            <v-layout>
+                <div>Before claiming a job request, you must configure your account to receive payments.</div>
+                <v-btn :to="{name: 'account-payouts'}">Configure</v-btn>
+            </v-layout>
+
+        </v-alert>
+
+
         <section class="pa-3" id="search">
           <v-layout row fill-height align-center justify-center wrap>
             <v-flex>
@@ -71,7 +85,7 @@
                     </v-layout>
                   </v-container>
                   <v-card-actions>
-                    <v-btn color="primary" @click="claim(job.id)">Claim</v-btn>
+                    <v-btn color="primary" @click="claim(job.id)" :disabled="!canReceivePayments">Claim</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -89,7 +103,7 @@ import { db } from "~/plugins/firebase-client-init.js";
  * @url https://www.npmjs.com/package/geolib
  */
 import * as geolib from "geolib";
-
+import { mapGetters } from 'vuex'
 import { Utils } from '~/modules/utilities'
 
 
@@ -176,9 +190,14 @@ export default {
         }
     },
     computed: {
-        user() {
-            return this.$store.getters['auth/activeUser'];
-        }
+        ...mapGetters({
+            user: 'auth/activeUser',
+            isResearcher: 'meta/isResearcher',
+            isSourcerer: 'meta/isSourcerer',
+            balance: 'meta/balance',
+            canMakePayments: 'meta/canMakePayments',
+            canReceivePayments: 'meta/canReceivePayments'
+        })
     },
     mounted() {}
 };

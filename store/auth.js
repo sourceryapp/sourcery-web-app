@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 import { Utils } from '~/modules/utilities.js';
 
 
+// user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
         user: null,

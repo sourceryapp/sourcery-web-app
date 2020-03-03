@@ -9,8 +9,6 @@
 
             <v-flex xs12 sm8 offset-sm2>
 
-
-
                 <h1 style="width:100%">Create Request</h1>
 
                 <v-alert
@@ -19,6 +17,15 @@
                     class="mt-4 mb-4"
                     >
                     During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.
+                </v-alert>
+
+                <v-alert
+                    :value="!canMakePayments"
+                    type="warning"
+                    class="mt-4 mb-4"
+                    >
+                    You must add a credit card before submitting a request.
+                    <v-btn :to="{name: 'account-credit-cards'}">Add Card</v-btn>
                 </v-alert>
 
                 <label for="area" class="title">
@@ -113,6 +120,7 @@
                             >Previous</v-btn>
                             <v-btn
                             color="primary"
+                            :disabled="request.citation.length < 10"
                             @click="formState=3"
                             >Next</v-btn>
 
@@ -164,7 +172,7 @@
                             @click="formState=2"
                             >Previous</v-btn>
                             <v-btn
-                            :disabled="loadingCost"
+                            :disabled="!request.pricing.total || !canMakePayments"
                             :loading="loadingCost"
                             @click="submitRequest"
                             class="primary"
@@ -187,7 +195,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex'
 import { db, functions } from '~/plugins/firebase-client-init.js'
 import { Utils } from '~/modules/utilities'
 
@@ -201,7 +209,7 @@ import { Utils } from '~/modules/utilities'
                 repositoryName: null,
                 request: {
                     pages: 0,
-                    citation: 'Wysocki, Anne Frances, et al. Writing New Media: Theory and Applications for Expanding the Teaching of Composition. Utah State UP, 2004.'
+                    citation: ''
                 },
 			    active: null,
 				suggestions: [],
@@ -248,14 +256,6 @@ import { Utils } from '~/modules/utilities'
                     });
                 })
 
-                let citations = [
-                    'James P. Quentin to Sally Quentin, 12 Jan. 1876, Springfield Collection.',
-                    'Manuscript Miscellany, Scribe: anon., various hands, 287 pp., paper, c. 1640.',
-                    'Mass. General Statutes, 1842-7, Vol. 23, pp 18-29.',
-                    'L.V. Beethoven, 5th Symphony, autograph MS, 1808.',
-                    'P.D.Q. Hoagland Collection, Administrative records, clippings, correspondence, ephemera, 1963-1964, 1967-1969, 42pp.',
-                ]
-
             return {
                 areaSelections: areaSelections,
                 areas: areas,
@@ -264,7 +264,7 @@ import { Utils } from '~/modules/utilities'
                 // @todo Remove random citations before launch.
                 request: {
                     pages: 0,
-                    citation: null, //citations[Math.floor(Math.random()*citations.length)],
+                    citation: '', //citations[Math.floor(Math.random()*citations.length)],
                     pricing: {
                         total: 0
                     }
@@ -274,7 +274,14 @@ import { Utils } from '~/modules/utilities'
         computed: {
             usermeta: function(){
                 return this.$store.state.meta
-            }
+            },
+            ...mapGetters({
+                user: 'auth/activeUser',
+                isResearcher: 'meta/isResearcher',
+                isSourcerer: 'meta/isSourcerer',
+                balance: 'meta/balance',
+                canMakePayments: 'meta/canMakePayments'
+            }),
         },
         mounted() {
         },
