@@ -67,7 +67,7 @@ export const getters = {
     /**
      * Has the user completed onboarding?
      */
-    onboardingComplete: (state, getters) => (state.onboardingComplete === true),
+    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && typeof state.onboardingComplete !== 'undefined'),
 }
 
 

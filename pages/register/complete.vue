@@ -46,6 +46,15 @@ export default {
     name: "complete",
 
     /**
+     * Don't show this page if onboarding is complete:
+     */
+    middleware: function({ store, $axios, redirect, route, error }){
+        if(store.getters['meta/onboardingComplete']){
+            redirect({name: 'dashboard'})
+        }
+    },
+
+    /**
      * Retrieve the account type from our Store
      */
     asyncData({ store }){

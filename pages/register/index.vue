@@ -1,37 +1,103 @@
 <template>
   <v-layout>
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm6 offset-sm3 md4 offset-md4>
         <v-card flat color="transparent">
         <v-form @submit.prevent="registerValid">
             <h1>Register</h1>
             <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">{{message}}</v-alert>
-            <v-text-field type="text" name="name" v-model="name" label="Full Name"></v-text-field>
+            <v-alert
+                :value = errorEmpty
+                type="error">
+                <span color="white">All fields are required.</span>
+            </v-alert>
+            <v-text-field
+              type="text"
+              name="name"
+              v-model="name"
+              :rules="rules.required"
+              label="Full Name"
+              required
+              clearable
+              autofocus="autofocus"
+              validate-on-blur
+              prepend-icon="account_circle"
+            ></v-text-field>
             <span class="red--text" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
-            <v-text-field type="email" name="email" v-model="email" label="Email" required></v-text-field>
+            <v-text-field
+                type="email"
+                name="email"
+                v-model="email"
+                label="Email"
+                :rules="emailRules"
+                required
+                clearable
+                validate-on-blur
+                prepend-icon="email"
+            ></v-text-field>
             <span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
             <v-layout>
-            <v-flex>
                 <v-text-field
-                type="password"
                 name="password"
                 v-model="password"
                 label="Password"
                 autocomplete="false"
-                hint="At least 8 characters and 1 special character."
-                ></v-text-field>
-            </v-flex>
+                messages="At least 8 characters and 1 special character."
+                :rules="passRules"
+                :type="showPass ? 'text' : 'password'"
+                :append-icon="showPass ? 'visibility' : 'visibility_off'"
+                @click:append="showPass = !showPass"
+                required
+                counter
+                error-count="2"
+                :success="password==confirm_password && password !=''"
+                validate-on-blur
+                loading
+                prepend-icon="security"
+                >
+                <template v-slot:progress>
+                  <v-progress-linear
+                    :value="progress"
+                    :color="color"
+                    height="4"
+        > </v-progress-linear>
+      </template>
+            </v-text-field>
             </v-layout>
-            <v-layout>
-            <v-flex>
-                <v-text-field
-                type="password"
-                name="confirm_password"
-                v-model="confirm_password"
-                label="Confirm Password"
-                ></v-text-field>
-            </v-flex>
-            </v-layout>
+            <v-alert
+                :value = errorLength
+                type="warning"
+                outline
+                >
+                <span color="white">Password length must be at least 8 characters.</span>
+            </v-alert>
+            <v-alert
+                :value = errorSpecial
+                type="warning"
+                outline>
+                <span color="white">Password must include a special character.</span>
+            </v-alert>
+            <v-text-field
+              name="confirm_password"
+              v-model="confirm_password"
+              label="Confirm Password"
+              :rules="confirmPassRules"
+              :type="showPass2 ? 'text' : 'password'"
+              :append-icon="showPass2 ? 'visibility' : 'visibility_off'"
+              @click:append="showPass2 = !showPass2"
+              required
+              counter
+              :disabled="!  password"
+              :success="password==confirm_password && password !=''"
+              validate-on-blur
+              prepend-icon="check_circle"
+            ></v-text-field>
             <span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
+            <v-alert
+                :value = errorMatch
+                type="warning"
+                outline>
+                <span color="white">Passwords do not match.</span>
+            </v-alert>
             <v-layout>
             <v-flex>
                 <v-text-field
@@ -39,34 +105,16 @@
                 name="phone"
                 v-model="phone"
                 label="Phone Number"
+                :rules="rules.required"
+                required
+                validate-on-blur
+                prepend-icon="phone"
                 ></v-text-field>
             </v-flex>
             </v-layout>
-            <v-layout row align-center justify-center>
-                <v-btn to="/login">Back</v-btn>
-                <v-btn type="submit" value="Register" color="primary">Next</v-btn>
-            </v-layout>
+            <v-btn block type="submit" value="Register" color="primary" :loading="loading">Register</v-btn>
+            <v-btn block flat to="/login">Cancel</v-btn>
         </v-form>
-        <v-alert
-            :value = errorEmpty
-            type="warning">
-            <span color="white">All fields must be filled.</span>
-        </v-alert>
-        <v-alert
-            :value = errorMatch
-            type="warning">
-            <span color="white">Passwords do not match.</span>
-        </v-alert>
-        <v-alert
-            :value = errorLength
-            type="warning">
-            <span color="white">Password length must be atleast 8 characters.</span>
-        </v-alert>
-        <v-alert
-            :value = errorSpecial
-            type="warning">
-            <span color="white">Password must include a special character.</span>
-        </v-alert>
 
     </v-card>
     </v-flex>
@@ -91,12 +139,34 @@ export default {
     return {
       name: "",
       email: "",
+      emailRules: [
+        v => !!v || 'E-mail is required',
+        v => /.+@.+/.test(v) || 'E-mail must be valid'
+      ],
+      rules: {
+        'required': [v => !!v || 'This field is required'],
+      },
       password: "",
+      showPass: false,
+      special_characters: ["~", "!", "@", "#", "$", "%","^", "&", "*", "_", "-", "+", "=", "`", "|", "(", ")", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/"],
+      passRules: [
+        v => v.length >= 8 || 'Password must be at least 8 characters',
+        v => this.special_characters.some(substring=>v.includes(substring)) || 'Password must contain 1 special character'
+      ],
+      goodPass: [
+        'At least 8 characters',
+        'At least 1 special character'
+      ],
       confirm_password: "",
+      showPass2: false,
+      confirmPassRules: [
+        v => v === this.password || 'Passwords must match'
+      ],
       phone: "",
       message: null,
       execute: true,
 
+      loading: false,
       errorEmpty: false,
       errorMatch: false,
       errorLength: false,
@@ -109,9 +179,16 @@ export default {
         confirm_password: []
       },
 
-      special_characters: ["~", "!", "@", "#", "$", "%","^", "&", "*", "_", "-", "+", "=", "`", "|", "(", ")", "{", "}", "[", "]", ":", ";", "'", "<", ">", ",", ".", "?", "/"],
     };
   },
+  computed: {
+      progress () {
+        return ((Math.min(this.password.length,8)/8) + (this.special_characters.some(substring=>this.password.includes(substring))))*50
+      },
+      color () {
+        return ['primary','success'][Math.floor(this.progress / 100)]
+      }
+    },
   methods: {
     registerSubmit: function() {
 
@@ -149,6 +226,7 @@ export default {
         });
     },
     registerValid: function() {
+      this.loading = true;
       //re-initialize all error messages back to default
       this.errorEmpty = false;
       this.errorMatch = false;
@@ -195,6 +273,7 @@ export default {
       }
       else {
         this.execute = true;
+        this.loading = false;
       }
   }
   },
