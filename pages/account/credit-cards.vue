@@ -84,7 +84,7 @@ import { mapGetters } from 'vuex'
         return {
             cards: (store.state.meta.stripeCustomerId) ?
             (await stripeGetPaymentMethods({ customer: customer_id, type: 'card'})).data :
-            []
+            {data:[]}
         }
     },
     data () {
