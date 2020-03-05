@@ -34,7 +34,8 @@ module.exports = {
 	*/
 	css: [
 	    '~/assets/styles/sourcery.css',
-        'material-design-icons-iconfont/dist/material-design-icons.css'
+        'material-design-icons-iconfont/dist/material-design-icons.css',
+        'paymentfont/css/paymentfont.min.css'
     ],
 
 

@@ -5,26 +5,38 @@
                 <v-flex>
                     <v-card width="100%">
                         <v-card-title>
-                            <h1>Credit Cards</h1>
+                            <h1>Payment Information</h1>
                         </v-card-title>
                         <v-card-text>
 
-                            <h3>Cards on File</h3>
-                              <v-data-table
-                                v-if="cards"
-                                :headers="headers"
-                                :items="cards.data"
-                                :hide-headers="!cards"
-                                hide-actions
-                                no-data-text="You have no cards on file."
-                            >
-                                <template v-slot:items="props">
-                                <td class="text-xs">{{ props.item.card.brand }}</td>
-                                <td class="text-xs">**** {{ props.item.card.last4 }}</td>
-                                <td class="text-xs">{{ props.item.card.exp_month }}/{{ props.item.card.exp_year }}</td>
-                                <!-- <td class="text-xs">Delete</td> -->
+
+                            <v-list two-line v-if="cards.data.length">
+                                <v-subheader>
+                                    Cards
+                                </v-subheader>
+                                <template v-for="(item, index) in cards.data">
+                                    <v-divider :key="`divider-${index}`"></v-divider>
+
+                                    <v-list-tile :key="`list-item-${index}`"  @click="deleteCard(item.card.id)">
+                                        <v-list-tile-avatar :key="`avatar-${index}`">
+                                            <i :class="`pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand"></i>
+                                        </v-list-tile-avatar>
+
+                                        <v-list-tile-content :key="`content-${index}`">
+                                            <v-list-tile-title>
+                                                Last four digits:  {{ item.card.last4 }}
+                                            </v-list-tile-title>
+                                            <v-list-tile-sub-title>
+                                                Expires: {{ item.card.exp_month }}/{{ item.card.exp_year }}
+                                            </v-list-tile-sub-title>
+                                        </v-list-tile-content>
+                                        <v-list-tile-action>
+                                            <v-icon>delete</v-icon>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
                                 </template>
-                            </v-data-table>
+                            </v-list>
+                            <p v-else>You have no cards on file.</p>
 
 
                         </v-card-text>
@@ -77,22 +89,9 @@ import { mapGetters } from 'vuex'
     },
     data () {
       return {
-          headers: [
-              {
-                  text: "Type",
-                  align: 'left',
-                  sortable: false
-              },
-              {
-                  text: "Number",
-                  sortable: false
-              },
-              {
-                  text: "Exp.",
-                  sortable: false
-              }
-          ],
-          cards: [],
+          cards: {
+              data: []
+          },
           dialog: false
       }
     },
@@ -118,32 +117,21 @@ import { mapGetters } from 'vuex'
 
             // Reload to update card list
             window.location.reload();
+        },
+        deleteCard(id){
+            confirm("Are you sure you want to delete this card?")
         }
     },
     async mounted() {
-
+        console.log(this.cards);
     }
   }
 </script>
 
 <style scoped>
-.dont-break {
-    font-family: monospace;
-  /* These are technically the same, but use both */
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-
-  -ms-word-break: break-all;
-  /* This is the dangerous one in WebKit, as it breaks things wherever */
-  word-break: break-all;
-  /* Instead use this non-standard one: */
-  word-break: break-word;
-
-  /* Adds a hyphen where the word breaks, if supported (No Blink) */
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-
+.pf {
+    font-size: 1.2em;
+    color: var(--v-primary-base)
 }
+
 </style>

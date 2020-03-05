@@ -39,6 +39,7 @@
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
     "nuxt": "2",
+    "paymentfont": "^1.2.5",
     "vue-cookie-law": "^1.11.0",
     "vuetify-loader": "^1.2.2"
   },
