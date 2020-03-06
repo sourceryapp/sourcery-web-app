@@ -6,6 +6,7 @@
     "build": "nuxt build --spa",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "dev": "nodemon --watch server --exec \"nuxt\"",
+    "dev-local": "EMULATOR=1 nodemon --watch server --exec \"nuxt\"",
     "start": "nuxt start",
     "generate": "nuxt generate",
     "precommit": "npm run lint",

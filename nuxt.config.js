@@ -7,6 +7,11 @@ if (process.env.NODE_ENV === 'production') {
 	env = require('./config/production.js')
 }
 
+/**
+ * Don't completely overwrite the
+ * existing env vars.
+ */
+Object.assign(env, process.env);
 
 module.exports = {
     mode: 'spa',

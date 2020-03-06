@@ -25,6 +25,24 @@ firebase.firestore.DocumentSnapshot.prototype.request = request;
 
 // Export Firestore
 let firestore = firebase.firestore();
+
+/**
+ * Check to see if the local emulator is running
+ */
+if(process.env.EMULATOR){
+    console.warn("🔥🔥🔥🔥🔥🔥🔥 USING LOCAL FIREBASE EMULATOR 🔥🔥🔥🔥🔥🔥🔥");
+
+    // Local Firestore emulator
+    firestore.settings({
+        host: "localhost:8080",
+        ssl: false
+    });
+
+    // Setup functions emulator
+    firebase.functions().useFunctionsEmulator("http://localhost:5001")
+}
+
+
 export const db = firestore;
 export const GeoPoint = firebase.Geopoint;
 export const storage = firebase.storage();
