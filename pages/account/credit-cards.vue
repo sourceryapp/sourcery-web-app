@@ -17,21 +17,31 @@
                                 <template v-for="(item, index) in cards.data">
                                     <v-divider :key="`divider-${index}`"></v-divider>
 
-                                    <v-list-tile :key="`list-item-${index}`"  @click="deleteCard(item.card.id)">
+                                    <v-list-tile :key="`list-item-${index}`">
                                         <v-list-tile-avatar :key="`avatar-${index}`">
                                             <i :class="`pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand"></i>
                                         </v-list-tile-avatar>
 
                                         <v-list-tile-content :key="`content-${index}`">
-                                            <v-list-tile-title>
-                                                Last four digits:  {{ item.card.last4 }}
-                                            </v-list-tile-title>
-                                            <v-list-tile-sub-title>
-                                                Expires: {{ item.card.exp_month }}/{{ item.card.exp_year }}
-                                            </v-list-tile-sub-title>
+                                            <v-layout style="width:100%" justify-space-between align-center>
+                                                    <v-list-tile-title>
+                                                        **** **** ****  {{ item.card.last4 }}
+                                                    </v-list-tile-title>
+                                                    <v-list-tile-sub-title>
+                                                        Exp: {{ item.card.exp_month }}/{{ item.card.exp_year }}
+                                                    </v-list-tile-sub-title>
+
+                                                <v-flex  >
+                                                </v-flex>
+                                            </v-layout>
                                         </v-list-tile-content>
                                         <v-list-tile-action>
-                                            <v-icon>delete</v-icon>
+                                            <p v-if="index == 0" class="caption font-weight-thin my-0">
+                                                    default
+                                            </p>
+                                            <v-btn v-else icon class="mx-1"  @click="deleteCard(item.id)">
+                                                <v-icon color="primary">delete</v-icon>
+                                            </v-btn>
                                         </v-list-tile-action>
                                     </v-list-tile>
                                 </template>
@@ -115,12 +125,22 @@ import { mapGetters } from 'vuex'
             // Close the dialog
             this.dialog = false;
 
+            this.reload();
+        },
+        async deleteCard(id){
+            if(confirm("Are you sure you want to delete this card?")){
+                let stripeDeleteCard = functions.httpsCallable('stripeDeleteCard');
+                let { data } = await stripeDeleteCard({ card_id: id });
+                if(data.id){
+                    this.reload();
+                }
+            }
+        },
+        reload(){
             // Reload to update card list
             window.location.reload();
-        },
-        deleteCard(id){
-            confirm("Are you sure you want to delete this card?")
         }
+
     },
     async mounted() {
         console.log(this.cards);

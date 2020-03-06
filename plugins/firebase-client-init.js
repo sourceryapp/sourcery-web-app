@@ -32,14 +32,14 @@ let firestore = firebase.firestore();
 if(process.env.EMULATOR){
     console.warn("🔥🔥🔥🔥🔥🔥🔥 USING LOCAL FIREBASE EMULATOR 🔥🔥🔥🔥🔥🔥🔥");
 
+    // Setup functions emulator
+    firebase.functions().useFunctionsEmulator("http://localhost:5001")
+
     // Local Firestore emulator
     firestore.settings({
         host: "localhost:8080",
         ssl: false
     });
-
-    // Setup functions emulator
-    firebase.functions().useFunctionsEmulator("http://localhost:5001")
 }
 
 

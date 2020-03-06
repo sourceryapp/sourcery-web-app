@@ -14,7 +14,14 @@ export default async function ({ store, $axios, redirect, route, error }) {
      */
     console.info('Do we have stripe meta data in the Vuex store?:', store.getters['meta/isset'] ? 'yes' : 'no');
     if (store.state.auth.user && !(store.getters['meta/isset'])){
+
+        // Gets usermeta from the database
         let usermeta = await Utils.getUserMeta( store.getters['auth/activeUser'].uid );
+
+        // Merges the fetched data with the default state to ensure that
+        // none of the usermeta properties are undefined
+        usermeta = Object.assign(JSON.parse(JSON.stringify(store.state.meta)), usermeta);
+
         console.info("Meta retrieved:", usermeta)
         store.commit('meta/setStripe', usermeta.stripe)
         store.commit('meta/setPhone', usermeta.phone)
