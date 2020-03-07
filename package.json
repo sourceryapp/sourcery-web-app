@@ -50,6 +50,7 @@
     "eslint-loader": "^2.1.2",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-vue": "^5.2.2",
+    "faker": "^4.1.0",
     "husky": "^2.4.0",
     "nodemon": "^1.19.1",
     "sass-loader": "^7.0.3",
