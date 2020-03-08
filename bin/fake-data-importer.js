@@ -64,7 +64,7 @@ areas.forEach( async (area) =>{
                 address1: faker.address.streetAddress(),
                 city: "Storrs",
                 country_code: "US",
-                geo: new firebase.firestore.GeoPoint( Number(faker.address.latitude()), Number(faker.address.longitude()) ),
+                geo: new firebase.firestore.GeoPoint( Number(41.801121), Number(-72.240997) ),
                 institution: "University of Connecticut",
                 name: faker.company.companyName(),
             },
