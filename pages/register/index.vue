@@ -3,6 +3,12 @@
       <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4 >
         <v-form @submit.prevent="registerValid">
           <h1 class="text-xs-center">Register</h1>
+          <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">{{message}}</v-alert>
+            <v-alert
+                :value = errorEmpty
+                type="error">
+                <span color="white">All fields are required.</span>
+            </v-alert>
             <v-text-field
               type="text"
               name="name"
@@ -215,7 +221,7 @@ export default {
       this.errorSpecial = false;
 
       // (1) text fields not empty
-      if (this.name == "" || this.email == "" || this.password == "" || this.email == "") {
+      if (this.name == "" || this.email == "" || this.password == "" || this.phone == "") {
         this.execute = false;
         this.errorEmpty = true;
         //console.log("Empty")
@@ -251,6 +257,7 @@ export default {
       //if conditions (1) - (4) true, register submit
       if (this.execute) {
         this.registerSubmit();
+        this.loading = false;
       }
       else {
         this.execute = true;
