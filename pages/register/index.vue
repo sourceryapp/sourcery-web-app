@@ -1,15 +1,8 @@
 <template>
-  <v-layout>
-      <v-flex xs12 sm6 offset-sm3 md4 offset-md4>
-        <v-card flat color="transparent">
+  <v-layout row fill-height align-center>
+      <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4 >
         <v-form @submit.prevent="registerValid">
-            <h1>Register</h1>
-            <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">{{message}}</v-alert>
-            <v-alert
-                :value = errorEmpty
-                type="error">
-                <span color="white">All fields are required.</span>
-            </v-alert>
+          <h1 class="text-xs-center">Register</h1>
             <v-text-field
               type="text"
               name="name"
@@ -21,6 +14,8 @@
               autofocus="autofocus"
               validate-on-blur
               prepend-icon="account_circle"
+              box
+              background-color="#F3F1F6"
             ></v-text-field>
             <span class="red--text" v-for="(err, index) in errors.name" :key="index">{{err}}</span>
             <v-text-field
@@ -33,6 +28,8 @@
                 clearable
                 validate-on-blur
                 prepend-icon="email"
+                box
+                background-color="#F3F1F6"
             ></v-text-field>
             <span class="red--text" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
             <v-layout>
@@ -53,14 +50,17 @@
                 validate-on-blur
                 loading
                 prepend-icon="security"
+                box
+                background-color="#F3F1F6"
                 >
                 <template v-slot:progress>
                   <v-progress-linear
                     :value="progress"
                     :color="color"
                     height="4"
-        > </v-progress-linear>
-      </template>
+                    >
+                  </v-progress-linear>
+                </template>
             </v-text-field>
             </v-layout>
             <v-alert
@@ -76,30 +76,6 @@
                 outline>
                 <span color="white">Password must include a special character.</span>
             </v-alert>
-            <v-text-field
-              name="confirm_password"
-              v-model="confirm_password"
-              label="Confirm Password"
-              :rules="confirmPassRules"
-              :type="showPass2 ? 'text' : 'password'"
-              :append-icon="showPass2 ? 'visibility' : 'visibility_off'"
-              @click:append="showPass2 = !showPass2"
-              required
-              counter
-              :disabled="!  password"
-              :success="password==confirm_password && password !=''"
-              validate-on-blur
-              prepend-icon="check_circle"
-            ></v-text-field>
-            <span class="red--text" v-for="(err, index) in errors.confirm_password" :key="index">{{err}}</span>
-            <v-alert
-                :value = errorMatch
-                type="warning"
-                outline>
-                <span color="white">Passwords do not match.</span>
-            </v-alert>
-            <v-layout>
-            <v-flex>
                 <v-text-field
                 type="phone"
                 name="phone"
@@ -109,14 +85,19 @@
                 required
                 validate-on-blur
                 prepend-icon="phone"
+                box
+                background-color="#F3F1F6"
                 ></v-text-field>
-            </v-flex>
-            </v-layout>
-            <v-btn block type="submit" value="Register" color="primary" :loading="loading">Register</v-btn>
-            <v-btn block flat to="/login">Cancel</v-btn>
+                <div class="hidden-xs-only">
+                  <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading">NEXT</v-btn>
+                  <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
+                </div>
+            <v-card min-width="100%" class="bottom-buttons hidden-sm-and-up">
+              <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading">NEXT</v-btn>
+              <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
+            </v-card>
+            <v-spacer style="height: 122px;"></v-spacer>
         </v-form>
-
-    </v-card>
     </v-flex>
 
 
@@ -234,18 +215,18 @@ export default {
       this.errorSpecial = false;
 
       // (1) text fields not empty
-      if (this.name == "" || this.email == "" || this.password == "" || this.confirm_password == "" || this.email == "") {
+      if (this.name == "" || this.email == "" || this.password == "" || this.email == "") {
         this.execute = false;
         this.errorEmpty = true;
         //console.log("Empty")
       }
 
       // (2) passwords match
-      if (this.password !== this.confirm_password) {
-        this.execute = false;
-        this.errorMatch = true;
-        //console.log("Match")
-      }
+      // if (this.password !== this.confirm_password) {
+      //   this.execute = false;
+      //   this.errorMatch = true;
+      //   //console.log("Match")
+      // }
 
       // (3) password 8 or more characters
       if (this.password.length < 8) {
@@ -281,4 +262,21 @@ export default {
 </script>
 
 <style scoped>
+  .v-toolbar--fixed {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 6px 12px;
+    border-radius: 20px 20px 0px 0px;
+    z-index: 5;
+  }
+  h1 {
+    margin-bottom: 12px;
+  }
 </style>

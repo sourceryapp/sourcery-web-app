@@ -26,6 +26,7 @@ module.exports = {
             { "name": "viewport", content: "width=device-width, initial-scale=1" }
 		],
 		link: [
+            {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Barlow:500,600,700,800&display=swap' },
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
             { rel: 'icon', type: 'image/png', href: '/icon-256.png' }
         ],
@@ -232,7 +233,8 @@ module.exports = {
         babel: {
             babelrc: false,
             plugins: (process.env.NODE_ENV === 'production') ? ["transform-remove-console"] : [],
-            cacheDirectory: true
+            cacheDirectory: true,
+            sourceType: 'unambiguous'
         }
 	}
 };

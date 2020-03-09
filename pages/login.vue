@@ -1,8 +1,8 @@
 <template>
-	<v-layout>
+	<v-layout row fill-height align-center>
         <v-flex xs12 sm6 offset-sm3 md4 offset-md4>
             <v-form @submit.prevent="login">
-                <h1>Log In</h1>
+                <h1 class="text-xs-center">Log In</h1>
                 <v-alert
                     :value = loginError
                     type="error"
@@ -21,6 +21,7 @@
                     validate-on-blur
                     prepend-icon="email"
                     autofocus
+                    box
                 ></v-text-field>
                 <span class="text-red" v-for="(err, index) in errors.email" :key="index">{{err}}</span>
                 <v-text-field 
@@ -34,16 +35,17 @@
                     :rules="[v => !!v || 'Password is required']"
                     prepend-icon="security"
                     validate-on-blur
+                    box
                 ></v-text-field>
                 <span class="text-red" v-for="(err, index) in errors.password" :key="index">{{err}}</span>
                 
-                <v-btn block type="submit" color="primary" :loading="loading" :disabled="loading">Log In</v-btn>
-                <v-btn block flat to="/password">Forgot password?</v-btn>
+                <v-btn block depressed large type="submit" color="primary" :loading="loading" :disabled="loading">Log In</v-btn>
+                <v-btn block flat large to="/password">Forgot password?</v-btn>
 
                 <v-divider class="mt-3 mb-3"></v-divider>
 
-                <h3>Don't Have an Account?</h3>
-                <v-btn block outline color="primary" to="/register">Register</v-btn>
+                <h2 class="text-xs-center">Don't Have an Account?</h2>
+                <v-btn block outline large color="primary" to="/register">Register</v-btn>
 
 
             </v-form>
@@ -98,5 +100,7 @@
 </script>
 
 <style scoped>
-
+h1 {
+    margin-bottom: 12px;
+  }
 </style>

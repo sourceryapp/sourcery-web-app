@@ -1,7 +1,32 @@
 body {
-    font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    font-family: 'Barlow','Roboto', Arial, Helvetica, sans-serif;
 }
 
+.application {
+    font-family: 'Barlow','Roboto', Arial, Helvetica, sans-serif;
+    background: #FAF9FB;
+}
+.theme--light.application {
+    background: #FAF9FB;
+    color: #362C52;
+}
+
+.v-btn {
+    font-weight: 700;
+    border-radius: 8px;
+}
+
+.v-btn--large {
+    font-weight: 800;
+    letter-spacing: .2px;
+    font-size: 20px;
+    height: 54px;
+    padding: 0 32px;
+}
+
+.v-btn.v-btn--outline {
+    border: 4px solid #DAD4EA;
+}
 /* Toast styles */
 .toasted {
     font-family: 'Roboto', Arial, Helvetica, sans-serif;

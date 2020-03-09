@@ -69,7 +69,7 @@
 		<v-content pa-0>
 			<v-container fill-height>
 				<v-layout
-						justify-center
+						justify-center fill-height
 				>
 
 					<nuxt/>
@@ -80,7 +80,7 @@
             :value="true"
             app
             fixed
-            v-if="user"
+            v-if="user && onboardingComplete"
         >
             <v-btn
                 flat
@@ -175,7 +175,8 @@ import md5 from 'md5'
                 isResearcher: 'meta/isResearcher',
                 isSourcerer: 'meta/isSourcerer',
                 balance: 'meta/balance',
-                canMakePayments: 'meta/canMakePayments'
+                canMakePayments: 'meta/canMakePayments',
+                onboardingComplete: 'meta/onboardingComplete'
             })
 		},
 		methods: {

@@ -1,41 +1,41 @@
 <template>
-  <v-layout>
-      <v-flex xs12 sm6 offset-sm3>
-        <v-card flat color="transparent">
+  <v-layout align-center>
+      <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
         <v-form @submit.prevent="save">
-            <h1>Choose an Account Type</h1>
-
-            <v-alert
-            :value="true"
-            type="warning"
+            <h2 class="text-xs-center">What do you want to do?</h2>
+            <v-card class="selection-card"
+            v-ripple='{class: "primary--text"}'
+            flat
+            @click.native="selectResearcher()"
+            :active='accountType == "researcher"'
             >
-            Don't worry. You can always change this later.
-            </v-alert>
-
-
-            <v-radio-group v-model="accountType">
-            <v-radio
-                label="Researcher"
-                value="researcher"
-            ></v-radio>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quam adipisci minus facilis, nemo, veritatis nostrum repellat veniam minima ratione nihil enim, harum quibusdam est neque doloribus molestiae. Ratione, neque itaque.</p>
-
-            <v-radio
-                label="Sourcerer"
-                value="sourcer"
-            ></v-radio>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam repellendus sapiente qui fuga hic accusantium corrupti, aspernatur tempore? Quidem alias repellendus expedita accusantium nihil consequuntur delectus dolorem earum unde sint?</p>
-            </v-radio-group>
-
-
-            <v-layout row align-center justify-center>
-                <!-- <v-btn to="/login">Back</v-btn> -->
-                <v-btn type="submit" value="Register" color="primary">Next</v-btn>
-            </v-layout>
-
+                <v-card-text class="text-xs-center">
+                    I want to request documents.
+                </v-card-text>
+            </v-card>
+            <p class="text-xs-center disclaimer-text">(requires credit card)</p>
+            <v-card class="selection-card"
+            v-ripple='{class: "primary--text"}'
+            flat
+            @click.native="selectSourcerer()"
+            :active='accountType == "sourcerer"'>
+                <v-card-text class="text-xs-center">
+                    I want to fulfill document requests for other researchers.
+                </v-card-text>
+            </v-card>
+            <p class="text-xs-center disclaimer-text">(requires debit card or bank info)</p>
+            <p class="text-xs-center regardless"> Regardless of how you initially sign up, you can still choose to submit or fulfill requests later on.</p>
+            <div class="hidden-xs-only">
+                  <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading" :disabled="disabled">NEXT</v-btn>
+                  <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
+                </div>
+            <v-card min-width="100%" class="bottom-buttons hidden-sm-and-up">
+              <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading" :disabled="disabled">NEXT</v-btn>
+              <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
+            </v-card>
+            <v-spacer style="height: 122px;"></v-spacer>
         </v-form>
 
-    </v-card>
     </v-flex>
 
 
@@ -51,7 +51,8 @@ export default {
 
   data() {
     return {
-        accountType: 'researcher',
+        accountType: '',
+        disabled: true,
     };
   },
   methods: {
@@ -66,10 +67,59 @@ export default {
           }
 
           this.$router.push({name: 'dashboard'})
+      },
+      selectResearcher() {
+          this.accountType = 'researcher';
+          this.disabled = false;
+      },
+      selectSourcerer() {
+          this.accountType = 'sourcerer'
+          this.disabled = false;
       }
   }
 };
 </script>
 
 <style scoped>
+.selection-card {
+    background: #F3F1F6;
+    border: 3px solid #BDB2DA;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #55428B;
+}
+.selection-card[active=true] {
+    background: rgba(101, 78, 163, 0.3);
+    border: 3px solid #654EA3;
+    border-radius: 12px;
+    color: #4A3A74;
+}
+.bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 6px 12px;
+    border-radius: 20px 20px 0px 0px;
+    z-index: 5;
+}
+h2 {
+    margin-bottom: 12px;
+    font-size: 26px;
+}
+.v-card__text.text-xs-center {
+    font-size: 20px;
+    line-height: 26px;
+}
+.disclaimer-text {
+    font-style: italic;
+    font-size: 13px;
+    line-height: 32px;
+    color: #55428B;
+}
+.regardless {
+font-weight: 600;
+font-size: 15px;
+line-height: 18px;
+color: #4A3A74;
+}
 </style>
