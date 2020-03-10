@@ -62,7 +62,7 @@ export const getters = {
     /**
      * Can the user make payments?
      */
-    canMakePayments: (state, getters) => (state.stripeCustomerId !== null && typeof state.stripeCustomerId !== 'undefined'),
+    canMakePayments: (state, getters) => (state.stripeCustomerId !== null && state.stripeCustomerId !== false),
 
     /**
      * Has the user completed onboarding?
