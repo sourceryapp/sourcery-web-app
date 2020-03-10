@@ -26,11 +26,11 @@
             <p class="text-xs-center disclaimer-text">(requires debit card or bank info)</p>
             <p class="text-xs-center regardless"> Regardless of how you initially sign up, you can still choose to submit or fulfill requests later on.</p>
             <div class="hidden-xs-only">
-                  <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading" :disabled="disabled">NEXT</v-btn>
+                  <v-btn block large depressed type="submit" value="Register" color="primary" :disabled="disabled">NEXT</v-btn>
                   <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
                 </div>
             <v-card min-width="100%" class="bottom-buttons hidden-sm-and-up">
-              <v-btn block large depressed type="submit" value="Register" color="primary" :loading="loading" :disabled="disabled">NEXT</v-btn>
+              <v-btn block large depressed type="submit" value="Register" color="primary" :disabled="disabled">NEXT</v-btn>
               <v-btn block large color="primary" outline to="/login">Cancel</v-btn>
             </v-card>
             <v-spacer style="height: 122px;"></v-spacer>

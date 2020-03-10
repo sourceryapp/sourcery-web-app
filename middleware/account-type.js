@@ -9,6 +9,24 @@ export default async function ({ store, $axios, redirect, route, error }) {
     let routeName = 'register-account-type';
 
     /**
+     * If this an existing stripe-connect user, we will completely
+     * by-pass the onboarding pages.
+     */
+    if(store.getters['meta/canReceivePayments'] && !store.getters['meta/onboardingComplete']){
+
+        console.warn("Existing user that is a researcher");
+
+        // Set onboarding complete and log as researcher
+        store.commit('meta/setOnboardingComplete', true);
+        store.commit('meta/setResearcher', true);
+
+        // Save the status
+        await store.dispatch('meta/save', 'onboardingComplete');
+        await store.dispatch('meta/save', 'researcher');
+
+    }
+
+    /**
      * Has the user chosen to be a Sourcerer or Researcher?
      */
 

@@ -47,7 +47,7 @@ export const getters = {
     /**
      * Is this user a sourcerer?
      */
-    isSourcerer: (state, getters) => (state.sourcerer === true || getters.isset),
+    isSourcerer: (state, getters) => (state.sourcerer === true),
 
     /**
      * Is this user a researcher?
