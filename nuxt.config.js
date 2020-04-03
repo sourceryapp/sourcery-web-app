@@ -28,7 +28,8 @@ module.exports = {
 		link: [
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Barlow:500,600,700,800&display=swap' },
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
-            { rel: 'icon', type: 'image/png', href: '/icon-256.png' }
+            {rel: 'icon', type: 'image/png', href: '/img/favicon.png' },
+            {rel: 'apple-touch-icon', href: '/apple-icon.png'}
         ],
         script: [
             { src: 'https://js.stripe.com/v3/', async: true }
@@ -55,9 +56,10 @@ module.exports = {
 	 * PWA Icons
 	 * @url https://pwa.nuxtjs.org/modules/icon.html
      */
-	icon: {
-		iconSrc: 'static/img/sourcery-cauldron.png'
-	},
+    icon: {
+        iconSrc: 'static/icon-fz.png'
+    },
+
 
     /**
      * Paths that don't require authentication
@@ -83,7 +85,8 @@ module.exports = {
     meta: {
         name: 'Sourcery',
         description: 'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
-        mobileAppIOS: true
+        mobileAppIOS: true,
+        favicon: false
     },
 
 
