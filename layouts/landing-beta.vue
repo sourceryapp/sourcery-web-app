@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <v-app id="tube">
+      <lp-banner></lp-banner>
       	<header class="sticky" ref="sticky">
               <a href="/">
                 <img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
@@ -7,11 +8,12 @@
             <p id="subhead">Your sources, like magic</p>
         </header>
     <nuxt />
-  </div>
+  </v-app>
 </template>
 
 <script>
 import throttle from 'lodash.throttle'
+import lpBeta from '~/components/lp-banner.vue'
 
 export default {
     name: 'landing-beta',
@@ -51,6 +53,9 @@ export default {
 
         //     }
         // }, 500));
+    },
+    components: {
+        'lp-banner': lpBeta,
     }
 }
 </script>
