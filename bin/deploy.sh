@@ -12,4 +12,4 @@ echo $NODE_ENV
 firebase use $PROJECT --token $FIREBASE_TOKEN
 
 # echo "Deploying..."
-firebase deploy --token $FIREBASE_TOKEN  --only hosting:$TARGET --message "From: $GITHUB_REF" --debug
+firebase deploy --token $FIREBASE_TOKEN  --only hosting:$TARGET,rules:$TARGET --message "From: $GITHUB_REF" --debug
