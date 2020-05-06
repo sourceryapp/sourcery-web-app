@@ -85,7 +85,7 @@
                     </v-layout>
                   </v-container>
                   <v-card-actions>
-                    <v-btn color="primary" @click="claim(job.id)" :disabled="!canReceivePayments">Claim</v-btn>
+                    <v-btn color="primary" @click="claim(job.id)" :disabled="!canReceivePayments || job.claimed">{{ job.claimed ? "Claimed" : "Claim"}} </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
@@ -115,24 +115,34 @@ export default {
             userLong: null,
             distance: 50,
             jobs: null,
-            searching: false
+            searching: false,
+
+            /**
+             * An array of current document listeners.
+             * We listen to make sure a document isn't claimed
+             * before the current user tried to claim it.
+             * @url https://firebase.google.com/docs/firestore/query-data/listen
+             */
+            listener: null
         };
     },
     methods: {
         claim(id) {
-            let router = this.$router;
             let uid = this.user.uid;
-            db.collection("requests")
-                .doc(id)
-                .set({
-                    vendor_id: uid,
-                    status: "picked_up"
-                }, {
-                    merge: true
-                })
-                .then(function(ref) {
-                    router.push("/dashboard");
-                });
+            if(confirm("Are you sure that you want to claim this job?")){
+                db.collection("requests")
+                    .doc(id)
+                    .set({
+                        vendor_id: uid,
+                        status: "picked_up"
+                    }, {
+                        merge: true
+                    })
+                    .then( ref => {
+                        this.$router.push("/dashboard");
+                    });
+            }
+
         },
         getLocation() {
             if (navigator.geolocation) {
@@ -177,7 +187,16 @@ export default {
                             // Don't allow users to claim their own (disabling for testing)
                             // if ( (miles <= this.distance) && (doc.data().client_id != this.user.uid) ) {
                             if ( (miles <= this.distance) && doc.data().client_id != userID) {
-                                jobs.push(doc);
+                                /**
+                                 * Using this to track whether the request gets claimed
+                                 * while the user is browsing the results
+                                 */
+                                let claimedProperty = { claimed: false }
+
+                                /**
+                                 * Push the document (and claimed property) to the jobs array
+                                 */
+                                jobs.push(Object.assign(doc, claimedProperty));
                             }
                         }
                     });
@@ -197,9 +216,53 @@ export default {
             balance: 'meta/balance',
             canMakePayments: 'meta/canMakePayments',
             canReceivePayments: 'meta/canReceivePayments'
-        })
+        }),
+
     },
-    mounted() {}
+
+    mounted() {
+
+        /**
+         * Begin listening for updates to the
+         * requests collection
+         */
+        this.listener = db.collection("requests")
+            .where("status", "==", "pending")
+            .onSnapshot(snapshot =>{
+                snapshot.docChanges().forEach(change => {
+
+                    /**
+                     * If a request is removed (no longer in the collection
+                     * that we're listening to). That is, the status is not
+                     * equal to "pending"
+                     */
+                    if (change.type === "removed") {
+
+                        let changed_id = change.doc.id;
+                        console.log("Removed:", changed_id)
+                        /**
+                         * If the changed ID is in our result list,
+                         * disable the option to claim the request.
+                         */
+                        this.jobs.forEach( (job, index) => {
+                            if(job.id === changed_id){
+                                console.log(this.jobs[index].claimed);
+                                this.jobs[index].claimed = true;
+                                console.log(this.jobs[index]);
+
+                            }
+                        })
+                    }
+                });
+            });
+    },
+    beforeDestroy(){
+        /**
+         * Destroy the collection listener
+         * @url https://firebase.google.com/docs/firestore/query-data/listen#detach_a_listener
+         */
+        this.listener();
+    }
 };
 </script>
 
