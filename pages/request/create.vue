@@ -331,6 +331,7 @@ import { Utils } from '~/modules/utilities'
                 await db.collection("requests").add({
                     label: this.request.label,
                     pages: this.request.pages,
+                    totalPages: 0,
                     repository_id: this.request.repository_id,
                     repository: await this.getRepository( this.request.repository_id ),
 					citation: this.request.citation,
@@ -338,7 +339,7 @@ import { Utils } from '~/modules/utilities'
                     status: "pending",
                     created_at: new Date(),
                     vendor_id: "",
-                    attachments: {},
+                    attachments: [],
                     pricing: this.request.pricing
                 })
                 .then( async (ref) => {

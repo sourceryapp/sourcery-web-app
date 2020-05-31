@@ -3,7 +3,7 @@
     <v-flex xs12 sm6 offset-sm3>
       <h1>History</h1>
       <v-list two-line>
-        <v-subheader>Past Requests</v-subheader>
+        <v-subheader>Archived Requests</v-subheader>
         <v-divider></v-divider>
 
         <v-list-tile v-if="requests.length == 0" to="/request/create">
@@ -25,7 +25,7 @@
 
 
       <v-list two-line class="mt-5">
-        <v-subheader>Past Jobs</v-subheader>
+        <v-subheader>Completed Jobs</v-subheader>
         <v-divider></v-divider>
 
         <v-list-tile v-if="jobs.length == 0" to="/jobs">
@@ -69,7 +69,6 @@ export default {
         let jobs = await db
                 .collection("requests")
                 .where("vendor_id", "==", store.getters['auth/activeUser'].uid)
-                .where("status", "==", "archived")
                 .orderBy("created_at", "desc")
                 .get()
 
