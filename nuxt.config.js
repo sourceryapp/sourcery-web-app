@@ -2,7 +2,7 @@
  * Loads environment vars for the current NODE_ENV
  * Options: production, development
  */
-let env = require('sourcery-env')[process.env.NODE_ENV];
+let env = require('sourcery-env');
 
 /**
  * Don't completely overwrite the
