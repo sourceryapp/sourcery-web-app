@@ -1,11 +1,8 @@
-const path = require('path');
-
-let env = require('./config/development.js')
-
-if (process.env.NODE_ENV === 'production') {
-    console.log('Loading Prod ENV')
-	env = require('./config/production.js')
-}
+/**
+ * Loads environment vars for the current NODE_ENV
+ * Options: production, development
+ */
+let env = require('sourcery-env')[process.env.NODE_ENV];
 
 /**
  * Don't completely overwrite the
