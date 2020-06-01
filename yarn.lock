@@ -9145,9 +9145,9 @@ source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.0, source-map@~0.6.1:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
   integrity sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
 
-"sourcery-env@git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git":
-  version "1.0.0"
-  resolved "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#ecee28c0cf50db9dbf82ad84181a4a4b5470cd03"
+"sourcery-env@git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.0.1":
+  version "1.0.1"
+  resolved "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#c049bb9d21194a81caefa7db20f3d03dc01557f5"
 
 spdx-correct@^3.0.0:
   version "3.1.0"

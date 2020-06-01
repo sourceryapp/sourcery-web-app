@@ -54,7 +54,7 @@
     "husky": "^2.4.0",
     "nodemon": "^1.19.1",
     "sass-loader": "^7.0.3",
-    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git",
+    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "vue-loader": "^15.7.0",
