@@ -21,6 +21,7 @@ const initialState = () => {
         sourcerer: false,
         stripeCustomerId: false,
         cards: false,
+        organizations: false
     }
 }
 
@@ -53,6 +54,11 @@ export const getters = {
      * Is this user a researcher?
      */
     isResearcher: (state, getters) => (state.researcher === true),
+
+    /**
+     * Is this user an organization member?
+     */
+    isOrgMember: (state, getters) => ( (state.organizations !== false) && Array.isArray(state.organizations) ),
 
     /**
      * Can the user receive payments?
