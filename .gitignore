@@ -30,3 +30,7 @@ sw.*
 
 # Firestore hosting cache
 /.firebase
+
+# Nightwatch Testing
+/chromedriver.log
+/tests_output

@@ -1,0 +1,27 @@
+{
+    "src_folders": [
+        "tests"
+    ],
+    "exclude": [
+        "tests/globals.js"
+    ],
+    "webdriver": {
+        "start_process": true,
+        "server_path": "node_modules/.bin/chromedriver",
+        "cli_args": [
+            "--verbose"
+        ],
+        "port": 9515
+    },
+    "test_settings": {
+        "default": {
+            "desiredCapabilities": {
+                "browserName": "chrome"
+            },
+            "globals": {
+                "asyncHookTimeout": 60000
+            }
+        }
+    },
+    "globals_path": "tests/globals.js"
+}
