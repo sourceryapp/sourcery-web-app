@@ -3,7 +3,8 @@
         "tests"
     ],
     "exclude": [
-        "tests/globals.js"
+        "tests/globals.js",
+        "tests/custom-commands/"
     ],
     "webdriver": {
         "start_process": true,
@@ -16,12 +17,19 @@
     "test_settings": {
         "default": {
             "desiredCapabilities": {
-                "browserName": "chrome"
+                "browserName": "chrome",
+                "chromeOptions": {
+                    "args": [
+                        "verbose",
+                        "window-size=800,1200"
+                    ]
+                }
             },
             "globals": {
                 "asyncHookTimeout": 60000
             }
         }
     },
-    "globals_path": "tests/globals.js"
+    "globals_path": "tests/globals.js",
+    "custom_commands_path": "./tests/custom-commands"
 }

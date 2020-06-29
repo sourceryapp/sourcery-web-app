@@ -115,6 +115,7 @@ module.exports = {
         // { src: '~/plugins/stripe', mode: 'client' },
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
         '~/plugins/firebase-auth.js',
+        '~/plugins/vue-instantsearch'
 	],
 
 
@@ -175,9 +176,21 @@ module.exports = {
      * @url https://github.com/shakee93/vue-toasted
      */
     toast: {
-        position: 'top-center',
-        duration: 3000,
-
+        theme: "toasted-primary", // ['toasted-primary', 'outline', 'bubble']
+        position: 'bottom-center',
+        duration: 5000,
+        keepOnHover: false,
+        action: null,
+        fullWidth: false,
+        fitToScreen: false,
+        className: null,
+        containerClass: null,
+        iconPack: 'material', // ['material', 'fontawesome', 'mdi', 'custom-class', 'callback']
+        Icon: null, // Material icon name as string. explained here
+        type: 'default', // Type of the Toast ['success', 'info', 'error']
+        onComplete: null,
+        closeOnSwipe: true,
+        singleton: false,
     },
 
     /**
