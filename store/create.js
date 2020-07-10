@@ -176,8 +176,7 @@ export const actions = {
             commit('setStatusReserved')
         }
 
-        console.log(state);
-        // return db.collection("requests").add(state);
+        return db.collection("requests").add(state);
 
     },
 

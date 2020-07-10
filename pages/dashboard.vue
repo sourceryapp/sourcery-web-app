@@ -2,7 +2,6 @@
   <v-layout row>
     <v-flex xs12 sm6 offset-sm3>
       <h1>Dashboard</h1>
-      <p>Org Member?: {{isOrgMember}}</p>
       <v-list two-line>
         <v-subheader>Your Requests</v-subheader>
         <v-divider></v-divider>
