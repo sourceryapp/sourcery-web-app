@@ -1,6 +1,16 @@
 import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
 
 
+
+// Request/job States
+const DRAFT =       'draft';
+const PENDING =     'pending';
+const PICKED_UP =   'picked_up';
+const ARCHIVED =    'archived';
+const RESERVED =    'reserved';
+const COMPLETE =    'complete';
+
+
 /**
  * Any properties for the initial state should be added
  * to this function.
@@ -41,32 +51,45 @@ export const getters = {
     /**
      * Is the current request complete
      */
-    isDraft: (state, getters) => state.status === 'draft',
+    isDraft: (state, getters) => state.status === DRAFT,
 
     /**
      * Is the current request complete
      */
-    isComplete: (state, getters) => state.status === 'complete',
+    isComplete: (state, getters) => state.status === COMPLETE,
 
     /**
      * Is the current request pending
      */
-    isPending: (state, getters) => state.status === 'pending',
+    isPending: (state, getters) => state.status === PENDING,
 
     /**
      * Is the current request picked up
      */
-    isPickedUp: (state, getters) => state.status === 'picked_up',
+    isPickedUp: (state, getters) => state.status === PICKED_UP,
 
     /**
-     * Is the current request picked up
+     * Is the current request archived
      */
-    isArchived: (state, getters) => state.status === 'archived',
+    isArchived: (state, getters) => state.status === ARCHIVED,
+
+    /**
+     * Is the current request reserved for an Org Account
+     */
+    isReserved: (state, getters) => state.status === RESERVED,
 
     /**
      * Returns a human-readable version of status
      */
-    prettyStatus: (state, getters) => state.status.replace('_', ' ')
+    prettyStatus: (state, getters) => state.status.replace('_', ' '),
+
+    /**
+     * This is just a utility function to determine whether the
+     * given repo is from a member organization
+     */
+    isMemberRepo: (state, getters) => (repo) =>
+        //  @todo Remove hard-coded organization values in production
+        ( (repo.hasOwnProperty('organization') && repo.organization !== null) || repo.institution == 'UConn' || repo.institution == 'Northeastern University'),
 
 }
 
@@ -86,13 +109,27 @@ export const mutations = {
         state.repository_id = value;
     },
     setLabel(state, value=false){
-        /**
-         * Set the label to the given value or as a truncated citation
-         */
+        // Set the label to the given value or as a truncated citation
         state.label = value ? value : state.citation.match(/^(\w(\s*))+/)[0];
     },
-
-
+    setStatusDraft(state){
+        state.status = DRAFT;
+    },
+    setStatusPending(state){
+        state.status = PENDING;
+    },
+    setStatusPickedUp(state){
+        state.status = PICKED_UP;
+    },
+    setStatusArchived(state){
+        state.status = ARCHIVED;
+    },
+    setStatusReserved(state){
+        state.status = RESERVED;
+    },
+    setStatusComplete(state){
+        state.status = COMPLETE;
+    },
     reset(state) {
         const s = initialState()
         Object.keys(s).forEach(key => {
@@ -134,7 +171,13 @@ export const actions = {
         // Client ID of current user
         state.client_id = rootGetters['auth/activeUser'].uid;
 
-        return db.collection("requests").add(state);
+        // If a member repo, set to reserved and set the parent org
+        if(rootGetters['create/isMemberRepo'], state.repository){
+            commit('setStatusReserved')
+        }
+
+        console.log(state);
+        // return db.collection("requests").add(state);
 
     },
 
@@ -142,6 +185,6 @@ export const actions = {
         return db.collection('repositories').doc(id).get().then((doc) => {
             return doc.data();
         });
-    },
+    }
 }
 
