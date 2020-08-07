@@ -32,6 +32,7 @@ export default async function ({ store, $axios, redirect, route, error }) {
         store.commit('meta/setResearcher', usermeta.researcher)
         store.commit('meta/setOnboardingComplete', usermeta.onboardingComplete)
         store.commit('meta/setStripeCustomerId', usermeta.stripeCustomerId)
+        store.commit('meta/setOrganizations', usermeta.organizations)
         console.log('Meta Store', store.state.meta);
         if(usermeta && usermeta.stripe && usermeta.stripe.stripe_user_id){
             try{

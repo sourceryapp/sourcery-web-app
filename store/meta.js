@@ -116,6 +116,9 @@ export const mutations = {
     setStripeCustomerId(state, id){
         state.stripeCustomerId = id;
     },
+    setOrganizations(state, orgs){
+        state.organizations = orgs;
+    },
     reset(state) {
         const s = initialState()
         Object.keys(s).forEach(key => {
@@ -153,6 +156,21 @@ export const actions = {
             // Failed - User won't give access
             console.info('Geolocation failed in meta.js')
         });
+    },
+
+    /**
+     * Getting Organizations for the current user
+     * @todo Need to add organizations to each user before using this method
+     * @param {object} context
+     * @returns {array} A collection of organizations for the current user
+     */
+    async getOrganizations({state, commit, dispatch}){
+        if(Array.isArray(state.organizations)){
+            state.organizations.forEach(org => {
+
+            });
+        }
+        return [];
     }
 }
 

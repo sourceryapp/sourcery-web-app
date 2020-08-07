@@ -16,7 +16,7 @@
                     <v-list-tile-content v-if="this.user">
                         <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title v-if="isOrgMember">Member Account</v-list-tile-sub-title>
+                        <v-list-tile-sub-title v-if="isOrgMember">Organization Account</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>

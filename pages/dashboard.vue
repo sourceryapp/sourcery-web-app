@@ -117,7 +117,7 @@ export default {
     };
   },
   mounted() {
-
+      console.log(this.isOrgMember)
   }
 };
 </script>
