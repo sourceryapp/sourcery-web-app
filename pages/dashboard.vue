@@ -2,6 +2,23 @@
   <v-layout row>
     <v-flex xs12 sm6 offset-sm3>
       <h1>Dashboard</h1>
+
+
+        <template v-for="(snapshot, index) in reserved_requests">
+            <v-list two-line  :key="index" v-if="snapshot.size !== 0" class="mb-5">
+                <v-subheader>Jobs to Claim or Release at<br> {{ getOrganizationFromRequest(snapshot.docs[0]).name }}</v-subheader>
+                <v-divider></v-divider>
+                <v-list-tile v-for="request in snapshot.docs" :key="request.id">
+                    <v-list-tile-content>
+                        <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
+                        <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip>
+                </v-list-tile>
+                <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
+            </v-list>
+        </template>
+
       <v-list two-line>
         <v-subheader>Your Requests</v-subheader>
         <v-divider></v-divider>
@@ -80,6 +97,29 @@ export default {
   async asyncData({ params, store }) {
     if (store.getters['auth/activeUser'].uid) {
 
+
+        let organizations = null, reserve_queries = [], reserved_requests = null;
+        if(store.getters['meta/isOrgMember']){
+
+            // Get the organizations for the current user
+            organizations = await store.dispatch('meta/getOrganizations');
+
+            organizations.forEach(organization => {
+                reserve_queries.push(
+                    db.collection("requests")
+                    .where("status", "==", "reserved")
+                    .where("repository.organization", "==", organization.id)
+                    .orderBy("created_at", "desc")
+                    .get()
+                );
+            });
+
+            reserved_requests = await Promise.all(reserve_queries);
+            console.log("Reserved requests", reserved_requests);
+        }
+
+
+
         let requests = await db
         .collection("requests")
         .where("client_id", "==", store.getters['auth/activeUser'].uid)
@@ -98,7 +138,10 @@ export default {
          */
         return {
             requests: requests.docs.filter( doc => !doc.request().isArchived() ),
-            jobs: jobs.docs
+            jobs: jobs.docs,
+            organizations,
+            reserved_requests
+
         };
     }
   },
@@ -113,11 +156,27 @@ export default {
   data: function() {
     return {
       requests: [],
-      jobs: []
+      reserved_requests: [],
+      jobs: [],
+      organizations: [],
     };
   },
+  methods: {
+      getOrganizationFromRequest(request){
+          let orgId = request.data().repository.organization;
+          let found = {};
+          this.organizations.forEach(organization => {
+              if(organization.id == orgId){
+                  console.log("Found: ", organization.data());
+                found = organization.data();
+              }
+          });
+          return found;
+      }
+  },
   mounted() {
-      console.log(this.isOrgMember)
+      console.log(this.organizations)
+    //   console.log(this.reserved_requests)
   }
 };
 </script>

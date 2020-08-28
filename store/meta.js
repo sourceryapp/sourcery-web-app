@@ -164,11 +164,13 @@ export const actions = {
      * @param {object} context
      * @returns {array} A collection of organizations for the current user
      */
-    async getOrganizations({state, commit, dispatch}){
+    getOrganizations({state, commit, dispatch}){
         if(Array.isArray(state.organizations)){
+            let organizations = [];
             state.organizations.forEach(org => {
-
+                organizations.push( db.collection("organization").doc(org).get() );
             });
+            return Promise.all(organizations);
         }
         return [];
     }
