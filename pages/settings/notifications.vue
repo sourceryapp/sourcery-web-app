@@ -9,7 +9,7 @@
             </v-card-title>
             <v-card-text>
                 <v-switch
-                label="Receive alerts for nearby jobs."
+                label="Receive alerts for nearby jobs (email)."
                 v-model="agentBool"
                 :hint="alertHint"
                 :persistent-hint="false"
@@ -18,20 +18,33 @@
                 @change="updateNotifications"
                 :readonly="!deviceHasGeoLocation"
                 ></v-switch>
+
+                <v-switch
+                label="Receive alerts for nearby jobs (push notifications)."
+                v-model="pushBool"
+                :hint="alertHint"
+                :persistent-hint="false"
+                color="primary"
+                @change="getMessagingToken()"
+                :readonly="!deviceHasGeoLocation"
+                ></v-switch>
             </v-card-text>
         </v-card>
+        
         </v-container>
     </v-app>
 </template>
 
 <script>
-    import { Auth, db } from '~/plugins/firebase-client-init.js'
+    import { Auth, db, functions, messaging } from '~/plugins/firebase-client-init.js'
     import firebase from 'firebase/app'
 
     export default {
         data () {
             return {
                 agentBool: this.$store.state.meta.agentUpdates,
+                pushBool: this.$store.state.meta.agentPush,
+                //token: this.$store.state.meta.token,
                 updateSuccess: false,
                 alertHint: 'Please choose "Allow" if prompted by your device/browser.',
                 geoError: 'You need to enable location services to use this feature.',
@@ -47,6 +60,43 @@
                 this.$store.commit('meta/setAgent', this.agentBool)
                 this.$store.dispatch('meta/save', 'agentUpdates');
                 this.$toast.show('Notification Preference Saved!')
+            },
+
+            getMessagingToken () {
+                messaging.getToken().then((token) => {
+                        console.log("Token: ", token);
+                        //this.token = token;
+                        this.changeSubscription(token)
+                        this.$store.commit('meta/setToken', token)
+                        this.$store.dispatch('meta/save', 'token');
+                        this.$toast.show('Token Saved!')
+                })
+            },
+
+            changeSubscription: async function(token) {
+                this.$store.commit('meta/setPush', this.pushBool)
+                this.$store.dispatch('meta/save', 'agentPush');
+                this.$toast.show('Notification Preference Saved!')
+
+                /*if (this.pushBool == false || this.pushBool == null) {
+                    //Unsubscribe Here 
+                    console.log("Unsubscribing.")
+                    let topic = 'general';
+                    let subFunct = functions.httpsCallable('unsubscribeFromTopic');
+                    let data = await subFunct({token: token, topic: topic});
+                    console.log(data)
+                    return data;
+                }
+                else {
+                    //Subscribe Here
+                    console.log("Subscribing!")
+                    let topic = 'general';
+                    let subFunct = functions.httpsCallable('subscribeToTopic');
+                    let data = await subFunct({token: token, topic: topic});
+                    console.log(data)
+                    return data;
+                }
+                */
             }
         },
         mounted() {

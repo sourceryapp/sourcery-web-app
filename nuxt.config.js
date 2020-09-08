@@ -92,7 +92,9 @@ module.exports = {
 	 * @url https://pwa.nuxtjs.org/modules/workbox.html
      */
     workbox: {
-
+        importScripts: [
+            'firebase-messaging-sw.js'
+        ]
     },
 
     /**
@@ -115,8 +117,17 @@ module.exports = {
         // { src: '~/plugins/stripe', mode: 'client' },
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
         '~/plugins/firebase-auth.js',
-        '~/plugins/vue-instantsearch'
-	],
+        '~/plugins/vue-instantsearch',
+        '~/plugins/cloud-messaging.js'
+    ],
+    
+    /**pwa: {
+        // configure the workbox plugin
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+          swSrc: "~/firebase-messaging-sw.js"
+        }
+      },**/
 
 
     /**

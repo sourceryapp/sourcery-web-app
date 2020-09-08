@@ -16,7 +16,7 @@
                     <v-list-tile-content v-if="this.user">
                         <v-list-tile-title>{{this.user.displayName}}</v-list-tile-title>
                         <v-list-tile-sub-title>{{this.user.email}}</v-list-tile-sub-title>
-                        <v-list-tile-sub-title v-if="isOrgMember">Member Account</v-list-tile-sub-title>
+                        <v-list-tile-sub-title>Estimated Balance: {{this.balance}}</v-list-tile-sub-title>
                     </v-list-tile-content>
                 </v-list-tile>
             </v-list>
@@ -39,6 +39,25 @@
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+            </v-list>
+
+            <v-list dense class="pt-0" two-line>
+                <v-list-tile
+                    v-for="item in items2"
+                    :key="item.title"
+                    :to = "item.link"
+                    nuxt
+                    active-class="accent accent--text text--lighten-5"
+                >
+                    <v-list-tile-action>
+                    <v-icon>{{ item.icon }}</v-icon>
+                    </v-list-tile-action>
+
+                    <v-list-tile-content>
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+
                 <v-list-tile @click="dialog=true" nuxt active-class>
                     <v-list-tile-action>
                         <v-icon>power_settings_new</v-icon>
@@ -57,8 +76,8 @@
             <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon> -->
 
             <v-toolbar-title style="display:flex; justify-content:center; width: 100%" class="ma-0">
-                <nuxt-link :to="{ name: 'dashboard' }" id="wordmark-link">
-                    <img src="/img/beta-wordmark-brian.svg" id="logo" alt="Sourcery Logo">
+                <nuxt-link to="/" id="wordmark-link">
+                    <img src="/img/sourcery-wordmark.svg" id="logo" alt="Sourcery Logo">
                 </nuxt-link>
             </v-toolbar-title>
 
@@ -70,7 +89,7 @@
 		<v-content pa-0>
 			<v-container fill-height>
 				<v-layout
-						justify-center fill-height
+						justify-center
 				>
 
 					<nuxt/>
@@ -81,12 +100,12 @@
             :value="true"
             app
             fixed
-            v-if="user && onboardingComplete"
+            v-if="user"
         >
             <v-btn
                 flat
                 value="dashboard"
-                :to="{ name: 'dashboard' }"
+                to="/"
                 color="primary"
 
             >
@@ -163,44 +182,55 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import md5 from 'md5'
-
-    export default {
+    import md5 from 'md5'
+    import { messaging } from '~/plugins/firebase-client-init.js'
+	export default {
 		computed: {
+            user() {
+                return this.$store.getters['auth/activeUser']
+            },
             gravatar() {
                 return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
             },
-            ...mapGetters({
-                user: 'auth/activeUser',
-                isResearcher: 'meta/isResearcher',
-                isSourcerer: 'meta/isSourcerer',
-                balance: 'meta/balance',
-                canMakePayments: 'meta/canMakePayments',
-                onboardingComplete: 'meta/onboardingComplete',
-                isOrgMember: 'meta/isOrgMember'
-            })
+            balance() {
+                return this.$store.getters['meta/balance'];
+            }
 		},
 		methods: {
             async logout() {
                 await this.$store.dispatch('auth/signOut');
                 this.dialog=false;
                 this.$router.replace('/login')
-            }
+            },
+            /**listenTokenRefresh() {
+                const currentMessageToken = window.localStorage.getItem('messagingToken')
+                console.log('currentMessageToken', currentMessageToken);
+                if(!!currentMessageToken){
+                    messaging.onTokenRefresh(function() {
+                        messaging.getToken().then(function(token) {
+                            this.saveToken(token);
+                        }).catch(function(err) {
+                            console.log('Unable to retrieve refreshed token ', err);
+                        });
+                    });
+                }
+            },**/
 		},
         data: () => ({
             drawer: null,
             dialog: false,
             items1: [
                 { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
-                { title: 'Payouts', icon: 'account_balance', link: '/account/payouts'},
-                { title: 'Payments', icon: 'credit_card', link: '/account/credit-cards'},
-                { title: 'Email Notifications', icon: 'notifications', link: '/settings/notifications'},
+                { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
+                { title: 'Notifications', icon: 'notifications', link: '/settings/notifications'},
                 { title: 'History', icon: 'hourglass_full', link: '/request/history'},
-                { title: 'Privacy Policy', icon: 'enhanced_encryption', link: '/privacy'},
-                { title: 'Terms of Use', icon: 'subject', link: '/terms'},
+                { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
+            ],
+            items2: [
+                { title: 'Terms and Conditions', icon: 'subject', link: '/settings/terms_conditions'},
                 { title: 'Help', icon: 'help', link: '/account/help'},
                 { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
+                // { title: 'Rate', icon: 'star', link: ''},
             ],
         }),
 
@@ -211,6 +241,7 @@ import md5 from 'md5'
             // console.log('Firebase: ', firebase);
             // console.log(this.$store);
             // console.log('Meta', this.$store.state.meta)
+            //this.listenTokenRefresh();
         }
 	}
 </script>
