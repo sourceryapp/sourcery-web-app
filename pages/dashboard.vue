@@ -14,8 +14,9 @@
                         <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip>
+
                 </v-list-tile>
-                <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
+                <!-- <v-divider v-if="snapshot.size !== index" :key="`divider-${index}`"></v-divider> -->
             </v-list>
         </template>
 
