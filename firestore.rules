@@ -63,5 +63,18 @@ service cloud.firestore {
       allow read, update: if request.auth.uid == userId;
       allow delete: if false;
     }
+
+  //suggestions
+  	match /suggestRepo/{suggestion} {
+    	allow create: if request.auth != null;
+      allow read, update, delete: if false;
+    }
+
+
+  // organizations
+  	match /organization/{document} {
+    	allow read: if request.auth != null;
+      // allow read, update, delete: if false;
+    }
   }
 }

@@ -52,7 +52,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "chromedriver": "^83.0.0",
+    "chromedriver": "^85.0.0",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-promise": "^4.1.1",
