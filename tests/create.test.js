@@ -17,7 +17,7 @@ const faker = require('faker');
 module.exports = {
 
     // Set true to disable this test
-    disabled: false,
+    disabled: true,
 
     'Page: /create without Credit Card' : function (browser) {
         browser

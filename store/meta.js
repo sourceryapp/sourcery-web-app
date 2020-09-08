@@ -13,6 +13,8 @@ const initialState = () => {
         balance: {},
         phone: null,
         agentUpdates: null,
+        agentPush: null,
+        token: null,
         newsUpdates: null,
         requestUpdates: null,
         location: null,
@@ -91,6 +93,12 @@ export const mutations = {
     },
     setAgent(state, obj=null) {
         state.agentUpdates = obj;
+    },
+    setPush(state, obj=null) {
+        state.agentPush = obj;
+    },
+    setToken(state, obj=null) {
+        state.token = obj;
     },
     setNews(state, obj=null) {
         state.newsUpdates = obj;

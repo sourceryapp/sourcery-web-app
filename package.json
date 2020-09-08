@@ -44,6 +44,7 @@
     "md5": "^2.2.1",
     "nuxt": "2",
     "paymentfont": "^1.2.5",
+    "register-service-worker": "^1.7.1",
     "search-insights": "^1.4.0",
     "vue-cookie-law": "^1.11.0",
     "vue-instantsearch": "^2.7.0",
@@ -51,7 +52,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "chromedriver": "^83.0.0",
+    "chromedriver": "^85.0.0",
     "eslint": "^5.16.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-promise": "^4.1.1",

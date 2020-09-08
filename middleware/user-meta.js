@@ -26,6 +26,8 @@ export default async function ({ store, $axios, redirect, route, error }) {
         store.commit('meta/setStripe', usermeta.stripe)
         store.commit('meta/setPhone', usermeta.phone)
         store.commit('meta/setAgent', usermeta.agentUpdates)
+        store.commit('meta/setPush', usermeta.agentPush)
+        store.commit('meta/setToken', usermeta.token)
         store.commit('meta/setNews', usermeta.newsUpdates)
         store.commit('meta/setRequest', usermeta.requestUpdates)
         store.commit('meta/setSourcerer', usermeta.sourcerer)
