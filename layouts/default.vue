@@ -182,68 +182,76 @@
 </template>
 
 <script>
-    import md5 from 'md5'
-    import { messaging } from '~/plugins/firebase-client-init.js'
-	export default {
-		computed: {
-            user() {
-                return this.$store.getters['auth/activeUser']
-            },
-            gravatar() {
-                return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
-            },
-            balance() {
-                return this.$store.getters['meta/balance'];
-            }
-		},
-		methods: {
-            async logout() {
-                await this.$store.dispatch('auth/signOut');
-                this.dialog=false;
-                this.$router.replace('/login')
-            },
-            /**listenTokenRefresh() {
-                const currentMessageToken = window.localStorage.getItem('messagingToken')
-                console.log('currentMessageToken', currentMessageToken);
-                if(!!currentMessageToken){
-                    messaging.onTokenRefresh(function() {
-                        messaging.getToken().then(function(token) {
-                            this.saveToken(token);
-                        }).catch(function(err) {
-                            console.log('Unable to retrieve refreshed token ', err);
-                        });
-                    });
-                }
-            },**/
-		},
-        data: () => ({
-            drawer: null,
-            dialog: false,
-            items1: [
-                { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
-                { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
-                { title: 'Notifications', icon: 'notifications', link: '/settings/notifications'},
-                { title: 'History', icon: 'hourglass_full', link: '/request/history'},
-                { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
-            ],
-            items2: [
-                { title: 'Terms and Conditions', icon: 'subject', link: '/settings/terms_conditions'},
-                { title: 'Help', icon: 'help', link: '/account/help'},
-                { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
-                // { title: 'Rate', icon: 'star', link: ''},
-            ],
-        }),
+import { mapGetters } from 'vuex'
+import md5 from 'md5'
+import { messaging } from '~/plugins/firebase-client-init.js'
 
-        props: {
-            source: String
+export default {
+    computed: {
+        user() {
+            return this.$store.getters['auth/activeUser']
         },
-        mounted() {
-            // console.log('Firebase: ', firebase);
-            // console.log(this.$store);
-            // console.log('Meta', this.$store.state.meta)
-            //this.listenTokenRefresh();
-        }
-	}
+        gravatar() {
+            return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`;
+        },
+        ...mapGetters({
+            user: 'auth/activeUser',
+            isResearcher: 'meta/isResearcher',
+            isSourcerer: 'meta/isSourcerer',
+            balance: 'meta/balance',
+            canMakePayments: 'meta/canMakePayments',
+            onboardingComplete: 'meta/onboardingComplete',
+            isOrgMember: 'meta/isOrgMember'
+        })
+    },
+    methods: {
+        async logout() {
+            await this.$store.dispatch('auth/signOut');
+            this.dialog=false;
+            this.$router.replace('/login')
+        },
+        /**listenTokenRefresh() {
+            const currentMessageToken = window.localStorage.getItem('messagingToken')
+            console.log('currentMessageToken', currentMessageToken);
+            if(!!currentMessageToken){
+                messaging.onTokenRefresh(function() {
+                    messaging.getToken().then(function(token) {
+                        this.saveToken(token);
+                    }).catch(function(err) {
+                        console.log('Unable to retrieve refreshed token ', err);
+                    });
+                });
+            }
+        },**/
+    },
+    data: () => ({
+        drawer: null,
+        dialog: false,
+        items1: [
+            { title: 'Edit Profile', icon: 'person', link: '/account/profile'},
+            { title: 'Payment Options', icon: 'credit_card', link: '/account/payment'},
+            { title: 'Notifications', icon: 'notifications', link: '/settings/notifications'},
+            { title: 'History', icon: 'hourglass_full', link: '/request/history'},
+            { title: 'Privacy', icon: 'enhanced_encryption', link: '/settings/privacy'}
+        ],
+        items2: [
+            { title: 'Terms and Conditions', icon: 'subject', link: '/settings/terms_conditions'},
+            { title: 'Help', icon: 'help', link: '/account/help'},
+            { title: 'Feedback', icon: 'feedback', link: '/settings/feedback'},
+            // { title: 'Rate', icon: 'star', link: ''},
+        ],
+    }),
+
+    props: {
+        source: String
+    },
+    mounted() {
+        // console.log('Firebase: ', firebase);
+        // console.log(this.$store);
+        // console.log('Meta', this.$store.state.meta)
+        //this.listenTokenRefresh();
+    }
+}
 </script>
 
 <style>
