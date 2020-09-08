@@ -5,19 +5,29 @@
 
 
         <template v-for="(snapshot, index) in reserved_requests">
-            <v-list two-line  :key="index" v-if="snapshot.size !== 0" class="mb-5">
-                <v-subheader>Jobs to Claim or Release at<br> {{ getOrganizationFromRequest(snapshot.docs[0]).name }}</v-subheader>
+            <v-card flat :key="index" v-if="snapshot.size !== 0" class="mb-5">
+                <v-card-title>Jobs to Claim or Release at<br> {{ getOrganizationFromRequest(snapshot.docs[0]).name }}</v-card-title>
                 <v-divider></v-divider>
-                <v-list-tile v-for="request in snapshot.docs" :key="request.id">
-                    <v-list-tile-content>
+                <v-card-text>
+
+                    <div v-for="request in snapshot.docs" :key="request.id">
+                        <v-checkbox class="institutional-job" :hide-details="true" v-model="selected" :label="request.data().citation" :value="request.id"></v-checkbox>
+                    </div>
+                    <!-- <v-list-tile-content>
                         <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
                         <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
                     </v-list-tile-content>
-                    <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip>
+                    <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip> -->
 
-                </v-list-tile>
+
+
+                </v-card-text>
+                <v-card-actions style="display: flex; justify-content: space-between">
+                    <v-btn  color="primary" :disabled="selected.length < 1">Release</v-btn>
+                    <v-btn  color="primary" :disabled="selected.length < 1">Claim</v-btn>
+                </v-card-actions>
                 <!-- <v-divider v-if="snapshot.size !== index" :key="`divider-${index}`"></v-divider> -->
-            </v-list>
+            </v-card>
         </template>
 
       <v-list two-line>
@@ -160,6 +170,7 @@ export default {
       reserved_requests: [],
       jobs: [],
       organizations: [],
+      selected: []
     };
   },
   methods: {
@@ -183,4 +194,8 @@ export default {
 </script>
 
 <style scoped>
+.institutional-job {
+    border: 1px solid var(--v-primary-base);
+    padding: 1em
+}
 </style>
