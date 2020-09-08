@@ -11,22 +11,13 @@
                 <v-card-text>
 
                     <div v-for="request in snapshot.docs" :key="request.id">
-                        <v-checkbox class="institutional-job" :hide-details="true" v-model="selected" :label="request.data().citation" :value="request.id"></v-checkbox>
+                        <v-checkbox color="primary" class="institutional-job" :hide-details="true" v-model="selected" :label="request.data().citation" :value="request.id"></v-checkbox>
                     </div>
-                    <!-- <v-list-tile-content>
-                        <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
-                        <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
-                    </v-list-tile-content>
-                    <v-chip color="secondary" text-color="white">{{request.request().prettyStatus()}}</v-chip> -->
-
-
-
                 </v-card-text>
                 <v-card-actions style="display: flex; justify-content: space-between">
                     <v-btn  color="primary" :disabled="selected.length < 1">Release</v-btn>
                     <v-btn  color="primary" :disabled="selected.length < 1">Claim</v-btn>
                 </v-card-actions>
-                <!-- <v-divider v-if="snapshot.size !== index" :key="`divider-${index}`"></v-divider> -->
             </v-card>
         </template>
 
