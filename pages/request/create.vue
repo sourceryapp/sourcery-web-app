@@ -47,18 +47,24 @@
                                             <v-list-tile
                                                 :key="item.objectID"
                                                 avatar
+                                                ripple
                                                 @click="repoSelection(item)"
+                                                :class="item.objectID === repository_id ? 'deep-purple lighten-4' : ''"
                                             >
 
                                                 <v-list-tile-content>
                                                     <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                                                    <v-list-tile-sub-title>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
+                                                    <v-list-tile-sub-title><span v-if="item.institution">{{item.institution}}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
                                                 </v-list-tile-content>
 
                                                 <v-list-tile-action>
-                                                    <v-btn icon ripple v-if="item.objectID === repository_id">
-                                                        <v-icon color="green lighten-1">check_circle</v-icon>
-                                                    </v-btn>
+                                                    <v-tooltip top>
+                                                        <template v-slot:activator="{ on }" v-if="isMemberRepo(item)">
+                                                            <v-icon color="primary" dark v-on="on">business</v-icon>
+                                                        </template>
+                                                        <span>Partner Institution</span>
+                                                    </v-tooltip>
+
                                                 </v-list-tile-action>
                                             </v-list-tile>
 
@@ -196,7 +202,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { db, functions } from '~/plugins/firebase-client-init.js'
 import { Utils } from '~/modules/utilities'
 import algoliasearch from 'algoliasearch/lite';
@@ -241,7 +247,8 @@ import 'instantsearch.css/themes/algolia-min.css';
                 isResearcher: 'meta/isResearcher',
                 isSourcerer: 'meta/isSourcerer',
                 balance: 'meta/balance',
-                canMakePayments: 'meta/canMakePayments'
+                canMakePayments: 'meta/canMakePayments',
+                isMemberRepo: 'create/isMemberRepo',
             }),
 
             /**
@@ -313,7 +320,7 @@ import 'instantsearch.css/themes/algolia-min.css';
                 console.log(id);
             },
             repoSelection(repo){
-                console.log(repo.objectID);
+                // console.log(repo.objectID, repo);
                 this.repository_id = repo.objectID;
             },
 

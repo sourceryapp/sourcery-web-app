@@ -23,7 +23,7 @@ const initialState = () => {
         sourcerer: false,
         stripeCustomerId: false,
         cards: false,
-        organizations: false
+        organizations: []
     }
 }
 
@@ -60,7 +60,7 @@ export const getters = {
     /**
      * Is this user an organization member?
      */
-    isOrgMember: (state, getters) => ( (state.organizations !== false) && Array.isArray(state.organizations) ),
+    isOrgMember: (state, getters) => ( Array.isArray(state.organizations) && (state.organizations.length > 0) ),
 
     /**
      * Can the user receive payments?
@@ -124,6 +124,9 @@ export const mutations = {
     setStripeCustomerId(state, id){
         state.stripeCustomerId = id;
     },
+    setOrganizations(state, orgs){
+        state.organizations = orgs;
+    },
     reset(state) {
         const s = initialState()
         Object.keys(s).forEach(key => {
@@ -161,6 +164,23 @@ export const actions = {
             // Failed - User won't give access
             console.info('Geolocation failed in meta.js')
         });
+    },
+
+    /**
+     * Getting Organizations for the current user
+     * @todo Need to add organizations to each user before using this method
+     * @param {object} context
+     * @returns {array} A collection of organizations for the current user
+     */
+    getOrganizations({state, commit, dispatch}){
+        if(Array.isArray(state.organizations)){
+            let organizations = [];
+            state.organizations.forEach(org => {
+                organizations.push( db.collection("organization").doc(org).get() );
+            });
+            return Promise.all(organizations);
+        }
+        return [];
     }
 }
 
