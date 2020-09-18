@@ -105,7 +105,7 @@
             <v-btn
                 flat
                 value="dashboard"
-                to="/"
+                to="/dashboard"
                 color="primary"
 
             >

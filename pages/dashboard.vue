@@ -6,17 +6,16 @@
 
         <template v-for="(snapshot, index) in reserved_requests">
             <v-card flat :key="index" v-if="snapshot.size !== 0" class="mb-5">
-                <v-card-title>Jobs to Claim or Release at<br> {{ getOrganizationFromRequest(snapshot.docs[0]).name }}</v-card-title>
+                <v-card-title>Jobs to Claim or Release</v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-
                     <div v-for="request in snapshot.docs" :key="request.id">
-                        <v-checkbox color="primary" class="institutional-job" :hide-details="true" v-model="selected" :label="request.data().citation" :value="request.id"></v-checkbox>
+                        <v-checkbox color="primary" class="institutional-job" :hint="request.data().repository.name + ', ' + request.data().repository.institution" :persistent-hint="true"  v-model="selected" :label="request.data().citation" :value="request.id"></v-checkbox>
                     </div>
                 </v-card-text>
                 <v-card-actions style="display: flex; justify-content: space-between">
-                    <v-btn  color="primary" :disabled="selected.length < 1">Release</v-btn>
-                    <v-btn  color="primary" :disabled="selected.length < 1">Claim</v-btn>
+                    <v-btn color="primary" :disabled="selected.length < 1" @click="release()">Release</v-btn>
+                    <v-btn color="primary" :disabled="selected.length < 1" @click="claim()">Claim</v-btn>
                 </v-card-actions>
             </v-card>
         </template>
@@ -175,6 +174,38 @@ export default {
               }
           });
           return found;
+      },
+      claim(){
+          console.log(this.reserved_requests);
+          let updates = [];
+          this.selected.forEach(item => {
+              updates.push(
+                db.collection("requests").doc(item).update({
+                    status: 'picked_up',
+                    vendor_id: this.user.uid
+                })
+              );
+          });
+
+          Promise.all(updates).then(values => {
+              // Not elegant. Need to change this
+              window.location.reload();
+          });
+      },
+      release(){
+          let updates = [];
+          this.selected.forEach(item => {
+              updates.push(
+                db.collection("requests").doc(item).update({
+                    status: 'pending'
+                })
+              );
+          });
+
+          Promise.all(updates).then(values => {
+              // Not elegant. Need to change this
+              window.location.reload();
+          });
       }
   },
   mounted() {
@@ -190,3 +221,5 @@ export default {
     padding: 1em
 }
 </style>
+
+
