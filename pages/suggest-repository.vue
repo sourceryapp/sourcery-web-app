@@ -11,7 +11,6 @@
                 label="Repository Name"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -23,7 +22,6 @@
                 label="City"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -35,7 +33,6 @@
                 label="Institution"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -47,7 +44,6 @@
                 label="Street Address"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -59,7 +55,6 @@
                 label="Country"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -71,7 +66,6 @@
                 label="Your Email Address"
                 required
                 clearable
-                autofocus="autofocus"
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
@@ -86,7 +80,10 @@
 
 <script>
 import suggestRepo from '~/modules/suggestRepo';
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
+    name: "suggest-repository",
     data() {
         return {
             name: "",
@@ -96,6 +93,11 @@ export default {
             country: "",
             email: ""
         }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'auth/activeUser'
+        }),
     },
     methods: {
         async submitRepository() {
@@ -107,8 +109,8 @@ export default {
                         institution: this.institution,
                         address: this.address,
                         country: this.country,
-                        
-                        text: "A new repository suggestion as been made from" + this.email 
+
+                        text: "A new repository suggestion as been made from" + this.email
                     });
 
                     // Message to user
@@ -120,6 +122,9 @@ export default {
                     // Return to previous page
                     //this.$router.go(-1);
         }
+    },
+    mounted(){
+        this.email = this.user.email;
     }
 }
 </script>
