@@ -9,7 +9,7 @@ const globals = require("./globals");
 module.exports = {
 
   // Set true to disable this test
-  disabled: false,
+  disabled: true,
 
   'Page: /' : function (browser) {
     browser

@@ -1,12 +1,6 @@
 <template>
         <v-layout row>
 
-
-
-
-
-
-
             <v-flex xs12 sm8 offset-sm2>
 
                 <h1 style="width:100%">Create Request</h1>
@@ -40,36 +34,45 @@
                         <!-- <span class="grey--text">1,000 miles of wonder</span> -->
                     </div>
                     </v-card-title>
-
                     <v-card-text>
-                        <v-select
-                        id="area"
-                        name="area"
-                        :items="areaSelections"
-                        item-text="value"
-                        item-value="key"
-                        label="City, State"
-                        v-model="area"
-                        >Loading...</v-select>
+                        <!-- https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/ -->
+                        <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
+                                <ais-search-box placeholder="Repository Name" v-model="repoSearchText" />
+                                <ais-configure
+                                :hitsPerPage="15"
+                                />
+                                <ais-hits>
+                                    <v-list two-line subheader slot-scope="{items}" id="repo-search">
+                                        <template  v-for="(item, index) in items">
+                                            <v-list-tile
+                                                :key="item.objectID"
+                                                avatar
+                                                ripple
+                                                @click="repoSelection(item)"
+                                                :class="item.objectID === repository_id ? 'deep-purple lighten-4' : ''"
+                                            >
 
-                        <v-select
-                        id="location"
-                        name="location"
-                        :items="repositories"
-                        v-if="area"
-                        item-text="name"
-                        item-value="id"
-                        label="Choose a location"
-                        v-model="request.repository_id"
-                        :loading="loadingLocations"
-                        >
-                            <template slot="item" slot-scope="data" >
-                                <v-list-tile-content>
-                                    <v-list-tile-title @click="setName(data.item.name)" v-html="data.item.name"></v-list-tile-title>
-                                    <v-list-tile-sub-title v-html="data.item.institution"></v-list-tile-sub-title>
-                                </v-list-tile-content>
-                            </template>
-                        </v-select>
+                                                <v-list-tile-content>
+                                                    <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                                                    <v-list-tile-sub-title><span v-if="item.institution">{{item.institution}}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
+                                                </v-list-tile-content>
+
+                                                <v-list-tile-action>
+                                                    <v-tooltip top>
+                                                        <template v-slot:activator="{ on }" v-if="isMemberRepo(item)">
+                                                            <v-icon color="primary" dark v-on="on">business</v-icon>
+                                                        </template>
+                                                        <span>Partner Institution</span>
+                                                    </v-tooltip>
+
+                                                </v-list-tile-action>
+                                            </v-list-tile>
+
+                                            <v-divider :key="index"></v-divider>
+                                        </template>
+                                    </v-list>
+                                </ais-hits>
+                        </ais-instant-search>
 
                     </v-card-text>
                     <v-card-actions>
@@ -78,6 +81,7 @@
 
                         >
                             <v-btn
+                            id="next-repo"
                             color="primary"
                             @click="formState=2"
                             :disabled="!request.repository_id"
@@ -104,7 +108,7 @@
                             name="citation"
                             label="Citation"
                             multi-line="true"
-                            v-model="request.citation"
+                            v-model="citation"
                             auto-grow
                         ></v-textarea>
 
@@ -119,8 +123,9 @@
                             @click="formState=1"
                             >Previous</v-btn>
                             <v-btn
+                            id="next-citation"
                             color="primary"
-                            :disabled="request.citation.length < 10"
+                            :disabled="citation.length < 10"
                             @click="formState=3"
                             >Next</v-btn>
 
@@ -136,8 +141,8 @@
 
                     <v-card-title primary-title>
                     <div>
-                        <div class="headline">Estimated Number of Pages</div>
-                        <span class="grey--text text--darken-1">You will be charged immediately for the base rate, and charged once it is picked up for the rest.</span>
+                        <div class="headline">Estimated Number of Pages Needed</div>
+                        <span class="grey--text text--darken-1"></span>
                     </div>
                     </v-card-title>
 
@@ -146,18 +151,19 @@
                         <v-layout>
                             <v-flex xs6 >
                                 <p></p>
-                                <v-select
+                                <v-text-field
                                     id="pages"
                                     name="pages"
-                                    v-model="request.pages"
-                                    :items="pages"
+                                    v-model="pages"
                                     label="Maximum Pages"
-                                    @change="getCost"
-                                ></v-select>
+                                    type="number"
+                                    min="1"
+                                ></v-text-field>
+
                             </v-flex>
                             <v-flex xs5 offset-xs1 v-if="request.pricing.total">
                                 <p class="caption mb-0 primary--text">Cost Will Not Exceed</p>
-                                <p class="display-1 pt-0 font-weight-bold">{{ toDollars(request.pricing.total) }}</p>
+                                <p class="display-1 pt-0 font-weight-bold" id="price">{{ toDollars(request.pricing.total) }}</p>
                             </v-flex>
                         </v-layout>
 
@@ -172,8 +178,9 @@
                             @click="formState=2"
                             >Previous</v-btn>
                             <v-btn
-                            :disabled="!request.pricing.total || !canMakePayments"
-                            :loading="loadingCost"
+                            id="submit-request"
+                            :disabled="!request.pricing.total || !canMakePayments || isSaving"
+                            :loading="loadingCost || isSaving"
                             @click="submitRequest"
                             class="primary"
                             >
@@ -195,9 +202,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { db, functions } from '~/plugins/firebase-client-init.js'
 import { Utils } from '~/modules/utilities'
+import algoliasearch from 'algoliasearch/lite';
+import 'instantsearch.css/themes/algolia-min.css';
 
 	export default {
         name: "create",
@@ -205,14 +214,7 @@ import { Utils } from '~/modules/utilities'
 		data() {
 			return {
                 areas: null,
-                repositories: ["Loading..."],
-                repositoryName: null,
-                request: {
-                    pages: 0,
-                    citation: ''
-                },
 			    active: null,
-				suggestions: [],
                 loading: false,
                 loadingCost: false,
 				errors: {
@@ -220,150 +222,87 @@ import { Utils } from '~/modules/utilities'
 					repository: [],
 					citation: [],
 				},
-                numPages: 0,
-                pages: [
-                    5,
-                    10,
-                    15,
-                    20,
-                    25,
-                    30,
-                    35,
-                    40,
-                    45,
-                    50
-                ],
                 formState: 1,
-                area: null,
-                loadingLocations: true
+                isSaving: false,
+
+                // Algolia
+                searchClient: algoliasearch(
+                    process.env.ALGOLIA.appId,
+                    process.env.ALGOLIA.apiKey
+                ),
+                searchIndex: process.env.ALGOLIA.indexName,
+                repoSearchText: ''
 			}
         },
-        async asyncData ({ params, store }) {
-            let areaSelections = [];
-            let areas = new Map();
-            await db.collection('areas')
-                .where('country', '==', 'US')
-                .orderBy('state')
-                .orderBy('city')
-                .get()
-                .then((snapshot) => {
-                    snapshot.docs.forEach(doc => {
-                        areaSelections.push({
-                            key: doc.id,
-                            value: `${doc.data().city}, ${doc.data().state}`
-                        })
-                        areas.set(doc.id, doc.data())
-                    });
-                })
-
-            return {
-                areaSelections: areaSelections,
-                areas: areas,
-
-                // Set a random citation during development.
-                // @todo Remove random citations before launch.
-                request: {
-                    pages: 0,
-                    citation: '', //citations[Math.floor(Math.random()*citations.length)],
-                    pricing: {
-                        total: 0
-                    }
-                }
-            }
-        },
+        async asyncData ({ params, store }) {},
         computed: {
             usermeta: function(){
                 return this.$store.state.meta
+            },
+            request: function() {
+                return this.$store.state.create;
             },
             ...mapGetters({
                 user: 'auth/activeUser',
                 isResearcher: 'meta/isResearcher',
                 isSourcerer: 'meta/isSourcerer',
                 balance: 'meta/balance',
-                canMakePayments: 'meta/canMakePayments'
+                canMakePayments: 'meta/canMakePayments',
+                isMemberRepo: 'create/isMemberRepo',
             }),
-        },
-        mounted() {
+
+            /**
+             * Mapping items to the Vuex Store
+             * @url https://vuex.vuejs.org/guide/forms.html#two-way-computed-property
+             */
+            citation: {
+                get () {
+                    return this.$store.state.create.citation
+                },
+                set (value) {
+                    this.$store.commit('create/setCitation', value)
+                }
+            },
+            pages:{
+                get () {
+                    return this.$store.state.create.pages
+                },
+                set (value) {
+                    this.getCost();
+                    this.$store.commit('create/setPages', value)
+                }
+            },
+            repository_id:{
+                get () {
+                    return this.$store.state.create.repository_id
+                },
+                set (value) {
+                    this.$store.commit('create/setRepositoryId', value)
+                }
+            },
         },
         watch: {
-            /**
-             * Update repositories after the Area field changes
-             */
-            area: async function (newArea, oldArea) {
-                let area = this.areas.get(newArea);
-                this.loadingLocations = true;
-                let repositoriesList = [];
-                let repQuery = await db.collection('repositories')
-                    .where('state', '==', area.state)     // Matches state
-                    .orderBy('institution')
-                    .orderBy('name')
-                    .get()
-                    .then((snapshot) => {
-                        snapshot.docs.forEach(doc => {
-                            // Check if the result matches the chosen city or nearby cities
-                            if(doc.data().city == area.city || area.includes.indexOf(doc.data().city)){
-                                repositoriesList.push({
-                                    id: doc.id,
-                                    name: doc.data().name,
-                                    institution: doc.data().institution
-                                })
-                            }
-                        });
-                    })
-                this.loadingLocations = false;
-                this.repositories = repositoriesList;
+            repoSearchText: function(newVal, oldVal){
+                /**
+                 * The search text has changed, so we need to
+                 * reset the repository_id
+                 */
+                this.repository_id = null;
             }
         },
 		methods: {
 			async submitRequest() {
-                // Generate a label for the request
-                this.request.label = this.request.citation.match(/^(\w(\s*))+/)[0];
-
-				this.errors.citation = []
-				this.errors.repository = []
-				this.errors.label = []
-                this.loading = true
-                this.loadingCost = true;
-
-                let router = this.$router;
-
-                // @todo Request should be moved to Vuex and managed thru the store
-                await db.collection("requests").add({
-                    label: this.request.label,
-                    pages: this.request.pages,
-                    totalPages: 0,
-                    repository_id: this.request.repository_id,
-                    repository: await this.getRepository( this.request.repository_id ),
-					citation: this.request.citation,
-                    client_id: this.$store.getters['auth/activeUser'].uid,
-                    status: "pending",
-                    created_at: new Date(),
-                    vendor_id: "",
-                    attachments: [],
-                    pricing: this.request.pricing
-                })
-                .then( async (ref) => {
-                    console.log(`Imported "${ref.id}"`);
-
-                    // Success
-                    this.$toast.show('Your request was sent.', {
-                        onComplete: () => {
-                            router.push('/dashboard')
-                        }
-                    })
-                })
-                .catch(function(error){
-                    console.error(error);
-                })
+                this.isSaving = true;
+                this.$store.dispatch('create/insert').then(snapshot => {
+                    this.$toast.success('Your request has been submitted!')
+                    this.isSaving = false;
+                    this.$router.push({ name: 'dashboard' })
+                }).catch(error => {
+                    this.isSaving = false;
+                    this.$toast.error('There was a problem saving your request.')
+                });
             },
-            async getRepository(id){
-                return await db.collection('repositories')
-                    .doc(id)
-                    .get()
-                    .then((doc) => {
-                        return doc.data();
-                    })
-            },
+
             async getCost(){
                 this.loadingCost = true;
                 var cost = functions.httpsCallable('cost');
@@ -374,13 +313,21 @@ import { Utils } from '~/modules/utilities'
                 this.request.pricing = costObj.data;
                 this.loadingCost = false;
             },
-            setName(name){
-                this.repositoryName = name;
-            },
             toDollars(cents){
                 return Utils.currencyFormat(cents)
-            }
-		}
+            },
+            testSelect(id){
+                console.log(id);
+            },
+            repoSelection(repo){
+                // console.log(repo.objectID, repo);
+                this.repository_id = repo.objectID;
+            },
+
+        },
+        mounted() {
+            // console.log(this.request);
+        }
 	}
 </script>
 
@@ -389,4 +336,16 @@ import { Utils } from '~/modules/utilities'
         width: 80%;
         margin: 0 auto;
     }
+
+    #repo-search {
+        height: 200px;
+        overflow-y: scroll;
+    }
+
+    /* .checkmark {
+        display:none;
+    }
+    .active .checkmark{
+        display: inline-block;
+    } */
 </style>
