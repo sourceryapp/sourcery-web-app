@@ -7,8 +7,14 @@ jobs:
   build_and_preview:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: yarn install && nuxt generate
+      - name: "Checkout Master"
+        uses: actions/checkout@v2
+      - name: webfactory/ssh-agent
+        uses: webfactory/ssh-agent@v0.3.0
+        with:
+            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - run: yarn install --ignore-engines
+      - run: NODE_ENV=development yarn run generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
