@@ -10,7 +10,7 @@
                     type="info"
                     class="mt-4 mb-4"
                     >
-                    During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.
+                    During the beta, users can request documents located in the Boston, New York, and Washington, D.C. metro areas, and at the University of Connecticut.
                 </v-alert>
 
                 <v-alert
