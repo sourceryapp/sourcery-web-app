@@ -14,19 +14,9 @@
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
+                :rules="[rules.required]"
                 ></v-text-field>
-                <v-text-field
-                type="text"
-                name="city"
-                v-model="city"
-                label="City"
-                required
-                clearable
-                validate-on-blur
-                box
-                background-color="#F3F1F6"
-                ></v-text-field>
-                <v-text-field
+                 <v-text-field
                 type="text"
                 name="institution"
                 v-model="institution"
@@ -36,12 +26,24 @@
                 validate-on-blur
                 box
                 background-color="#F3F1F6"
+                :rules="[rules.required]"
                 ></v-text-field>
                 <v-text-field
                 type="text"
                 name="address"
                 v-model="address"
                 label="Street Address"
+                required
+                clearable
+                validate-on-blur
+                box
+                background-color="#F3F1F6"
+                ></v-text-field>
+                <v-text-field
+                type="text"
+                name="city"
+                v-model="city"
+                label="City"
                 required
                 clearable
                 validate-on-blur
@@ -70,8 +72,8 @@
                 box
                 background-color="#F3F1F6"
                 ></v-text-field>
-                <v-btn color="red" dark to="/dashboard">Cancel</v-btn>
-                <v-btn color="teal darken-1" dark type="submit">Submit</v-btn>
+                <v-btn color="red" dark to="/request/create">Cancel</v-btn>
+                <v-btn color="primary" dark type="submit">Submit</v-btn>
             </v-form>
         </v-flex>
     </v-layout>
@@ -91,7 +93,10 @@ export default {
             institution: "",
             address: "",
             country: "",
-            email: ""
+            email: "",
+            rules: {
+                required: value => !!value || 'Required.',
+            }
         }
     },
     computed: {
@@ -101,7 +106,10 @@ export default {
     },
     methods: {
         async submitRepository() {
-            // Store the data
+
+            // Validate the form
+            if(this.$refs.repoForm.validate()){
+                    // Store the data
                     await suggestRepo.send({
                         from: this.email,
                         name: this.name,
@@ -120,7 +128,8 @@ export default {
                     this.$refs.repoForm.reset();
 
                     // Return to previous page
-                    //this.$router.go(-1);
+                    this.$router.go(-1);
+            }
         }
     },
     mounted(){

@@ -11,7 +11,7 @@ class suggestRepo {
     /**
      * To: address
      */
-    to = 'support@sourceryapp.org';
+    to = 'research.tube.app@gmail.com';
 
     /**
      * From Address
