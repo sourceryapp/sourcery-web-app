@@ -6,7 +6,7 @@ import 'firebase/firestore'
 import 'firebase/auth';
 import 'firebase/storage';
 import 'firebase/functions';
-import 'firebase/messaging'
+import 'firebase/messaging';
 
 /**
  * Our custom extensions/methods to Firestore
@@ -43,13 +43,17 @@ if(process.env.EMULATOR){
     });
 }
 
+try {
+    const messaging = firebase.messaging();
+  } catch (err) {
+    console.log(err);
+  }
 
 export const db = firestore;
 export const GeoPoint = firebase.Geopoint;
 export const storage = firebase.storage();
 export const FieldValue = firebase.firestore.FieldValue;
 export const functions = firebase.functions();
-export const messaging = firebase.messaging();
 
 // Auth
 firebase.auth().useDeviceLanguage();

@@ -19,7 +19,7 @@
                 :readonly="!deviceHasGeoLocation"
                 ></v-switch>
 
-                <v-switch
+                <!--<v-switch
                 label="Receive alerts for nearby jobs (push notifications)."
                 v-model="pushBool"
                 :hint="alertHint"
@@ -27,7 +27,7 @@
                 color="primary"
                 @change="getMessagingToken()"
                 :readonly="!deviceHasGeoLocation"
-                ></v-switch>
+                ></v-switch>-->
             </v-card-text>
         </v-card>
         
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-    import { Auth, db, functions, messaging } from '~/plugins/firebase-client-init.js'
+    import { Auth, db, functions, /**messaging**/ } from '~/plugins/firebase-client-init.js'
     import firebase from 'firebase/app'
 
     export default {
@@ -63,14 +63,14 @@
             },
 
             getMessagingToken () {
-                messaging.getToken().then((token) => {
+                /**messaging.getToken().then((token) => {
                         console.log("Token: ", token);
                         //this.token = token;
                         this.changeSubscription(token)
                         this.$store.commit('meta/setToken', token)
                         this.$store.dispatch('meta/save', 'token');
                         this.$toast.show('Token Saved!')
-                })
+                })**/
             },
 
             changeSubscription: async function(token) {
