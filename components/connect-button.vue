@@ -21,7 +21,7 @@ import { Utils } from '~/modules/utilities'
                 return this.$store.getters['meta/canReceivePayments'] ? this.stripeDashboardURL : this.stripeURL;
             },
             buttonText: function(){
-                return this.$store.getters['meta/canReceivePayments'] ? 'Manage Your Payment Options' : 'Connect to Stripe';
+                return this.$store.getters['meta/canReceivePayments'] ? 'Manage Your Payout Settings' : 'Connect to Stripe';
             },
             usermeta: function(){
                 return this.$store.state.meta;
