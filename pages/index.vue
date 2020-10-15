@@ -128,10 +128,10 @@
 					<h1 id="ready">Ready to try Sourcery?</h1>
 				</div>
 				<div class="cta-buttons">
-					<a href="" class="button button___mobile-block button__lg button__outline">
+					<a href="/login" class="button button___mobile-block button__lg button__outline">
 						Log In
 					</a>
-					<a href="" class="button button___mobile-block button__lg button__purple">
+					<a href="/register" class="button button___mobile-block button__lg button__purple">
 						Sign Up
 					</a>
 				</div>
