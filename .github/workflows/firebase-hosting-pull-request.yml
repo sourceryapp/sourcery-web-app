@@ -15,7 +15,7 @@ jobs:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - run: yarn install --ignore-engines
       - run: NODE_ENV=development yarn run generate
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0.4-alpha
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TUBE_1542818590717 }}'
