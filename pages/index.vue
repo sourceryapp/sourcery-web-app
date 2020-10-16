@@ -1,759 +1,578 @@
 <template>
 	<div id="content" class="site-content">
+		<header>
+			<div class="header-content">
+				<img class="header__logo" src="../static/img/logo-wordmark-beta-white.svg" alt="">
+				<img class="header__mockup" src="../static/img/sourcery-mockup-no-shadow.png" alt="">
+				<div class="header__buttons">
+					<a href="/register" class="button button__mobile-block button__lg button__white">
+						Sign Up
+					</a>
+					<a href="/login" class="button button__mobile-block button__lg button__outline button__white-outline">
+						Log In
+					</a>
+				</div>
+				<div class="header__slogan">
+					<h1>Your sources, like magic</h1>
+					<p>Delivering archival documents straight to your device</p>
+				</div>
+			</div>
+		</header>
+		<section id="meet-sourcery">
+			<div class="section-container">
+				<h1 id="meet" class="color-700">Meet Sourcery</h1>
+				<div class="feature">
+					<img class="feature-illustration" src="../static/img/landing-illustrations/undraw_researching_22gp.svg" alt="">
+					<div class="feature-desc">
+						<h4 class="feature-title">Easy document requests</h4>
+						<p class="feature-text">Request a document using just a citation and where it’s located.</p>
+					</div>
+				</div>
+				<div class="feature feature__text-first">
+					<img class="feature-illustration" src="../static/img/landing-illustrations/undraw_collaborators_prrw.svg" alt="">
+					<div class="feature-desc">
+						<h4 class="feature-title">High quality sources</h4>
+						<p class="feature-text">Receive high resolution scans from institutions and Sourcery-registered researchers.</p>
+					</div>
+				</div>
+				<div class="feature">
+					<img class="feature-illustration" src="../static/img/landing-illustrations/undraw_folder_files_nweq.svg" alt="">
+					<div class="feature-desc">
+						<h4 class="feature-title">Streamlining workflows for institutions</h4>
+						<p class="feature-text">Give archival staff and patrons one easy platform for requesting and receiving scans.</p>
+					</div>
+				</div>
+				<div class="feature feature__text-first">
+					<img class="feature-illustration" src="../static/img/landing-illustrations/undraw_wallet_aym5.svg" alt="">
+					<div class="feature-desc">
+						<h4 class="feature-title">Cut the travel fees</h4>
+						<p class="feature-text">Save your wallet from expensive flights and transportation.</p>
+					</div>
+				</div>
+				<div class="feature">
+					<img class="feature-illustration" src="../static/img/landing-illustrations/undraw_absorbed_in_xahs.svg" alt="">
+					<div class="feature-desc">
+						<h4 class="feature-title">Get back to what’s important</h4>
+						<p class="feature-text">Gain efficient, affordable
+	access with Sourcery.</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-	<div id="section3">
-		<div class="video-responsive">
-			<iframe width="560" height="315" src="https://www.youtube.com/embed/-PG6UeDhgu8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-		</div>
-		<aside>
-			<p class="text">
-				Save the time and cost. Conjure your sources with Sourcery instead!
-			</p>
-		</aside>
-	</div><!--section3-->
+		<section id="how-does-sourcery-work">
+			<div class="section-container">
+				<div class="section-header">
+					<img class="section-img" src="../static/img/landing-illustrations/undraw_faq_rjoy.svg" alt="">
+					<h1 class="text" id="how" ref="how">How does Sourcery work?</h1>
+				</div>
+				<div class="paragraphs">
+					<p class="medium">
+						When you submit a request, the app finds and notifies
+						Sourcery-registered researchers working near the repository
+						where your document is located. One of these remote
+						researchers will claim the job, call the document from the
+						archive, take a picture of it, and
+						<span
+							>send it directly to your desktop or mobile device</span
+						>.
+					</p>
+					<img src="../static/img/sparkle-circle.svg" alt="" class="sparkle">
+					<p class="text indiv">
+						Sourcery is a not-for-profit service that gives researchers
+						access to documents that can't be found online by paying
+						other researchers to find them. It aims to streamline the
+						process that researchers go through by providing one simple
+						platform that works at any collecting institution in our
+						service area (currently New York City, Boston, Washington, DC, and Storrs;
+						coming soon to Providence, New Haven, and
+						other cities).
+						<span
+							>Just provide the document’s citation information, and
+							Sourcery will do the rest.</span
+						>
+					</p>
+					<img src="../static/img/sparkle-circle.svg" alt="" class="sparkle">
+					<p class="text indiv">
+						Sourcery emerges from the design process of <a
+								href="https://greenhousestudios.uconn.edu/"
+								class="partnerlink"
+								>Greenhouse Studios</a
+							>
+						and from the project team’s past work and ongoing interests
+						in research software for the humanities. Greenhouse Studios,
+						an incubator for digital scholarship at the University of
+						Connecticut, is a shared initiative of the
+						<a href="https://lib.uconn.edu/" class="partnerlink"
+							>UConn Library</a
+						>,
+						<a href="https://sfa.uconn.edu/" class="partnerlink"
+							>School of Fine Arts</a
+						>, and the
+						<a href="https://clas.uconn.edu/" class="partnerlink"
+							>College of Liberal Arts and Sciences</a
+						>. Sourcery is a project of the
+						<a href="https://digitalscholar.org/" class="partnerlink">
+							Corporation for Digital Scholarship</a
+						>, a not-for-profit organization.
+					</p>
+				</div>
+				<a href="/about" class="button button__sm button__outline button__mobile-block button__purple">Learn More</a>
+			</div>
+		</section>
+		
+		<section id="cta">
+			<div class="section-container">
+				<div class="section-header">
+					<img src="../static/img/landing-illustrations/undraw_enter_uhqk.svg" alt="" class="section-img ready-img">
+					<h1 id="ready">Ready to try Sourcery?</h1>
+				</div>
+				<div class="cta-buttons">
+					<a href="/login" class="button button___mobile-block button__lg button__outline">
+						Log In
+					</a>
+					<a href="/register" class="button button___mobile-block button__lg button__purple">
+						Sign Up
+					</a>
+				</div>
+			</div>
+		</section>
 
-    <div class="buttons">
-        <a href="/register"><button class="purplebutton" id="button1" to="/register">Join the Beta</button></a>
-        <a href="/login"><button class="purplebutton" id="button1" to="/login">Login</button></a>
-    </div>
-
-
-	<div id="section1">
-	<div id="section1top">
-		<img src="/img/plane.png" alt="plane" id="plane">
-		<p id="intro" class="text">Skip the planes, trains, and automobiles...</p>
-		<img src="/img/car.png" alt="car" id="car">
-	</div><!--section1top-->
-	<div id="section1bottom">
-		<img src="/img/bus.png" alt="bus" id="bus">
-		<aside>
-			<p class="text" id="intro2">...and have your documents delivered to you instead.</p>
-		</aside>
-	</div><!--section1bottom-->
-	</div><!--section1-->
-
-	<div id="section2">
-		<div id="meet">
-			<h1 class="text">Meet Sourcery</h1>
-			<h5 class="text">Delivering archival documents straight to your device</h5>
-			<img src="/img/transfer.png" alt="phone outline">
-			<ul class="text">
-				<li>Request a document using a citation</li>
-				<li>Receive quality scans from Sourcery-registered researchers</li>
-				<li>Cut the travel fees</li>
-				<li>Gain efficient, affordable access with <strong>Sourcery</strong></li>
-			</ul>
-		</div> <!--meet-->
-	</div><!--section2-->
-
-
-	<div id="section4">
-			<h1 class="text" id="how" ref="how">How does Sourcery work?</h1>
-		<div id="paragraphs">
-		<p class="text indiv">Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them. It aims to streamline the process that researchers go through by providing one simple platform that works at any collecting institution in our service area (currently New York City, Boston, and Storrs; coming soon to Providence, New Haven, Washington, DC, and other cities). <span>Just provide the document’s citation information, and Sourcery will do the rest.</span></p>
-		<p class="text indiv">When you submit a request, the app finds and notifies Sourcery-registered researchers working near the repository where your document is located. One of these remote researchers will claim the job, call the document from the archive, take a picture of it, and <span>send it directly to your desktop or mobile device</span>.</p>
-		<p class="text indiv">Sourcery emerges from the design process of <span><a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a></span> and from the project team’s past work and ongoing interests in research software for the humanities. Greenhouse Studios, an incubator for digital scholarship at the University of Connecticut, is a shared initiative of the <a href="https://lib.uconn.edu/" class="partnerlink">UConn Library</a>, <a href="https://sfa.uconn.edu/" class="partnerlink">School of Fine Arts</a>, and the <a href="https://clas.uconn.edu/" class="partnerlink">College of Liberal Arts and Sciences</a>. Sourcery is a project of the <a href="https://digitalscholar.org/" class="partnerlink"> Corporation for Digital Scholarship</a>, a not-for-profit organization.
-
-</p>
-		</div><!--paragraphs-->
-	</div><!--section4-->
-
-	<footer>
-			<a href="https://greenhousestudios.uconn.edu/"><img src="/img/gslogoblack.jpg"></a>
-			<div id="links">
-				<a href="/register"><button class="purplebutton" id="button5">Join the Beta</button></a>
-				<a href="/about" style="padding-top: 1em;"><button class="purplebutton" id="button5">Learn More</button></a>
-				<a href="/login" style="padding-top: 1em;"><button class="purplebutton" id="button5">Login</button></a>
-				<a href="mailto:support@sourceryapp.org"><button class="purplebutton" id="button6">Contact Us</button></a>
-			</div><!--links-->
-
-            <cookie-law
-            theme="dark-lime"
-            message="We use cookies to ensure you get the best experience on our website."
-            buttonText="OK"
-            buttonLink="/cookies-notice"
-            >
-            </cookie-law>
+		<footer class="footer__light">
+			
+			<div class="footer-content">
+				<a href="https://sourceryapp.org/">
+					<img src="../static/img/sourcery-logo-purple.svg" alt="">
+				</a>
+				<div class="social-icons">
+					<a href="https://www.instagram.com/sourcery_app/" class="social-icon">
+						<img src="../static/img/social-icons/instagram.svg" alt="">
+					</a>
+					<a href="https://www.facebook.com/SourceryApp" class="social-icon">
+						<img src="../static/img/social-icons/facebook.svg" alt="">
+					</a>
+					<a href="https://twitter.com/Sourcery_App" class="social-icon">
+						<img src="../static/img/social-icons/twitter.svg" alt="">
+					</a>
+				</div>
+				<p>Sourcery is a project of the Corporation for Digital Scholarship, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with Greenhouse Studios | Scholarly Communications Design at UConn</p>
+			</div>
+			<cookie-law
+					theme="dark-lime"
+					message="We use cookies to ensure you get the best experience on our website."
+					buttonText="OK"
+					buttonLink="/cookies-notice"
+				>
+			</cookie-law>
 		</footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js" integrity="sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=" crossorigin="anonymous"></script>
-    <script>
+		<footer>
+			
+		</footer>
 
-    </script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js"
+			integrity="sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM="
+			crossorigin="anonymous"
+		></script>
+		<script></script>
 	</div>
 </template>
-
-
 
 <script>
 /**
  * Cookie Consent
  * @url https://github.com/apertureless/vue-cookie-law#--vue-cookie-law
  */
-import CookieLaw from 'vue-cookie-law'
+import CookieLaw from "vue-cookie-law";
 export default {
-  name: 'home',
-  layout: 'landing-beta',
-  middleware: null,
-  data: function() {
-    return {
-        // social: social
-    }
-  },
-  components: { CookieLaw },
-  methods: {
-    smoothScroll: function(target) {
-        var scrollContainer = target;
-        do { //find scroll container
-            scrollContainer = scrollContainer.parentNode;
-            if (!scrollContainer) return;
-            scrollContainer.scrollTop += 1;
-        } while (scrollContainer.scrollTop == 0);
+	name: "home",
+	layout: "landing-beta",
+	middleware: null,
+	data: function() {
+		return {
+			// social: social
+		};
+	},
+	components: { CookieLaw },
+	methods: {
+		smoothScroll: function(target) {
+			var scrollContainer = target;
+			do {
+				//find scroll container
+				scrollContainer = scrollContainer.parentNode;
+				if (!scrollContainer) return;
+				scrollContainer.scrollTop += 1;
+			} while (scrollContainer.scrollTop == 0);
 
-        var targetY = 0;
-        do { //find the top of target relatively to the container
-            if (target == scrollContainer) break;
-            targetY += target.offsetTop;
-        } while (target = target.offsetParent);
+			var targetY = 0;
+			do {
+				//find the top of target relatively to the container
+				if (target == scrollContainer) break;
+				targetY += target.offsetTop;
+			} while ((target = target.offsetParent));
 
-        scroll = function(c, a, b, i) {
-            i++; if (i > 30) return;
-            c.scrollTop = a + (b - a) / 30 * i;
-            setTimeout(function(){ scroll(c, a, b, i); }, 20);
-        }
-        // start scrolling
-        scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
-    }
-  },
-  mounted: function(){
-
-  }
-}
+			scroll = function(c, a, b, i) {
+				i++;
+				if (i > 30) return;
+				c.scrollTop = a + ((b - a) / 30) * i;
+				setTimeout(function() {
+					scroll(c, a, b, i);
+				}, 20);
+			};
+			// start scrolling
+			scroll(scrollContainer, scrollContainer.scrollTop, targetY, 0);
+		}
+	},
+	mounted: function() {}
+};
 </script>
 
 <style>
-.Cookie--dark-lime a.Cookie__button {
-    background-color: grey;
+
+:root {
+	--sourcery-500: #654EA3;
+	--sourcery-700: #413268;
+	--sourcery-900: #292043;
+	--max-width: 840px;
 }
 
+.Cookie--dark-lime a.Cookie__button {
+	background-color: grey;
+}
 
-body{
+body {
 	margin: 0;
 }
 
-header{
-	display: flex;
-	flex-direction: column;
-}
-
-button:focus{
-	outline: 0;
-}
-
-a{
-	text-decoration: none;
-}
-
-
-#arrow{
-	display: none;
-}
-
-.video-responsive{
-	overflow: hidden;
-	padding-bottom: 41.25%;
-	width: 74%;
-	position: relative;
-	height: 0;
-	margin: 0 auto;
-}
-
-.video-responsive iframe{
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	position: absolute;
-}
-
-
-#logo{
-	width: 90%;
-	margin: 1em auto;
-}
-
-
-#subhead{
-	text-align: center;
-	width: 60%;
-	font-size: 20px;
-	margin: 1em auto;
-	font-family: "Barlow", sans-serif;
-	color: #6c6c6c;
-}
-
-.buttons {
-    margin: 3em;
-}
-
-.purplebutton{
-	background-color: #654fa1;
-	font-family: "Barlow", sans-serif;
-	color: white;
-	border-radius: 15px;
-	border: none;
-	font-size: 20px;
-	box-sizing: border-box;
-	display: block;
-	box-shadow: grey 3px 3px 6px 0px;
-	transition: box-shadow, transform;
-	transition-duration: .5s;
-}
-
-.purplebutton:hover{
-	transform: scale(1.1);
-	box-shadow: #a0a0a0a6 1px 4px 20px 3px;
-}
-
-#button1{
-	margin: 0 auto;
-	margin-top: 10%;
-	padding: 20px 30px;
-}
-
-.text{
-	font-family: "Barlow", sans-serif;
-	color: #6c6c6c;
-	text-align: center;
-}
-
-span{
-	font-weight: 400;
-}
-
-.indiv{
-	text-align: center;
-	text-indent: 0px
-}
-
-
-#section1top{
-	margin-top: 20vw;
-	display: flex;
-	flex-direction: row;
-	font-size: 16px;
-}
-
-#section1top p{
-	width: 50%;
-	font-weight: 500;
-}
-
-#section1top #plane{
-	width: 30%;
-	align-self: flex-start;
-	position: relative;
-	bottom: 30px;
-}
-
-#section1top #car{
-	width: 40%;
-	align-self: flex-start;
-	position: relative;
-	top: 60px;
-	right: 10px;
-	transform: rotate(-15deg);
-}
-
-#section1bottom{
-	display: flex;
-	flex-direction: row;
-	margin-top: 40px;
-	justify-content: center;
-}
-
-#section1bottom #bus{
-	align-self: flex-start;
-	width: 50%;
-	transform: rotate(5deg);
-}
-
-#section1bottom aside{
-	display: flex;
-	flex-direction: column;
-	font-size: 16px;
-	width: 40%;
-	font-weight: 500;
-}
-
-#button2{
-	width: 80%;
-	margin: 0 auto;
-	margin-top: 15px;
-	text-align: center;
-	font-size: 15px;
-	padding: 10px 20px;
-}
-
-#section2{
-	margin-top: 70px;
-	width: 100%;
-}
-
-#meet h1{
-		font-size: 40px;
-		margin-bottom: 10px;
-	}
-
-#section2 h5{
-	width: 75%;
-	margin: 0 auto;
-	font-weight: 200;
-	font-size: 16px;
-}
-
-#section2 ul{
-	list-style-type: none;
-	padding-left: 0;
-	line-height: 3;
-	width: 90%;
-	margin: 0 auto;
-	margin-top: 3%;
-	font-size: 14px;
-}
-
-#section2 img{
-	z-index: -1;
-	width: 36%;
-	margin-left: 32%;
-	margin-top: 4%;
-}
-
-#button3{
-	font-size: 16px;
-	padding: 10px;
-	text-align: center;
-	width: 40%;
-	max-width: 150px;
-	margin: 0 auto;
-	margin-top: 5%;
-}
-
-#section3{
-	margin-top: 40px;
-	width: 100%;
-}
-
-
-#section3 p{
-	width: 52%;
-	margin: 0 auto;
-	margin-top: 15px;
-	font-weight: 500;
+p {
 	font-size: 18px;
+	margin: 0;
+	color: var(--sourcery-900)
 }
 
-#section3 button{
-	width: 40%;
-	max-width: 150px;
-	font-size: 16px;
-	padding: 10px;
-	margin: 0 auto;
-	margin-top: 20px;
+h1 {
+	font-size: 32px;
+	line-height: 38px;
 }
 
-#section4{
-	margin-top: 15%;
-	margin-bottom: 15%;
+.color-700 {
+	color: var(--sourcery-700);
 }
 
-#section4 h1{
+.color-900 {
+	color: var(--sourcery-900)
+}
+
+#meet {
 	text-align: center;
+	margin-bottom: 36px;
+}
+
+header {
+	padding: 48px 24px;
+	background: rgb(146,79,190);
+	background: linear-gradient(135deg, rgba(146,79,190,1) 0%, rgba(111,77,170,1) 50%);
+}
+
+.header-content {
+	max-width: var(--max-width);
+	margin: 0 auto;
+	display: grid;
+	align-items: center;
+	grid-template-areas: 
+		"logo"
+		"mockup"
+		"buttons"
+		"slogan";
+	row-gap: 12px;
+}
+
+.header__logo {
+	width: 100%;
+	max-height: 60px;
+	grid-area: logo;
+}
+
+.header__mockup {
+	width: 100%;
+	padding: 24px 0;
+	grid-area: mockup;
+	filter: drop-shadow(16px 8px 8px rgb(41, 32, 67, .30));
+}
+
+.header__buttons {
+	grid-area: buttons;
+}
+
+.header__buttons a:first-child {
+	margin-bottom: 12px;
+}
+
+.header__slogan {
+	grid-area: slogan;
+	color: white;
+}
+
+.header__slogan h1 {
+	margin-bottom: 12px;
+}
+
+.header__slogan p {
+	color: white;
 	font-size: 24px;
 }
 
-#section4 #paragraphs{
-    width: 75%;
-    margin: 0 auto;
-    line-height: 2;
-    font-weight: 200;
-    font-size: 14px;
+.section-container {
+	max-width: var(--max-width);
+	margin: 0 auto;
+	padding: 48px 24px;
 }
 
-#section4 #topflip{
-	width: 30%;
-	float: left;
+.feature:not(:last-child) {
+	margin-bottom: 24px;
 }
 
-#section4 button{
-	clear: both;
-}
-
-
-#section4 #button6{
-	width: 30%;
-	font-size: 15px;
-	padding: 5px;
-	margin-top: 20px;
-}
-
-#section4 #bottomflip{
-	width: 30%;
-	float: right;
-}
-
-#footers{
-	clear: both;
-}
-
-footer{
-	display: flex;
-	justify-content: space-around;
+.feature-illustration {
 	width: 100%;
-	margin-bottom: 5%;
+	padding: 24px;
+}
+
+.feature-desc {
+	color: var(--sourcery-900);
+}
+
+
+
+.feature-title {
+	font-size: 24px;
+	font-weight: 700;
+	margin-bottom: 6px;
+}
+
+.feature-text {
+	font-weight: 500;
+}
+
+#how-does-sourcery-work {
+	background: #F2F0F6;
+}
+
+.section-img {
+	width: 100%;
+	padding: 24px;
+}
+
+#how {
+	margin-bottom: 12px;
+}
+
+.medium {
+	font-weight: 500;
+}
+
+.sparkle {
+	display: block;
+	margin: 18px auto;
+}
+
+.paragraphs {
+	margin-bottom: 24px;
+}
+
+.button {
+	transition: transform 100ms ease-in;
+	display: inline-flex;
 	align-items: center;
+	justify-content: center;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: 600;
+	border-radius: 4px;
+	text-align: center;
 }
 
-
-footer > a{
-	width: 15%;
+.button:hover, .button:focus {
+	transform: scale(1.02);
 }
 
-footer > a > img{
+.button:active {
+	transform: scale(.98);
+}
+
+.button__lg {
+	padding-left: 60px;
+	padding-right: 60px;
+	height: 76px;
+	font-size: 24px;
+}
+
+.button__sm {
+	padding: 12px 24px;
+	font-size: 16px;
+}
+
+.button__outline {
+	border: solid 2px;
+
+}
+
+.button__purple {
+	background: var(--sourcery-500);
+	color: white;
+}
+
+.button__white {
+	background: white;
+	color: var(--sourcery-900)
+}
+
+.button__white-outline {
+	color: white;
+}
+
+.button__mobile-block {
+	display: flex;
 	width: 100%;
 }
 
-#links{
-	margin-right: 27%;
+.ready-img {
+	height: 300px;
+}
+
+.cta-buttons {
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	gap: 12px;
+}
+
+#ready {
+	margin-bottom: 24px;
+}
+
+footer {
+	width: 100%;
+	background: #F2F0F6;
+}
+
+.footer-content {
+	padding: 48px 24px;
+	max-width: var(--max-width);
+	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	font-size: 16px;
+	color: #4A3A74;
+	line-height: 22px;
 }
 
-#button5{
-	max-width: 190px;
-	font-size: 20px;
-	padding: 10px 30px;
+.footer-content img {
+	fill: red;
 	width: 100%;
+	height: 40px;
 }
 
-#button6{
-		font-size: 16px;
-		max-width: 250px;
-		margin-top: 10px;
-		padding: 8px 20px;
+.social-icons {
+	display: flex;
+	justify-content: center;
+	margin: 12px 0;
 }
 
-.partnerlink{
-	text-decoration: none;
-	color: #595e9e;
-	text-shadow: #b7b7b7 1px 1px 2px;
-	transition: text-shadow .2s, bottom .2s;
-	position: relative;
-	bottom: 0px;
+.social-icons .social-icon {
+	transition: transform 100ms ease-in;
+	margin-left: 8px;
+	margin-right: 8px;
 }
 
-.partnerlink:hover{
-	color: #7a7fc7;
-	text-shadow: #b7b7b7 2px 2px 5px;
-	bottom: 3px;
-
+.social-icons .social-icon:hover {
+	-webkit-transform: scale(1.1);
+	transform: scale(1.1);
 }
 
-
-@media screen and (min-width: 700px){
-
-    .buttons {
-        display: flex;
-        justify-content: space-around
-    }
-
-	.text{
-		font-size: 16px;
-	}
-
-	#meet h1{
-		font-size: 32px;
-		margin-bottom: 0px;
-	}
-
-	#subhead{
-		width: 70%;
-		font-size: 28px;
-	}
-
-	#section3 p{
-		width: 60%;
-	}
-
-	#intro{
-		font-size: 20px;
-	}
-
-	#intro2{
-		font-size: 20px;
-	}
-
-	#button1{
-		font-size: 28px;
-		margin: 0 auto;
-		padding: 16px 25px;
-	}
-
-	#button2{
-		font-size: 24px;
-		max-width: 200px;
-	}
-
-	#button3{
-		font-size: 24px;
-		max-width: 200px;
-
-	}
-
-	#meet h1{
-		margin-bottom: 20px;
-		font-size: 42px;
-	}
-
-	#section2 h5{
-		font-size: 20px;
-		width: 65%;
-		font-weight: 400;
-	}
-
-	#section2 ul{
-		font-size: 18px;
-		line-height: 3;
-		margin-bottom: 15px;
-		margin-top: 1.5%;
-	}
-
-	#section3 p{
-		font-size: 25px;
-		margin-top: 40px;
-	}
-
-	#section3 button{
-		font-size: 25px;
-		width: 30%;
-		margin: 0 auto;
-		max-width: 250px;
-		margin-top: 30px;
-	}
-
-	#section4{
-		margin-top: 15%;
-		margin-bottom: 10%;
-	}
-
-	#section4 h1{
-		font-size: 36px;
-	}
-
-	#paragraphs{
-		font-size: 20px;
-	}
-
-	#section4 #button6{
-		font-size: 20px;
-		width: 24%;
-		margin-left: 38%;
-		padding: 8px;
-	}
-
-	#links{
-		margin-right: 30%;
-	}
-
-	#button5{
-		font-size: 24px;
-		max-width: 210px;
-		padding: 10px 35px;
-	}
-
-	#button6{
-		font-size: 20px;
-	}
-
+.social-icons .social-icon img {
+	height: 32px;
+	width: 32px;
 }
 
 
+@media only screen and (min-width: 600px) {
 
-@media screen and (min-width: 1000px){
-
-.video-responsive {
-    overflow: hidden;
-    padding-bottom: 30.25%;
-    width: 53%;
-    position: relative;
-    height: 0;
-    margin: 0 auto;}
-
-	#logo{
-		width: 75%;
-		margin: 1em auto;
+	header {
+		padding: 96px 0;
 	}
 
-	#corner{
-		width: 31%;
+	.header-content {
+		grid-template-areas: 
+			"logo mockup"
+			"slogan mockup"
+			"buttons mockup";
+		column-gap: 96px;
+		grid-template-columns: 5fr 4fr;
 	}
 
-	#subhead{
-		bottom: 5vw;
+	.header__mockup {
+		padding: 0;
+		width: auto;
+		max-width: 100%;
+		height: 100%;
+		object-fit: contain;
 	}
 
-
-	#section1 #plane{
-		width: 26%;
+	.feature {
+		height: 240px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+	}
+	
+	.feature-illustration {
+		flex: 1;
+		height: 100%;
+		width: auto;
+		/* width: 50%; */
+	}
+	
+	.feature__text-first .feature-desc{
+		order: -1;
 	}
 
-	#intro{
-		margin: 0px;
-		font-size: 42px;
-		position: relative;
-		left: 15px;
+	.feature-desc {
+		flex: 1;
+		/* width: 50%; */
+		color: var(--sourcery-900);
 	}
 
-	#intro2{
-		font-size: 42px;
+	.section-header {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
 	}
 
-	#section1 #car{
-		width: 37%;
-		right: 43px;
-	}
-
-	#button2{
-		width: 50%;
-	}
-
-	#section2{
-		margin-top: 0px;
-	}
-
-	#section2 ul{
-		font-size: 18px;
-	}
-
-	#section2 img{
-	z-index: -1;
-	width: 25%;
-	margin-left: 37.5%;
-	margin-top: 4%;
-}
-
-
-	#section3{
-		margin-top: 100px;
-	}
-
-	#section3 aside{
-		margin-top: 80px;
-	}
-
-	#section3 button{
-		width: 70%;
-	}
-
-
-	#meet h1{
-		font-size: 60px;
-	}
-
-	#meet h5{
-		font-size: 24px;
-		width: 70%;
-		font-weight: 200;
-		margin-top: 20px;
-	}
-
-	#button3{
-		font-size: 20px;
-		margin: 0 auto;
-		margin-top: 2%;
-		width: 15%;
-		max-width: 216px;
-		display: block;
-	}
-
-	#section4{
-		margin-top: 10%;
-		margin-bottom: 5%;
-	}
-
-	#section4 h1{
-		font-size: 40px;
-	}
-
-	.text{
-		font-size: 20px;
-	}
-
-	#section4 #paragraphs{
-		line-height: 2;
-		width: 60%;
-		font-size: 5px;
-		margin-top: 3%;
-		max-width: 803px;
-	}
-
-
-	#section4 #button6{
-		max-width: 250px;
-		margin-top: 30px;
-	}
-
-	footer > a{
-	width: 10%;
-}
-
-	footer > a > img{
+	.section-img {
 		width: 100%;
+		order: 1;
 	}
 
-	#links{
-		margin-right: 29%;
+	.section-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 
+	.button__mobile-block {
+		width: auto;
+		margin: 0 auto;
+	}
 
-}
-
-@media screen and (min-width: 1250px){
-
-	.video-responsive{
-	overflow: hidden;
-	padding-bottom: 28.25%;
-	width: 50%;
-	position: relative;
-	height: 0;
-	margin: 0 auto;
-}
-
-.video-responsive iframe{
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	position: absolute;
-}
-
-footer > a{
-	width: 8%;
-}
-
-	footer > a > img{
+	.cta-buttons {
 		width: 100%;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		grid-template-rows: none;
+		align-items: center;
+		gap: 48px;
 	}
-
-	#links{
-		margin-right: 30%;
-	}
-
 
 }
-
-
-
-
 </style>
