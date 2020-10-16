@@ -1,12 +1,12 @@
 <template>
   <v-app id="tube">
-      <lp-banner></lp-banner>
-      	<header class="sticky" ref="sticky">
+      <!-- <lp-banner></lp-banner> -->
+      	<!-- <header class="sticky" ref="sticky">
               <a href="/">
                 <img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
               </a>
             <p id="subhead">Your sources, like magic</p>
-        </header>
+        </header> -->
     <nuxt />
   </v-app>
 </template>
@@ -55,7 +55,7 @@ export default {
         // }, 500));
     },
     components: {
-        'lp-banner': lpBeta,
+        // 'lp-banner': lpBeta,
     }
 }
 </script>
