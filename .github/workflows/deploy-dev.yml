@@ -13,6 +13,21 @@ jobs:
       uses: actions/checkout@v2-beta
       with:
         ref: 'master'
+    - name: webfactory/ssh-agent
+      uses: webfactory/ssh-agent@v0.3.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '14'
+      env:
+        PROJECT: sourcery-dev
+        TARGET: sourcery-dev
+        NODE_ENV: development
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+    - run: yarn install --ignore-engines
+    - run: NODE_ENV=development yarn run generate
     - name: Deploy to Firebase
       uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
       env:
