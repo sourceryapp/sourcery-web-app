@@ -57,17 +57,20 @@
 }
 
 .ath-ios.ath-phone {
+	position: fixed;
 	bottom: 1.8em;
 	left: 50%;
 	margin-left: -9em;
 }
 
 .ath-ios6.ath-tablet {
+	position: fixed;
 	left: 5em;
 	top: 1.8em;
 }
 
 .ath-ios7.ath-tablet {
+	position: fixed;
 	left: 0.7em;
 	top: 1.8em;
 }
@@ -75,11 +78,13 @@
 .ath-ios8.ath-tablet,
 .ath-ios9.ath-tablet,
 .ath-ios10.ath-tablet{
+	position: fixed;
 	right: 0.4em;
 	top: 1.8em;
 }
 
 .ath-android {
+	position: fixed;
 	bottom: 1.8em;
 	left: 50%;
 	margin-left: -9em;
@@ -88,7 +93,7 @@
 /* close icon */
 .ath-container:before {
 	content: '';
-	position: relative;
+	position: fixed;
 	display: block;
 	float: right;
 	margin: -0.7em -0.6em 0 0.5em;

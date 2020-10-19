@@ -96,7 +96,7 @@ module.exports = {
      */
     workbox: {
         importScripts: [
-            'firebase-messaging-sw.js'
+            //'firebase-messaging-sw.js'
         ]
     },
 
