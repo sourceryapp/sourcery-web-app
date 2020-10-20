@@ -91,6 +91,7 @@
 <script>
 import { db } from "~/plugins/firebase-client-init.js";
 import { mapGetters } from 'vuex'
+addToHomescreen();
 export default {
     middleware: 'user-meta',
 

@@ -26,10 +26,12 @@ module.exports = {
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Barlow:500,600,700,800&display=swap' },
             {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
             {rel: 'icon', type: 'image/png', href: '/img/favicon.png' },
-            {rel: 'apple-touch-icon', href: '/apple-icon.png'}
+            {rel: 'apple-touch-icon', href: '/apple-icon.png'},
+            //{rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
         ],
         script: [
-            { src: 'https://js.stripe.com/v3/', async: true }
+            { src: 'https://js.stripe.com/v3/', async: true },
+            { src: '/addtohomescreen.js'}
         ]
 	},
 
@@ -39,7 +41,8 @@ module.exports = {
 	css: [
 	    '~/assets/styles/sourcery.css',
         'material-design-icons-iconfont/dist/material-design-icons.css',
-        'paymentfont/css/paymentfont.min.css'
+        'paymentfont/css/paymentfont.min.css',
+        '~/assets/styles/addtohomescreen.css'
     ],
 
 
@@ -93,7 +96,7 @@ module.exports = {
      */
     workbox: {
         importScripts: [
-            'firebase-messaging-sw.js'
+            //'firebase-messaging-sw.js'
         ]
     },
 
@@ -118,7 +121,7 @@ module.exports = {
         // { src: '~/plugins/user-meta', mode: 'client', ssr: false }
         '~/plugins/firebase-auth.js',
         '~/plugins/vue-instantsearch',
-        '~/plugins/cloud-messaging.js'
+        //'~/plugins/cloud-messaging.js'
     ],
     
     /**pwa: {
