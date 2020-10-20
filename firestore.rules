@@ -7,7 +7,7 @@ service cloud.firestore {
   	return resource.data.client_id == request.auth.uid ||
     (
      resource.data.vendor_id == "" &&
-     resource.data.status == 'pending' &&
+     (resource.data.status == 'pending' || resource.data.status == 'reserved') &&
      request.resource.data.attachments == resource.data.attachments &&
      request.resource.data.citation == resource.data.citation &&
      request.resource.data.client_id == resource.data.client_id &&
