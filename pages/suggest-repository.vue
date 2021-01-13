@@ -81,7 +81,7 @@
 
 
 <script>
-import suggestRepo from '~/modules/suggestRepo';
+import Feedback from '~/modules/feedback';
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
@@ -110,15 +110,16 @@ export default {
             // Validate the form
             if(this.$refs.repoForm.validate()){
                     // Store the data
-                    await suggestRepo.send({
+                    await Feedback.send({
                         from: this.email,
-                        name: this.name,
-                        city: this.city,
-                        institution: this.institution,
-                        address: this.address,
-                        country: this.country,
-
-                        text: "A new repository suggestion as been made from" + this.email
+                        text: [
+                            `${this.name} has suggested a new repository:\n`,
+                            `Repository Name: ${this.name}`,
+                            `Institution: ${this.institution}`,
+                            `Street Address: ${this.address}`,
+                            `City: ${this.city}`,
+                            `Country: ${this.country}`,
+                        ].join("\n")
                     });
 
                     // Message to user

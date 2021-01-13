@@ -22,7 +22,7 @@ class Feedback {
     /**
      * Message Subject
      */
-    subject = 'Feedback from Tube';
+    subject = 'Feedback from Sourcery App';
 
     /**
      * Text/alternate message for when
@@ -40,7 +40,7 @@ class Feedback {
         return await db.collection(this.collection).add({
             to: this.to,
             from: msg.from || null,
-            subject: msg.subject || null,
+            subject: msg.subject || this.subject,
             text: msg.text || null,
             html: msg.html || null,
             date: new Date(),
