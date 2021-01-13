@@ -113,7 +113,7 @@ export default {
                     await Feedback.send({
                         from: this.email,
                         text: [
-                            `${this.name} has suggested a new repository:\n`,
+                            `${this.user.displayName} has suggested a new repository:\n`,
                             `Repository Name: ${this.name}`,
                             `Institution: ${this.institution}`,
                             `Street Address: ${this.address}`,
