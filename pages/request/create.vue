@@ -30,8 +30,8 @@
 
                     <v-card-title primary-title>
                     <div>
-                        <div class="headline">Where is your document located?</div>
-                        <!-- <span class="grey--text">1,000 miles of wonder</span> -->
+                        <div class="headline">Where is your document located? </div>
+                        <span class="grey--text"><nuxt-link :to="{ name: 'suggest-repository' }">Don't see yours listed?</nuxt-link></span>
                     </div>
                     </v-card-title>
                     <v-card-text>
