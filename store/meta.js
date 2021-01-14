@@ -1,7 +1,3 @@
-import { Utils } from "~/modules/utilities"
-import firebase from 'firebase/app'
-import { db } from "~/plugins/firebase-client-init.js";
-
 /**
  * Any properties for the meta state should be added
  * to this function.
@@ -30,16 +26,15 @@ const initialState = () => {
 /**
  * The initial state uses the initialState() function
  */
-export const state = initialState;
-
+export const state = initialState
 
 /**
  * Getters for our metadata
  */
 export const getters = {
-    balance: (state, getters) =>  {
-        if(state.balance && state.balance.available){
-            return Utils.currencyFormat(state.balance.available[0].amount, state.balance.available[0].currency)
+    balance: (state, getters) => {
+        if (state.balance && state.balance.available) {
+            return this.$utils.currencyFormat(state.balance.available[0].amount, state.balance.available[0].currency)
         }
     },
     /**
@@ -60,7 +55,7 @@ export const getters = {
     /**
      * Is this user an organization member?
      */
-    isOrgMember: (state, getters) => ( Array.isArray(state.organizations) && (state.organizations.length > 0) ),
+    isOrgMember: (state, getters) => (Array.isArray(state.organizations) && (state.organizations.length > 0)),
 
     /**
      * Can the user receive payments?
@@ -75,66 +70,64 @@ export const getters = {
     /**
      * Has the user completed onboarding?
      */
-    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false),
+    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false)
 }
-
 
 export const mutations = {
     /* this method is not good and needs to go at some point */
-    set(state, obj){
-        state = Object.assign(state, obj);
+    set (state, obj) {
+        state = Object.assign(state, obj)
     },
-    setStripe(state, obj={}) {
+    setStripe (state, obj = {}) {
         console.info('New Stripe data being stored to Vuex:', obj)
-        state.stripe = obj;
+        state.stripe = obj
     },
-    setPhone(state, obj=null){
-        state.phone = obj;
+    setPhone (state, obj = null) {
+        state.phone = obj
     },
-    setAgent(state, obj=null) {
-        state.agentUpdates = obj;
+    setAgent (state, obj = null) {
+        state.agentUpdates = obj
     },
-    setPush(state, obj=null) {
-        state.agentPush = obj;
+    setPush (state, obj = null) {
+        state.agentPush = obj
     },
-    setToken(state, obj=null) {
-        state.token = obj;
+    setToken (state, obj = null) {
+        state.token = obj
     },
-    setNews(state, obj=null) {
-        state.newsUpdates = obj;
+    setNews (state, obj = null) {
+        state.newsUpdates = obj
     },
-    setRequest(state, obj=null) {
-        state.requestUpdates = obj;
+    setRequest (state, obj = null) {
+        state.requestUpdates = obj
     },
-    setLocation(state, obj=null){
-        state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude);
+    setLocation (state, obj = null) {
+        state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude)
     },
-    setSourcerer(state, val){
-        state.sourcerer = val;
+    setSourcerer (state, val) {
+        state.sourcerer = val
     },
-    setResearcher(state, val) {
-        state.researcher = val;
+    setResearcher (state, val) {
+        state.researcher = val
     },
-    balance(state, obj){
+    balance (state, obj) {
         state.balance = obj
     },
-    setOnboardingComplete(state, val){
-        state.onboardingComplete = val;
+    setOnboardingComplete (state, val) {
+        state.onboardingComplete = val
     },
-    setStripeCustomerId(state, id){
-        state.stripeCustomerId = id;
+    setStripeCustomerId (state, id) {
+        state.stripeCustomerId = id
     },
-    setOrganizations(state, orgs){
-        state.organizations = orgs;
+    setOrganizations (state, orgs) {
+        state.organizations = orgs
     },
-    reset(state) {
+    reset (state) {
         const s = initialState()
-        Object.keys(s).forEach(key => {
+        Object.keys(s).forEach((key) => {
             state[key] = s[key]
         })
     }
 }
-
 
 /**
  * Available properties within actions
@@ -148,22 +141,22 @@ export const mutations = {
 }
  */
 export const actions = {
-    async save({state, rootGetters}, key){
-        return await db.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+    async save ({ state, rootGetters }, key) {
+        return await $fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
-        }, { merge: true });
+        }, { merge: true })
     },
     /**
      * Updates the current user location
      */
-    updateCurrentLocation({state, commit, dispatch}){
-        navigator.geolocation.getCurrentPosition( ({coords}) => {
+    updateCurrentLocation ({ state, commit, dispatch }) {
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
             commit('setLocation', coords)
-            dispatch('save', 'location');
+            dispatch('save', 'location')
         }, () => {
             // Failed - User won't give access
             console.info('Geolocation failed in meta.js')
-        });
+        })
     },
 
     /**
@@ -172,15 +165,15 @@ export const actions = {
      * @param {object} context
      * @returns {array} A collection of organizations for the current user
      */
-    getOrganizations({state, commit, dispatch}){
-        if(Array.isArray(state.organizations)){
-            let organizations = [];
-            state.organizations.forEach(org => {
-                organizations.push( db.collection("organization").doc(org).get() );
-            });
-            return Promise.all(organizations);
+    getOrganizations ({ state, commit, dispatch }) {
+        if (Array.isArray(state.organizations)) {
+            const organizations = []
+            state.organizations.forEach((org) => {
+                organizations.push($fire.firestore.collection('organization').doc(org).get())
+            })
+            return Promise.all(organizations)
         }
-        return [];
+        return []
     }
 }
 

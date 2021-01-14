@@ -1,9 +1,8 @@
-const globals = require('../globals');
+const globals = require('../globals')
 
-var load_speed = 5000;
+const load_speed = 5000
 
-exports.command = function(username, password) {
-
+exports.command = function (username, password) {
     this
         .url(`http://${globals.serverHost}:${globals.serverPort}/login`)
         .waitForElementVisible('body')
@@ -15,5 +14,5 @@ exports.command = function(username, password) {
             locateStrategy: 'xpath'
         })
 
-    return this;
+    return this
 }

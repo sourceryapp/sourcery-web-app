@@ -1,7 +1,4 @@
-import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
 import Cookies from 'js-cookie'
-import { Utils } from '~/modules/utilities.js';
-
 
 // user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
@@ -11,7 +8,7 @@ const initialState = () => {
     }
 }
 
-export const state = initialState;
+export const state = initialState
 
 export const getters = {
     activeUser: (state, getters) => {
@@ -20,23 +17,22 @@ export const getters = {
     isLoading: (state, getters) => {
         return state.loading
     }
-};
+}
 
 export const mutations = {
-    setUser(state, payload) {
-        state.user = payload;
+    setUser (state, payload) {
+        state.user = payload
     },
-    setLoading(state, payload) {
+    setLoading (state, payload) {
         state.loading = payload
     },
-    reset(state) {
+    reset (state) {
         const s = initialState()
-        Object.keys(s).forEach(key => {
+        Object.keys(s).forEach((key) => {
             state[key] = s[key]
         })
     }
-};
-
+}
 
 /**
  * Available properties within actions
@@ -50,30 +46,30 @@ export const mutations = {
 }
  */
 export const actions = {
-    async signInWithGooglePopup({ commit }) {
+    async signInWithGooglePopup ({ commit }) {
         commit('setLoading', true)
-        let authData = await Auth.signInWithPopup(GoogleAuthProvider);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
+        const authData = await Auth.signInWithPopup(GoogleAuthProvider)
+        commit('setUser', Auth.currentUser)
+        commit('setLoading', false)
     },
 
-    async signIn({ commit }, { email, password }) {
-        commit('setLoading', true);
-        let authData = await Auth.signInWithEmailAndPassword(email, password);
+    async signIn ({ commit }, { email, password }) {
+        commit('setLoading', true)
+        const authData = await Auth.signInWithEmailAndPassword(email, password)
         const token = await Auth.currentUser.getIdToken(true)
-        Cookies.set('token', token);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
-        return "Someone";
+        Cookies.set('token', token)
+        commit('setUser', Auth.currentUser)
+        commit('setLoading', false)
+        return 'Someone'
     },
 
-    async signOut({commit, rootState}) {
+    async signOut ({ commit, rootState }) {
         await Auth.signOut()
-        Cookies.remove('token');
-        Cookies.remove('user');
-        commit('reset'); // auth/reset
+        Cookies.remove('token')
+        Cookies.remove('user')
+        commit('reset') // auth/reset
 
         // Also reset meta store for this user
         commit('meta/reset', null, { root: true })
     }
-};
+}

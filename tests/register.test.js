@@ -1,5 +1,5 @@
 // Needed to get the serverHost and serverPort
-const globals = require("./globals");
+const globals = require('./globals')
 
 /**
  * Nightwatch
@@ -9,19 +9,18 @@ const globals = require("./globals");
 
 module.exports = {
 
-  // Set true to disable this test
-  disabled: true,
+    // Set true to disable this test
+    disabled: true,
 
-  'Page: /register' : function (browser) {
-    browser
-      .url(`http://${globals.serverHost}:${globals.serverPort}/register`)
-      .waitForElementVisible('body')
-      .setValue("input[name='name']", user.name)
-      .setValue("input[name='email']", user.email)
-      .setValue("input[name='password']", user.password)
-      .setValue("input[name='phone']", user.phone)
-      .click("button[type='submit']")
-      .end();
-  }
+    'Page: /register' (browser) {
+        browser
+            .url(`http://${globals.serverHost}:${globals.serverPort}/register`)
+            .waitForElementVisible('body')
+            .setValue("input[name='name']", user.name)
+            .setValue("input[name='email']", user.email)
+            .setValue("input[name='password']", user.password)
+            .setValue("input[name='phone']", user.phone)
+            .click("button[type='submit']")
+            .end()
+    }
 }
-

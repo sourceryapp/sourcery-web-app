@@ -3,8 +3,7 @@
  * user location in the store
  */
 import { locationUpdater } from '~/plugins/location-updater'
-export const plugins = [ locationUpdater ]
-
+export const plugins = [locationUpdater]
 
 /**
  * Force Strict Mode

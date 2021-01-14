@@ -1,25 +1,27 @@
 <template>
-    <v-app id="tube">
-        <v-container fluid>
-        <h1>Notifications</h1>
+  <v-app id="tube">
+    <v-container fluid>
+      <h1>Notifications</h1>
 
-        <v-card width="350px">
-            <v-card-title primary-title>
-                <h3 class="headline mb-0">Job Alerts (Sourcerers only)</h3>
-            </v-card-title>
-            <v-card-text>
-                <v-switch
-                label="Receive alerts for nearby jobs (email)."
-                v-model="agentBool"
-                :hint="alertHint"
-                :persistent-hint="false"
-                color="primary"
-                class="mt-0"
-                @change="updateNotifications"
-                :readonly="!deviceHasGeoLocation"
-                ></v-switch>
+      <v-card width="350px">
+        <v-card-title primary-title>
+          <h3 class="headline mb-0">
+            Job Alerts (Sourcerers only)
+          </h3>
+        </v-card-title>
+        <v-card-text>
+          <v-switch
+            v-model="agentBool"
+            label="Receive alerts for nearby jobs (email)."
+            :hint="alertHint"
+            :persistent-hint="false"
+            color="primary"
+            class="mt-0"
+            :readonly="!deviceHasGeoLocation"
+            @change="updateNotifications"
+          />
 
-                <!--<v-switch
+          <!--<v-switch
                 label="Receive alerts for nearby jobs (push notifications)."
                 v-model="pushBool"
                 :hint="alertHint"
@@ -28,42 +30,43 @@
                 @change="getMessagingToken()"
                 :readonly="!deviceHasGeoLocation"
                 ></v-switch>-->
-            </v-card-text>
-        </v-card>
-        
-        </v-container>
-    </v-app>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
-    import { Auth, db, functions, /**messaging**/ } from '~/plugins/firebase-client-init.js'
-    import firebase from 'firebase/app'
 
-    export default {
-        data () {
-            return {
-                agentBool: this.$store.state.meta.agentUpdates,
-                pushBool: this.$store.state.meta.agentPush,
-                //token: this.$store.state.meta.token,
-                updateSuccess: false,
-                alertHint: 'Please choose "Allow" if prompted by your device/browser.',
-                geoError: 'You need to enable location services to use this feature.',
-                deviceHasGeoLocation: false, // Starts as read-only until we confirm geolocation
-            }
+export default {
+    data () {
+        return {
+            agentBool: this.$store.state.meta.agentUpdates,
+            pushBool: this.$store.state.meta.agentPush,
+            // token: this.$store.state.meta.token,
+            updateSuccess: false,
+            alertHint: 'Please choose "Allow" if prompted by your device/browser.',
+            geoError: 'You need to enable location services to use this feature.',
+            deviceHasGeoLocation: false // Starts as read-only until we confirm geolocation
+        }
+    },
+    computed: {
+
+    },
+    mounted () {
+    // Check if device supports geolocation
+        this.deviceHasGeoLocation = Boolean(navigator.geolocation)
+    },
+    methods: {
+
+        async updateNotifications () {
+            this.$store.commit('meta/setAgent', this.agentBool)
+            this.$store.dispatch('meta/save', 'agentUpdates')
+            this.$toast.show('Notification Preference Saved!')
         },
-        computed: {
 
-        },
-        methods: {
-
-            updateNotifications: async function() {
-                this.$store.commit('meta/setAgent', this.agentBool)
-                this.$store.dispatch('meta/save', 'agentUpdates');
-                this.$toast.show('Notification Preference Saved!')
-            },
-
-            getMessagingToken () {
-                /**messaging.getToken().then((token) => {
+        getMessagingToken () {
+            /** messaging.getToken().then((token) => {
                         console.log("Token: ", token);
                         //this.token = token;
                         this.changeSubscription(token)
@@ -71,15 +74,15 @@
                         this.$store.dispatch('meta/save', 'token');
                         this.$toast.show('Token Saved!')
                 })**/
-            },
+        },
 
-            changeSubscription: async function(token) {
-                this.$store.commit('meta/setPush', this.pushBool)
-                this.$store.dispatch('meta/save', 'agentPush');
-                this.$toast.show('Notification Preference Saved!')
+        async changeSubscription (token) {
+            this.$store.commit('meta/setPush', this.pushBool)
+            this.$store.dispatch('meta/save', 'agentPush')
+            this.$toast.show('Notification Preference Saved!')
 
-                /*if (this.pushBool == false || this.pushBool == null) {
-                    //Unsubscribe Here 
+            /* if (this.pushBool == false || this.pushBool == null) {
+                    //Unsubscribe Here
                     console.log("Unsubscribing.")
                     let topic = 'general';
                     let subFunct = functions.httpsCallable('unsubscribeFromTopic');
@@ -97,13 +100,9 @@
                     return data;
                 }
                 */
-            }
-        },
-        mounted() {
-            // Check if device supports geolocation
-            this.deviceHasGeoLocation = Boolean(navigator.geolocation);
         }
     }
+}
 </script>
 
 <style scoped>
