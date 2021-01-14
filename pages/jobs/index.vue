@@ -136,7 +136,7 @@ export default {
         claim (id) {
             const uid = this.user.uid
             if (confirm('Are you sure that you want to claim this job?')) {
-                $fire.firestore.collection('requests')
+                this.$fire.firestore.collection('requests')
                     .doc(id)
                     .set({
                         vendor_id: uid,
@@ -167,7 +167,7 @@ export default {
             this.userLong = coords.longitude
             const userID = this.user.uid
 
-            this.jobs = await db
+            this.jobs = await this.$firestore
                 .collection('requests')
                 .where('status', '==', 'pending')
                 .get()
@@ -191,7 +191,7 @@ export default {
 
                             // Don't allow users to claim their own (disabling for testing)
                             // if ( (miles <= this.distance) && (doc.data().client_id != this.user.uid) ) {
-                            if ((miles <= this.distance) && doc.data().client_id != userID) {
+                            if ((miles <= this.distance) && doc.data().client_id !== userID) {
                                 /**
                                  * Using this to track whether the request gets claimed
                                  * while the user is browsing the results
@@ -230,7 +230,7 @@ export default {
          * Begin listening for updates to the
          * requests collection
          */
-        this.listener = $fire.firestore.collection('requests')
+        this.listener = this.$fire.firestore.collection('requests')
             .where('status', '==', 'pending')
             .onSnapshot((snapshot) => {
                 snapshot.docChanges().forEach((change) => {

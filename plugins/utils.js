@@ -1,9 +1,8 @@
 import cookieParser from 'cookieparser'
 import jwt_decode from 'jwt-decode'
-import accounting from 'accounting-js'
+import { formatMoney, unformat } from 'accounting-js'
 
 export default ({ app }, inject) => {
-
     // Inject $utils() in Vue, context and store.
     inject('utils', () => {
         return {
@@ -53,7 +52,7 @@ export default ({ app }, inject) => {
              * Gets UserMeta for chosen UID
              */
             getUserMeta: async (uid) => {
-                const doc = await $fire.firestore.collection('user-meta').doc(uid).get()
+                const doc = await app.$fire.firestore.collection('user-meta').doc(uid).get()
                 return Promise.resolve(doc.data())
             },
 
@@ -77,7 +76,7 @@ export default ({ app }, inject) => {
              * @todo move to a maintained lib like Dinero (https://github.com/sarahdayan/dinero.js)
              */
             estimatedCost: ({ pages }, prefix = '$') => {
-                return accounting.formatMoney((30 + (pages * 0.5) + Math.random()), prefix)
+                return formatMoney((30 + (pages * 0.5) + Math.random()), prefix)
             },
 
             /**
@@ -87,9 +86,8 @@ export default ({ app }, inject) => {
             // User gets 80% of cost.
                 return (job.pricing && job.pricing !== null)
                     ? this.$utils.currencyFormat(job.pricing.total * 0.8)
-                    : accounting.formatMoney(accounting.unformat(job.estimated_cost_usd) * 0.80)
+                    : formatMoney(unformat(job.estimated_cost_usd) * 0.80)
             },
-
 
             socialLinks: {
                 twitter: 'https://twitter.com/sourcery_app',
@@ -97,5 +95,5 @@ export default ({ app }, inject) => {
                 instagram: 'https://www.instagram.com/sourcery_app/'
             }
         }
-  });
+    })
 }

@@ -61,7 +61,7 @@ export default {
 
         async updateNotifications () {
             this.$store.commit('meta/setAgent', this.agentBool)
-            this.$store.dispatch('meta/save', 'agentUpdates')
+            await this.$store.dispatch('meta/save', 'agentUpdates')
             this.$toast.show('Notification Preference Saved!')
         },
 
@@ -78,7 +78,7 @@ export default {
 
         async changeSubscription (token) {
             this.$store.commit('meta/setPush', this.pushBool)
-            this.$store.dispatch('meta/save', 'agentPush')
+            await this.$store.dispatch('meta/save', 'agentPush')
             this.$toast.show('Notification Preference Saved!')
 
             /* if (this.pushBool == false || this.pushBool == null) {

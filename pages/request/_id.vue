@@ -119,12 +119,12 @@ export default {
     //     }
 
     // },
-    async asyncData ({ params, store, error }) {
+    asyncData ({ params, store, error, app }) {
     // Populate the Vuex Store
         store.dispatch('request/init', params.id)
 
         if (store.getters['auth/activeUser'].uid) {
-            return $fire.firestore.collection('requests').doc(params.id).get()
+            return app.$fire.firestore.collection('requests').doc(params.id).get()
                 .then((doc) => {
                     return {
                         record: (doc.exists) ? doc : false,
@@ -160,7 +160,7 @@ export default {
     mounted () {
     //  Listen for changes to this document
         if (this.record && this.record.id) {
-            $fire.firestore.collection('requests').doc(this.record.id).onSnapshot((doc) => { this.record = doc })
+            this.$fire.firestore.collection('requests').doc(this.record.id).onSnapshot((doc) => { this.record = doc })
         }
     },
     methods: {
@@ -173,7 +173,7 @@ export default {
                 })
             }
         },
-        async cancel () {
+        cancel () {
             if (confirm('Are you sure you want to cancel this request? This action cannot be undone.')) {
                 this.$store.dispatch('request/delete').then((result) => {
                     this.$router.push({ name: 'dashboard' })
@@ -182,9 +182,9 @@ export default {
                 })
             }
         },
-        async setRating () {
+        setRating () {
             if (confirm(`This action cannot be undone. Would you like to rate this Sourcerer ${this.rating} stars?`)) {
-                $fire.firestore.collection('requests').doc(this.record.id).set({
+                this.$fire.firestore.collection('requests').doc(this.record.id).set({
                     userRating: this.rating
                 }, { merge: true })
             }

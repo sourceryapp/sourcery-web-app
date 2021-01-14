@@ -46,25 +46,25 @@ export const mutations = {
 }
  */
 export const actions = {
-    async signInWithGooglePopup ({ commit }) {
-        commit('setLoading', true)
-        const authData = await Auth.signInWithPopup(GoogleAuthProvider)
-        commit('setUser', Auth.currentUser)
-        commit('setLoading', false)
-    },
+    // async signInWithGooglePopup ({ commit }) {
+    //     commit('setLoading', true)
+    //     await this.$nuxt.app.$fire.auth.signInWithPopup(GoogleAuthProvider)
+    //     commit('setUser', this.$nuxt.app.$fire.auth.currentUser)
+    //     commit('setLoading', false)
+    // },
 
     async signIn ({ commit }, { email, password }) {
         commit('setLoading', true)
-        const authData = await Auth.signInWithEmailAndPassword(email, password)
-        const token = await Auth.currentUser.getIdToken(true)
+        await this.$nuxt.app.$fire.auth.signInWithEmailAndPassword(email, password)
+        const token = await this.$nuxt.app.$fire.auth.currentUser.getIdToken(true)
         Cookies.set('token', token)
-        commit('setUser', Auth.currentUser)
+        commit('setUser', this.$nuxt.app.$fire.auth.currentUser)
         commit('setLoading', false)
         return 'Someone'
     },
 
     async signOut ({ commit, rootState }) {
-        await Auth.signOut()
+        await this.$nuxt.app.$fire.auth.signOut()
         Cookies.remove('token')
         Cookies.remove('user')
         commit('reset') // auth/reset

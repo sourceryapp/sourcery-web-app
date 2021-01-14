@@ -85,26 +85,26 @@ export const mutations = {
 export const actions = {
     init ({ state, commit, dispatch }, request_id) {
     // Get initial data
-        $fire.firestore.collection('requests').doc(request_id).get().then((doc) => {
+        this.$nuxt.app.$fire.firestore.collection('requests').doc(request_id).get().then((doc) => {
             commit('set', doc)
         }).catch((error) => {
             error(error)
         })
 
         // Register a listener for updates
-        const unsubscribe = $fire.firestore.collection('requests').doc(request_id).onSnapshot(doc => commit('set', doc))
+        this.$nuxt.app.$fire.firestore.collection('requests').doc(request_id).onSnapshot(doc => commit('set', doc))
     },
-    addAttachment ({ state, commit, dispatch }, file) {
-        return new Promise(async (resolve, reject) => {
-            // Default number of pages for an attachment
-            let pages = 1
+    async addAttachment ({ state, commit, dispatch }, file) {
+        // Default number of pages for an attachment
+        let pages = 1
 
-            // If it's a PDF, we need to count the number of pages
-            if (file.type == 'application/pdf') {
-                pages = await countPages(file)
-            }
+        // If it's a PDF, we need to count the number of pages
+        if (file.type === 'application/pdf') {
+            pages = await countPages(file)
+        }
 
-            const storageRef = storage.ref(`jobs/${state.document.id}/images/`)
+        return new Promise((resolve, reject) => {
+            const storageRef = this.$nuxt.app.$fire.storage.ref(`jobs/${state.document.id}/images/`)
             const imageRef = storageRef.child(file.name.toLowerCase())
             const uploadTask = imageRef.put(file)
 
@@ -132,8 +132,8 @@ export const actions = {
                     // Upload completed successfully, now we can get the download URL
                     await uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
                         url = downloadURL
-                        $fire.firestore.collection('requests').doc(state.document.id).update({
-                            attachments: FieldValue.arrayUnion(downloadURL)
+                        this.$nuxt.app.$fire.firestore.collection('requests').doc(state.document.id).update({
+                            attachments: this.$nuxt.app.$fire.firestore.FieldValue.arrayUnion(downloadURL)
                         })
                     })
 
@@ -151,7 +151,9 @@ export const actions = {
                         // Updated metadata for 'images/forest.jpg' is returned in the Promise
                         console.info('Added custom metadata to attachment')
                     }).catch((error) => {
-                        // Uh-oh, an error occurred!
+                        if (error) {
+                            console.log('Request.js', error)
+                        }
                     })
 
                     // Resolve this promise
@@ -168,8 +170,8 @@ export const actions = {
         const filename = path.replace(/.*\//, '')
 
         // Run the tasks
-        return new Promise(async (resolve, reject) => {
-            const storageRef = storage.ref(`jobs/${state.document.id}/images/`)
+        return new Promise((resolve, reject) => {
+            const storageRef = this.$nuxt.app.$fire.storage.ref(`jobs/${state.document.id}/images/`)
             const fileRef = storageRef.child(filename)
 
             const tasks = [
@@ -178,8 +180,8 @@ export const actions = {
                 fileRef.delete(),
 
                 // Delete the db reference
-                $fire.firestore.collection('requests').doc(state.document.id).update({
-                    attachments: FieldValue.arrayRemove(file)
+                this.$nuxt.app.$fire.firestore.collection('requests').doc(state.document.id).update({
+                    attachments: this.$nuxt.app.$fire.firestore.FieldValue.arrayRemove(file)
                 })
             ]
 
@@ -192,17 +194,17 @@ export const actions = {
     /**
      * Mark as complete
      */
-    markComplete: ({ state, commit, dispatch }) => $fire.firestore.collection('requests').doc(state.document.id).update({ status: 'complete' }),
+    markComplete: ({ state, commit, dispatch }) => this.$nuxt.app.$fire.firestore.collection('requests').doc(state.document.id).update({ status: 'complete' }),
 
     /**
      * Archive current request
      */
-    markArchived: ({ state, commit, dispatch }) => $fire.firestore.collection('requests').doc(state.document.id).update({ status: 'archived' }),
+    markArchived: ({ state, commit, dispatch }) => this.$nuxt.app.$fire.firestore.collection('requests').doc(state.document.id).update({ status: 'archived' }),
 
     /**
      * Delete current request
      */
-    delete: ({ state, commit, dispatch }) => $fire.firestore.collection('requests').doc(state.document.id).delete()
+    delete: ({ state, commit, dispatch }) => this.$nuxt.app.$fire.firestore.collection('requests').doc(state.document.id).delete()
 
 }
 

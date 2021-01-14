@@ -101,7 +101,7 @@ export const mutations = {
         state.requestUpdates = obj
     },
     setLocation (state, obj = null) {
-        state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude)
+        state.location = new this.$nuxt.app.$fire.firestore.GeoPoint(obj.latitude, obj.longitude)
     },
     setSourcerer (state, val) {
         state.sourcerer = val
@@ -142,7 +142,7 @@ export const mutations = {
  */
 export const actions = {
     async save ({ state, rootGetters }, key) {
-        return await $fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+        return await this.$nuxt.app.$fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
         }, { merge: true })
     },
@@ -169,7 +169,7 @@ export const actions = {
         if (Array.isArray(state.organizations)) {
             const organizations = []
             state.organizations.forEach((org) => {
-                organizations.push($fire.firestore.collection('organization').doc(org).get())
+                organizations.push(this.$nuxt.app.$fire.firestore.collection('organization').doc(org).get())
             })
             return Promise.all(organizations)
         }

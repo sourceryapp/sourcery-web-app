@@ -66,7 +66,7 @@ export default {
         resetPassEmail () {
             this.success = false
             this.error = false
-            Auth.sendPasswordResetEmail(this.email).then(() => {
+            this.$fire.auth.sendPasswordResetEmail(this.email).then(() => {
                 this.success = true
                 this.email = ''
             }).catch((error) => {

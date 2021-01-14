@@ -160,7 +160,6 @@ export default {
         '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
-        // '@nuxtjs/vuetify',
         '@nuxtjs/firebase'
     ],
 

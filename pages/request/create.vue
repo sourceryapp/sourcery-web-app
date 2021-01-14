@@ -191,7 +191,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import algoliasearch from 'algoliasearch/lite'
 import 'instantsearch.css/themes/algolia-min.css'
 
@@ -281,21 +281,23 @@ export default {
     // console.log(this.request);
     },
     methods: {
-        async submitRequest () {
+        submitRequest () {
             this.isSaving = true
             this.$store.dispatch('create/insert').then((snapshot) => {
                 this.$toast.success('Your request has been submitted!')
                 this.isSaving = false
                 this.$router.push({ name: 'dashboard' })
             }).catch((error) => {
-                this.isSaving = false
-                this.$toast.error('There was a problem saving your request.')
+                if (error) {
+                    this.isSaving = false
+                    this.$toast.error('There was a problem saving your request.')
+                }
             })
         },
 
         async getCost () {
             this.loadingCost = true
-            const cost = functions.httpsCallable('cost')
+            const cost = this.$fire.functions.httpsCallable('cost')
             const costObj = await cost({
                 repository: this.repositoryName,
                 pages: this.request.pages

@@ -56,16 +56,16 @@
 <script>
 export default {
     name: 'History',
-    async asyncData ({ params, store }) {
+    async asyncData ({ params, store, app }) {
         if (store.getters['auth/activeUser'].uid) {
-            const requests = await db
+            const requests = await app.$fire.firestore
                 .collection('requests')
                 .where('client_id', '==', store.getters['auth/activeUser'].uid)
                 .where('status', '==', 'archived')
                 .orderBy('created_at', 'desc')
                 .get()
 
-            const jobs = await db
+            const jobs = await app.$fire.firestore
                 .collection('requests')
                 .where('vendor_id', '==', store.getters['auth/activeUser'].uid)
                 .orderBy('created_at', 'desc')

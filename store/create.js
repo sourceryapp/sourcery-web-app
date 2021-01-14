@@ -82,8 +82,10 @@ export const getters = {
      * given repo is from a member organization
      */
     isMemberRepo: (state, getters) => repo =>
-    //  @todo Remove hard-coded organization values in production
-        ((repo.hasOwnProperty('organization') && repo.organization !== null) || repo.institution == 'UConn' || repo.institution == 'Northeastern University')
+        //  TODO Remove hard-coded organization values in production
+        //  TODO Remove hasOwnProperty()
+        /* eslint no-prototype-builtins: "off" */
+        ((repo.hasOwnProperty('organization') && repo.organization !== null) || repo.institution === 'UConn' || repo.institution === 'Northeastern University')
 
 }
 
@@ -164,15 +166,15 @@ export const actions = {
         state.client_id = rootGetters['auth/activeUser'].uid
 
         // If a member repo, set to reserved and set the parent org
-        if (rootGetters['create/isMemberRepo'], state.repository) {
+        if (rootGetters['create/isMemberRepo'](state.repository)) {
             commit('setStatusReserved')
         }
 
-        return $fire.firestore.collection('requests').add(state)
+        return this.$nuxt.app.$fire.firestore.collection('requests').add(state)
     },
 
     getRepositoryById: ({ state, commit, dispatch }, id) => {
-        return $fire.firestore.collection('repositories').doc(id).get().then((doc) => {
+        return this.$nuxt.app.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
             return doc.data()
         })
     }

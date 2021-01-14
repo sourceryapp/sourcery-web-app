@@ -55,37 +55,31 @@ export default {
     },
     computed: {
         passwordIsValid () {
-            // text fields empty
-            if (this.password == '' && this.confirmpassword == '') { return false }
-            // text fields do not match
-            if (this.password !== this.confirmpassword) { return false }
-            // else return true
-            else { return true }
-
-            // return this.password !== '' &&
-            // this.confirmpassword !== '' &&
-            // this.password == this.confirmpassword;
+            if (this.password !== this.confirmpassword || this.password === '') {
+                return false
+            } else {
+                return true
+            }
         }
     },
     methods: {
         getUrlVars () {
             const vars = {}
-            const parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+            window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
                 vars[key] = value
             })
             return vars.test
         },
         resetPass () {
-            const code = getUrlVars()
-            const newPasswprd = this.password()
-            firebase.auth().confirmPasswordReset(code, newPassword)
+            const code = this.getUrlVars()
+            this.$fire.auth.confirmPasswordReset(code, this.password)
                 .then(function () {
-                    console.log(success)
-
-                    // Success
+                    console.log('success')
                 })
-                .catch(function () {
-                    // Invalid code
+                .catch(function (error) {
+                    if (error) {
+                        console.log('Error', error)
+                    }
                 })
         }
     }
