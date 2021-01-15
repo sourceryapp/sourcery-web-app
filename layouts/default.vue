@@ -13,9 +13,9 @@
           <v-list-tile-avatar size="50" class="mr-3">
             <img :src="gravatar">
           </v-list-tile-avatar>
-          <v-list-tile-content v-if="this.user">
-            <v-list-tile-title>{{ this.user.displayName }}</v-list-tile-title>
-            <v-list-tile-sub-title>{{ this.user.email }}</v-list-tile-sub-title>
+          <v-list-tile-content v-if="user">
+            <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>
+            <v-list-tile-sub-title>{{ user.email }}</v-list-tile-sub-title>
             <v-list-tile-sub-title v-if="isOrgMember">
               Institutional Account
             </v-list-tile-sub-title>
@@ -158,6 +158,25 @@ import { mapGetters } from 'vuex'
 import md5 from 'md5'
 
 export default {
+    // props: {
+    //     source: String
+    // },
+    data: () => ({
+        drawer: null,
+        dialog: false,
+        items1: [
+            { title: 'Edit Profile', icon: 'person', link: '/account/profile' },
+            { title: 'Payment Options', icon: 'credit_card', link: '/account/credit-cards' },
+            { title: 'Payouts', icon: 'account_balance', link: '/account/payouts' },
+            { title: 'Notifications', icon: 'notifications', link: '/settings/notifications' },
+            { title: 'History', icon: 'hourglass_full', link: '/request/history' },
+            { title: 'Privacy', icon: 'enhanced_encryption', link: '/privacy' },
+            { title: 'Terms and Conditions', icon: 'subject', link: '/terms' },
+            { title: 'Help', icon: 'help', link: '/account/help' },
+            { title: 'Feedback', icon: 'feedback', link: '/settings/feedback' }
+            // { title: 'Rate', icon: 'star', link: ''},
+        ]
+    }),
     computed: {
         user () {
             return this.$store.getters['auth/activeUser']
@@ -200,27 +219,7 @@ export default {
                 });
             }
         },**/
-    },
-
-    props: {
-        source: String
-    },
-    data: () => ({
-        drawer: null,
-        dialog: false,
-        items1: [
-            { title: 'Edit Profile', icon: 'person', link: '/account/profile' },
-            { title: 'Payment Options', icon: 'credit_card', link: '/account/credit-cards' },
-            { title: 'Payouts', icon: 'account_balance', link: '/account/payouts' },
-            { title: 'Notifications', icon: 'notifications', link: '/settings/notifications' },
-            { title: 'History', icon: 'hourglass_full', link: '/request/history' },
-            { title: 'Privacy', icon: 'enhanced_encryption', link: '/privacy' },
-            { title: 'Terms and Conditions', icon: 'subject', link: '/terms' },
-            { title: 'Help', icon: 'help', link: '/account/help' },
-            { title: 'Feedback', icon: 'feedback', link: '/settings/feedback' }
-            // { title: 'Rate', icon: 'star', link: ''},
-        ]
-    })
+    }
 }
 </script>
 

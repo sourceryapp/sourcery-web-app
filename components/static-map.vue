@@ -6,8 +6,15 @@
 export default {
     name: 'StaticMap',
     props: {
-        alt: String,
-        repository: Object
+        alt: {
+            type: String,
+            required: false,
+            default: ''
+        },
+        repository: {
+            type: Object,
+            required: true
+        }
     },
     data () {
         return {

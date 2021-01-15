@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * These methods are added to DocumentSnapshot
  * `doc.request().method()`

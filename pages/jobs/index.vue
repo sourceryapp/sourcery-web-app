@@ -132,6 +132,56 @@ export default {
             listener: null
         }
     },
+    computed: {
+        ...mapGetters({
+            user: 'auth/activeUser',
+            isResearcher: 'meta/isResearcher',
+            isSourcerer: 'meta/isSourcerer',
+            balance: 'meta/balance',
+            canMakePayments: 'meta/canMakePayments',
+            canReceivePayments: 'meta/canReceivePayments'
+        })
+
+    },
+    beforeDestroy () {
+    /**
+         * Destroy the collection listener
+         * @url https://firebase.google.com/docs/firestore/query-data/listen#detach_a_listener
+         */
+        this.listener()
+    },
+    mounted () {
+    /**
+         * Begin listening for updates to the
+         * requests collection
+         */
+        this.listener = this.$fire.firestore.collection('requests')
+            .where('status', '==', 'pending')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    /**
+                     * If a request is removed (no longer in the collection
+                     * that we're listening to). That is, the status is not
+                     * equal to "pending"
+                     */
+                    if (change.type === 'removed') {
+                        const changed_id = change.doc.id
+                        console.log('Removed:', changed_id)
+                        /**
+                         * If the changed ID is in our result list,
+                         * disable the option to claim the request.
+                         */
+                        this.jobs.forEach((job, index) => {
+                            if (job.id === changed_id) {
+                                console.log(this.jobs[index].claimed)
+                                this.jobs[index].claimed = true
+                                console.log(this.jobs[index])
+                            }
+                        })
+                    }
+                })
+            })
+    },
     methods: {
         claim (id) {
             const uid = this.user.uid
@@ -212,57 +262,6 @@ export default {
         jobValue (job) {
             return this.$utils.jobValue(job)
         }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/activeUser',
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments',
-            canReceivePayments: 'meta/canReceivePayments'
-        })
-
-    },
-
-    mounted () {
-    /**
-         * Begin listening for updates to the
-         * requests collection
-         */
-        this.listener = this.$fire.firestore.collection('requests')
-            .where('status', '==', 'pending')
-            .onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change) => {
-                    /**
-                     * If a request is removed (no longer in the collection
-                     * that we're listening to). That is, the status is not
-                     * equal to "pending"
-                     */
-                    if (change.type === 'removed') {
-                        const changed_id = change.doc.id
-                        console.log('Removed:', changed_id)
-                        /**
-                         * If the changed ID is in our result list,
-                         * disable the option to claim the request.
-                         */
-                        this.jobs.forEach((job, index) => {
-                            if (job.id === changed_id) {
-                                console.log(this.jobs[index].claimed)
-                                this.jobs[index].claimed = true
-                                console.log(this.jobs[index])
-                            }
-                        })
-                    }
-                })
-            })
-    },
-    beforeDestroy () {
-    /**
-         * Destroy the collection listener
-         * @url https://firebase.google.com/docs/firestore/query-data/listen#detach_a_listener
-         */
-        this.listener()
     }
 }
 </script>

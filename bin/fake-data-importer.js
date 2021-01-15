@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Firebase/Firestore SDK
  */

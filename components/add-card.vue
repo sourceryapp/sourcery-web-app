@@ -74,6 +74,40 @@ export default {
             show: false
         }
     },
+    computed: {
+        ...mapGetters({
+            user: 'auth/activeUser',
+            isResearcher: 'meta/isResearcher',
+            isSourcerer: 'meta/isSourcerer',
+            balance: 'meta/balance',
+            canMakePayments: 'meta/canMakePayments'
+        })
+    },
+    async mounted () {
+        console.log(this.value)
+        // Get the client secret and store it
+        const { data: { client_secret } } = await this.setupIntents()
+        this.client_secret = client_secret
+
+        // Setup the card element for stripe
+        // Get a previously generated card, if it exists.
+        this.cardElement = elements.getElement('card') || elements.create('card', {
+            base: {
+                color: '#32325d',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: 'antialiased',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#aab7c4'
+                }
+            },
+            invalid: {
+                color: '#fa755a',
+                iconColor: '#fa755a'
+            }
+        })
+        this.cardElement.mount(this.$refs.card)
+    },
     methods: {
         addCard () {
             this.loading = true
@@ -116,40 +150,6 @@ export default {
             this.agree = false
             this.cardElement.clear()
         }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/activeUser',
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments'
-        })
-    },
-    async mounted () {
-        console.log(this.value)
-        // Get the client secret and store it
-        const { data: { client_secret } } = await this.setupIntents()
-        this.client_secret = client_secret
-
-        // Setup the card element for stripe
-        // Get a previously generated card, if it exists.
-        this.cardElement = elements.getElement('card') || elements.create('card', {
-            base: {
-                color: '#32325d',
-                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                fontSmoothing: 'antialiased',
-                fontSize: '16px',
-                '::placeholder': {
-                    color: '#aab7c4'
-                }
-            },
-            invalid: {
-                color: '#fa755a',
-                iconColor: '#fa755a'
-            }
-        })
-        this.cardElement.mount(this.$refs.card)
     }
 }
 </script>

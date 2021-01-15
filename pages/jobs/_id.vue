@@ -65,6 +65,10 @@ import Attachments from '~/components/attachments'
 
 export default {
     name: 'JobId',
+    components: {
+        StaticMap,
+        Attachments
+    },
     async asyncData ({ params, store, error }) {
         // Populate the Vuex Store
         await store.dispatch('request/init', params.id)
@@ -85,10 +89,6 @@ export default {
             isArchived: 'request/isArchived',
             prettyStatus: 'request/prettyStatus'
         })
-    },
-    components: {
-        StaticMap,
-        Attachments
     },
     methods: {
 
