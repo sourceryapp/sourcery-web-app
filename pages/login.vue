@@ -73,7 +73,7 @@
 <script>
 export default {
     name: 'Login',
-    middleware: ['auth'],
+    // middleware: ['auth'],
     layout: 'default',
     data () {
         return {
@@ -99,17 +99,18 @@ export default {
         async login () {
             this.loading = true
             this.loginError = false
-            await this.$store.dispatch('auth/signIn', {
-                email: this.email,
-                password: this.password
-            }).then(function () {
-                console.log('success')
-            }).catch((error) => {
-                console.log('Error code:', error.code, 'Error message', error.message)
-                this.loginError = true
-                this.loading = false
-            })
-            this.$router.push({ name: 'dashboard' })
+
+            // @url https://firebase.google.com/docs/auth/web/start#sign_in_existing_users
+            await this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
+                .then(() => {
+                    // Success!
+                    this.$router.push({ name: 'dashboard' })
+                }).catch((error) => {
+                    // Login failed
+                    console.log('Error code:', error.code, 'Error message', error.message)
+                    this.loginError = true
+                    this.loading = false
+                })
         }
     }
 }

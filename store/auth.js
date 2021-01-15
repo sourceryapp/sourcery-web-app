@@ -1,36 +1,43 @@
-import Cookies from 'js-cookie'
-
 // user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
-        user: null,
-        loading: false
+        user: null
     }
 }
 
 export const state = initialState
 
 export const getters = {
-    activeUser: (state, getters) => {
-        return state.user
-    },
-    isLoading: (state, getters) => {
-        return state.loading
+    isLoggedIn: (state) => {
+        try {
+            return state.user.id !== null
+        } catch {
+            return false
+        }
     }
 }
 
 export const mutations = {
-    setUser (state, payload) {
-        state.user = payload
+    RESET_STORE: (state) => {
+        Object.assign(state, initialState())
     },
-    setLoading (state, payload) {
-        state.loading = payload
+
+    SET_AUTH_USER: (state, { user }) => {
+        state.user = {
+            uid: user.uid,
+            email: user.email
+        }
     },
-    reset (state) {
-        const s = initialState()
-        Object.keys(s).forEach((key) => {
-            state[key] = s[key]
-        })
+
+    // @url https://firebase.nuxtjs.org/service-options/auth#onauthstatechangedmutation
+    ON_AUTH_STATE_CHANGED_MUTATION: (state, { user, claims }) => {
+        if (user) {
+            // Populate user
+            const { uid, email, emailVerified } = user
+            state.user = { uid, email, emailVerified }
+        } else {
+            // Log user out
+        }
     }
 }
 
@@ -46,30 +53,14 @@ export const mutations = {
 }
  */
 export const actions = {
-    // async signInWithGooglePopup ({ commit }) {
-    //     commit('setLoading', true)
-    //     await this.$nuxt.app.$fire.auth.signInWithPopup(GoogleAuthProvider)
-    //     commit('setUser', this.$nuxt.app.$fire.auth.currentUser)
-    //     commit('setLoading', false)
-    // },
-
-    async signIn ({ commit }, { email, password }) {
-        commit('setLoading', true)
-        await this.$nuxt.app.$fire.auth.signInWithEmailAndPassword(email, password)
-        const token = await this.$nuxt.app.$fire.auth.currentUser.getIdToken(true)
-        Cookies.set('token', token)
-        commit('setUser', this.$nuxt.app.$fire.auth.currentUser)
-        commit('setLoading', false)
-        return 'Someone'
+    RESET_STORE: (state) => {
+        Object.assign(state, initialState())
     },
 
-    async signOut ({ commit, rootState }) {
-        await this.$nuxt.app.$fire.auth.signOut()
-        Cookies.remove('token')
-        Cookies.remove('user')
-        commit('reset') // auth/reset
-
-        // Also reset meta store for this user
-        commit('meta/reset', null, { root: true })
+    SET_AUTH_USER: (state, { user }) => {
+        state.user = {
+            uid: user.uid,
+            email: user.email
+        }
     }
 }

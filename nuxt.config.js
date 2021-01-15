@@ -15,8 +15,8 @@ export default {
     ssr: false,
 
     /*
-    ** Headers of the page
-    */
+     ** Headers of the page
+     */
     head: {
         title: 'Sourcery',
         meta: [
@@ -25,8 +25,16 @@ export default {
             { name: 'viewport', content: 'width=device-width, initial-scale=1' }
         ],
         link: [
-            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Barlow:500,600,700,800&display=swap' },
-            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' },
+            {
+                rel: 'stylesheet',
+                href:
+                    'https://fonts.googleapis.com/css?family=Barlow:500,600,700,800&display=swap'
+            },
+            {
+                rel: 'stylesheet',
+                href:
+                    'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
+            },
             { rel: 'icon', type: 'image/png', href: '/img/favicon.png' },
             { rel: 'apple-touch-icon', href: '/apple-icon.png' }
             // {rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
@@ -38,8 +46,8 @@ export default {
     },
 
     /*
-    ** Global CSS Files
-    */
+     ** Global CSS Files
+     */
     css: [
         '~/assets/styles/sourcery.css',
         // 'material-design-icons-iconfont/dist/material-design-icons.css',
@@ -48,8 +56,8 @@ export default {
     ],
 
     /*
-    ** Env File
-    */
+     ** Env File
+     */
     env,
 
     /**
@@ -83,7 +91,8 @@ export default {
      */
     meta: {
         name: 'Sourcery',
-        description: 'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
+        description:
+            'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true,
         favicon: false
     },
@@ -111,8 +120,8 @@ export default {
     },
 
     /*
-    ** Plugins
-    */
+     ** Plugins
+     */
     plugins: [
         '~/plugins/vue-instantsearch',
 
@@ -141,22 +150,25 @@ export default {
     },
 
     /*
-    ** Router
-    */
+     ** Router
+     */
     router: {
         middleware: [
-            'auth',
-            'user-meta',
-            'account-type',
-            'onboarding-complete'
+            // 'auth',
+            // 'user-meta',
+            // 'account-type',
+            // 'onboarding-complete'
         ]
     },
 
     modules: [
-        ['@nuxtjs/google-analytics', {
-            id: 'UA-150639074',
-            dev: false // don't use in dev mode
-        }],
+        [
+            '@nuxtjs/google-analytics',
+            {
+                id: 'UA-150639074',
+                dev: false // don't use in dev mode
+            }
+        ],
         '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
@@ -177,9 +189,21 @@ export default {
             remoteConfig: true
         }
     },
+    auth: {
+        persistence: 'local', // default
+        initialize: {
+            onAuthStateChangedMutation: 'auth/ON_AUTH_STATE_CHANGED_MUTATION',
+            onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
+            subscribeManually: false
+        },
+        ssr: false, // default
+        emulatorPort: 9099,
+        emulatorHost: 'http://localhost'
+    },
 
     /**
      * Settings for @nuxtjs/vuetify
+     * TODO Upgrade to v2 of Vuetify.
      * @url https://github.com/nuxt-community/vuetify-module/
      */
     vuetify: {
@@ -239,5 +263,12 @@ export default {
     ],
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
-    build: { }
+    build: {
+        extend (config, { isDev }) {
+            // Extend only webpack config for client-bundle
+            if (isDev) {
+                config.devtool = 'source-map'
+            }
+        }
+    }
 }

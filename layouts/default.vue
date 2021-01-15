@@ -179,13 +179,12 @@ export default {
     }),
     computed: {
         user () {
-            return this.$store.getters['auth/activeUser']
+            return this.$fire.auth.activeUser
         },
         gravatar () {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
         },
         ...mapGetters({
-            user: 'auth/activeUser',
             isResearcher: 'meta/isResearcher',
             isSourcerer: 'meta/isSourcerer',
             balance: 'meta/balance',
