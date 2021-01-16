@@ -135,7 +135,10 @@ export default {
         '~/plugins/utils',
 
         // Extensions for the request object
-        '~/plugins/request-extensions'
+        '~/plugins/request-extensions',
+
+        // Sourcery API
+        '~/plugins/sourcery'
     ],
 
     /** pwa: {
