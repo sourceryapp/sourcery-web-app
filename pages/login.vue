@@ -71,9 +71,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'Login',
-    // middleware: ['auth'],
     layout: 'default',
     data () {
         return {
@@ -94,6 +94,19 @@ export default {
             errorMessage: ''
         }
     },
+    computed: {
+        ...mapGetters({
+            user: 'auth/activeUser'
+        })
+    },
+    watch: {
+        // Not a fan of this (@bdaley): https://github.com/nuxt-community/firebase-module/issues/148#issuecomment-611474296
+        user (val) {
+            if (val) {
+                this.$router.push({ name: 'dashboard' })
+            }
+        }
+    },
     methods: {
 
         async login () {
@@ -101,16 +114,15 @@ export default {
             this.loginError = false
 
             // @url https://firebase.google.com/docs/auth/web/start#sign_in_existing_users
-            await this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
-                .then(() => {
-                    // Success!
-                    this.$router.push({ name: 'dashboard' })
-                }).catch((error) => {
-                    // Login failed
-                    console.log('Error code:', error.code, 'Error message', error.message)
-                    this.loginError = true
-                    this.loading = false
-                })
+            console.log('logging in')
+            try {
+                await this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
+                console.log('Logged in!')
+            } catch (error) {
+                console.log('Error code:', error.code, 'Error message', error.message)
+                this.loginError = true
+                this.loading = false
+            }
         }
     }
 }

@@ -111,7 +111,7 @@ import { mapGetters } from 'vuex'
 // TODO Not sure why addToHomeScreen is here
 // addToHomescreen()
 export default {
-    middleware: 'user-meta',
+    // middleware: 'auth-guard',
 
     name: 'Dashboard',
     async asyncData ({ params, store, app }) {
@@ -149,8 +149,8 @@ export default {
                 .get()
 
             /**
-         * Filter out archived records
-         */
+             * Filter out archived records
+             */
             return {
                 requests: requests.docs.filter(doc => !doc.request().isArchived()),
                 jobs: jobs.docs,
@@ -178,7 +178,7 @@ export default {
         })
     },
     mounted () {
-        console.log(this.organizations)
+        // console.log(this.organizations)
     //   console.log(this.reserved_requests)
     },
     methods: {

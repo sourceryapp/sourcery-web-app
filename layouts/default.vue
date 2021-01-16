@@ -179,7 +179,7 @@ export default {
     }),
     computed: {
         user () {
-            return this.$fire.auth.activeUser
+            return this.$store.getters['auth/activeUser']
         },
         gravatar () {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
@@ -201,9 +201,13 @@ export default {
     },
     methods: {
         async logout () {
-            await this.$store.dispatch('auth/signOut')
-            this.dialog = false
-            this.$router.replace('/login')
+            try {
+                await this.$fire.auth.signOut()
+                this.dialog = false
+                this.$router.replace('/login')
+            } catch (error) {
+                console.log(error)
+            }
         }
     /** listenTokenRefresh() {
             const currentMessageToken = window.localStorage.getItem('messagingToken')

@@ -14,6 +14,25 @@ export default {
     target: 'static',
     ssr: false,
 
+    // @url https://nuxtjs.org/blog/moving-from-nuxtjs-dotenv-to-runtime-config/
+    publicRuntimeConfig: {
+        /**
+         * Paths that don't require authentication
+         */
+        publicPaths: [
+            '/login',
+            '/about',
+            '/',
+            '/register',
+            '/password',
+            '/resetpassword',
+            '/index-new',
+            '/terms',
+            '/privacy',
+            '/cookies-notice'
+        ]
+    },
+
     /*
      ** Headers of the page
      */
@@ -69,22 +88,6 @@ export default {
     },
 
     /**
-     * Paths that don't require authentication
-     */
-    noAuth: [
-        '/login',
-        '/about',
-        '/',
-        '/register',
-        '/password',
-        '/resetpassword',
-        '/index-new',
-        '/terms',
-        '/privacy',
-        '/cookies-notice'
-    ],
-
-    /**
      * Meta
      * @todo Add proper meta for FB and Twitter
      * @url https://pwa.nuxtjs.org/modules/meta.html
@@ -129,7 +132,10 @@ export default {
         '~/plugins/feedback',
 
         // Custom utilities for Sourcery
-        '~/plugins/utils'
+        '~/plugins/utils',
+
+        // Extensions for the request object
+        '~/plugins/request-extensions'
     ],
 
     /** pwa: {
@@ -154,7 +160,7 @@ export default {
      */
     router: {
         middleware: [
-            // 'auth',
+            'auth-guard'
             // 'user-meta',
             // 'account-type',
             // 'onboarding-complete'
@@ -182,23 +188,22 @@ export default {
     firebase: {
         config: env.FIREBASE_CONFIG,
         services: {
-            auth: true,
+            auth: {
+                persistence: 'local', // default
+                initialize: {
+                    onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
+                    onAuthStateChangedAction: 'auth/onAuthStateChanged',
+                    subscribeManually: false
+                },
+                ssr: false // default
+                // emulatorPort: 9099,
+                // emulatorHost: 'http://localhost'
+            },
             firestore: true,
             functions: true,
             storage: true,
             remoteConfig: true
         }
-    },
-    auth: {
-        persistence: 'local', // default
-        initialize: {
-            onAuthStateChangedMutation: 'auth/ON_AUTH_STATE_CHANGED_MUTATION',
-            onAuthStateChangedAction: 'auth/onAuthStateChangedAction',
-            subscribeManually: false
-        },
-        ssr: false, // default
-        emulatorPort: 9099,
-        emulatorHost: 'http://localhost'
     },
 
     /**

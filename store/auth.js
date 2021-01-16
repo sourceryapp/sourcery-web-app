@@ -1,7 +1,7 @@
 // user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
-        user: null
+        authUser: null
     }
 }
 
@@ -10,10 +10,14 @@ export const state = initialState
 export const getters = {
     isLoggedIn: (state) => {
         try {
-            return state.user.id !== null
+            return state.authUser.uid !== null
         } catch {
             return false
         }
+    },
+
+    activeUser: (state) => {
+        return state.authUser
     }
 }
 
@@ -22,22 +26,31 @@ export const mutations = {
         Object.assign(state, initialState())
     },
 
-    SET_AUTH_USER: (state, { user }) => {
-        state.user = {
-            uid: user.uid,
-            email: user.email
+    SET_AUTH_USER: (state, { authUser }) => {
+        if (authUser) {
+            console.log('SET_AUTH_USER called', authUser)
+            state.authUser = {
+                uid: authUser.uid,
+                email: authUser.email,
+                photoURL: authUser.photoURL,
+                displayName: authUser.displayName
+            }
         }
     },
 
-    // @url https://firebase.nuxtjs.org/service-options/auth#onauthstatechangedmutation
-    ON_AUTH_STATE_CHANGED_MUTATION: (state, { user, claims }) => {
-        if (user) {
-            // Populate user
-            const { uid, email, emailVerified } = user
-            state.user = { uid, email, emailVerified }
+    ON_AUTH_STATE_CHANGED_MUTATION: (state, { authUser, claims }) => {
+        console.group('ON_AUTH_STATE_CHANGED_MUTATION')
+        console.info('User/Claims', authUser, claims)
+        if (!authUser) {
+            console.log('User not authenticated')
+
+            // claims = null
+            // perform logout operations
         } else {
-            // Log user out
+            console.log('User authenticated!')
+            // Do something with the authUser and the claims object...
         }
+        console.groupEnd()
     }
 }
 
@@ -53,14 +66,27 @@ export const mutations = {
 }
  */
 export const actions = {
-    RESET_STORE: (state) => {
-        Object.assign(state, initialState())
-    },
-
-    SET_AUTH_USER: (state, { user }) => {
-        state.user = {
-            uid: user.uid,
-            email: user.email
+    async onAuthStateChanged ({ commit }, { authUser }) {
+        console.group('onAuthStateChanged')
+        if (!authUser) {
+            console.log('Resetting auth store')
+            commit('RESET_STORE')
+            console.groupEnd()
+            return
         }
+        if (authUser && authUser.getIdToken) {
+            try {
+                const idToken = await authUser.getIdToken(true)
+                console.info('idToken', idToken)
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        if (authUser) {
+            console.log('Setting user', authUser)
+            commit('SET_AUTH_USER', { authUser })
+        }
+
+        console.groupEnd()
     }
 }

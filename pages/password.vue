@@ -74,8 +74,12 @@ export default {
             })
         },
         returnAndLog () {
-            this.$store.dispatch('auth/signOut')
-            this.$router.replace('/login')
+            this.$fire.auth.signOut().then(() => {
+                console.log('logout complete')
+                this.$router.replace('/login')
+            }).catch((error) => {
+                console.log(error)
+            })
         }
     }
 

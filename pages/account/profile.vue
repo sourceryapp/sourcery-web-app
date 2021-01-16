@@ -365,9 +365,13 @@ export default {
                 this.emailFail = true
             })
         },
-        async forgotLog () {
-            await this.$store.dispatch('auth/signOut')
-            this.$router.replace('/password')
+        forgotLog () {
+            this.$fire.auth.signOut().then(() => {
+                console.log('logout complete')
+                this.$router.replace('/password')
+            }).catch((error) => {
+                console.log(error)
+            })
         },
         async setPhone () {
             if (this.phone !== null) {
