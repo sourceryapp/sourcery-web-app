@@ -64,7 +64,7 @@ export default {
     data () {
         return {
             cardElement: null,
-            nameOnCard: this.$store.state.auth.user.displayName,
+            nameOnCard: this.$store.getters['auth/activeUser'].displayName,
             error: false,
             setupIntents: this.$fire.functions.httpsCallable('stripeSetupIntents'),
             saveCard: this.$fire.functions.httpsCallable('stripeSaveCard'),

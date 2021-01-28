@@ -211,17 +211,19 @@ export default {
          * @todo Once Firestore supports geoqueries, we can remove the geolib library and client-side
          *       calculations. Otherwise these queries will get pretty heavy.
          */
-        async findJobs ({ coords }) {
+        findJobs ({ coords }) {
+            console.log('find jobs running')
             this.searching = true
             this.userLat = coords.latitude
             this.userLong = coords.longitude
             const userID = this.user.uid
 
-            this.jobs = await this.$firestore
+            this.$fire.firestore
                 .collection('requests')
                 .where('status', '==', 'pending')
                 .get()
                 .then((snapshot) => {
+                    console.log('results', snapshot)
                     const jobs = []
                     snapshot.docs.forEach((doc) => {
                         if (doc.data().repository) {
@@ -256,7 +258,10 @@ export default {
                         }
                     })
                     this.searching = false
-                    return jobs
+                    this.jobs = jobs
+                })
+                .catch((error) => {
+                    console.log(error)
                 })
         },
         jobValue (job) {

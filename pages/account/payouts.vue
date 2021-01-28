@@ -47,7 +47,8 @@ export default {
             return this.$store.state.meta
         },
         balance () {
-            return this.$store.getters['meta/balance']
+            const { available } = this.$store.getters['meta/balance']
+            return this.$utils.currencyFormat(available[0].amount, available[0].currency)
         },
         hasStripeID () {
             return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)

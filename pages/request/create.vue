@@ -40,7 +40,7 @@
           <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
             <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
             <ais-configure
-              :hits-per-page="15"
+              :hitsPerPage="15"
             />
             <ais-hits>
               <v-list id="repo-search" slot-scope="{items}" two-line subheader>

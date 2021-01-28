@@ -3,8 +3,7 @@ import jwt_decode from 'jwt-decode'
 import { formatMoney, unformat } from 'accounting-js'
 
 export default ({ app }, inject) => {
-    // Inject $utils() in Vue, context and store.
-    inject('utils', () => {
+    const utils = (() => {
         return {
             /**
              * Get First Name
@@ -14,22 +13,27 @@ export default ({ app }, inject) => {
             getFirstName: str => str.split(' ').slice(0, -1).join(' '),
 
             /**
-            * Get Last Name
-            * Assumes str is a full name
-            * "Brian Daley" would return "Daley"
-            */
+             * Get Last Name
+             * Assumes str is a full name
+             * "Brian Daley" would return "Daley"
+             */
             getLastName: str => str.split(' ').slice(-1).join(' '),
 
             /**
              * Builds a query string from an object of parameters
              */
-            buildQueryString: params => Object.keys(params).map(key => key + '=' + encodeURIComponent(params[key])).join('&'),
+            buildQueryString: params =>
+                Object.keys(params)
+                    .map(key => key + '=' + encodeURIComponent(params[key]))
+                    .join('&'),
 
             getUserFromCookie: (cookie) => {
                 const parsed = cookieParser.parse(cookie)
 
                 if (parsed.token) {
-                    const { name, picture, user_id, email } = jwt_decode(parsed.token)
+                    const { name, picture, user_id, email } = jwt_decode(
+                        parsed.token
+                    )
 
                     return {
                         email,
@@ -42,7 +46,9 @@ export default ({ app }, inject) => {
 
             addressToEncodedString: (repository) => {
                 return repository.address1.concat(
-                    repository.address2 ? `,${encodeURIComponent(repository.address2)}` : '',
+                    repository.address2
+                        ? `,${encodeURIComponent(repository.address2)}`
+                        : '',
                     `,${encodeURIComponent(repository.city)}`,
                     `,${encodeURIComponent(repository.state)}`
                 )
@@ -52,7 +58,10 @@ export default ({ app }, inject) => {
              * Gets UserMeta for chosen UID
              */
             getUserMeta: async (uid) => {
-                const doc = await app.$fire.firestore.collection('user-meta').doc(uid).get()
+                const doc = await app.$fire.firestore
+                    .collection('user-meta')
+                    .doc(uid)
+                    .get()
                 return Promise.resolve(doc.data())
             },
 
@@ -76,17 +85,17 @@ export default ({ app }, inject) => {
              * @todo move to a maintained lib like Dinero (https://github.com/sarahdayan/dinero.js)
              */
             estimatedCost: ({ pages }, prefix = '$') => {
-                return formatMoney((30 + (pages * 0.5) + Math.random()), prefix)
+                return formatMoney(30 + pages * 0.5 + Math.random(), prefix)
             },
 
             /**
              * Get the value of a job for a Sourcerer
              */
-            jobValue: (job, prefix = '$') => {
-            // User gets 80% of cost.
-                return (job.pricing && job.pricing !== null)
-                    ? this.$utils.currencyFormat(job.pricing.total * 0.8)
-                    : formatMoney(unformat(job.estimated_cost_usd) * 0.80)
+            jobValue (job, prefix = '$') {
+                // User gets 80% of cost.
+                return job.pricing && job.pricing !== null
+                    ? this.currencyFormat(job.pricing.total * 0.8)
+                    : formatMoney(unformat(job.estimated_cost_usd) * 0.8)
             },
 
             socialLinks: {
@@ -95,5 +104,8 @@ export default ({ app }, inject) => {
                 instagram: 'https://www.instagram.com/sourcery_app/'
             }
         }
-    })
+    })()
+
+    // Inject $utils() in Vue, context and store.
+    inject('utils', utils)
 }

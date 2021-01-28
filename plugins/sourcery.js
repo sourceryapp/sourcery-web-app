@@ -10,7 +10,7 @@ export default (ctx, inject) => {
             /**
              * Request
              */
-            request: {},
+            request: (id) => {},
 
             /**
              * User

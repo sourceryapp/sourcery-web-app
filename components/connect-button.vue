@@ -12,11 +12,6 @@ export default {
             type: String,
             required: false,
             default: ''
-        },
-        repository: {
-            type: Object,
-            required: true,
-            default: null
         }
     },
     data () {

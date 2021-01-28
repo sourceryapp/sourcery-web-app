@@ -82,8 +82,8 @@ export default {
     components: {
         'add-card': addCard
     },
-    async asyncData ({ params, store, $functions }) {
-        const stripeGetPaymentMethods = $functions.httpsCallable('stripeGetPaymentMethods')
+    async asyncData ({ params, store, app }) {
+        const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
         const customer_id = store.state.meta.stripeCustomerId
         return {
             cards: (store.state.meta.stripeCustomerId)
@@ -123,7 +123,7 @@ export default {
         },
         async deleteCard (id) {
             if (confirm('Are you sure you want to delete this card?')) {
-                const stripeDeleteCard = this.$functions.httpsCallable('stripeDeleteCard')
+                const stripeDeleteCard = this.$fire.$functions.httpsCallable('stripeDeleteCard')
                 const { data } = await stripeDeleteCard({ card_id: id })
                 if (data.id) {
                     this.reload()

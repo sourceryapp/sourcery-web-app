@@ -152,7 +152,7 @@ export const actions = {
      * Delete current request
      */
     // delete: ({state, commit, dispatch}) => $fire.firestore.collection('requests').doc(state.id).delete(),
-    insert: async ({ state, commit, dispatch, rootGetters }) => {
+    async insert ({ state, commit, dispatch, rootGetters }) {
     // Generate a label for the request
         commit('setLabel')
 
@@ -169,12 +169,12 @@ export const actions = {
         if (rootGetters['create/isMemberRepo'](state.repository)) {
             commit('setStatusReserved')
         }
-
-        return this.$nuxt.app.$fire.firestore.collection('requests').add(state)
+        console.log('this', this)
+        return this.$fire.firestore.collection('requests').add(state)
     },
 
-    getRepositoryById: ({ state, commit, dispatch }, id) => {
-        return this.$nuxt.app.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
+    getRepositoryById ({ state, commit, dispatch }, id) {
+        return this.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
             return doc.data()
         })
     }

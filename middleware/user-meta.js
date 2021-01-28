@@ -1,7 +1,7 @@
 /**
  * Fetches user-meta and populates the Vuex store
  */
-export default async function ({ store, $axios, redirect, route, error }) {
+export default async function ({ store, $axios, redirect, route, error, app }) {
     console.group('User Meta Middleware - /middleware/user-meta.js')
 
     console.info('User as reported by Vuex Store:', store.getters['auth/activeUser'])
@@ -11,9 +11,9 @@ export default async function ({ store, $axios, redirect, route, error }) {
      * and the meta data hasn't been populated yet.
      */
     console.info('Do we have stripe meta data in the Vuex store?:', store.getters['meta/isset'] ? 'yes' : 'no')
-    if (store.state.auth.user && !(store.getters['meta/isset'])) {
+    if (store.getters['auth/activeUser'] && !(store.getters['meta/isset'])) {
     // Gets usermeta from the database
-        let usermeta = await this.$utils.getUserMeta(store.getters['auth/activeUser'].uid)
+        let usermeta = await app.$utils.getUserMeta(store.getters['auth/activeUser'].uid)
 
         // Merges the fetched data with the default state to ensure that
         // none of the usermeta properties are undefined

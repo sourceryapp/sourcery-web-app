@@ -52,7 +52,7 @@
                       fill-height
                       align-center
                       justify-center
-                      ma-0
+                      ma0
                     >
                       <v-progress-circular indeterminate color="grey lighten-5" />
                     </v-layout>
@@ -70,7 +70,7 @@
                       fill-height
                       align-center
                       justify-center
-                      ma-0
+                      ma0
                     >
                       <v-progress-circular indeterminate color="grey lighten-5" />
                     </v-layout>

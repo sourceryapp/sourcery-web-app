@@ -63,7 +63,7 @@
       <!-- Stupid Hack to center align the wordmark -->
       <!-- <v-toolbar-side-icon style="visibility: hidden" v-if="user"></v-toolbar-side-icon> -->
     </v-toolbar>
-    <v-content pa-0>
+    <v-content pa0>
       <v-container fill-height>
         <v-layout
           justify-center

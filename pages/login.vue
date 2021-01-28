@@ -102,6 +102,7 @@ export default {
     watch: {
         // Not a fan of this (@bdaley): https://github.com/nuxt-community/firebase-module/issues/148#issuecomment-611474296
         user (val) {
+            console.log('Watched User val', val)
             if (val) {
                 this.$router.push({ name: 'dashboard' })
             }

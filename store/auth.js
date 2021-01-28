@@ -1,4 +1,4 @@
-// user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
+// authUser props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
         authUser: null

@@ -19,7 +19,8 @@ module.exports = {
         'no-console': 'off',
         eqeqeq: ['error', 'smart'],
         camelcase: 'off', // TODO Enforce camelcase naming
-        'vue/no-v-html': 'off'
+        'vue/no-v-html': 'off',
+        'vue/attribute-hyphenation': 'off'
     },
     ignorePatterns: ['/tests/', '/static/'] // Disable these for now
 }

@@ -32,11 +32,7 @@ export const state = initialState
  * Getters for our metadata
  */
 export const getters = {
-    balance: (state, getters) => {
-        if (state.balance && state.balance.available) {
-            return this.$utils.currencyFormat(state.balance.available[0].amount, state.balance.available[0].currency)
-        }
-    },
+    balance: (state, getters) => state.balance && state.balance.available ? state.balance : 0,
     /**
      * Check to see if Stripe Connect has been linked
      */
@@ -101,7 +97,7 @@ export const mutations = {
         state.requestUpdates = obj
     },
     setLocation (state, obj = null) {
-        state.location = new this.$nuxt.app.$fire.firestore.GeoPoint(obj.latitude, obj.longitude)
+        state.location = new this.$fire.firestore.GeoPoint(obj.latitude, obj.longitude)
     },
     setSourcerer (state, val) {
         state.sourcerer = val
@@ -142,7 +138,7 @@ export const mutations = {
  */
 export const actions = {
     async save ({ state, rootGetters }, key) {
-        return await this.$nuxt.app.$fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+        return await this.$fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
         }, { merge: true })
     },
@@ -169,7 +165,7 @@ export const actions = {
         if (Array.isArray(state.organizations)) {
             const organizations = []
             state.organizations.forEach((org) => {
-                organizations.push(this.$nuxt.app.$fire.firestore.collection('organization').doc(org).get())
+                organizations.push(this.$fire.firestore.collection('organization').doc(org).get())
             })
             return Promise.all(organizations)
         }

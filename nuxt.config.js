@@ -163,10 +163,10 @@ export default {
      */
     router: {
         middleware: [
-            'auth-guard'
-            // 'user-meta',
-            // 'account-type',
-            // 'onboarding-complete'
+            'auth-guard',
+            'user-meta',
+            'account-type',
+            'onboarding-complete'
         ]
     },
 
@@ -277,6 +277,17 @@ export default {
             if (isDev) {
                 config.devtool = 'source-map'
             }
+
+            // Fix during development
+            config.module.rules.push({
+                enforce: 'pre',
+                test: /\.(js|vue)$/,
+                loader: 'eslint-loader',
+                exclude: /(node_modules)/,
+                options: {
+                    fix: true
+                }
+            })
         }
     }
 }
