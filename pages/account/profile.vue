@@ -322,13 +322,13 @@ export default {
                     displayName: this.name
                     // phoneNumber: this.phone,
                 })
-                this.$store.commit('auth/setUser', user)
+                this.$store.commit('auth/SET_AUTH_USER', user)
                 this.$toast.success('Profile Saved!')
             }
         },
         resetPass () {
-            this.$fire.auth.currentUser.reauthenticateAndRetrieveDataWithCredential(
-                this.$fire.auth.EmailAuthProvider.credential(
+            this.$fire.auth.currentUser.reauthenticateWithCredential(
+                this.$fireModule.auth.EmailAuthProvider.credential(
                     this.$fire.auth.currentUser.email,
                     this.oldpassword
                 )
@@ -348,8 +348,8 @@ export default {
             })
         },
         changeUserEmail () {
-            this.$fire.auth.currentUser.reauthenticateAndRetrieveDataWithCredential(
-                this.$fire.auth.EmailAuthProvider.credential(
+            this.$fire.auth.currentUser.reauthenticateWithCredential(
+                this.$fireModule.auth.EmailAuthProvider.credential(
                     this.$fire.auth.currentUser.email,
                     this.epass
                 )

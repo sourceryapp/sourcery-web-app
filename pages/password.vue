@@ -30,7 +30,7 @@
           </v-flex>
         </v-layout>
         <v-layout row align-center justify-center>
-          <v-btn to="/login">
+          <v-btn @click="$router.go(-1)">
             Back
           </v-btn>
           <v-btn
