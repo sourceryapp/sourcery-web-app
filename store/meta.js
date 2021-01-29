@@ -97,7 +97,7 @@ export const mutations = {
         state.requestUpdates = obj
     },
     setLocation (state, obj = null) {
-        state.location = new this.$fire.firestore.GeoPoint(obj.latitude, obj.longitude)
+        state.location = obj
     },
     setSourcerer (state, val) {
         state.sourcerer = val
@@ -147,7 +147,7 @@ export const actions = {
      */
     updateCurrentLocation ({ state, commit, dispatch }) {
         navigator.geolocation.getCurrentPosition(({ coords }) => {
-            commit('setLocation', coords)
+            commit('setLocation', new this.$fireModule.firestore.GeoPoint(coords.latitude, coords.longitude))
             dispatch('save', 'location')
         }, () => {
             // Failed - User won't give access

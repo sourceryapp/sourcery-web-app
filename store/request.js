@@ -149,7 +149,7 @@ export const actions = {
                                 .collection('requests')
                                 .doc(state.document.id)
                                 .update({
-                                    attachments: this.$fire.firestore.FieldValue.arrayUnion(
+                                    attachments: this.$fireModule.firestore.FieldValue.arrayUnion(
                                         downloadURL
                                     )
                                 })
@@ -206,7 +206,7 @@ export const actions = {
                     .collection('requests')
                     .doc(state.document.id)
                     .update({
-                        attachments: this.$fire.firestore.FieldValue.arrayRemove(
+                        attachments: this.$fireModule.firestore.FieldValue.arrayRemove(
                             file
                         )
                     })
@@ -221,29 +221,32 @@ export const actions = {
     /**
      * Mark as complete
      */
-    markComplete: ({ state, commit, dispatch }) =>
-        this.$fire.firestore
+    markComplete ({ state, commit, dispatch }) {
+        return this.$fire.firestore
             .collection('requests')
             .doc(state.document.id)
-            .update({ status: 'complete' }),
+            .update({ status: 'complete' })
+    },
 
     /**
      * Archive current request
      */
-    markArchived: ({ state, commit, dispatch }) =>
-        this.$fire.firestore
+    markArchived ({ state, commit, dispatch }) {
+        return this.$fire.firestore
             .collection('requests')
             .doc(state.document.id)
-            .update({ status: 'archived' }),
+            .update({ status: 'archived' })
+    },
 
     /**
      * Delete current request
      */
-    delete: ({ state, commit, dispatch }) =>
-        this.$fire.firestore
+    delete ({ state, commit, dispatch }) {
+        return this.$fire.firestore
             .collection('requests')
             .doc(state.document.id)
             .delete()
+    }
 }
 
 /**

@@ -265,17 +265,19 @@
       </section>
     </main>
     <div class="container" style="min-height: auto">
-      <a
+      <NuxtLink
         id="subscribe"
-        href="/"
+        :to="{name: 'register'}"
         class="inline-block bg-transparent hover:bg-purple-500 text-purple-500 font-semibold hover:text-white py-2 px-4 border border-purple-500 hover:border-transparent rounded"
-      >Sign Up Now!</a>
+      >
+        Sign Up Now!
+      </NuxtLink>
     </div>
     <div class="container" style="min-height: auto;">
       <div style="padding-top: 1%;">
-        <a class="fa fa-instagram" :href="$this.$utils.socialLinks.instagram" />
-        <a class="fa fa-twitter" :href="$this.$utils.socialLinks.twitter" />
-        <a class="fa fa-facebook" :href="$this.$utils.socialLinks.facebook" />
+        <a class="fa fa-instagram" :href="$utils.socialLinks.instagram" />
+        <a class="fa fa-twitter" :href="$utils.socialLinks.twitter" />
+        <a class="fa fa-facebook" :href="$utils.socialLinks.facebook" />
       </div>
     </div>
     <hr>

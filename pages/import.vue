@@ -38,7 +38,7 @@ export default {
                         address2: item.address2,
                         city: item.city,
                         country_code: item.country_code,
-                        geo: new this.$fire.firestore.GeoPoint(item.lat, item.long),
+                        geo: new this.$fireModule.firestore.GeoPoint(item.lat, item.long),
                         institution: item.institution,
                         name: item.name,
                         postal_code: item.postal_code,

@@ -26,11 +26,11 @@
           />
         </v-card-text>
         <v-card-actions>
-          <v-btn color="red" dark to="/dashboard">
+          <v-btn to="/dashboard">
             Cancel
           </v-btn>
           <v-spacer />
-          <v-btn color="teal darken-1" dark type="submit">
+          <v-btn color="primary" dark type="submit">
             Submit
           </v-btn>
         </v-card-actions>
