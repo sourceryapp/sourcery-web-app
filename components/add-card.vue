@@ -106,7 +106,11 @@ export default {
                 iconColor: '#fa755a'
             }
         })
-        this.cardElement.mount(this.$refs.card)
+        if (typeof this.$refs.card !== 'undefined') {
+            this.cardElement.mount(this.$refs.card)
+        } else {
+            console.warn('this.$refs.card is not defined', this.$refs)
+        }
     },
     methods: {
         addCard () {
