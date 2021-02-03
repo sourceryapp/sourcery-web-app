@@ -288,6 +288,15 @@ export default {
                     fix: true
                 }
             })
+        },
+
+        // Disable Console messages in production builds
+        terser: {
+            terserOptions: {
+                compress: {
+                    drop_console: true
+                }
+            }
         }
     }
 }

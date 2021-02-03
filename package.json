@@ -56,7 +56,7 @@
     "firebase-tools": "^9.2.0",
     "husky": "^4.3.7",
     "prettier-eslint": "^12.0.0",
-    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.3"
+    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.4"
   },
   "description": "Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them.",
   "author": "Greenhouse Studios <greenhousestudios@uconn.edu>",
