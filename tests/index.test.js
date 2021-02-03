@@ -1,5 +1,5 @@
 // Needed to get the serverHost and serverPort
-const globals = require("./globals");
+const globals = require('./globals')
 
 /**
  * Nightwatch
@@ -8,14 +8,14 @@ const globals = require("./globals");
  */
 module.exports = {
 
-  // Set true to disable this test
-  disabled: true,
+    // Set true to disable this test
+    disabled: true,
 
-  'Page: /' : function (browser) {
-    browser
-      .url(`http://${globals.serverHost}:${globals.serverPort}`)
-      .waitForElementVisible('body')
-      .assert.titleContains('Sourcery')
-      .end();
-  }
+    'Page: /' (browser) {
+        browser
+            .url(`http://${globals.serverHost}:${globals.serverPort}`)
+            .waitForElementVisible('body')
+            .assert.titleContains('Sourcery')
+            .end()
+    }
 }

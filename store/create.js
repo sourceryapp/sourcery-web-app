@@ -1,15 +1,10 @@
-import { db, storage, FieldValue } from "~/plugins/firebase-client-init.js";
-
-
-
 // Request/job States
-const DRAFT =       'draft';
-const PENDING =     'pending';
-const PICKED_UP =   'picked_up';
-const ARCHIVED =    'archived';
-const RESERVED =    'reserved';
-const COMPLETE =    'complete';
-
+const DRAFT = 'draft'
+const PENDING = 'pending'
+const PICKED_UP = 'picked_up'
+const ARCHIVED = 'archived'
+const RESERVED = 'reserved'
+const COMPLETE = 'complete'
 
 /**
  * Any properties for the initial state should be added
@@ -27,16 +22,15 @@ const initialState = () => {
         pricing: {},
         repository: {},
         repository_id: null,
-        status: "pending",
-        vendor_id: '',
+        status: 'pending',
+        vendor_id: ''
     }
 }
 
 /**
  * The initial state uses the initialState() function
  */
-export const state = initialState;
-
+export const state = initialState
 
 /**
  * Getters for our metadata
@@ -46,7 +40,7 @@ export const getters = {
     /**
      * Get an item by key
      */
-    getItem: (state, getters) => (key) => state[key],
+    getItem: (state, getters) => key => state[key],
 
     /**
      * Is the current request complete
@@ -87,9 +81,11 @@ export const getters = {
      * This is just a utility function to determine whether the
      * given repo is from a member organization
      */
-    isMemberRepo: (state, getters) => (repo) =>
-        //  @todo Remove hard-coded organization values in production
-        ( (repo.hasOwnProperty('organization') && repo.organization !== null) || repo.institution == 'UConn' || repo.institution == 'Northeastern University'),
+    isMemberRepo: (state, getters) => repo =>
+        //  TODO Remove hard-coded organization values in production
+        //  TODO Remove hasOwnProperty()
+        /* eslint no-prototype-builtins: "off" */
+        ((repo.hasOwnProperty('organization') && repo.organization !== null) || repo.institution === 'UConn' || repo.institution === 'Northeastern University')
 
 }
 
@@ -99,46 +95,45 @@ export const getters = {
  */
 export const mutations = {
 
-    setCitation(state, value){
+    setCitation (state, value) {
         state.citation = value
     },
-    setPages(state, value){
-        state.pages = Number(value);
+    setPages (state, value) {
+        state.pages = Number(value)
     },
-    setRepositoryId(state, value){
-        state.repository_id = value;
+    setRepositoryId (state, value) {
+        state.repository_id = value
     },
-    setLabel(state, value=false){
-        // Set the label to the given value or as a truncated citation
-        state.label = value ? value : state.citation.match(/^(\w(\s*))+/)[0];
+    setLabel (state, value = false) {
+    // Set the label to the given value or as a truncated citation
+        state.label = value || state.citation.match(/^(\w(\s*))+/)[0]
     },
-    setStatusDraft(state){
-        state.status = DRAFT;
+    setStatusDraft (state) {
+        state.status = DRAFT
     },
-    setStatusPending(state){
-        state.status = PENDING;
+    setStatusPending (state) {
+        state.status = PENDING
     },
-    setStatusPickedUp(state){
-        state.status = PICKED_UP;
+    setStatusPickedUp (state) {
+        state.status = PICKED_UP
     },
-    setStatusArchived(state){
-        state.status = ARCHIVED;
+    setStatusArchived (state) {
+        state.status = ARCHIVED
     },
-    setStatusReserved(state){
-        state.status = RESERVED;
+    setStatusReserved (state) {
+        state.status = RESERVED
     },
-    setStatusComplete(state){
-        state.status = COMPLETE;
+    setStatusComplete (state) {
+        state.status = COMPLETE
     },
-    reset(state) {
+    reset (state) {
         const s = initialState()
-        Object.keys(s).forEach(key => {
+        Object.keys(s).forEach((key) => {
             state[key] = s[key]
         })
-    },
+    }
 
 }
-
 
 /**
  * Available properties within actions
@@ -156,34 +151,31 @@ export const actions = {
     /**
      * Delete current request
      */
-    // delete: ({state, commit, dispatch}) => db.collection('requests').doc(state.id).delete(),
-    insert: async ({state, commit, dispatch, rootGetters}) => {
-
-        // Generate a label for the request
-        commit('setLabel');
+    // delete: ({state, commit, dispatch}) => $fire.firestore.collection('requests').doc(state.id).delete(),
+    async insert ({ state, commit, dispatch, rootGetters }) {
+    // Generate a label for the request
+        commit('setLabel')
 
         // Created now
-        state.created_at = new Date();
+        state.created_at = new Date()
 
         // Repository Object
-        state.repository = await dispatch('getRepositoryById', state.repository_id);
+        state.repository = await dispatch('getRepositoryById', state.repository_id)
 
         // Client ID of current user
-        state.client_id = rootGetters['auth/activeUser'].uid;
+        state.client_id = rootGetters['auth/activeUser'].uid
 
         // If a member repo, set to reserved and set the parent org
-        if(rootGetters['create/isMemberRepo'], state.repository){
+        if (rootGetters['create/isMemberRepo'](state.repository)) {
             commit('setStatusReserved')
         }
-
-        return db.collection("requests").add(state);
-
+        console.log('this', this)
+        return this.$fire.firestore.collection('requests').add(state)
     },
 
-    getRepositoryById: ({state, commit, dispatch}, id) => {
-        return db.collection('repositories').doc(id).get().then((doc) => {
-            return doc.data();
-        });
+    getRepositoryById ({ state, commit, dispatch }, id) {
+        return this.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
+            return doc.data()
+        })
     }
 }
-

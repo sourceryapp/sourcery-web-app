@@ -1,14 +1,11 @@
-import { Utils } from "~/modules/utilities.js"
 
 /**
  * Finish the onboarding process, if not yet complete.
  */
-export default async function ({ store, redirect, route, error, req }) {
+export default function ({ store, redirect, route, error, req }) {
+    const routeName = 'register-complete'
 
-    let routeName = 'register-complete';
-
-    if (store.getters['auth/activeUser'] && (route.name !== routeName) && ((store.getters['meta/isResearcher'] || store.getters['meta/isSourcerer']) && !(store.getters['meta/onboardingComplete'])) ){
+    if (store.getters['auth/activeUser'] && (route.name !== routeName) && ((store.getters['meta/isResearcher'] || store.getters['meta/isSourcerer']) && !(store.getters['meta/onboardingComplete']))) {
         return redirect({ name: routeName })
     }
-
 }

@@ -1,4 +1,4 @@
-import { db } from '../firebase-client-init'
+/* eslint-disable */
 
 /**
  * These methods are added to DocumentSnapshot
@@ -6,7 +6,7 @@ import { db } from '../firebase-client-init'
  * @url https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot
  */
 
-export default function() {
+export default function () {
     // Make sure the document is of type "request" before continuing?
     // ...
 
@@ -17,7 +17,7 @@ export default function() {
          * Just for Testing
          */
         testing: () => {
-            console.info("Testing", this.data());
+            console.info('Testing', this.data())
         },
 
         /**
@@ -44,30 +44,27 @@ export default function() {
          * Complete current request
          */
         markComplete: async () => {
-            return await db.collection('requests').doc(this.id).update({ status: 'complete' });
+            return await $fire.firestore.collection('requests').doc(this.id).update({ status: 'complete' })
         },
 
         /**
          * Archive current request
          */
         markArchived: async () => {
-            return await db.collection('requests').doc(this.id).update({ status: 'archived' });
+            return await $fire.firestore.collection('requests').doc(this.id).update({ status: 'archived' })
         },
 
         /**
          * Delete current request
          */
         delete: async () => {
-            return await db.collection('requests').doc(this.id).delete();
+            return await $fire.firestore.collection('requests').doc(this.id).delete()
         },
 
         /**
          * Returns a human-readable version of status
          */
-        prettyStatus: () => this.data().status.replace('_', ' '),
-
+        prettyStatus: () => this.data().status.replace('_', ' ')
 
     }
-
-
 }

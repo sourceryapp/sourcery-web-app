@@ -1,7 +1,7 @@
 <template>
   <v-app id="tube">
-      <!-- <lp-banner></lp-banner> -->
-      	<!-- <header class="sticky" ref="sticky">
+    <!-- <lp-banner></lp-banner> -->
+    <!-- <header class="sticky" ref="sticky">
               <a href="/">
                 <img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
               </a>
@@ -12,12 +12,33 @@
 </template>
 
 <script>
-import throttle from 'lodash.throttle'
-import lpBeta from '~/components/lp-banner.vue'
+// import throttle from 'lodash.throttle'
+// import lpBeta from '~/components/lp-banner.vue'
 
 export default {
-    name: 'landing-beta',
-    head() {
+    name: 'LandingBeta',
+    components: {
+    // 'lp-banner': lpBeta,
+    },
+    data () {
+        return {
+            // scrollYPosition:null
+        }
+    },
+    mounted () {
+    // let sticky = this.$refs.sticky;
+    // window.addEventListener('scroll', throttle(function(e) {
+
+        //     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        //         sticky.classList.add('sticky--small')
+
+        //     } else {
+        //         sticky.classList.remove('sticky--small')
+
+    //     }
+    // }, 500));
+    },
+    head () {
         return {
             script: [
 
@@ -31,31 +52,10 @@ export default {
                     href: 'https://fonts.googleapis.com/css?family=Barlow:100,200,300,400,500,600,700,800,900&display=swap',
                     rel: 'stylesheet'
                 },
-                { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+                { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' }
 
             ]
         }
-    },
-    data: function() {
-        return {
-            // scrollYPosition:null
-        }
-    },
-    mounted() {
-        // let sticky = this.$refs.sticky;
-        // window.addEventListener('scroll', throttle(function(e) {
-
-        //     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        //         sticky.classList.add('sticky--small')
-
-        //     } else {
-        //         sticky.classList.remove('sticky--small')
-
-        //     }
-        // }, 500));
-    },
-    components: {
-        // 'lp-banner': lpBeta,
     }
 }
 </script>
@@ -85,7 +85,6 @@ export default {
     display:none;
 }
 
-
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -104,6 +103,5 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
-
 
 </style>

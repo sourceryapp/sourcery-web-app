@@ -1,42 +1,58 @@
-import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
-import Cookies from 'js-cookie'
-import { Utils } from '~/modules/utilities.js';
-
-
-// user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
+// authUser props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
-        user: null,
-        loading: false
+        authUser: null
     }
 }
 
-export const state = initialState;
+export const state = initialState
 
 export const getters = {
-    activeUser: (state, getters) => {
-        return state.user
+    isLoggedIn: (state) => {
+        try {
+            return state.authUser.uid !== null
+        } catch {
+            return false
+        }
     },
-    isLoading: (state, getters) => {
-        return state.loading
+
+    activeUser: (state) => {
+        return state.authUser
     }
-};
+}
 
 export const mutations = {
-    setUser(state, payload) {
-        state.user = payload;
+    RESET_STORE: (state) => {
+        Object.assign(state, initialState())
     },
-    setLoading(state, payload) {
-        state.loading = payload
-    },
-    reset(state) {
-        const s = initialState()
-        Object.keys(s).forEach(key => {
-            state[key] = s[key]
-        })
-    }
-};
 
+    SET_AUTH_USER: (state, { authUser }) => {
+        if (authUser) {
+            console.log('SET_AUTH_USER called', authUser)
+            state.authUser = {
+                uid: authUser.uid,
+                email: authUser.email,
+                photoURL: authUser.photoURL,
+                displayName: authUser.displayName
+            }
+        }
+    },
+
+    ON_AUTH_STATE_CHANGED_MUTATION: (state, { authUser, claims }) => {
+        console.group('ON_AUTH_STATE_CHANGED_MUTATION')
+        console.info('User/Claims', authUser, claims)
+        if (!authUser) {
+            console.log('User not authenticated')
+
+            // claims = null
+            // perform logout operations
+        } else {
+            console.log('User authenticated!')
+            // Do something with the authUser and the claims object...
+        }
+        console.groupEnd()
+    }
+}
 
 /**
  * Available properties within actions
@@ -50,30 +66,27 @@ export const mutations = {
 }
  */
 export const actions = {
-    async signInWithGooglePopup({ commit }) {
-        commit('setLoading', true)
-        let authData = await Auth.signInWithPopup(GoogleAuthProvider);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
-    },
+    async onAuthStateChanged ({ commit }, { authUser }) {
+        console.group('onAuthStateChanged')
+        if (!authUser) {
+            console.log('Resetting auth store')
+            commit('RESET_STORE')
+            console.groupEnd()
+            return
+        }
+        if (authUser && authUser.getIdToken) {
+            try {
+                const idToken = await authUser.getIdToken(true)
+                console.info('idToken', idToken)
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        if (authUser) {
+            console.log('Setting user', authUser)
+            commit('SET_AUTH_USER', { authUser })
+        }
 
-    async signIn({ commit }, { email, password }) {
-        commit('setLoading', true);
-        let authData = await Auth.signInWithEmailAndPassword(email, password);
-        const token = await Auth.currentUser.getIdToken(true)
-        Cookies.set('token', token);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
-        return "Someone";
-    },
-
-    async signOut({commit, rootState}) {
-        await Auth.signOut()
-        Cookies.remove('token');
-        Cookies.remove('user');
-        commit('reset'); // auth/reset
-
-        // Also reset meta store for this user
-        commit('meta/reset', null, { root: true })
+        console.groupEnd()
     }
-};
+}

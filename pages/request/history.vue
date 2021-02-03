@@ -4,7 +4,7 @@
       <h1>History</h1>
       <v-list two-line>
         <v-subheader>Archived Requests</v-subheader>
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-list-tile v-if="requests.length == 0" to="/request/create">
           <v-list-tile-content>
@@ -19,14 +19,13 @@
               <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
+          <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
         </template>
       </v-list>
 
-
       <v-list two-line class="mt-5">
         <v-subheader>Completed Jobs</v-subheader>
-        <v-divider></v-divider>
+        <v-divider />
 
         <v-list-tile v-if="jobs.length == 0" to="/jobs">
           <v-list-tile-content>
@@ -41,61 +40,61 @@
               <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-          <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`"></v-divider>
+          <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
         </template>
       </v-list>
 
       <div class="text-xs-center mt-5">
-        <v-btn color="primary" to="/dashboard">Back</v-btn>
+        <v-btn color="primary" to="/dashboard">
+          Back
+        </v-btn>
       </div>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { db } from "~/plugins/firebase-client-init.js";
 export default {
-  name: "history",
-  async asyncData({ params, store }) {
-    if (store.getters['auth/activeUser'].uid) {
-
-        let requests = await db
-                .collection("requests")
-                .where("client_id", "==", store.getters['auth/activeUser'].uid)
-                .where("status", "==", "archived")
-                .orderBy("created_at", "desc")
-                .get();
-
-        let jobs = await db
-                .collection("requests")
-                .where("vendor_id", "==", store.getters['auth/activeUser'].uid)
-                .orderBy("created_at", "desc")
+    name: 'History',
+    async asyncData ({ params, store, app }) {
+        if (store.getters['auth/activeUser'].uid) {
+            const requests = await app.$fire.firestore
+                .collection('requests')
+                .where('client_id', '==', store.getters['auth/activeUser'].uid)
+                .where('status', '==', 'archived')
+                .orderBy('created_at', 'desc')
                 .get()
 
+            const jobs = await app.$fire.firestore
+                .collection('requests')
+                .where('vendor_id', '==', store.getters['auth/activeUser'].uid)
+                .orderBy('created_at', 'desc')
+                .get()
+
+            return {
+                requests: requests.docs,
+                jobs: jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+            }
+        }
+    },
+    data () {
         return {
-            requests: requests.docs,
-            jobs: jobs.docs.filter( doc => doc.request().isArchived() || doc.request().isComplete() )
-        };
-    }
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/activeUser'];
-    }
-  },
-  data: function() {
-    return {
-      requests: [],
-      jobs: []
-    };
-  },
-  mounted() {
+            requests: [],
+            jobs: []
+        }
+    },
+    computed: {
+        user () {
+            return this.$store.getters['auth/activeUser']
+        }
+    },
+    mounted () {
     // this.$axios
     //     .$get('/requests')
     //     .then(response => (this.requests = response.data));
     // console.log(this.requests.docs);
-  }
-};
+    }
+}
 </script>
 
 <style scoped>

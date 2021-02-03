@@ -1,61 +1,64 @@
 <template>
   <v-app id="tube">
-       <v-flex xs12 sm6 offset-sm3>
-            <v-layout column fill-height>
-                <v-flex>
-                    <v-card width="100%">
-                        <v-card-title>
-                            <h1>Payouts</h1>
-                        </v-card-title>
-                        <v-card-text>
-                            <p v-if="!hasStripeID">Before accepting payments, you must configure your payout options. </p>
-                            <p v-if="hasStripeID">Your payout options have been configured. Use the button below to check your balance, change your payout configuration, or modify your payout schedule.</p>
-                            <p v-if="hasStripeID">Estimated Balance: {{ this.balance }} </p>
-                        </v-card-text>
+    <v-flex xs12 sm6 offset-sm3>
+      <v-layout column fill-height>
+        <v-flex>
+          <v-card width="100%">
+            <v-card-title>
+              <h1>Payouts</h1>
+            </v-card-title>
+            <v-card-text>
+              <p v-if="!hasStripeID">
+                Before accepting payments, you must configure your payout options.
+              </p>
+              <p v-if="hasStripeID">
+                Your payout options have been configured. Use the button below to check your balance, change your payout configuration, or modify your payout schedule.
+              </p>
+              <p v-if="hasStripeID">
+                Estimated Balance: {{ balance }}
+              </p>
+            </v-card-text>
 
-                        <v-card-actions>
-                            <connect-button></connect-button>
-                        </v-card-actions>
-
-                    </v-card>
-
-                </v-flex>
-            </v-layout>
-       </v-flex>
-
+            <v-card-actions>
+              <connect-button />
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-flex>
   </v-app>
 </template>
 
 <script>
-import { functions } from "~/plugins/firebase-client-init.js"
-import connectButton from "~/components/connect-button.vue";
+import connectButton from '~/components/connect-button.vue'
 
-  export default {
-    name: "payouts",
-    data () {
-      return {
-        stripeConnect: null
-      }
-    },
+export default {
+    name: 'Payouts',
     components: {
         'connect-button': connectButton
     },
-    computed: {
-        usermeta: function(){
-            return this.$store.state.meta;
-        },
-        balance: function(){
-            return this.$store.getters['meta/balance']
-        },
-        hasStripeID: function(){
-            return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
-        },
+    data () {
+        return {
+            stripeConnect: null
+        }
     },
-    async mounted() {
-        console.log("Stripe URL:", this.stripeURL, this.usermeta.phone)
-        console.log("User Balance:", this.usermeta.balance)
+    computed: {
+        usermeta () {
+            return this.$store.state.meta
+        },
+        balance () {
+            const { available } = this.$store.getters['meta/balance']
+            return this.$utils.currencyFormat(available[0].amount, available[0].currency)
+        },
+        hasStripeID () {
+            return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
+        }
+    },
+    mounted () {
+        console.log('Stripe URL:', this.stripeURL, this.usermeta.phone)
+        console.log('User Balance:', this.usermeta.balance)
     }
-  }
+}
 </script>
 
 <style scoped>
