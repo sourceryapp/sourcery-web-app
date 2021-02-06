@@ -19,12 +19,12 @@
           >
             Sign Up
           </a>
-          <a
-            href="/login"
+          <nuxt-link
+            :to="{ name: 'dashboard' }"
             class="button button__mobile-block button__lg button__outline button__white-outline"
           >
             Log In
-          </a>
+          </nuxt-link>
         </div>
         <div class="header__slogan">
           <h1>Your sources, like magic</h1>
@@ -213,12 +213,12 @@
           </h1>
         </div>
         <div class="cta-buttons">
-          <a
-            href="/login"
+          <nuxt-link
+            :to="{ name: 'dashboard' }"
             class="button button___mobile-block button__lg button__outline"
           >
             Log In
-          </a>
+          </nuxt-link>
           <a
             href="/register"
             class="button button___mobile-block button__lg button__purple"
