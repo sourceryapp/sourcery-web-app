@@ -3,6 +3,7 @@ name: Build
 jobs:
   build:
     name: Build Test
+    environment: development
     if: false
     runs-on: ubuntu-latest
     steps:

@@ -4,6 +4,7 @@ on:
 name: Deploy to Production
 jobs:
   production:
+    environment: production
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout tagged release"
