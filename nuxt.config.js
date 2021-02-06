@@ -174,14 +174,15 @@ export default {
         [
             '@nuxtjs/google-analytics',
             {
-                id: 'UA-150639074',
+                id: process.env.GOOGLE_ANALYTICS_ID,
                 dev: false // don't use in dev mode
             }
         ],
         '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
-        '@nuxtjs/firebase'
+        '@nuxtjs/firebase',
+        '@nuxtjs/sentry'
     ],
 
     /**
@@ -207,6 +208,14 @@ export default {
             storage: true,
             remoteConfig: true
         }
+    },
+
+    /**
+     * Sentry Error Logging
+     * @url https://sentry.nuxtjs.org/guide/setup
+     */
+    sentry: {
+        dsn: process.env.SENTRY_DSN
     },
 
     /**
