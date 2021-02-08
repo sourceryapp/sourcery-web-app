@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+import mime from 'mime-types'
 /**
  * Any properties for the meta state should be added
  * to this function.
@@ -104,6 +106,9 @@ export const actions = {
         // Default number of pages for an attachment
         let pages = 1
 
+        // Stored Filename will become UUID.extension
+        const storedFileName = `${uuidv4()}.${mime.extension(file.type)}`
+
         // If it's a PDF, we need to count the number of pages
         if (file.type === 'application/pdf') {
             pages = await countPages(file)
@@ -113,7 +118,7 @@ export const actions = {
             const storageRef = this.$fire.storage.ref(
                 `jobs/${state.document.id}/images/`
             )
-            const imageRef = storageRef.child(file.name.toLowerCase())
+            const imageRef = storageRef.child(storedFileName)
             const uploadTask = imageRef.put(file)
 
             uploadTask.on(
