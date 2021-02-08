@@ -39,10 +39,12 @@
     "lodash.throttle": "^4.1.1",
     "material-design-icons-iconfont": "^5.0.1",
     "md5": "^2.2.1",
+    "mime-types": "^2.1.28",
     "nuxt": "^2.14.12",
     "paymentfont": "^1.2.5",
     "register-service-worker": "^1.7.1",
     "search-insights": "^1.4.0",
+    "uuid": "^8.3.2",
     "vue-cookie-law": "^1.11.0",
     "vue-instantsearch": "^2.7.0"
   },
