@@ -5,18 +5,13 @@ about: Suggest an idea for this project
 ---
 
 <!--
-Thank you for suggesting an idea to make Sourcery better.
+Helpful Guide
 
-Please fill in as much of the template below as you're able.
+"As a [persona]": Who are we building this for? We’re not just after a job title, we’re after the persona of the person. Max. Our team should have a shared understanding of who Max is. We’ve hopefully interviewed plenty of Max’s. We understand how that person works, how they think and what they feel. We have empathy for Max.
+
+“Wants to”: Here we’re describing their intent — not the features they use. What is it they’re actually trying to achieve? This statement should be implementation free — if you’re describing any part of the UI and not what the user goal is you're missing the point.
+
+“So that”: how does their immediate desire to do something this fit into their bigger picture? What’s the overall benefit they’re trying to achieve? What is the big problem that needs solving?
 -->
 
-**Is your feature request related to a problem? Please describe.**
-Please describe the problem you are trying to solve.
-
-
-**Describe the solution you'd like**
-Please describe the desired behavior.
-
-
-**Describe alternatives you've considered**
-Please describe alternative solutions or features you have considered.
+As a [persona], I [want to], [so that].
