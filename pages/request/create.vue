@@ -32,12 +32,23 @@
             <div class="headline">
               Where is your document located?
             </div>
-            <span class="grey--text"><nuxt-link :to="{ name: 'suggest-repository' }">Don't see yours listed?</nuxt-link></span>
+            <!-- <span class="grey--text"><nuxt-link :to="{ name: 'suggest-repository' }">Don't see yours listed?</nuxt-link></span> -->
           </div>
         </v-card-title>
         <v-card-text>
+          <!-- The following is a temporary selection tool for partner organizations -->
+          <v-radio-group v-model="request.repository_id">
+            <v-radio
+              v-for="repo in repositories"
+              :key="repo.id"
+              color="primary"
+              :label="repo.data().name"
+              :value="repo.id"
+            />
+          </v-radio-group>
+
           <!-- https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/ -->
-          <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
+          <!-- <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
             <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
             <ais-configure
               :hitsPerPage="15"
@@ -73,7 +84,7 @@
                 </template>
               </v-list>
             </ais-hits>
-          </ais-instant-search>
+          </ais-instant-search> -->
         </v-card-text>
         <v-card-actions>
           <v-layout
@@ -198,9 +209,26 @@ import 'instantsearch.css/themes/algolia-min.css'
 export default {
     name: 'Create',
     auth: true,
-    async asyncData ({ params, store }) {},
+    async asyncData ({ params, store, app }) {
+        let repositories = { docs: [] }
+        try {
+            repositories = await app.$fire.firestore
+                .collection('repositories')
+                .where('organization', '!=', '')
+                .orderBy('organization')
+                .orderBy('name', 'asc')
+                .get()
+        } catch (error) {
+            console.log(error)
+        }
+        return {
+            repositories: repositories.docs
+        }
+    },
     data () {
         return {
+            repositories: [],
+            repository: null,
             areas: null,
             active: null,
             loading: false,
@@ -279,6 +307,7 @@ export default {
     },
     mounted () {
     // console.log(this.request);
+        console.log(this.repositories)
     },
     methods: {
         submitRequest () {
