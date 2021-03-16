@@ -165,17 +165,26 @@ export const actions = {
         // Client ID of current user
         state.client_id = rootGetters['auth/activeUser'].uid
 
-        // If a member repo, set to reserved and set the parent org
+        // If a member repo, set to picked_up by the vendor
         if (rootGetters['create/isMemberRepo'](state.repository)) {
-            commit('setStatusReserved')
+            // Set as picked_up
+            commit('setStatusPickedUp')
+
+            // Set the vendor_id
+            state.vendor_id = await dispatch('getOrganizationUser', state.repository.organization)
         }
-        console.log('this', this)
         return this.$fire.firestore.collection('requests').add(state)
     },
 
     getRepositoryById ({ state, commit, dispatch }, id) {
         return this.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
             return doc.data()
+        })
+    },
+
+    getOrganizationUser ({ state, commit, dispatch }, orgId) {
+        return this.$fire.firestore.collection('organization').doc(orgId).get().then((doc) => {
+            return doc.data().users[0]
         })
     }
 }

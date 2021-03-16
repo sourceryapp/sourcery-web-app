@@ -3,7 +3,7 @@
     <v-flex xs12 sm6 offset-sm3>
       <h1>Dashboard</h1>
 
-      <template v-for="(snapshot, index) in reserved_requests">
+      <!-- <template v-for="(snapshot, index) in reserved_requests">
         <v-card v-if="snapshot.size !== 0" :key="index" flat class="mb-5">
           <v-card-title>Jobs to Claim or Release</v-card-title>
           <v-divider />
@@ -29,7 +29,7 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </template>
+      </template> -->
 
       <v-list two-line>
         <v-subheader>Your Requests</v-subheader>
@@ -116,24 +116,27 @@ export default {
     name: 'Dashboard',
     async asyncData ({ params, store, app }) {
         if (store.getters['auth/activeUser'].uid) {
-            let organizations = null; const reserve_queries = []; let reserved_requests = null
-            if (store.getters['meta/isOrgMember']) {
-                // Get the organizations for the current user
-                organizations = await store.dispatch('meta/getOrganizations')
+            const organizations = null
+            // const reserve_queries = [];
+            const reserved_requests = null
+            // Temporarily disabled. Org requests are going straight to org owners
+            // if (store.getters['meta/isOrgMember']) {
+            //     // Get the organizations for the current user
+            //     organizations = await store.dispatch('meta/getOrganizations')
 
-                organizations.forEach((organization) => {
-                    reserve_queries.push(
-                        app.$fire.firestore.collection('requests')
-                            .where('status', '==', 'reserved')
-                            .where('repository.organization', '==', organization.id)
-                            .orderBy('created_at', 'desc')
-                            .get()
-                    )
-                })
+            //     organizations.forEach((organization) => {
+            //         reserve_queries.push(
+            //             app.$fire.firestore.collection('requests')
+            //                 .where('status', '==', 'reserved')
+            //                 .where('repository.organization', '==', organization.id)
+            //                 .orderBy('created_at', 'desc')
+            //                 .get()
+            //         )
+            //     })
 
-                reserved_requests = await Promise.all(reserve_queries)
-                console.log('Reserved requests', reserved_requests)
-            }
+            //     reserved_requests = await Promise.all(reserve_queries)
+            //     console.log('Reserved requests', reserved_requests)
+            // }
 
             const requests = await app.$fire.firestore
                 .collection('requests')

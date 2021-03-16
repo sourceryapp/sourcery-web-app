@@ -98,7 +98,7 @@
         <v-icon>add_circle</v-icon>
       </v-btn>
 
-      <v-btn
+      <!-- <v-btn
         flat
         value="search"
         to="/jobs"
@@ -106,7 +106,7 @@
       >
         <span>Find Jobs</span>
         <v-icon>search</v-icon>
-      </v-btn>
+      </v-btn> -->
 
       <v-btn
         flat
