@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if="isPickedUp" class="mt-3">
+    <v-card v-if="isPickedUp && userIsVendor" class="mt-3">
       <v-card-title primary-title class="headline">
         Attachments
       </v-card-title>
@@ -231,8 +231,13 @@ export default {
         },
         isFailed () {
             return this.currentStatus === STATUS_FAILED
+        },
+        /**
+         * Returns true if the current user is the vendor for this request
+         */
+        userIsVendor () {
+            return this.$store.state.auth.authUser.uid === this.data.vendor_id
         }
-
     },
     mounted () {
         console.log(this.data)
