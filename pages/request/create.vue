@@ -10,7 +10,8 @@
         type="info"
         class="mt-4 mb-4"
       >
-        During the beta, users can request documents located in the Boston, New York, and Washington, D.C. metro areas, and at the University of Connecticut.
+        <!-- During the beta, users can request documents located in the Boston, New York, and Washington, D.C. metro areas, and at the University of Connecticut. -->
+        Due to the pandemic, documents can only be requested from our partner
       </v-alert>
 
       <v-alert
@@ -312,11 +313,14 @@ export default {
     methods: {
         submitRequest () {
             this.isSaving = true
-            this.$store.dispatch('create/insert').then((snapshot) => {
+            this.$store.dispatch('create/insert').then((doc) => {
                 this.$toast.success('Your request has been submitted!')
                 this.isSaving = false
+                console.log('Inserted:', doc.id)
+                this.$store.commit('create/reset')
                 this.$router.push({ name: 'dashboard' })
             }).catch((error) => {
+                console.log(error)
                 if (error) {
                     this.isSaving = false
                     this.$toast.error('There was a problem saving your request.')
@@ -344,7 +348,6 @@ export default {
             // console.log(repo.objectID, repo);
             this.repository_id = repo.objectID
         }
-
     }
 }
 </script>
