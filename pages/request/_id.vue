@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 offset-sm2>
-      <template v-if="!id">
+      <template v-if="!job.id">
         <!-- <h1>Not found</h1> -->
         <v-alert type="error" value="1">
           The request does not exist or was deleted.
@@ -10,79 +10,57 @@
           Dashboard
         </v-btn>
       </template>
-      <template v-if="id">
+      <template v-if="job.id">
         <v-card>
           <StaticMap
-            :alt="`Satellite image of ${data.repository.name}`"
-            :repository="data.repository"
+            :alt="`Satellite image of ${job.repository.name}`"
+            :repository="job.repository"
           />
           <v-card-title>
             <div>
               <div class="headline">
-                {{ data.label }}
+                {{ job.label }}
               </div>
 
-              <span class="grey--text text--darken-4 citation">{{ data.citation }}</span>
+              <span class="grey--text text--darken-4 citation">{{ job.citation }}</span>
 
               <v-divider class="mt-3 mb-3" />
 
               <div class="" style="text-transform:capitalize">
-                <strong>Status</strong>: {{ prettyStatus }}
+                <strong>Status</strong>: {{ job.prettyStatus() }}
               </div>
               <div class="">
-                <strong>Repository</strong>: {{ data.repository.institution }}
+                <strong>Repository</strong>: {{ job.repository.institution }}
               </div>
             </div>
           </v-card-title>
           <v-card-actions>
             <!-- <v-btn color="primary" v-if="isPending" to="/">Edit</v-btn> -->
-            <v-btn v-if="isPending" color="primary" @click="cancel">
+            <v-btn v-if="job.isPending()" color="primary" @click="cancel">
               Cancel
             </v-btn>
-            <v-btn v-if="isComplete && !isArchived" color="primary" @click="archive">
+            <v-btn v-if="job.isComplete() && !job.isArchived()" color="primary" @click="archive">
               Archive
             </v-btn>
             <!-- <v-btn color="primary" to="/" v-if="record.status=='complete'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
           </v-card-actions>
         </v-card>
 
-        <!-- <v-card v-if="isComplete" class="mt-3">
-                <v-card-title>
-                    <div>
-                        <div class="headline">Download Images</div>
-
-                        <div><span class="grey--text text--darken-4">Click/Touch each image to download.</span></div>
-                    </div>
-                </v-card-title>
-                <v-layout row wrap>
-                <v-flex xs3 v-for="(image, index) in data.attachments" :key="index" class="pa-2">
-                    <a :href="image" target="_blank" download>
-                        <v-img v-if="!image.includes('.pdf')" :src="image" :alt="`Attachment #${index+1}`" aspect-ratio="1"></v-img>
-                        <v-responsive v-else :aspect-ratio = "1">
-                            <embed :src="image" type="application/pdf"/>
-                            <span class="grey--text text--darken-4">Click to Download</span>
-                        </v-responsive>
-                    </a>
-                </v-flex>
-                </v-layout>
-
-            </v-card> -->
-
         <Attachments />
 
-        <v-card v-if="isComplete" class="mt-3">
+        <v-card v-if="job.isComplete()" class="mt-3">
           <v-card-title>
-            <div class="headline" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'" />
+            <div class="headline" v-html="!job.userRating ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'" />
           </v-card-title>
           <v-card-text>
             <v-rating
-              v-model="rating"
+              v-model="job.userRating"
               background-color="primary lighten-3"
               color="primary"
               :readonly="isRatingSet"
             />
           </v-card-text>
-          <v-card-actions v-if="!isRatingSet">
+          <v-card-actions v-if="!job.userRating">
             <v-btn color="primary" @click="setRating">
               Save
             </v-btn>
@@ -94,7 +72,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { Job } from '~/models/job'
 import StaticMap from '~/components/static-map'
 import Attachments from '~/components/attachments'
 
@@ -104,69 +82,42 @@ export default {
         StaticMap,
         Attachments
     },
-    // async asyncData({ params, store, error }) {
-    //     if (store.getters['auth/activeUser'].uid) {
-    //         return $fire.firestore.collection("requests").doc(params.id).get()
-    //         .then(doc => {
-    //             return {
-    //                 record: (doc.exists) ? doc : false,
-    //                 rating: (doc.exists) ? doc.data().userRating : 0
-    //             }
-    //         })
-    //         .catch((e) => {
-    //             console.log(e)
-    //         })
-    //     }
-
-    // },
-    asyncData ({ params, store, error, app }) {
-    // Populate the Vuex Store
-        store.dispatch('request/init', params.id)
-
+    async asyncData ({ params, store, error, app }) {
         if (store.getters['auth/activeUser'].uid) {
-            return app.$fire.firestore.collection('requests').doc(params.id).get()
-                .then((doc) => {
-                    return {
-                        record: (doc.exists) ? doc : false,
-                        rating: (doc.exists) ? doc.data().userRating : 0
-                    }
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
+            let job = false
+            try {
+                const doc = await app.$fire.firestore.collection('requests').doc(params.id).get()
+                job = new Job(doc)
+            } catch (error) {
+                console.log(error)
+            }
+            return {
+                job
+            }
         }
     },
     data () {
         return {
-            record: false,
-            rating: 0
-            // ratingSent: false
+            job: {
+                id: false
+            }
         }
     },
     computed: {
         isRatingSet () {
-            return Boolean(this.data.userRating)
-        },
-        ...mapGetters({
-            id: 'request/id',
-            data: 'request/data',
-            isComplete: 'request/isComplete',
-            isPending: 'request/isPending',
-            isPickedUp: 'request/isPickedUp',
-            isArchived: 'request/isArchived',
-            prettyStatus: 'request/prettyStatus'
-        })
+            return Boolean(this.job.userRating)
+        }
     },
     mounted () {
-    //  Listen for changes to this document
-        if (this.record && this.record.id) {
-            this.$fire.firestore.collection('requests').doc(this.record.id).onSnapshot((doc) => { this.record = doc })
+        //  Listen for changes to this document
+        if (this.job.exists) {
+            this.job.ref.onSnapshot((doc) => { this.job = new Job(doc) })
         }
     },
     methods: {
         archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
-                this.$store.dispatch('request/markArchived').then((result) => {
+                this.job.ref.set({ status: 'archived' }, { merge: true }).then(() => {
                     this.$router.push({ name: 'dashboard' })
                 }).catch((error) => {
                     console.log(error)
@@ -175,7 +126,7 @@ export default {
         },
         cancel () {
             if (confirm('Are you sure you want to cancel this request? This action cannot be undone.')) {
-                this.$store.dispatch('request/delete').then((result) => {
+                this.job.ref.delete().then(() => {
                     this.$router.push({ name: 'dashboard' })
                 }).catch((error) => {
                     console.log(error)
@@ -184,7 +135,7 @@ export default {
         },
         setRating () {
             if (confirm(`This action cannot be undone. Would you like to rate this Sourcerer ${this.rating} stars?`)) {
-                this.$fire.firestore.collection('requests').doc(this.record.id).set({
+                this.job.ref.set({
                     userRating: this.rating
                 }, { merge: true })
             }
