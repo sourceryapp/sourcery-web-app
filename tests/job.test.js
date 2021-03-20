@@ -1,8 +1,9 @@
+// @example https://github.com/Upstatement/firestore-jest-mock/blob/master/__tests__/mock-firestore.test.js
 // @url https://github.com/Upstatement/firestore-jest-mock
 import { FakeFirestore } from 'firestore-jest-mock'
 
 // Model that we want to test
-import { Job } from '../models/job'
+import { Job } from '../models'
 
 // Fake record(s) for firestore
 import { readFileSync } from 'fs'

@@ -10,7 +10,8 @@
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "precommit": "yarn lint:js",
-    "test": "jest"
+    "test": "jest",
+    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json"
   },
   "husky": {
     "hooks": {
@@ -36,6 +37,8 @@
     "geolib": "^3.0.3",
     "instantsearch.css": "^7.4.2",
     "js-cookie": "^2.2.0",
+    "jsdoc": "^3.6.6",
+    "jsdoc-template": "https://github.com/braintree/jsdoc-template",
     "jwt-decode": "^2.2.0",
     "lodash.throttle": "^4.1.1",
     "material-design-icons-iconfont": "^5.0.1",

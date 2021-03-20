@@ -1,0 +1,36 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": [
+            "jsdoc",
+            "closure"
+        ]
+    },
+    "source": {
+        "include": [
+            "models/"
+        ],
+        "includePattern": ".js$"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates": {
+        "referenceTitle": "Sourcery Models",
+        "disableSort": false,
+        "collapse": true,
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "resources": {
+            "Sourcery (GitHub)": "https://github.com/GreenhouseStudios/sourcery-web-app",
+            "Firestore DocumentSnapshot": "https://firebase.google.com/docs/reference/js/firebase.firestore.DocumentSnapshot"
+        }
+    },
+    "opts": {
+        "destination": "./docs/",
+        "encoding": "utf8",
+        "private": false,
+        "recurse": true,
+        "template": "./node_modules/jsdoc-template"
+    }
+}

@@ -22,5 +22,5 @@ module.exports = {
         'vue/no-v-html': 'off',
         'vue/attribute-hyphenation': 'off'
     },
-    ignorePatterns: ['/tests/', '/static/'] // Disable these for now
+    ignorePatterns: ['/tests/', '/static/', '/docs/'] // Disable these for now
 }
