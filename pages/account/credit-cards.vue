@@ -11,9 +11,9 @@
         <v-list v-if="cards.data.length" two-line>
           <template v-for="(item, index) in cards.data">
             <v-list-item :key="`list-item-${index}`" two-line>
-              <v-list-item-icon :key="`avatar-${index}`">
+              <v-list-item-avatar :key="`avatar-${index}`">
                 <i :class="`pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand" />
-              </v-list-item-icon>
+              </v-list-item-avatar>
 
               <v-list-item-content :key="`content-${index}`">
                 <v-list-item-title

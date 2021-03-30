@@ -8,6 +8,7 @@
     >
       <v-app-bar-nav-icon
         v-if="user"
+        color="primary"
         @click="drawer = !drawer"
       />
       <v-spacer class="d-none d-sm-flex" />
@@ -24,7 +25,10 @@
       app
       bottom
     >
-      <v-list>
+      <v-list
+        style="background: rgb(146, 79, 190); background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);"
+        dark
+      >
         <v-list-item>
           <v-list-item-avatar>
             <img :src="gravatar">
@@ -36,10 +40,23 @@
               {{ user.displayName }}
             </v-list-item-title>
             <v-list-item-sub-title>{{ user.email }}</v-list-item-sub-title>
-            <v-list-item-sub-title v-if="isOrgMember">
-              Institutional Account
-            </v-list-item-sub-title>
           </v-list-item-content>
+          <v-list-item-action v-if="isOrgMember">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-icon
+                  dark
+                  v-bind="attrs"
+                  icon
+                  transition="slide-y-transition"
+                  v-on="on"
+                >
+                  mdi-school
+                </v-icon>
+              </template>
+              <span>Institutional Account</span>
+            </v-tooltip>
+          </v-list-item-action>
         </v-list-item>
       </v-list>
 
@@ -112,7 +129,7 @@
         to="/jobs"
       >
         <span>Find Jobs</span>
-        <v-icon>mdi-magnify</v-icon>
+        <v-icon>mdi-briefcase-search</v-icon>
       </v-btn>
 
       <!-- <v-btn
@@ -171,7 +188,7 @@ export default {
         dialog: false,
         items1: [
             { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
-            { title: 'Payment Options', icon: 'mdi-credit-card', link: '/account/credit-cards' },
+            { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
             { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
             { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
             { title: 'History', icon: 'mdi-history', link: '/request/history' },

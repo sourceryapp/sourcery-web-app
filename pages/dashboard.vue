@@ -40,6 +40,12 @@
           class="primary--text text--darken-2 deep-purple lighten-5"
         >
           Your Requests
+          <v-spacer />
+          <v-icon
+            color="primary darken-2"
+          >
+            mdi-file-search
+          </v-icon>
         </v-card-title>
         <v-divider />
         <v-list two-line>
@@ -64,10 +70,22 @@
               :to="'/request/' + request.id"
             >
               <v-list-item-content>
-                <v-list-item-title>{{ request.data().label }}</v-list-item-title>
-                <v-list-item-sub-title>{{ request.data().citation }}</v-list-item-sub-title>
+                <v-list-item-title
+                  class="text-truncate"
+                >
+                  {{ request.data().label }}
+                </v-list-item-title>
+                <v-list-item-sub-title
+                  class="text-truncate"
+                >
+                  {{ request.data().citation }}
+                </v-list-item-sub-title>
               </v-list-item-content>
-              <v-chip color="secondary" text-color="white">
+              <v-chip
+                color="deep-purple lighten-5"
+                text-color="primary darken-2"
+                style="text-transform: capitalize"
+              >
                 {{ request.request().prettyStatus() }}
               </v-chip>
             </v-list-item>
@@ -83,6 +101,12 @@
           class="primary--text text--darken-2 deep-purple lighten-5"
         >
           Your Jobs
+          <v-spacer />
+          <v-icon
+            color="primary darken-2"
+          >
+            mdi-briefcase
+          </v-icon>
         </v-card-title>
         <v-divider />
         <v-list two-line>

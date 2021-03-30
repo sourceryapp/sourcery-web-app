@@ -1,27 +1,18 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 offset-sm2>
-      <h1 style="width:100%">
+      <h1>
         Create Request
       </h1>
 
-      <v-banner
-        class="mb-4"
+      <v-alert
+        icon="mdi-information"
+        text
+        type="info"
+        class="mt-1 mb-0"
       >
-        <v-avatar
-          slot="icon"
-          color="info"
-          size="40"
-        >
-          <v-icon
-            icon="mdi-information"
-            color="white"
-          >
-            mdi-information
-          </v-icon>
-        </v-avatar>
         Due to the pandemic, documents can only be requested from our institutional partners.
-      </v-banner>
+      </v-alert>
 
       <v-alert
         :value="!canMakePayments"
@@ -33,176 +24,225 @@
           Add Card
         </v-btn>
       </v-alert>
-
-      <label for="area" class="text-h6" />
-
-      <v-card v-if="formState===1" outlined>
-        <v-card-title
-          class="primary--text text--darken-2 deep-purple lighten-5"
+      <v-stepper
+        v-model="formState"
+        class="elevation-0"
+      >
+        <v-stepper-header
+          class="elevation-0"
         >
-          Where is your document located?
-        </v-card-title>
-        <v-divider />
-        <v-card-text>
-          <!-- The following is a temporary selection tool for partner organizations -->
-          <v-radio-group v-model="request.repository_id">
-            <v-radio
-              v-for="repo in repositories"
-              :key="repo.id"
-              color="primary"
-              :label="repo.data().name"
-              :value="repo.id"
-              class="font-weight-medium"
-            />
-          </v-radio-group>
-
-          <!-- https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/ -->
-          <!-- <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
-            <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
-            <ais-configure
-              :hitsPerPage="15"
-            />
-            <ais-hits>
-              <v-list id="repo-search" slot-scope="{items}" two-line subheader>
-                <template v-for="(item, index) in items">
-                  <v-list-tile
-                    :key="item.objectID"
-                    avatar
-                    ripple
-                    :class="item.objectID === repository_id ? 'deep-purple lighten-4' : ''"
-                    @click="repoSelection(item)"
-                  >
-                    <v-list-tile-content>
-                      <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                      <v-list-tile-sub-title><span v-if="item.institution">{{ item.institution }}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
-                    </v-list-tile-content>
-
-                    <v-list-tile-action>
-                      <v-tooltip top>
-                        <template v-if="isMemberRepo(item)" v-slot:activator="{ on }">
-                          <v-icon color="primary" dark v-on="on">
-                            business
-                          </v-icon>
-                        </template>
-                        <span>Partner Institution</span>
-                      </v-tooltip>
-                    </v-list-tile-action>
-                  </v-list-tile>
-
-                  <v-divider :key="index" />
-                </template>
-              </v-list>
-            </ais-hits>
-          </ais-instant-search> -->
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            id="next-repo"
-            color="primary"
-            :disabled="!request.repository_id"
-            depressed
-            @click="formState=2"
+          <v-stepper-step
+            :complete="formState > 1"
+            step="1"
+            class="font-weight-medium"
           >
-            Next
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-
-      <v-card v-if="formState===2" outlined transition="fade-transition">
-        <v-card-title
-          class="primary--text text--darken-2 deep-purple lighten-5"
-        >
-          What is the citation for your document?
-        </v-card-title>
-        <v-divider />
-        <v-card-subtitle>
-          Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
-        </v-card-subtitle>
-        <v-card-text>
-          <v-textarea
-            id="citation"
-            v-model="citation"
-            name="citation"
-            label="Citation"
-            auto-grow
-            filled
-            rows="1"
-            hide-details="auto"
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            text
-            @click="formState=1"
+            Location
+          </v-stepper-step>
+          <v-divider />
+          <v-stepper-step
+            :complete="formState > 2"
+            step="2"
+            class="font-weight-medium"
           >
-            Previous
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            id="next-citation"
-            depressed
-            color="primary"
-            :disabled="citation.length < 10"
-            @click="formState=3"
+            Citation
+          </v-stepper-step>
+          <v-divider />
+          <v-stepper-step
+            step="3"
+            class="font-weight-medium"
           >
-            Next
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-
-      <v-card v-if="formState===3" outlined>
-        <v-card-title
-          class="primary--text text--darken-2 deep-purple lighten-5"
-        >
-          How long is your document?
-        </v-card-title>
-        <v-divider />
-        <v-card-text>
-          <v-layout>
-            <v-flex xs6>
-              <p />
-              <v-text-field
-                id="pages"
-                v-model="pages"
-                name="pages"
-                label="Maximum Pages"
-                type="number"
-                value="1"
-                min="1"
-                filled
-              />
-            </v-flex>
-            <v-flex v-if="request.pricing.total" xs5 offset-xs1>
-              <p class="text-caption mb-0 primary--text font-weight-medium">
-                Cost Will Not Exceed
-              </p>
-              <p id="price" class="text-h4 pt-0 font-weight-bold">
-                {{ toDollars(request.pricing.total) }}
-              </p>
-            </v-flex>
-          </v-layout>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn
-            text
-            @click="formState=2"
-          >
-            Previous
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            id="submit-request"
-            :disabled="!request.pricing.total || !canMakePayments || isSaving"
-            :loading="loadingCost || isSaving"
-            class="primary"
-            depressed
-            @click="submitRequest"
-          >
-            Submit
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+            Pages
+          </v-stepper-step>
+        </v-stepper-header>
+        <v-stepper-items>
+          <v-stepper-content step="1">
+            <v-card outlined>
+              <v-card-title
+                class="primary--text text--darken-2 deep-purple lighten-5"
+              >
+                Where is your document located?
+                <v-spacer />
+                <v-icon
+                  color="primary darken-2"
+                >
+                  mdi-map-marker
+                </v-icon>
+              </v-card-title>
+              <v-divider />
+              <v-card-text>
+                <!-- The following is a temporary selection tool for partner organizations -->
+                <v-radio-group v-model="request.repository_id">
+                  <v-radio
+                    v-for="repo in repositories"
+                    :key="repo.id"
+                    color="primary"
+                    :label="repo.data().name"
+                    :value="repo.id"
+                    class="font-weight-medium"
+                  />
+                </v-radio-group>
+                <!-- https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/ -->
+                <!-- <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
+                      <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
+                      <ais-configure
+                        :hitsPerPage="15"
+                      />
+                      <ais-hits>
+                        <v-list id="repo-search" slot-scope="{items}" two-line subheader>
+                          <template v-for="(item, index) in items">
+                            <v-list-tile
+                              :key="item.objectID"
+                              avatar
+                              ripple
+                              :class="item.objectID === repository_id ? 'deep-purple lighten-4' : ''"
+                              @click="repoSelection(item)"
+                            >
+                              <v-list-tile-content>
+                                <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                                <v-list-tile-sub-title><span v-if="item.institution">{{ item.institution }}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
+                              </v-list-tile-content>
+                              <v-list-tile-action>
+                                <v-tooltip top>
+                                  <template v-if="isMemberRepo(item)" v-slot:activator="{ on }">
+                                    <v-icon color="primary" dark v-on="on">
+                                      business
+                                    </v-icon>
+                                  </template>
+                                  <span>Partner Institution</span>
+                                </v-tooltip>
+                              </v-list-tile-action>
+                            </v-list-tile>
+                            <v-divider :key="index" />
+                          </template>
+                        </v-list>
+                      </ais-hits>
+                    </ais-instant-search> -->
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  id="next-repo"
+                  color="primary"
+                  :disabled="!request.repository_id"
+                  depressed
+                  @click="formState++"
+                >
+                  Next
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-stepper-content>
+          <v-stepper-content step="2">
+            <v-card outlined>
+              <v-card-title
+                class="primary--text text--darken-2 deep-purple lighten-5"
+              >
+                What is the citation for your document?
+                <v-spacer />
+                <v-icon
+                  color="primary darken-2"
+                >
+                  mdi-format-quote-close
+                </v-icon>
+              </v-card-title>
+              <v-divider />
+              <v-card-subtitle>
+                Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
+              </v-card-subtitle>
+              <v-card-text>
+                <v-textarea
+                  id="citation"
+                  v-model="citation"
+                  name="citation"
+                  label="Citation"
+                  auto-grow
+                  filled
+                  rows="1"
+                  hide-details="auto"
+                />
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  text
+                  @click="formState--"
+                >
+                  Previous
+                </v-btn>
+                <v-spacer />
+                <v-btn
+                  id="next-citation"
+                  depressed
+                  color="primary"
+                  :disabled="citation.length < 10"
+                  @click="formState++"
+                >
+                  Next
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-stepper-content>
+          <v-stepper-content step="3">
+            <v-card outlined>
+              <v-card-title
+                class="primary--text text--darken-2 deep-purple lighten-5"
+              >
+                How long is your document?
+                <v-spacer />
+                <v-icon
+                  color="primary darken-2"
+                >
+                  mdi-book-open-page-variant
+                </v-icon>
+              </v-card-title>
+              <v-divider />
+              <v-card-text>
+                <v-layout>
+                  <v-flex xs6>
+                    <p />
+                    <v-text-field
+                      id="pages"
+                      v-model="pages"
+                      name="pages"
+                      label="Maximum Pages"
+                      type="number"
+                      value="1"
+                      min="1"
+                      filled
+                    />
+                  </v-flex>
+                  <v-flex v-if="request.pricing.total" xs5 offset-xs1>
+                    <p class="text-caption mb-0 primary--text font-weight-medium">
+                      Cost Will Not Exceed
+                    </p>
+                    <p id="price" class="text-h4 pt-0 font-weight-bold">
+                      {{ toDollars(request.pricing.total) }}
+                    </p>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  text
+                  @click="formState=2"
+                >
+                  Previous
+                </v-btn>
+                <v-spacer />
+                <v-btn
+                  id="submit-request"
+                  :disabled="!request.pricing.total || !canMakePayments || isSaving"
+                  :loading="loadingCost || isSaving"
+                  class="primary"
+                  depressed
+                  @click="submitRequest"
+                >
+                  Submit
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-stepper-content>
+        </v-stepper-items>
+      </v-stepper>
     </v-flex>
   </v-layout>
 </template>
@@ -358,16 +398,14 @@ export default {
 </script>
 
 <style scoped>
-    #add-stepper, h1 {
-        width: 80%;
-        margin: 0 auto;
-    }
-
     #repo-search {
         height: 200px;
         overflow-y: scroll;
     }
 
+    .v-stepper__content {
+      padding: 0;
+    }
     /* .checkmark {
         display:none;
     }

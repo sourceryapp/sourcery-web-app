@@ -2,7 +2,14 @@
   <v-layout fill-height>
     <v-flex xs12 sm8 offset-sm2>
       <h1>Find Jobs</h1>
-      <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.</p>
+      <v-alert
+        icon="mdi-information"
+        text
+        type="info"
+        class="mt-1"
+      >
+        During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.
+      </v-alert>
 
       <v-alert
         :value="!canReceivePayments"
@@ -17,30 +24,49 @@
         </v-layout>
       </v-alert>
 
-      <section id="search" class="pa-3">
-        <v-layout fill-height align-center justify-center wrap>
-          <v-flex>
-            <h3>Search Radius</h3>
-            <v-radio-group v-model="distance" row>
-              <v-radio label="1 mile" :value="1" />
-              <v-radio label="5 miles" :value="5" />
-              <v-radio label="10 miles" :value="10" />
-              <v-radio label="50 miles" :value="50" />
-              <v-radio label="100 miles" :value="100" />
-            </v-radio-group>
-            <v-btn dark color="primary" :loading="searching" @click="getLocation()">
-              Find Jobs Near Me
-            </v-btn>
-          </v-flex>
-        </v-layout>
-      </section>
-      <v-divider />
+      <v-card
+        outlined
+      >
+        <v-card-title
+          class="pa-3 primary--text text--darken-2 deep-purple lighten-5"
+        >
+          Search Radius
+          <v-spacer />
+          <v-icon
+            color="primary darken-2"
+          >
+            mdi-map-marker-radius
+          </v-icon>
+        </v-card-title>
 
-      <section v-if="jobs" id="results" class="mt-4">
+        <v-divider />
+        <v-card-text>
+          <v-radio-group v-model="distance" row>
+            <v-radio label="1 mile" :value="1" />
+            <v-radio label="5 miles" :value="5" />
+            <v-radio label="10 miles" :value="10" />
+            <v-radio label="50 miles" :value="50" />
+            <v-radio label="100 miles" :value="100" />
+          </v-radio-group>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn depressed color="primary" :loading="searching" @click="getLocation()">
+            <v-icon left>
+              mdi-briefcase-search
+            </v-icon>
+            Find Jobs Near Me
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-divider v-if="jobs" class="my-4" />
+
+      <section v-if="jobs" id="results">
         <v-alert
           v-if="jobs.length==0 && !searching"
           :value="true"
-          type="info"
+          type="warning"
+          prominent
         >
           Nothing found. Please try a larger search radius.
         </v-alert>
@@ -49,56 +75,59 @@
           <h4 v-if="searching">
             Searching...
           </h4>
-
+          <h2>Results</h2>
           <template v-for="(job, index) in jobs">
-            <v-flex :key="index" xs12 sm6 lg4 xl3>
-              <v-card class="ma-2" :data-id="job.id">
-                <v-card-title primary-title>
-                  <div>
-                    <h3
-                      class="text-h5 mb-0"
-                    >
-                      {{ job.data().repository.name }}, {{ job.data().repository.city }}
-                    </h3>
+            <v-card
+              :key="index"
+              class="my-1"
+              :data-id="job.id"
+              outlined
+            >
+              <v-card-title>
+                {{ job.data().repository.name }}, {{ job.data().repository.city }}
+              </v-card-title>
+              <v-card-subtitle>
+                {{ job.data().citation }}
+              </v-card-subtitle>
+              <v-container fill-height fluid>
+                <v-layout fill-height>
+                  <v-flex xs2 align-center justify-center flexbox text-center>
+                    <v-icon x-large>
+                      mdi-map-marker-circle
+                    </v-icon>
+                  </v-flex>
+                  <v-flex xs10 align-end flexbox>
+                    {{ job.data().repository.name }}
+                    <br>
+                    {{ job.data().repository.address1 }}
+                    <br>
+                    {{ job.data().repository.city }}, {{ job.data().repository.state }} {{ job.data().repository.postal_code }}
+                  </v-flex>
+                  <v-flex>
+                    <p
+                      color="primary--text"
+                      class="primary--text text-h3 font-weight-bold"
+                      v-html="jobValue(job.data())"
+                    />
                     <p class="grey--text text--darken-1">
-                      {{ job.data().citation }}
+                      (Estimated payout for a {{ job.data().pages }} page fulfillment.)
                     </p>
-                  </div>
-                </v-card-title>
-                <v-container fill-height fluid>
-                  <v-layout fill-height>
-                    <v-flex xs2 align-center justify-center flexbox text-center>
-                      <v-icon x-large>
-                        location_on
-                      </v-icon>
-                    </v-flex>
-                    <v-flex xs10 align-end flexbox>
-                      {{ job.data().repository.name }}
-                      <br>
-                      {{ job.data().repository.address1 }}
-                      <br>
-                      {{ job.data().repository.city }}, {{ job.data().repository.state }} {{ job.data().repository.postal_code }}
-                    </v-flex>
-                    <v-flex>
-                      <p
-                        color="primary--text"
-                        class="primary--text text-h3"
-                        v-html="jobValue(job.data())"
-                      />
-                      <p class="grey--text text--darken-1">
-                        (Estimated payout for a {{ job.data().pages }} page fulfillment.)
-                      </p>
-                    </v-flex>
-                  </v-layout>
-                </v-container>
-                <v-card-actions>
-                  <v-btn color="primary" :disabled="!canReceivePayments || job.claimed" @click="claim(job.id)">
-                    {{ job.claimed ? "Claimed" : "Claim" }}
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn color="primary" depressed :disabled="!canReceivePayments || job.claimed" @click="claim(job.id)">
+                  {{ job.claimed ? "Claimed" : "Claim" }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </template>
+        </v-layout>
+      </section>
+    </v-flex>
+  </v-layout>
+</template>
         </v-layout>
       </section>
     </v-flex>
