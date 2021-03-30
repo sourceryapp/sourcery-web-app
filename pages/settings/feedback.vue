@@ -2,7 +2,7 @@
   <v-app id="tube">
     <v-form ref="feedbackForm" @submit.prevent="sendFeedback">
       <v-card>
-        <v-card-title class="headline">
+        <v-card-title class="text-h5">
           Feedback
         </v-card-title>
         <v-card-text>

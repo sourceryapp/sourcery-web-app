@@ -1,5 +1,5 @@
 <template>
-  <v-layout row fill-height>
+  <v-layout fill-height>
     <v-flex xs12 sm8 offset-sm2>
       <h1>Find Jobs</h1>
       <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.</p>
@@ -18,7 +18,7 @@
       </v-alert>
 
       <section id="search" class="pa-3">
-        <v-layout row fill-height align-center justify-center wrap>
+        <v-layout fill-height align-center justify-center wrap>
           <v-flex>
             <h3>Search Radius</h3>
             <v-radio-group v-model="distance" row>
@@ -56,7 +56,7 @@
                 <v-card-title primary-title>
                   <div>
                     <h3
-                      class="headline mb-0"
+                      class="text-h5 mb-0"
                     >
                       {{ job.data().repository.name }}, {{ job.data().repository.city }}
                     </h3>
@@ -67,7 +67,7 @@
                 </v-card-title>
                 <v-container fill-height fluid>
                   <v-layout fill-height>
-                    <v-flex xs2 align-center justify-center flexbox text-xs-center>
+                    <v-flex xs2 align-center justify-center flexbox text-center>
                       <v-icon x-large>
                         location_on
                       </v-icon>
@@ -82,7 +82,7 @@
                     <v-flex>
                       <p
                         color="primary--text"
-                        class="primary--text display-2"
+                        class="primary--text text-h3"
                         v-html="jobValue(job.data())"
                       />
                       <p class="grey--text text--darken-1">

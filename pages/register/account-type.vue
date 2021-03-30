@@ -2,7 +2,7 @@
   <v-layout align-center>
     <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
       <v-form @submit.prevent="save">
-        <h2 class="text-xs-center">
+        <h2 class="text-center">
           What do you want to do?
         </h2>
         <v-card
@@ -12,11 +12,11 @@
           :active="accountType == &quot;researcher&quot;"
           @click.native="selectResearcher()"
         >
-          <v-card-text class="text-xs-center">
+          <v-card-text class="text-center">
             I want to request documents.
           </v-card-text>
         </v-card>
-        <p class="text-xs-center disclaimer-text">
+        <p class="text-center disclaimer-text">
           (requires credit card)
         </p>
         <v-card
@@ -26,14 +26,14 @@
           :active="accountType == &quot;sourcerer&quot;"
           @click.native="selectSourcerer()"
         >
-          <v-card-text class="text-xs-center">
+          <v-card-text class="text-center">
             I want to fulfill document requests for other researchers.
           </v-card-text>
         </v-card>
-        <p class="text-xs-center disclaimer-text">
+        <p class="text-center disclaimer-text">
           (requires debit card or bank info)
         </p>
-        <p class="text-xs-center regardless">
+        <p class="text-center regardless">
           Regardless of how you initially sign up, you can still choose to submit or fulfill requests later on.
         </p>
         <div class="hidden-xs-only">

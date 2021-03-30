@@ -9,9 +9,11 @@ module.exports = {
     },
     extends: [
         '@nuxtjs',
+        'plugin:vue/base',
         'plugin:nuxt/base'
     ],
     plugins: [
+        'vuetify'
     ],
     // add your custom rules here
     rules: {
@@ -20,7 +22,8 @@ module.exports = {
         eqeqeq: ['error', 'smart'],
         camelcase: 'off', // TODO Enforce camelcase naming
         'vue/no-v-html': 'off',
-        'vue/attribute-hyphenation': 'off'
+        'vue/attribute-hyphenation': 'off',
+        'vuetify/no-deprecated-classes': 'error'
     },
     ignorePatterns: ['/tests/', '/static/'] // Disable these for now
 }

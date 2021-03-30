@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card v-if="isPickedUp && userIsVendor" class="mt-3">
-      <v-card-title primary-title class="headline">
+      <v-card-title primary-title class="text-h5">
         Attachments
       </v-card-title>
       <v-card-text v-if="isComplete == false">
@@ -31,7 +31,7 @@
       </v-card-text>
 
       <v-container grid-list-sm fluid>
-        <v-layout v-if="Array.isArray(data.attachments)" row wrap>
+        <v-layout v-if="Array.isArray(data.attachments)" wrap>
           <v-flex
             v-for="n in data.attachments.reverse()"
             :key="n"
@@ -124,14 +124,14 @@
       <v-card class="mt-3">
         <v-card-title>
           <div>
-            <div class="headline">
+            <div class="text-h5">
               Download Images
             </div>
 
             <div><span class="grey--text text--darken-4">Click/Touch each image to download.</span></div>
           </div>
         </v-card-title>
-        <v-layout row wrap>
+        <v-layout wrap>
           <v-flex v-for="(attachment, index) in data.attachments" :key="index" xs3 class="pa-2">
             <a :href="attachment + '&response-content-disposition=attachment; filename=something.jpg'" target="_blank" download>
               <v-img :src="!attachment.isPDF() ? attachment : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
@@ -142,7 +142,7 @@
     </template>
 
     <!-- Viewer -->
-    <v-layout row justify-center>
+    <v-layout justify-center>
       <v-dialog
         v-model="viewerDialog"
         fullscreen

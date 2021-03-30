@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <h1>Profile</h1>
 
@@ -65,7 +65,7 @@
         <v-tab-item class="pt-2">
           <v-card flat>
             <v-card-title primary-title>
-              <h3 class="headline mb-0">
+              <h3 class="text-h5 mb-0">
                 Change Password
               </h3>
             </v-card-title>
@@ -146,7 +146,7 @@
         <v-tab-item class="pt-2">
           <v-card flat>
             <v-card-title primary-title>
-              <h3 class="headline mb-0">
+              <h3 class="text-h5 mb-0">
                 Change Email
               </h3>
             </v-card-title>

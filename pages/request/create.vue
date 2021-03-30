@@ -1,18 +1,27 @@
 <template>
-  <v-layout row>
+  <v-layout>
     <v-flex xs12 sm8 offset-sm2>
       <h1 style="width:100%">
         Create Request
       </h1>
 
-      <v-alert
-        :value="true"
-        type="info"
-        class="mt-4 mb-4"
+      <v-banner
+        class="mb-4"
       >
-        <!-- During the beta, users can request documents located in the Boston, New York, and Washington, D.C. metro areas, and at the University of Connecticut. -->
-        Due to the pandemic, documents can only be requested from our partner
-      </v-alert>
+        <v-avatar
+          slot="icon"
+          color="info"
+          size="40"
+        >
+          <v-icon
+            icon="mdi-information"
+            color="white"
+          >
+            mdi-information
+          </v-icon>
+        </v-avatar>
+        Due to the pandemic, documents can only be requested from our institutional partners.
+      </v-banner>
 
       <v-alert
         :value="!canMakePayments"
@@ -25,17 +34,15 @@
         </v-btn>
       </v-alert>
 
-      <label for="area" class="title" />
+      <label for="area" class="text-h6" />
 
-      <v-card v-if="formState===1">
-        <v-card-title primary-title>
-          <div>
-            <div class="headline">
-              Where is your document located?
-            </div>
-            <!-- <span class="grey--text"><nuxt-link :to="{ name: 'suggest-repository' }">Don't see yours listed?</nuxt-link></span> -->
-          </div>
+      <v-card v-if="formState===1" outlined>
+        <v-card-title
+          class="primary--text text--darken-2 deep-purple lighten-5"
+        >
+          Where is your document located?
         </v-card-title>
+        <v-divider />
         <v-card-text>
           <!-- The following is a temporary selection tool for partner organizations -->
           <v-radio-group v-model="request.repository_id">
@@ -45,6 +52,7 @@
               color="primary"
               :label="repo.data().name"
               :value="repo.id"
+              class="font-weight-medium"
             />
           </v-radio-group>
 
@@ -88,72 +96,68 @@
           </ais-instant-search> -->
         </v-card-text>
         <v-card-actions>
-          <v-layout
-            justify-end
+          <v-spacer />
+          <v-btn
+            id="next-repo"
+            color="primary"
+            :disabled="!request.repository_id"
+            depressed
+            @click="formState=2"
           >
-            <v-btn
-              id="next-repo"
-              color="primary"
-              :disabled="!request.repository_id"
-              @click="formState=2"
-            >
-              Next
-            </v-btn>
-          </v-layout>
+            Next
+          </v-btn>
         </v-card-actions>
       </v-card>
 
-      <v-card v-if="formState===2">
-        <v-card-title primary-title>
-          <div>
-            <div class="headline">
-              What is the citation for your document?
-            </div>
-            <span class="grey--text text--darken-1 body-1">Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).</span>
-          </div>
+      <v-card v-if="formState===2" outlined transition="fade-transition">
+        <v-card-title
+          class="primary--text text--darken-2 deep-purple lighten-5"
+        >
+          What is the citation for your document?
         </v-card-title>
-
+        <v-divider />
+        <v-card-subtitle>
+          Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
+        </v-card-subtitle>
         <v-card-text>
           <v-textarea
             id="citation"
             v-model="citation"
             name="citation"
             label="Citation"
-            multi-line="true"
             auto-grow
+            filled
+            rows="1"
+            hide-details="auto"
           />
         </v-card-text>
         <v-card-actions>
-          <v-layout
-            justify-space-between
+          <v-btn
+            text
+            @click="formState=1"
           >
-            <v-btn
-              @click="formState=1"
-            >
-              Previous
-            </v-btn>
-            <v-btn
-              id="next-citation"
-              color="primary"
-              :disabled="citation.length < 10"
-              @click="formState=3"
-            >
-              Next
-            </v-btn>
-          </v-layout>
+            Previous
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            id="next-citation"
+            depressed
+            color="primary"
+            :disabled="citation.length < 10"
+            @click="formState=3"
+          >
+            Next
+          </v-btn>
         </v-card-actions>
       </v-card>
 
-      <v-card v-if="formState===3">
-        <v-card-title primary-title>
-          <div>
-            <div class="headline">
-              Estimated Number of Pages Needed
-            </div>
-            <span class="grey--text text--darken-1" />
-          </div>
+      <v-card v-if="formState===3" outlined>
+        <v-card-title
+          class="primary--text text--darken-2 deep-purple lighten-5"
+        >
+          How long is your document?
         </v-card-title>
-
+        <v-divider />
         <v-card-text>
           <v-layout>
             <v-flex xs6>
@@ -164,38 +168,39 @@
                 name="pages"
                 label="Maximum Pages"
                 type="number"
+                value="1"
                 min="1"
+                filled
               />
             </v-flex>
             <v-flex v-if="request.pricing.total" xs5 offset-xs1>
-              <p class="caption mb-0 primary--text">
+              <p class="text-caption mb-0 primary--text font-weight-medium">
                 Cost Will Not Exceed
               </p>
-              <p id="price" class="display-1 pt-0 font-weight-bold">
+              <p id="price" class="text-h4 pt-0 font-weight-bold">
                 {{ toDollars(request.pricing.total) }}
               </p>
             </v-flex>
           </v-layout>
         </v-card-text>
         <v-card-actions>
-          <v-layout
-            justify-space-between
+          <v-btn
+            text
+            @click="formState=2"
           >
-            <v-btn
-              @click="formState=2"
-            >
-              Previous
-            </v-btn>
-            <v-btn
-              id="submit-request"
-              :disabled="!request.pricing.total || !canMakePayments || isSaving"
-              :loading="loadingCost || isSaving"
-              class="primary"
-              @click="submitRequest"
-            >
-              Submit
-            </v-btn>
-          </v-layout>
+            Previous
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            id="submit-request"
+            :disabled="!request.pricing.total || !canMakePayments || isSaving"
+            :loading="loadingCost || isSaving"
+            class="primary"
+            depressed
+            @click="submitRequest"
+          >
+            Submit
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-flex>

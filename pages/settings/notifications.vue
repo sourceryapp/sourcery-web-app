@@ -5,7 +5,7 @@
 
       <v-card width="350px">
         <v-card-title primary-title>
-          <h3 class="headline mb-0">
+          <h3 class="text-h5 mb-0">
             Job Alerts (Sourcerers only)
           </h3>
         </v-card-title>

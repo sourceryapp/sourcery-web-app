@@ -1,8 +1,8 @@
 <template>
-  <v-layout row fill-height align-center>
+  <v-layout fill-height align-center>
     <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
       <v-form @submit.prevent="registerValid">
-        <h1 class="text-xs-center">
+        <h1 class="text-center">
           Register
         </h1>
         <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">
@@ -24,8 +24,8 @@
           clearable
           autofocus="autofocus"
           validate-on-blur
-          prepend-icon="account_circle"
-          box
+          prepend-icon="mdi-account-circle"
+          filled
           background-color="#F3F1F6"
         />
         <span v-for="(err, index) in errors.name" :key="index" class="red--text">{{ err }}</span>
@@ -38,8 +38,8 @@
           required
           clearable
           validate-on-blur
-          prepend-icon="email"
-          box
+          prepend-icon="mdi-email"
+          filled
           background-color="#F3F1F6"
         />
         <span v-for="(err, index) in errors.email" :key="index" class="red--text">{{ err }}</span>
@@ -52,15 +52,15 @@
             messages="At least 8 characters and 1 special character."
             :rules="passRules"
             :type="showPass ? 'text' : 'password'"
-            :append-icon="showPass ? 'visibility' : 'visibility_off'"
+            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             required
             counter
             error-count="2"
             :success="password==confirm_password && password !=''"
             validate-on-blur
             loading
-            prepend-icon="security"
-            box
+            prepend-icon="mdi-security"
+            filled
             background-color="#F3F1F6"
             @click:append="showPass = !showPass"
           >
@@ -69,6 +69,7 @@
                 :value="progress"
                 :color="color"
                 height="4"
+                absolute
               />
             </template>
           </v-text-field>
@@ -95,14 +96,14 @@
           :rules="rules.required"
           required
           validate-on-blur
-          prepend-icon="phone"
-          box
+          prepend-icon="mdi-phone"
+          filled
           background-color="#F3F1F6"
         />
         <div class="hidden-xs-only">
           <v-btn
             block
-            large
+            x-large
             depressed
             type="submit"
             value="Register"
@@ -111,23 +112,37 @@
           >
             NEXT
           </v-btn>
-          <v-btn block large color="primary" outline to="/login">
+          <v-btn
+            block
+            x-large
+            color="primary"
+            outlined
+            to="/login"
+            style="border-color: #dad4ea"
+          >
             Cancel
           </v-btn>
         </div>
         <v-card min-width="100%" class="bottom-buttons hidden-sm-and-up">
           <v-btn
             block
-            large
+            x-large
             depressed
             type="submit"
             value="Register"
             color="primary"
             :loading="loading"
           >
-            NEXT
+            Next
           </v-btn>
-          <v-btn block large color="primary" outline to="/login">
+          <v-btn
+            block
+            x-large
+            color="primary"
+            outlined
+            to="/login"
+            style="border-color: #dad4ea"
+          >
             Cancel
           </v-btn>
         </v-card>

@@ -138,7 +138,9 @@ export default {
         '~/plugins/request-extensions',
 
         // Sourcery API
-        '~/plugins/sourcery'
+        '~/plugins/sourcery',
+
+        { src: '~/plugins/vuetify.ts', ssr: false }
     ],
 
     /** pwa: {
@@ -225,14 +227,31 @@ export default {
      */
     vuetify: {
         theme: {
-            primary: '#654EA3',
-            secondary: '#4E4B51',
-            accent: '#53AFAC',
-            error: '#b71c1c'
-        },
+            themes: {
+              light: {
+                primary: '#654EA3',
+                secondary: '#4E4B51',
+                accent: '#53AFAC',
+                error: '#b71c1c',
+                }, dark: {
+                    primary: '#654EA3',
+                    secondary: '#4E4B51',
+                    accent: '#53AFAC',
+                    error: '#b71c1c',
+                    },
+            },
+          },
         options: {
             customProperties: true
-        }
+        },
+        defaultAssets: {
+            font: {
+                family: 'Barlow'
+            },
+            icons: 'mdi'
+        },
+        treeShake: true,
+        customVariables: ['~/assets/variables.scss']
     },
 
     /**

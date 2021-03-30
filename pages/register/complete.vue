@@ -1,11 +1,11 @@
 <template>
   <v-layout align-center>
     <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
-      <h1 class="text-xs-center">
+      <h1 class="text-center">
         You're almost done!
       </h1>
       <template v-if="isResearcher">
-        <h2 class="text-xs-center primary--text text--darken-1">
+        <h2 class="text-center primary--text text--darken-1">
           You want to request documents.
         </h2>
         <p>
@@ -37,7 +37,7 @@
       </template>
 
       <template v-if="isSourcerer">
-        <h2 class="text-xs-center primary--text text--darken-1">
+        <h2 class="text-center primary--text text--darken-1">
           You want to fulfill document requests for other researchers.
         </h2>
         <p>

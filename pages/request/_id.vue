@@ -18,7 +18,7 @@
           />
           <v-card-title>
             <div>
-              <div class="headline">
+              <div class="text-h5">
                 {{ data.label }}
               </div>
 
@@ -72,7 +72,7 @@
 
         <v-card v-if="isComplete" class="mt-3">
           <v-card-title>
-            <div class="headline" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'" />
+            <div class="text-h5" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'" />
           </v-card-title>
           <v-card-text>
             <v-rating

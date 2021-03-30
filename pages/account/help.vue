@@ -1,9 +1,9 @@
 <template>
-  <v-layout row>
+  <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <h1>Help</h1>
 
-      <v-card-title class="headline">
+      <v-card-title class="text-h5">
         Need Help?
       </v-card-title>
       <v-card>
@@ -11,7 +11,7 @@
           <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
         </v-card-text>
       </v-card>
-      <v-card-title class="headline">
+      <v-card-title class="text-h5">
         FAQ
       </v-card-title>
       <v-expansion-panel>

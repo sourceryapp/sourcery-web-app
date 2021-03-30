@@ -8,7 +8,7 @@
         />
         <v-card-title>
           <div>
-            <div class="headline">
+            <div class="text-h5">
               {{ data.label }}
             </div>
 
@@ -33,7 +33,7 @@
 
       <v-dialog v-model="message" width="500">
         <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>
+          <v-card-title class="text-h5 grey lighten-2" primary-title>
             What are the options?
           </v-card-title>
 

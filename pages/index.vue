@@ -1,6 +1,6 @@
 <template>
   <div id="content" class="site-content">
-    <header>
+    <header class="landing-header">
       <div class="header-content">
         <img
           class="header__logo"
@@ -384,7 +384,7 @@ h1 {
     text-align: center;
     margin-bottom: 36px;
 }
-header {
+.landing-header {
     padding: 48px 24px;
     background: rgb(146, 79, 190);
     background: linear-gradient(
@@ -569,7 +569,7 @@ footer {
     width: 32px;
 }
 @media only screen and (min-width: 600px) {
-    header {
+    .landing-header {
         padding: 96px 24px;
     }
     .header-content {

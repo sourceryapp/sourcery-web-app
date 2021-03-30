@@ -1,7 +1,9 @@
 <template>
-  <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
-      <h1>Dashboard</h1>
+  <v-layout>
+    <v-flex xs12 sm8 offset-sm2>
+      <h1 class="mb-4">
+        Dashboard
+      </h1>
 
       <!-- <template v-for="(snapshot, index) in reserved_requests">
         <v-card v-if="snapshot.size !== 0" :key="index" flat class="mb-5">
@@ -30,74 +32,92 @@
           </v-card-actions>
         </v-card>
       </template> -->
-
-      <v-list two-line>
-        <v-subheader>Your Requests</v-subheader>
+      <v-card
+        outlined
+        class="mb-4"
+      >
+        <v-card-title
+          class="primary--text text--darken-2 deep-purple lighten-5"
+        >
+          Your Requests
+        </v-card-title>
         <v-divider />
-        <v-list-tile v-if="requests.length == 0" to="/request/create">
-          <v-list-tile-content>
-            <v-list-tile-title>No Active Requests</v-list-tile-title>
-            <v-list-tile-sub-title>Click to create a new request.</v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">
-                add_circle
-              </v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+        <v-list two-line>
+          <v-list-item v-if="requests.length == 0" to="/request/create">
+            <v-list-item-content>
+              <v-list-item-title>No Active Requests</v-list-item-title>
+              <v-list-item-subtitle>Click to create a new request.</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn icon ripple>
+                <v-icon color="grey darken-2">
+                  mdi-plus-circle
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
 
-        <template v-for="(request, index) in requests">
-          <v-list-tile
-            v-if="requests && !request.request().isArchived()"
-            :key="request.id"
-            :to="'/request/' + request.id"
-          >
-            <v-list-tile-content>
-              <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-chip color="secondary" text-color="white">
-              {{ request.request().prettyStatus() }}
-            </v-chip>
-          </v-list-tile>
-          <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
-        </template>
-      </v-list>
+          <template v-for="(request, index) in requests">
+            <v-list-item
+              v-if="requests && !request.request().isArchived()"
+              :key="request.id"
+              :to="'/request/' + request.id"
+            >
+              <v-list-item-content>
+                <v-list-item-title>{{ request.data().label }}</v-list-item-title>
+                <v-list-item-sub-title>{{ request.data().citation }}</v-list-item-sub-title>
+              </v-list-item-content>
+              <v-chip color="secondary" text-color="white">
+                {{ request.request().prettyStatus() }}
+              </v-chip>
+            </v-list-item>
+            <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
+          </template>
+        </v-list>
+      </v-card>
 
-      <v-list two-line class="mt-5">
-        <v-subheader>Your Jobs</v-subheader>
+      <v-card
+        outlined
+      >
+        <v-card-title
+          class="primary--text text--darken-2 deep-purple lighten-5"
+        >
+          Your Jobs
+        </v-card-title>
         <v-divider />
+        <v-list two-line>
+          <v-list-item v-if="jobs.length == 0" to="/jobs">
+            <v-list-item-content>
+              <v-list-item-title>No Active Jobs</v-list-item-title>
+              <v-list-item-sub-title>Click to find available jobs.</v-list-item-sub-title>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn icon ripple>
+                <v-icon color="grey lighten-1">
+                  search
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
 
-        <v-list-tile v-if="jobs.length == 0" to="/jobs">
-          <v-list-tile-content>
-            <v-list-tile-title>No Active Jobs</v-list-tile-title>
-            <v-list-tile-sub-title>Click to find available jobs.</v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-btn icon ripple>
-              <v-icon color="grey lighten-1">
-                search
-              </v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
+          <template v-for="(job, index) in jobs">
+            <v-list-item :key="index" :to="'/jobs/' + job.id">
+              <v-list-item-content>
+                <v-list-item-title>{{ job.data().label }}</v-list-item-title>
+                <v-list-item-sub-title>{{ job.data().citation }}</v-list-item-sub-title>
+              </v-list-item-content>
+              <!-- <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip> -->
+            </v-list-item>
+            <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
+          </template>
+        </v-list>
+      </v-card>
 
-        <template v-for="(job, index) in jobs">
-          <v-list-tile :key="index" :to="'/jobs/' + job.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-            <!-- <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip> -->
-          </v-list-tile>
-          <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
-        </template>
-      </v-list>
-
-      <div class="text-xs-center mt-5">
-        <v-btn color="primary" to="/request/history">
+      <div class="text-center mt-5">
+        <v-btn color="grey darken-1" to="/request/history" text>
+          <v-icon left>
+            mdi-history
+          </v-icon>
           View History
         </v-btn>
       </div>

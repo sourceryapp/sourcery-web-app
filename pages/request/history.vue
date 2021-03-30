@@ -1,5 +1,5 @@
 <template>
-  <v-layout row>
+  <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <h1>History</h1>
       <v-list two-line>
@@ -44,7 +44,7 @@
         </template>
       </v-list>
 
-      <div class="text-xs-center mt-5">
+      <div class="text-center mt-5">
         <v-btn color="primary" to="/dashboard">
           Back
         </v-btn>
