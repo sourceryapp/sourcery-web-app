@@ -35,3 +35,6 @@ sw.*
 # Nightwatch Testing
 /chromedriver.log
 /tests_output
+
+#VSCode Options
+.vscode

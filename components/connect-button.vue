@@ -1,5 +1,5 @@
 <template>
-  <v-btn :href="buttonLink" color="primary" @click="$emit('click', $event)">
+  <v-btn depressed :href="buttonLink" color="primary" @click="$emit('click', $event)">
     {{ buttonText }}
   </v-btn>
 </template>

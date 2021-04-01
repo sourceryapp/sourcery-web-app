@@ -1,6 +1,6 @@
 <template>
   <v-layout fill-height>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1>Find Jobs</h1>
       <v-alert
         icon="mdi-information"
@@ -28,7 +28,7 @@
         outlined
       >
         <v-card-title
-          class="pa-3 primary--text text--darken-2 deep-purple lighten-5"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Search Radius
           <v-spacer />
@@ -75,7 +75,11 @@
           <h4 v-if="searching">
             Searching...
           </h4>
-          <h2>Results</h2>
+          <h2
+            v-if="jobs.length>0 && !searching"
+          >
+            Results
+          </h2>
           <template v-for="(job, index) in jobs">
             <v-card
               :key="index"

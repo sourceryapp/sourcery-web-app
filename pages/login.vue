@@ -40,7 +40,6 @@
           @click:append="showPass = !showPass"
         />
         <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span>
-
         <v-btn
           block
           depressed

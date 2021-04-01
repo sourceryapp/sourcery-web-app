@@ -2,7 +2,8 @@
   <v-app id="tube">
     <v-app-bar
       app
-      color="white"
+
+      color="transparent"
       max-height="72px"
       elevate-on-scroll
     >
@@ -17,13 +18,21 @@
           <img id="logo" src="/img/sourcery-wordmark.svg" alt="Sourcery Logo" class="">
         </nuxt-link>
       </v-app-bar-title>
-      <v-spacer class="d-none d-sm-flex" />
+      <v-spacer />
+      <!-- <v-btn
+        icon
+        color="primary"
+        @click="$vuetify.theme.dark = !$vuetify.theme.dark"
+      >
+        <v-icon>{{ $vuetify.theme.dark ? 'mdi-brightness-7' : 'mdi-brightness-3' }}</v-icon>
+      </v-btn> -->
     </v-app-bar>
     <v-navigation-drawer
       v-if="user"
       v-model="drawer"
       app
       bottom
+      :class="$vuetify.breakpoint.xs ? 'rounded-t-xl' : ''"
     >
       <v-list
         style="background: rgb(146, 79, 190); background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);"
@@ -34,29 +43,16 @@
             <img :src="gravatar">
           </v-list-item-avatar>
         </v-list-item>
-        <v-list-item>
+        <v-list-item two-line>
           <v-list-item-content v-if="user">
             <v-list-item-title class="text-h6">
               {{ user.displayName }}
             </v-list-item-title>
-            <v-list-item-sub-title>{{ user.email }}</v-list-item-sub-title>
+            <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="isOrgMember">
+              Institutional Account
+            </v-list-item-subtitle>
           </v-list-item-content>
-          <v-list-item-action v-if="isOrgMember">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-icon
-                  dark
-                  v-bind="attrs"
-                  icon
-                  transition="slide-y-transition"
-                  v-on="on"
-                >
-                  mdi-school
-                </v-icon>
-              </template>
-              <span>Institutional Account</span>
-            </v-tooltip>
-          </v-list-item-action>
         </v-list-item>
       </v-list>
 
@@ -142,7 +138,6 @@
         <v-icon>mdi-cog</v-icon>
       </v-btn> -->
     </v-bottom-navigation>
-
     <v-dialog
       v-model="dialog"
       max-width="400"

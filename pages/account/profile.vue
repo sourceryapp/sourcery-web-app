@@ -1,8 +1,7 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1>Profile</h1>
-
       <v-tabs
         slider-color="primary"
       >

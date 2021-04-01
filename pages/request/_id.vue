@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <template v-if="!id">
         <!-- <h1>Not found</h1> -->
         <v-alert type="error" value="1">

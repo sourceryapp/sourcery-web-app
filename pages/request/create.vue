@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1>
         Create Request
       </h1>
@@ -26,10 +26,10 @@
       </v-alert>
       <v-stepper
         v-model="formState"
-        class="elevation-0"
+        class="elevation-0 transparent"
       >
         <v-stepper-header
-          class="elevation-0"
+          class="elevation-0 "
         >
           <v-stepper-step
             :complete="formState > 1"
@@ -58,7 +58,7 @@
           <v-stepper-content step="1">
             <v-card outlined>
               <v-card-title
-                class="primary--text text--darken-2 deep-purple lighten-5"
+                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
               >
                 Where is your document located?
                 <v-spacer />
@@ -135,7 +135,7 @@
           <v-stepper-content step="2">
             <v-card outlined>
               <v-card-title
-                class="primary--text text--darken-2 deep-purple lighten-5"
+                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
               >
                 What is the citation for your document?
                 <v-spacer />
@@ -184,7 +184,7 @@
           <v-stepper-content step="3">
             <v-card outlined>
               <v-card-title
-                class="primary--text text--darken-2 deep-purple lighten-5"
+                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
               >
                 How long is your document?
                 <v-spacer />

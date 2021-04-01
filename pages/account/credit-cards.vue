@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1 class="mb-4">
         Payment Information
       </h1>

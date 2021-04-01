@@ -1,6 +1,13 @@
 <template>
   <v-layout>
-    <v-flex v-if="id !== null" xs12 sm8 offset-sm2>
+    <v-flex
+      v-if="id !== null"
+      xs12
+      sm8
+      xl6
+      offset-sm2
+      offset-xl3
+    >
       <v-card>
         <StaticMap
           :alt="`Satellite image of ${data.repository.name}`"

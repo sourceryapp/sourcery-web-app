@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 offset-sm2>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1 class="mb-4">
         Dashboard
       </h1>
@@ -37,12 +37,12 @@
         class="mb-4"
       >
         <v-card-title
-          class="primary--text text--darken-2 deep-purple lighten-5"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Your Requests
           <v-spacer />
           <v-icon
-            color="primary darken-2"
+            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
           >
             mdi-file-search
           </v-icon>
@@ -56,7 +56,7 @@
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon ripple>
-                <v-icon color="grey darken-2">
+                <v-icon color="grey">
                   mdi-plus-circle
                 </v-icon>
               </v-btn>
@@ -98,12 +98,12 @@
         outlined
       >
         <v-card-title
-          class="primary--text text--darken-2 deep-purple lighten-5"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Your Jobs
           <v-spacer />
           <v-icon
-            color="primary darken-2"
+            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
           >
             mdi-briefcase
           </v-icon>
@@ -113,12 +113,12 @@
           <v-list-item v-if="jobs.length == 0" to="/jobs">
             <v-list-item-content>
               <v-list-item-title>No Active Jobs</v-list-item-title>
-              <v-list-item-sub-title>Click to find available jobs.</v-list-item-sub-title>
+              <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn icon ripple>
-                <v-icon color="grey lighten-1">
-                  search
+                <v-icon color="grey">
+                  mdi-magnify
                 </v-icon>
               </v-btn>
             </v-list-item-action>

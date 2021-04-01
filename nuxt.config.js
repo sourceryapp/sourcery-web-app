@@ -54,7 +54,7 @@ export default {
                 href:
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
             },
-            { rel: 'icon', type: 'image/png', href: '/img/favicon.png' },
+            { rel: 'icon', type: 'image/png', href: '/favicon.png' },
             { rel: 'apple-touch-icon', href: '/apple-icon.png' }
             // {rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
         ],
@@ -83,8 +83,10 @@ export default {
      * PWA Icons
      * @url https://pwa.nuxtjs.org/modules/icon.html
      */
-    icon: {
-        iconSrc: 'static/icon-fz.png'
+    pwa: {
+        icon: {
+            source: 'static/icon-fz.png'
+        }
     },
 
     /**
@@ -138,7 +140,8 @@ export default {
         '~/plugins/request-extensions',
 
         // Sourcery API
-        '~/plugins/sourcery'
+        '~/plugins/sourcery',
+        { src: '~/plugins/vuetify.ts', ssr: false }
 
     ],
 
@@ -234,10 +237,7 @@ export default {
                     error: '#b71c1c'
                 },
                 dark: {
-                    primary: '#654EA3',
-                    secondary: '#4E4B51',
-                    accent: '#53AFAC',
-                    error: '#b71c1c'
+                    primary: '#c5aeef'
                 }
             }
         },
