@@ -164,10 +164,10 @@ export default {
     router: {
         middleware: [
             'auth-guard',
-            'user-meta',
-            'account-type',
-            'onboarding-complete'
+            'user-meta'
         ]
+        // [ONBOARD]'account-type',
+        // [ONBOARD] 'onboarding-complete'
     },
 
     modules: [

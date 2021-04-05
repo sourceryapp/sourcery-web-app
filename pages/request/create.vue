@@ -15,10 +15,11 @@
       </v-alert>
 
       <v-alert
-        :value="!canMakePayments"
+        :value="false"
         type="warning"
         class="mt-4 mb-4"
       >
+        <!-- :value="!canMakePayments" -->
         You must add a credit card before submitting a request.
         <v-btn :to="{name: 'account-credit-cards'}">
           Add Card
@@ -188,11 +189,12 @@
             </v-btn>
             <v-btn
               id="submit-request"
-              :disabled="!request.pricing.total || !canMakePayments || isSaving"
+              :disabled="!request.pricing.total || isSaving"
               :loading="loadingCost || isSaving"
               class="primary"
               @click="submitRequest"
             >
+              <!--:disabled="!request.pricing.total || !canMakePayments || isSaving"-->
               Submit
             </v-btn>
           </v-layout>

@@ -5,10 +5,11 @@
       <p>During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.</p>
 
       <v-alert
-        :value="!canReceivePayments"
+        :value="false"
         type="warning"
         class="mt-4 mb-4"
       >
+      <!--:value="!canReceivePayments"-->
         <v-layout>
           <div>Before claiming a job request, you must configure your account to receive payments.</div>
           <v-btn :to="{name: 'account-payouts'}">
@@ -92,9 +93,10 @@
                   </v-layout>
                 </v-container>
                 <v-card-actions>
-                  <v-btn color="primary" :disabled="!canReceivePayments || job.claimed" @click="claim(job.id)">
+                  <v-btn color="primary" :disabled="job.claimed" @click="claim(job.id)">
                     {{ job.claimed ? "Claimed" : "Claim" }}
                   </v-btn>
+                  <!--:disabled="!canReceivePayments || job.claimed" @click="claim(job.id)"-->
                 </v-card-actions>
               </v-card>
             </v-flex>
