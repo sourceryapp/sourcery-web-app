@@ -216,12 +216,10 @@ export default {
                         phone: this.phone
                     }, { merge: true })
 
-                    this.$store.dispatch('auth/signIn', {
-                        email: this.email,
-                        password: this.password
-                    }).then(() => {
-                        this.$router.push('/dashboard')
-                    })
+                    this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
+                        .then(() => {
+                            this.$router.push('/dashboard')
+                        })
                 })
             }).catch((error) => {
                 const messages = {
