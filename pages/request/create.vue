@@ -11,7 +11,7 @@
         class="mt-4 mb-4"
       >
         <!-- During the beta, users can request documents located in the Boston, New York, and Washington, D.C. metro areas, and at the University of Connecticut. -->
-        Due to the pandemic, documents can only be requested from our partner
+        Due to the pandemic, documents can only be requested from our partner institutions.
       </v-alert>
 
       <v-alert
