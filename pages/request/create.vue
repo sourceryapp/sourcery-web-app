@@ -5,14 +5,15 @@
         Create Request
       </h1>
 
-      <v-alert
+      <!-- <v-alert
         icon="mdi-information"
         text
         type="info"
         class="mt-1 mb-0"
+        dismissible
       >
         Due to the pandemic, documents can only be requested from our institutional partners.
-      </v-alert>
+      </v-alert> -->
 
       <v-alert
         :value="!canMakePayments"
@@ -56,33 +57,40 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
-            <v-card outlined>
+            <v-card
+              outlined
+              class="mb-4"
+            >
               <v-card-title
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
               >
                 Where is your document located?
-                <v-spacer />
                 <v-icon
-                  color="primary darken-2"
+                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
                 >
                   mdi-map-marker
                 </v-icon>
               </v-card-title>
               <v-divider />
-              <v-card-text>
-                <!-- The following is a temporary selection tool for partner organizations -->
-                <v-radio-group v-model="request.repository_id">
-                  <v-radio
-                    v-for="repo in repositories"
-                    :key="repo.id"
-                    color="primary"
-                    :label="repo.data().name"
-                    :value="repo.id"
-                    class="font-weight-medium"
-                  />
-                </v-radio-group>
-                <!-- https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/ -->
-                <!-- <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
+              <v-card-subtitle
+                class="ma-0 blue lighten-5 info--text text--darken-4"
+              >
+                Due to the pandemic, documents can only be requested from our institutional partners.
+              </v-card-subtitle>
+              <!-- <v-card-text>
+                The following is a temporary selection tool for partner organizations
+              <v-radio-group v-model="request.repository_id">
+                <v-radio
+                  v-for="repo in repositories"
+                  :key="repo.id"
+                  color="primary"
+                  :label="repo.data().name"
+                  :value="repo.id"
+                  class="font-weight-medium"
+                />
+              </v-radio-group>
+               https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/
+              <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
                       <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
                       <ais-configure
                         :hitsPerPage="15"
@@ -116,7 +124,7 @@
                           </template>
                         </v-list>
                       </ais-hits>
-                    </ais-instant-search> -->
+                    </ais-instant-search>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
@@ -129,18 +137,115 @@
                 >
                   Next
                 </v-btn>
-              </v-card-actions>
+              </v-card-actions> -->
             </v-card>
+            <v-item-group v-model="request.repository_id" mandatory>
+              <v-item
+                v-for="repo in repositories"
+                v-slot="{ toggle }"
+                :key="repo.id"
+              >
+                <v-card
+                  outlined
+                  class="mb-2"
+                  @click="toggle"
+                >
+                  <v-img
+                    :src="`/img/repo/${repo.id}.jpg`"
+                    class="align-end"
+                    gradient="135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%"
+                    width="100%"
+                    aspect-ratio="4"
+                    min-height="180px"
+                  >
+                    <v-container class="fill-height" height="100%">
+                      <v-row>
+                        <v-col class="d-flex justify-end">
+                          <img
+                            :src="`/img/institution/${repo.data().organization}.png`"
+                            alt="alt"
+                            height="48px"
+                          >
+                        </v-col>
+                      </v-row>
+                      <v-row class="fill-height">
+                        <v-col class="pa-0">
+                          <v-list-item
+                            three-line
+                          >
+                            <v-list-item-content v-if="repo.data().name != repo.data().institution">
+                              <v-list-item-title class="text-h5 white--text">
+                                {{ repo.data().name }}
+                              </v-list-item-title>
+                              <v-list-item-subtitle class="text-subtitle-1 white--text">
+                                {{ repo.data().institution }}
+                              </v-list-item-subtitle>
+                              <v-list-item-subtitle class="text-subtitle-2 white--text">
+                                {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
+                              </v-list-item-subtitle>
+                              <!-- <v-list-item-subtitle class="white--text">
+                                {{ repo.id }}
+                              </v-list-item-subtitle> -->
+                            </v-list-item-content>
+                            <v-list-item-content v-else>
+                              <v-list-item-title class="text-h5 white--text">
+                                {{ repo.data().name }}
+                              </v-list-item-title>
+                              <v-list-item-subtitle class="text-subtitle-2 white--text">
+                                {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
+                              </v-list-item-subtitle>
+                              <!-- <v-list-item-subtitle class="white--text">
+                                {{ repo.id }}
+                              </v-list-item-subtitle> -->
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                        <v-col cols="2" class="d-flex flex-row-reverse align-end">
+                          <v-btn
+                            color="white"
+                            class="black--text"
+                            @click="formState++; request.repository_id = repo.id"
+                          >
+                            Select
+                          </v-btn>
+                          <!-- <v-avatar
+                            v-if="active"
+                            class="deep-purple lighten-5 align-end"
+                          >
+                            <v-icon
+                              class="primary--text text--darken-4"
+                            >
+                              mdi-check
+                            </v-icon>
+                          </v-avatar> -->
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-img>
+                  <!-- In the future the images for the repos should be stored somewhere in Firebase so that they can be updated dynamically instead of having to push out a new build -->
+                  <!-- <v-card-actions>
+                    <v-avatar
+                      v-show="active"
+                      :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+                    >
+                      <v-icon>
+                        mdi-check
+                      </v-icon>
+                    </v-avatar>
+                  </v-card-actions> -->
+                </v-card>
+              </v-item>
+            </v-item-group>
           </v-stepper-content>
           <v-stepper-content step="2">
             <v-card outlined>
               <v-card-title
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
               >
                 What is the citation for your document?
                 <v-spacer />
                 <v-icon
-                  color="primary darken-2"
+                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
                 >
                   mdi-format-quote-close
                 </v-icon>
@@ -184,12 +289,12 @@
           <v-stepper-content step="3">
             <v-card outlined>
               <v-card-title
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
               >
                 How long is your document?
                 <v-spacer />
                 <v-icon
-                  color="primary darken-2"
+                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
                 >
                   mdi-book-open-page-variant
                 </v-icon>
@@ -208,6 +313,7 @@
                       value="1"
                       min="1"
                       filled
+                      inputmode="numeric"
                     />
                   </v-flex>
                   <v-flex v-if="request.pricing.total" xs5 offset-xs1>
@@ -276,7 +382,6 @@ export default {
             repositories: [],
             repository: null,
             areas: null,
-            active: null,
             loading: false,
             loadingCost: false,
             errors: {
@@ -405,6 +510,9 @@ export default {
 
     .v-stepper__content {
       padding: 0;
+    }
+    .v-list-item__title {
+      white-space: normal;
     }
     /* .checkmark {
         display:none;

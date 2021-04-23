@@ -2,30 +2,23 @@
   <v-app id="tube">
     <v-app-bar
       app
-
-      color="transparent"
-      max-height="72px"
+      :color="$vuetify.theme.dark ? '#121212' : 'white'"
+      max-height="84px"
       elevate-on-scroll
     >
       <v-app-bar-nav-icon
         v-if="user"
         color="primary"
+        class="float-left"
         @click="drawer = !drawer"
       />
-      <v-spacer class="d-none d-sm-flex" />
-      <v-app-bar-title class="mt-2 ma-0">
+      <v-spacer />
+      <v-app-bar-title :class="user ? 'mt-2 ma-0 ml-n8' : 'mt-2 ma-0'">
         <nuxt-link id="wordmark-link" to="/dashboard">
-          <img id="logo" src="/img/sourcery-wordmark.svg" alt="Sourcery Logo" class="">
+          <img id="logo" :src="$vuetify.theme.dark ? '/img/sourcery-wordmark-dark.svg' : '/img/sourcery-wordmark.svg'" alt="Sourcery Logo">
         </nuxt-link>
       </v-app-bar-title>
       <v-spacer />
-      <!-- <v-btn
-        icon
-        color="primary"
-        @click="$vuetify.theme.dark = !$vuetify.theme.dark"
-      >
-        <v-icon>{{ $vuetify.theme.dark ? 'mdi-brightness-7' : 'mdi-brightness-3' }}</v-icon>
-      </v-btn> -->
     </v-app-bar>
     <v-navigation-drawer
       v-if="user"
@@ -67,6 +60,28 @@
             :key="item.title"
             :to="item.link"
             nuxt
+            exact
+            class="hidden-sm-and-down"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+        <v-divider class="my-2 hidden-sm-and-down" />
+        <v-list-item-group
+          color="primary"
+        >
+          <v-list-item
+            v-for="item in items2"
+            :key="item.title"
+            :to="item.link"
+            nuxt
+            exact
           >
             <v-list-item-icon>
               <v-icon>{{ item.icon }}</v-icon>
@@ -97,12 +112,10 @@
       </v-container>
     </v-content>
     <v-bottom-navigation
-      v-if="user"
-      :value="value"
+      v-if="user && $vuetify.breakpoint.smAndDown"
       app
       grow
       color="primary"
-      :horizontal="$vuetify.breakpoint.smAndUp"
     >
       <v-btn
         value="dashboard"
@@ -120,23 +133,21 @@
         <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
 
-      <v-btn
+      <!-- <v-btn
         value="search"
         to="/jobs"
       >
         <span>Find Jobs</span>
         <v-icon>mdi-briefcase-search</v-icon>
-      </v-btn>
+      </v-btn> -->
 
-      <!-- <v-btn
+      <v-btn
         value="settings"
-        active-class=""
-        :class="drawer ? 'v-btn--active' :''"
-        @click.stop="drawer = !drawer"
+        to="/settings"
       >
         <span>Settings</span>
         <v-icon>mdi-cog</v-icon>
-      </v-btn> -->
+      </v-btn>
     </v-bottom-navigation>
     <v-dialog
       v-model="dialog"
@@ -157,9 +168,9 @@
             Cancel
           </v-btn>
           <v-btn
-            color="primary"
+            color="error"
             nuxt
-            depressed
+            text
             @click="logout()"
           >
             Log Out
@@ -182,13 +193,19 @@ export default {
         drawer: null,
         dialog: false,
         items1: [
-            { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
-            { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
-            { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
-            { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
+            // { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
+            { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+            { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
+            // { title: 'Find Jobs', icon: 'mdi-briefcase-search', link: '/jobs', desktopOnly: 'true' },
+        ],
+        items2: [
+            { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
+            // { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
+            // { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
+            // { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
             { title: 'History', icon: 'mdi-history', link: '/request/history' },
-            { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
-            { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
+            // { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
+            // { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
             { title: 'Help', icon: 'mdi-help-circle', link: '/account/help' },
             { title: 'Feedback', icon: 'mdi-message-alert', link: '/settings/feedback' }
             // { title: 'Rate', icon: 'star', link: ''},
@@ -211,6 +228,14 @@ export default {
         })
     },
     mounted () {
+        const theme = localStorage.getItem('dark_theme')
+        if (theme) {
+            if (theme === 'true') {
+                this.$vuetify.theme.dark = true
+            } else {
+                this.$vuetify.theme.dark = false
+            }
+        }
     // console.log('Firebase: ', firebase);
     // console.log(this.$store);
     // console.log('Meta', this.$store.state.meta)
@@ -225,6 +250,10 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        toggleDark () {
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+            localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString())
         }
     /** listenTokenRefresh() {
             const currentMessageToken = window.localStorage.getItem('messagingToken')
@@ -255,5 +284,8 @@ export default {
     }
     #logo {
       height: 48px
+    }
+    .v-dialog > .v-card > .v-card__actions {
+      padding: 8px
     }
 </style>

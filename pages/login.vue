@@ -9,7 +9,7 @@
           :value="loginError"
           type="error"
           transition="slide-y-transition"
-          outline
+          outlined
         >
           Username or password is incorrect.
         </v-alert>
@@ -23,7 +23,7 @@
           validate-on-blur
           prepend-icon="mdi-email"
           autofocus
-          filled
+          outlined
         />
         <span v-for="(err, index) in errors.email" :key="index" class="text-red">{{ err }}</span>
         <v-text-field
@@ -36,7 +36,7 @@
           :rules="[v => !!v || 'Password is required']"
           prepend-icon="mdi-security"
           validate-on-blur
-          filled
+          outlined
           @click:append="showPass = !showPass"
         />
         <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span>

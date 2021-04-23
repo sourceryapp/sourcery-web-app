@@ -37,7 +37,7 @@
         class="mb-4"
       >
         <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Your Requests
           <v-spacer />
@@ -98,7 +98,7 @@
         outlined
       >
         <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Your Jobs
           <v-spacer />

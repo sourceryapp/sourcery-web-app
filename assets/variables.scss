@@ -6,4 +6,8 @@ $btn-font-sizes: (
     'x-large': 1.25rem
 );
 
+.theme--dark.v-btn.v-btn--has-bg.primary {
+    color: black;
+}
+
 @import '~vuetify/src/styles/styles.sass'

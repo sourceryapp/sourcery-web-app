@@ -99,7 +99,8 @@ export default {
         description:
             'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true,
-        favicon: false
+        favicon: false,
+        appleStatusBarStyle: 'default' // unfortunately Apple took away the possibility of having a white status bar with black icons on iOS 14
     },
 
     /**
@@ -121,7 +122,8 @@ export default {
         short_name: 'Sourcery',
         lang: 'en-US',
         orientation: 'portrait',
-        start_url: '/dashboard'
+        start_url: '/dashboard',
+        nativeUI: true
     },
 
     /*
@@ -224,7 +226,6 @@ export default {
 
     /**
      * Settings for @nuxtjs/vuetify
-     * TODO Upgrade to v2 of Vuetify.
      * @url https://github.com/nuxt-community/vuetify-module/
      */
     vuetify: {
@@ -237,7 +238,8 @@ export default {
                     error: '#b71c1c'
                 },
                 dark: {
-                    primary: '#c5aeef'
+                    primary: '#c5aeef',
+                    secondary: '#2f2740'
                 }
             }
         },
@@ -326,5 +328,9 @@ export default {
                 }
             }
         }
+    },
+    server: {
+        host: '0.0.0.0',
+        port: 3000
     }
 }

@@ -28,7 +28,7 @@
         outlined
       >
         <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 primary darken-4' : 'primary--text text--darken-2 deep-purple lighten-5'"
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
           Search Radius
           <v-spacer />

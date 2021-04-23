@@ -146,6 +146,7 @@
 
 <script>
 export default {
+    name: 'Terms',
     data () {
         return {
             sourceryEmail: 'support@sourceryapp.org'
