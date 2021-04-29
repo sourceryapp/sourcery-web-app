@@ -230,6 +230,9 @@ export default {
      */
     vuetify: {
         theme: {
+            option: {
+                customProperties: true
+            },
             themes: {
                 light: {
                     primary: '#654EA3',

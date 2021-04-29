@@ -1,5 +1,8 @@
 <template>
   <v-app id="tube">
+    <v-icon>
+      mdi-caret-right
+    </v-icon>
     <v-app-bar
       app
       :color="$vuetify.theme.dark ? '#121212' : 'white'"
@@ -25,7 +28,7 @@
       v-model="drawer"
       app
       bottom
-      :class="$vuetify.breakpoint.xs ? 'rounded-t-xl' : ''"
+      :class="$vuetify.breakpoint.mobile ? 'rounded-t-xl' : ''"
     >
       <v-list
         style="background: rgb(146, 79, 190); background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);"
@@ -112,7 +115,7 @@
       </v-container>
     </v-content>
     <v-bottom-navigation
-      v-if="user && $vuetify.breakpoint.smAndDown"
+      v-if="user && $vuetify.breakpoint.mobile"
       app
       grow
       color="primary"
@@ -199,15 +202,15 @@ export default {
             // { title: 'Find Jobs', icon: 'mdi-briefcase-search', link: '/jobs', desktopOnly: 'true' },
         ],
         items2: [
+            { title: 'History', icon: 'mdi-history', link: '/request/history' },
             { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
             // { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
             // { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
             // { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
-            { title: 'History', icon: 'mdi-history', link: '/request/history' },
             // { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
             // { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
-            { title: 'Help', icon: 'mdi-help-circle', link: '/account/help' },
-            { title: 'Feedback', icon: 'mdi-message-alert', link: '/settings/feedback' }
+            { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
+            { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             // { title: 'Rate', icon: 'star', link: ''},
         ]
     }),

@@ -152,13 +152,13 @@
                 >
                   <v-img
                     :src="`/img/repo/${repo.id}.jpg`"
-                    class="align-end"
+                    class="align-stretch"
                     gradient="135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%"
                     width="100%"
                     aspect-ratio="4"
                     min-height="180px"
                   >
-                    <v-container class="fill-height" height="100%">
+                    <v-container class="fill-height">
                       <v-row>
                         <v-col class="d-flex justify-end">
                           <img
@@ -168,29 +168,18 @@
                           >
                         </v-col>
                       </v-row>
-                      <v-row class="fill-height">
+                      <v-row class="align-self-end">
                         <v-col class="pa-0">
                           <v-list-item
-                            three-line
+                            two-line
                           >
-                            <v-list-item-content v-if="repo.data().name != repo.data().institution">
+                            <v-list-item-content>
                               <v-list-item-title class="text-h5 white--text">
                                 {{ repo.data().name }}
                               </v-list-item-title>
-                              <v-list-item-subtitle class="text-subtitle-1 white--text">
+                              <v-list-item-subtitle v-if="repo.data().name != repo.data().institution" class="text-subtitle-1 white--text">
                                 {{ repo.data().institution }}
                               </v-list-item-subtitle>
-                              <v-list-item-subtitle class="text-subtitle-2 white--text">
-                                {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
-                              </v-list-item-subtitle>
-                              <!-- <v-list-item-subtitle class="white--text">
-                                {{ repo.id }}
-                              </v-list-item-subtitle> -->
-                            </v-list-item-content>
-                            <v-list-item-content v-else>
-                              <v-list-item-title class="text-h5 white--text">
-                                {{ repo.data().name }}
-                              </v-list-item-title>
                               <v-list-item-subtitle class="text-subtitle-2 white--text">
                                 {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
                               </v-list-item-subtitle>

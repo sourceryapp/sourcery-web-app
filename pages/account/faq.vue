@@ -1,8 +1,15 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
-      <h1>Help</h1>
-
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <h1 class="mb-4">
+        FAQ
+      </h1>
+      <!-- <v-banner>
+        <div class="text-h5">
+          Need help?
+        </div>
+        Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.
+      </v-banner>
       <v-card-title class="text-h5">
         Need Help?
       </v-card-title>
@@ -10,45 +17,47 @@
         <v-card-text>
           <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
         </v-card-text>
-      </v-card>
-      <v-card-title class="text-h5">
-        FAQ
-      </v-card-title>
-      <v-expansion-panel>
-        <v-expansion-panel-content
-          v-for="(item,i) in items"
-          :key="i"
+      </v-card> -->
+      <v-card outlined>
+        <v-card-title
+          :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
         >
-          <div slot="header">
-            {{ item.question }}
-          </div>
-          <v-card>
-            <v-card-text v-if="item.answer">
-              {{ item.answer }}
-            </v-card-text>
-
-            <!-- who are we -->
-            <v-card-text v-if="item.answer_link">
-              {{ item.answer_link }} <a href="https://greenhousestudios.uconn.edu/">{{ item.answer_link01 }}</a> {{ item.answer_link02 }} <a href="https://greenhousestudios.uconn.edu/projects/">{{ item.answer_link03 }}</a> {{ item.answer_link04 }}
-            </v-card-text>
-
-            <!-- when is sourcery coming -->
-            <v-card-text v-if="item.answer_link1">
-              {{ item.answer_link1 }} <a href="https://sourceryapp.org/">{{ item.answer_link2 }}</a> {{ item.answer_link3 }}
-            </v-card-text>
-
-            <v-card-text v-if="item.answer2">
-              {{ item.answer2 }}
-            </v-card-text>
-            <v-card-text v-if="item.answer3">
-              {{ item.answer3 }}
-            </v-card-text>
-            <v-card-text v-if="item.answer4">
-              {{ item.answer4 }}
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+          FAQ
+        </v-card-title>
+        <v-divider />
+        <v-expansion-panels flat tile>
+          <v-expansion-panel
+            v-for="(item,i) in items"
+            :key="i"
+          >
+            <v-expansion-panel-header class="text-h6">
+              {{ item.question }}
+            </v-expansion-panel-header>
+            <v-expansion-panel-content class="mt-2">
+              <div v-if="item.answer">
+                {{ item.answer }}
+              </div>
+              <!-- who are we -->
+              <div v-if="item.answer_link">
+                {{ item.answer_link }} <a href="https://greenhousestudios.uconn.edu/">{{ item.answer_link01 }}</a> {{ item.answer_link02 }} <a href="https://greenhousestudios.uconn.edu/projects/">{{ item.answer_link03 }}</a> {{ item.answer_link04 }}
+              </div>
+              <!-- when is sourcery coming -->
+              <div v-if="item.answer_link1">
+                {{ item.answer_link1 }} <a href="https://sourceryapp.org/">{{ item.answer_link2 }}</a> {{ item.answer_link3 }}
+              </div>
+              <div v-if="item.answer2">
+                {{ item.answer2 }}
+              </div>
+              <div v-if="item.answer3">
+                {{ item.answer3 }}
+              </div>
+              <div v-if="item.answer4">
+                {{ item.answer4 }}
+              </div>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
@@ -64,7 +73,7 @@
 
 <script>
 export default {
-    name: 'Help',
+    name: 'FAQ',
     data () {
         return {
             items: [
@@ -113,4 +122,7 @@ export default {
 </script>
 
 <style scoped>
+.v-expansion-panel-header {
+  padding: 16px
+}
 </style>

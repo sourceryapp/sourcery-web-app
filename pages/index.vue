@@ -13,18 +13,28 @@
           alt=""
         >
         <div class="header__buttons">
-          <a
-            href="/register"
-            class="button button__mobile-block button__lg button__white"
+          <v-btn
+            to="/register"
+            x-large
+            block
+            color="white"
+            class="black--text text-h5 font-weight-bold"
+            height="76px"
+            depressed
           >
             Sign Up
-          </a>
-          <nuxt-link
-            :to="{ name: 'dashboard' }"
-            class="button button__mobile-block button__lg button__outline button__white-outline"
+          </v-btn>
+          <v-btn
+            to="/dashboard"
+            x-large
+            block
+            color="white"
+            class="black--text text-h5 font-weight-bold"
+            height="76px"
+            outlined
           >
             Log In
-          </nuxt-link>
+          </v-btn>
         </div>
         <div class="header__slogan">
           <h1>Your sources, like magic</h1>
@@ -32,105 +42,140 @@
         </div>
       </div>
     </header>
-    <section id="meet-sourcery">
-      <div class="section-container">
-        <h1 id="meet" class="color-700">
+    <v-flex
+      xs12
+      sm10
+      md8
+      lg6
+      xl4
+      offset-sm1
+      offset-md2
+      offset-lg3
+      offset-xl4
+    >
+      <v-container>
+        <h1 id="meet" class="mt-2">
           Meet Sourcery
         </h1>
-        <div class="feature">
-          <img
-            class="feature-illustration"
-            src="../static/img/landing-illustrations/undraw_researching_22gp.svg"
-            alt=""
-          >
-          <div class="feature-desc">
-            <h4 class="feature-title">
-              Easy document requests
-            </h4>
-            <p class="feature-text">
-              Request a document using just a citation and where
-              it’s located.
-            </p>
-          </div>
-        </div>
-        <div class="feature feature__text-first">
-          <img
-            class="feature-illustration"
-            src="../static/img/landing-illustrations/undraw_collaborators_prrw.svg"
-            alt=""
-          >
-          <div class="feature-desc">
-            <h4 class="feature-title">
-              High quality sources
-            </h4>
-            <p class="feature-text">
-              Receive high resolution scans from institutions and
-              Sourcery-registered researchers.
-            </p>
-          </div>
-        </div>
-        <div class="feature">
-          <img
-            class="feature-illustration"
-            src="../static/img/landing-illustrations/undraw_folder_files_nweq.svg"
-            alt=""
-          >
-          <div class="feature-desc">
-            <h4 class="feature-title">
-              Streamlining workflows for institutions
-            </h4>
-            <p class="feature-text">
-              Give archival staff and patrons one easy platform
-              for requesting and receiving scans.
-            </p>
-          </div>
-        </div>
-        <div class="feature feature__text-first">
-          <img
-            class="feature-illustration"
-            src="../static/img/landing-illustrations/undraw_wallet_aym5.svg"
-            alt=""
-          >
-          <div class="feature-desc">
-            <h4 class="feature-title">
-              Cut the travel fees
-            </h4>
-            <p class="feature-text">
-              Save your wallet from expensive flights and
-              transportation.
-            </p>
-          </div>
-        </div>
-        <div class="feature">
-          <img
-            class="feature-illustration"
-            src="../static/img/landing-illustrations/undraw_absorbed_in_xahs.svg"
-            alt=""
-          >
-          <div class="feature-desc">
-            <h4 class="feature-title">
-              Get back to what’s important
-            </h4>
-            <p class="feature-text">
-              Gain efficient, affordable access with Sourcery.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
+        <v-row class="align-center">
+          <v-col>
+            <img
+              class="feature-illustration"
+              src="../static/img/landing-illustrations/undraw_researching_22gp.svg"
+              alt=""
+            >
+          </v-col>
+          <v-col class="col-12 col-sm-6">
+            <div class="feature-desc">
+              <h4 class="feature-title">
+                Easy document requests
+              </h4>
+              <p class="feature-text">
+                Request a document using just a citation and where
+                it’s located.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="align-center">
+          <v-col>
+            <img
+              class="feature-illustration"
+              src="../static/img/landing-illustrations/undraw_collaborators_prrw.svg"
+              alt=""
+            >
+          </v-col>
+          <v-col class="order-sm-first col-12 col-sm-6">
+            <div class="feature-desc ">
+              <h4 class="feature-title">
+                High quality sources
+              </h4>
+              <p class="feature-text">
+                Receive high resolution scans from institutions and
+                Sourcery-registered researchers.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="align-center">
+          <v-col>
+            <img
+              class="feature-illustration"
+              src="../static/img/landing-illustrations/undraw_folder_files_nweq.svg"
+              alt=""
+            >
+          </v-col>
+          <v-col class="col-12 col-sm-6">
+            <div class="feature-desc">
+              <h4 class="feature-title">
+                Streamlining workflows for institutions
+              </h4>
+              <p class="feature-text">
+                Give archival staff and patrons one easy platform
+                for requesting and receiving scans.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="align-center">
+          <v-col>
+            <img
+              class="feature-illustration"
+              src="../static/img/landing-illustrations/undraw_wallet_aym5.svg"
+              alt=""
+            >
+          </v-col>
+          <v-col class="order-sm-first col-12 col-sm-6">
+            <div class="feature-desc">
+              <h4 class="feature-title">
+                Cut the travel fees
+              </h4>
+              <p class="feature-text">
+                Save your wallet from expensive flights and
+                transportation.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="align-center">
+          <v-col>
+            <img
+              class="feature-illustration"
+              src="../static/img/landing-illustrations/undraw_absorbed_in_xahs.svg"
+              alt=""
+            >
+          </v-col>
+          <v-col class="col-12 col-sm-6">
+            <div class="feature-desc">
+              <h4 class="feature-title">
+                Get back to what’s important
+              </h4>
+              <p class="feature-text">
+                Gain efficient, affordable access with Sourcery.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-flex>
     <section id="how-does-sourcery-work">
       <div class="section-container">
-        <div class="section-header">
-          <img
-            class="section-img"
-            src="../static/img/landing-illustrations/undraw_faq_rjoy.svg"
-            alt=""
-          >
-          <h1 id="how" ref="how" class="text">
-            How does Sourcery work?
-          </h1>
-        </div>
+        <v-container>
+          <v-row class="align-center">
+            <v-col>
+              <img
+                class="section-img"
+                src="../static/img/landing-illustrations/undraw_faq_rjoy.svg"
+                alt=""
+              >
+            </v-col>
+            <v-col class="order-sm-first col-12 col-sm-6">
+              <h1 id="how" ref="how" class="text">
+                How does Sourcery work?
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
         <div class="paragraphs">
           <p class="medium">
             When you submit a request, the app finds and notifies
@@ -143,8 +188,8 @@
           </p>
           <img
             src="../static/img/sparkle-circle.svg"
-            alt=""
             class="sparkle"
+            :style="$vuetify.theme.dark ? 'filter: invert(1) hue-rotate(180deg)' : ''"
           >
           <p class="text indiv">
             Sourcery is a not-for-profit service that gives
@@ -160,8 +205,8 @@
           </p>
           <img
             src="../static/img/sparkle-circle.svg"
-            alt=""
             class="sparkle"
+            :style="$vuetify.theme.dark ? 'filter: invert(1) hue-rotate(180deg)' : ''"
           >
           <p class="text indiv">
             Sourcery emerges from the design process of
@@ -193,38 +238,59 @@
               Corporation for Digital Scholarship</a>, a not-for-profit organization.
           </p>
         </div>
-        <a
+        <v-btn
           href="/about"
-          class="button button__sm button__outline button__mobile-block button__purple"
-        >Learn More</a>
+          color="primary"
+          outlined
+          x-large
+          :block="$vuetify.breakpoint.mobile"
+        >
+          Learn More
+        </v-btn>
       </div>
     </section>
 
     <section id="cta">
       <div class="section-container">
-        <div class="section-header">
-          <img
-            src="../static/img/landing-illustrations/undraw_enter_uhqk.svg"
-            alt=""
-            class="section-img ready-img"
-          >
-          <h1 id="ready">
-            Ready to try Sourcery?
-          </h1>
-        </div>
+        <v-container>
+          <v-row>
+            <v-col>
+              <img
+                src="../static/img/landing-illustrations/undraw_enter_uhqk.svg"
+                alt=""
+                class="section-img ready-img"
+              >
+            </v-col>
+            <v-col class="order-sm-first col-12 col-sm-6">
+              <h1 id="ready">
+                Ready to try Sourcery?
+              </h1>
+            </v-col>
+          </v-row>
+        </v-container>
         <div class="cta-buttons">
-          <nuxt-link
-            :to="{ name: 'dashboard' }"
-            class="button button___mobile-block button__lg button__outline"
+          <v-btn
+            to="/dashboard"
+            x-large
+            block
+            color="primary"
+            class="text-h5 font-weight-bold"
+            height="76px"
+            outlined
           >
             Log In
-          </nuxt-link>
-          <a
-            href="/register"
-            class="button button___mobile-block button__lg button__purple"
+          </v-btn>
+          <v-btn
+            to="/register"
+            x-large
+            block
+            color="primary"
+            class="text-h5 font-weight-bold"
+            height="76px"
+            depressed
           >
             Sign Up
-          </a>
+          </v-btn>
         </div>
       </div>
     </section>
@@ -232,36 +298,39 @@
     <footer class="footer__light">
       <div class="footer-content">
         <a href="https://sourceryapp.org/">
-          <img src="../static/img/sourcery-logo-purple.svg" alt="">
+          <img :src="$vuetify.theme.dark ? '/img/sourcery-logo-purple-dark.svg' : '/img/sourcery-logo-purple.svg'" alt="">
         </a>
         <div class="social-icons">
-          <a
+          <v-btn
             href="https://www.instagram.com/sourcery_app/"
-            class="social-icon"
+            icon
+            x-large
+            color="primary"
           >
-            <img
-              src="../static/img/social-icons/instagram.svg"
-              alt=""
-            >
-          </a>
-          <a
+            <v-icon color="primary" large>
+              mdi-instagram
+            </v-icon>
+          </v-btn>
+          <v-btn
             href="https://www.facebook.com/SourceryApp"
-            class="social-icon"
+            icon
+            x-large
+            color="primary"
           >
-            <img
-              src="../static/img/social-icons/facebook.svg"
-              alt=""
-            >
-          </a>
-          <a
+            <v-icon color="primary" large>
+              mdi-facebook
+            </v-icon>
+          </v-btn>
+          <v-btn
             href="https://twitter.com/Sourcery_App"
-            class="social-icon"
+            icon
+            x-large
+            color="primary"
           >
-            <img
-              src="../static/img/social-icons/twitter.svg"
-              alt=""
-            >
-          </a>
+            <v-icon color="primary" large>
+              mdi-twitter
+            </v-icon>
+          </v-btn>
         </div>
         <p>
           Sourcery is a project of the Corporation for Digital
@@ -353,7 +422,7 @@ export default {
 </script>
 
 <style>
-:root {
+body {
     --sourcery-500: #654ea3;
     --sourcery-700: #413268;
     --sourcery-900: #292043;
@@ -368,11 +437,14 @@ body {
 p {
     font-size: 18px;
     margin: 0;
-    color: var(--sourcery-900);
+    color: var(--v-primary-base);
 }
 h1 {
     font-size: 32px;
     line-height: 38px;
+}
+.color-500 {
+  color: var(--sourcery-500)
 }
 .color-700 {
     color: var(--sourcery-700);
@@ -441,9 +513,6 @@ h1 {
     width: 100%;
     padding: 24px;
 }
-.feature-desc {
-    color: var(--sourcery-900);
-}
 .feature-title {
     font-size: 24px;
     font-weight: 700;
@@ -453,7 +522,7 @@ h1 {
     font-weight: 500;
 }
 #how-does-sourcery-work {
-    background: #f2f0f6;
+    background: hsla(260, 75%, 75%, 0.05);
 }
 .section-img {
     width: 100%;
@@ -468,56 +537,11 @@ h1 {
 .sparkle {
     display: block;
     margin: 18px auto;
+    background-color: white;
+    border-radius: 50%;
 }
 .paragraphs {
     margin-bottom: 24px;
-}
-.button {
-    transition: transform 100ms ease-in, border-radius 100ms ease-in;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-transform: uppercase;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 4px;
-    text-align: center;
-}
-.button:hover,
-.button:focus {
-    transform: scale(1.03);
-    border-radius: 8px;
-}
-.button:active {
-    transform: scale(0.98);
-}
-.button__lg {
-    padding-left: 60px;
-    padding-right: 60px;
-    height: 76px;
-    font-size: 24px;
-}
-.button__sm {
-    padding: 12px 24px;
-    font-size: 16px;
-}
-.button__outline {
-    border: solid 2px;
-}
-.button__purple {
-    background: var(--sourcery-500);
-    color: white;
-}
-.button__white {
-    background: white;
-    color: var(--sourcery-900);
-}
-.button__white-outline {
-    color: white;
-}
-.button__mobile-block {
-    display: flex;
-    width: 100%;
 }
 .ready-img {
     height: 300px;
@@ -532,7 +556,7 @@ h1 {
 }
 footer {
     width: 100%;
-    background: #f2f0f6;
+    background: hsla(260, 75%, 75%, 0.05);
 }
 .footer-content {
     padding: 48px 24px;
@@ -542,7 +566,6 @@ footer {
     flex-direction: column;
     align-items: center;
     font-size: 16px;
-    color: #4a3a74;
     line-height: 22px;
 }
 .footer-content img {
@@ -598,7 +621,6 @@ footer {
     }
     .feature-desc {
         flex: 1;
-        color: var(--sourcery-900);
     }
     .section-header {
         display: grid;
@@ -613,10 +635,6 @@ footer {
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .button__mobile-block {
-        width: auto;
-        margin: 0 auto;
     }
     .cta-buttons {
         width: 100%;

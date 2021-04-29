@@ -1,12 +1,5 @@
 <template>
-  <v-app id="tube">
-    <!-- <lp-banner></lp-banner> -->
-    <!-- <header class="sticky" ref="sticky">
-              <a href="/">
-                <img src="/img/beta-primary-brian.svg" alt="Sourcery Logo" id="logo">
-              </a>
-            <p id="subhead">Your sources, like magic</p>
-        </header> -->
+  <v-app>
     <nuxt />
   </v-app>
 </template>

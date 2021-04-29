@@ -110,13 +110,13 @@
         </v-card-title>
         <v-divider />
         <v-list two-line>
-          <v-list-item v-if="jobs.length == 0" to="/jobs">
+          <v-list-item v-if="jobs.length == 0">
             <v-list-item-content>
               <v-list-item-title>No Active Jobs</v-list-item-title>
               <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon ripple>
+              <v-btn icon ripple to="/jobs">
                 <v-icon color="grey">
                   mdi-magnify
                 </v-icon>
