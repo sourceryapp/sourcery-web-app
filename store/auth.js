@@ -88,5 +88,25 @@ export const actions = {
         }
 
         console.groupEnd()
+    },
+
+    /**
+     * Is the current user an admin?
+     *
+     * @param {*} { commit }
+     * @param {*} { authUser }
+     */
+    async isAdmin ({ state, commit }) {
+        if (state.authUser !== null) {
+            let doc
+            try {
+                doc = await this.$fire.firestore.collection('admins').doc(state.authUser.email).get()
+                return doc.exists
+            } catch (error) {
+                console.error(error)
+            }
+        } else {
+            return false
+        }
     }
 }
