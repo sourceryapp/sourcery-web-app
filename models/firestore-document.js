@@ -8,7 +8,8 @@ export class FirestoreDocument {
     /**
      * @readonly
      */
-    #mods = {}
+    id;
+    fields = {}
 
     /**
      * Creates an instance of FirestoreDocument.
@@ -28,17 +29,6 @@ export class FirestoreDocument {
      */
     get exists () {
         return this.doc.exists
-    }
-
-    /**
-     *
-     * Property of the DocumentSnapshot that provides the document's ID.
-     * @readonly
-     * @returns {String}
-     * @memberof FirestoreDocument
-     */
-    get id () {
-        return this.doc.id || null
     }
 
     /**
@@ -95,9 +85,9 @@ export class FirestoreDocument {
         return this.doc.isEqual(ds)
     }
 
-    // save(){
-    //     return this.ref.set(this.#job)
-    // }
+    save () {
+        return this.doc.ref.set(this.fields, { merge: true })
+    }
 
     // update() {
     //     return this.ref.update(this.#job, { merge: true })

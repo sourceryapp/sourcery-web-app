@@ -15,45 +15,44 @@ export class Organization extends FirestoreDocument {
      */
     constructor (doc = {}) {
         super(doc)
+
+        this.id = doc.id
+        this.fields = doc.data()
+
+        delete this.fields.users
+
+        this.owner = doc.data().owner || doc.data().users[0]
     }
 
-    /**
-     *
-     *
-     * @readonly
-     * @memberof Organization
-     */
     get address () {
-        return this.doc.data().address
+        return this.fields.address
     }
 
-    /**
-     *
-     *
-     * @readonly
-     * @memberof Organization
-     */
+    set address (val) {
+        this.fields.address = val
+    }
+
     get name () {
-        return this.doc.data().name
+        return this.fields.name
     }
 
-    /**
-     *
-     *
-     * @readonly
-     * @memberof Organization
-     */
+    set name (val) {
+        this.fields.name = val
+    }
+
+    get owner () {
+        return this.fields.owner
+    }
+
+    set owner (val) {
+        this.fields.owner = val
+    }
+
     get pricing () {
-        return this.doc.data().pricing || {}
+        return this.fields.pricing
     }
 
-    /**
-     *
-     *
-     * @readonly
-     * @memberof Organization
-     */
-    get users () {
-        return this.doc.data().users || []
+    set pricing (val) {
+        this.fields.pricing = val
     }
 }

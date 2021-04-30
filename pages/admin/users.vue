@@ -18,8 +18,8 @@ export default {
     name: 'Organizations',
     middleware: 'admin-guard',
     layout: 'admin',
-    async fetch () {
-        await this.$fire.firestore.collection('organization').get().then((docs) => {
+    fetch () {
+        this.$fire.firestore.collection('organization').get().then((docs) => {
             if (!docs.empty) {
                 docs.forEach((doc) => {
                     this.organizations.push(new Organization(doc))
