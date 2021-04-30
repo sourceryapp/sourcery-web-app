@@ -1,6 +1,10 @@
 <template>
   <div id="content" class="site-content">
-    admin page
+    <v-card-title primary-title>
+      <h3>admin page</h3>
+    </v-card-title>
+
+    <v-card-text />
   </div>
 </template>
 
@@ -8,12 +12,18 @@
 export default {
     name: 'Admin',
     middleware: 'admin-guard',
+    layout: 'admin',
+    fetch () {
+        this.organizations = [1, 3, 4]
+    },
     data () {
         return {
-            // social: social
+            organizations: []
         }
     },
-    mounted () {},
+    mounted () {
+        console.log(this.organizations)
+    },
     methods: {
 
     }
