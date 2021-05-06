@@ -86,14 +86,18 @@ export class FirestoreDocument {
     }
 
     save () {
-        return this.doc.ref.set(this.fields, { merge: true })
+        if (this.doc.exists) {
+            return this.doc.ref.set(this.fields, { merge: true })
+        } else {
+            return this.doc.parent.add(this.fields)
+        }
     }
 
     // update() {
     //     return this.ref.update(this.#job, { merge: true })
     // }
 
-    // delete() {
-    //     return this.ref.delete()
-    // }
+    delete () {
+        return this.ref.delete()
+    }
 }

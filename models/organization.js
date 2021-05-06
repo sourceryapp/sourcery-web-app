@@ -13,15 +13,17 @@ export class Organization extends FirestoreDocument {
      * @param {*} [doc={}]
      * @memberof Organization
      */
-    constructor (doc = {}) {
+    constructor (doc) {
         super(doc)
 
-        this.id = doc.id
-        this.fields = doc.data()
+        if (doc.exists) {
+            this.id = doc.id
+            this.fields = doc.data()
 
-        delete this.fields.users
+            delete this.fields.users
 
-        this.owner = doc.data().owner || doc.data().users[0]
+            this.owner = doc.data().owner || doc.data().users[0]
+        }
     }
 
     get address () {

@@ -18,7 +18,7 @@
         </v-list>
       </nav>
       <main>
-        <v-card>
+        <v-card flat>
           <nuxt />
         </v-card>
       </main>
@@ -63,5 +63,9 @@ export default {
 .flex {
     display: flex;
     gap: 20px
+}
+
+main {
+    flex-grow: 1;
 }
 </style>
