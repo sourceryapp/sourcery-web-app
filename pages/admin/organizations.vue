@@ -14,6 +14,20 @@
       </ul>
     </v-card-text>
 
+    <v-data-table :headers="tableHeaders" :items="organizations" class="">
+      <template v-slot:items="props">
+        <td>
+          <a @click="editOrg(props.index)">{{ props.item.name }} {{ props.index }}</a>
+        </td>
+        <td>
+          {{ props.item.address }}
+        </td>
+        <td>
+          {{ props.item.owner }}
+        </td>
+      </template>
+    </v-data-table>
+
     <v-dialog v-if="current" v-model="modal" max-width="600px">
       <v-card>
         <v-card-title class="headline grey lighten-2" style="" primary-title>
@@ -82,7 +96,21 @@ export default {
             modal: false,
             organizations: [],
             current: null,
-            saving: false
+            saving: false,
+            tableHeaders: [
+                {
+                    text: 'Name',
+                    value: 'name'
+                },
+                {
+                    text: 'Address',
+                    value: 'address'
+                },
+                {
+                    text: 'Owner ID',
+                    value: 'ownder'
+                }
+            ]
         }
     },
     mounted () {},
@@ -104,6 +132,7 @@ export default {
                 .then((ref) => {
                     this.$toast.success('Saved!')
                     if (ref) {
+                        // It's a new doc, so refresh the list
                         this.refresh()
                     }
                 }).catch((error) => {
