@@ -1,0 +1,7 @@
+{
+    "hooks": {
+        "pre-commit": "yarn lint:js",
+        "post-checkout": "yarn",
+        "post-merge": "git remote prune origin"
+    }
+}
