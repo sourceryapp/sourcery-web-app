@@ -1,0 +1,18 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Update dependencies
+yarn
+
+
+# Install or update functions
+functions_directory="functions"
+if [ -d "$functions_directory" ]
+then
+    cd $functions_directory && git pull
+else
+    git clone git@github.com:GreenhouseStudios/sourcery-functions.git $functions_directory
+    cd $functions_directory
+fi
+
+yarn --cwd function

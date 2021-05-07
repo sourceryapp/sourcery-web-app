@@ -292,12 +292,25 @@
 import CookieLaw from 'vue-cookie-law'
 export default {
     name: 'Home',
+    components: { CookieLaw },
     layout: 'landing-beta',
     middleware: null,
-    components: { CookieLaw },
     data () {
         return {
             // social: social
+        }
+    },
+    head () {
+        return {
+            script: [
+                {
+                    src:
+                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
+                    integrity:
+                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
+                    crossorigin: 'anonymous'
+                }
+            ]
         }
     },
     mounted () {},
@@ -334,19 +347,6 @@ export default {
             }
             // start scrolling
             scroller(scrollContainer, scrollContainer.scrollTop, targetY, 0)
-        }
-    },
-    head () {
-        return {
-            script: [
-                {
-                    src:
-                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
-                    integrity:
-                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
-                    crossorigin: 'anonymous'
-                }
-            ]
         }
     }
 }

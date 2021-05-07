@@ -35,3 +35,11 @@ sw.*
 # Nightwatch Testing
 /chromedriver.log
 /tests_output
+
+# Cloud Functions & Emulator Stuff
+/functions
+/ui-debug.log
+/firebase-debug.log
+
+# eslint
+/.eslintcache

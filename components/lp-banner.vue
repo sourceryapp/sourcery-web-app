@@ -5,7 +5,7 @@
         v-model="dialog"
         width="500"
       >
-        <template v-slot:activator="{ on }">
+        <template #activator="{ on }">
           <v-btn
             color="black"
             dark
