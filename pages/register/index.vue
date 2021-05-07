@@ -213,15 +213,12 @@ export default {
                     const userRef = this.$fire.firestore.collection('user-meta').doc(user.uid)
 
                     userRef.set({
-                        phone: this.phone
+                        phone: this.phone,
+                        email: this.email,
+                        displayName: this.name
                     }, { merge: true })
 
-                    this.$store.dispatch('auth/signIn', {
-                        email: this.email,
-                        password: this.password
-                    }).then(() => {
-                        this.$router.push('/dashboard')
-                    })
+                    this.$router.push('/dashboard')
                 })
             }).catch((error) => {
                 const messages = {

@@ -39,3 +39,7 @@ sw.*
 # Cloud Functions & Emulator Stuff
 /functions
 /ui-debug.log
+/firebase-debug.log
+
+# eslint
+/.eslintcache

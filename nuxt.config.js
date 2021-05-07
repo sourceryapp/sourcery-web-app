@@ -199,11 +199,15 @@ export default {
                     onAuthStateChangedAction: 'auth/onAuthStateChanged',
                     subscribeManually: false
                 },
-                ssr: false // default
-                // emulatorPort: 9099,
-                // emulatorHost: 'http://localhost'
+                ssr: false, // default
+
+                // if EMULATOR===local, use the Firestore Emulators
+                emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
             },
-            firestore: true,
+            firestore: {
+                // if EMULATOR===local, use the Firestore Emulators
+                emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
+            },
             functions: true,
             storage: true,
             remoteConfig: true

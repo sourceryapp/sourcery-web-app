@@ -18,7 +18,7 @@
     "rules": "firestore.rules"
   },
   "functions": {
-    "source": "functions/functions"
+    "source": "functions"
   },
   "emulators": {
     "functions": {
@@ -29,6 +29,12 @@
     },
     "ui": {
       "enabled": true
+    },
+    "auth": {
+      "port": 9099
+    },
+    "hosting": {
+      "port": 5000
     }
   }
 }
