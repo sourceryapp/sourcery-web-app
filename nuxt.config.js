@@ -281,6 +281,12 @@ export default {
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
+        // Fix for this bug: https://github.com/babel/babel/issues/11622
+        babel: {
+            plugins: [
+                ['@babel/plugin-proposal-private-methods', { loose: true }]
+            ]
+        },
         extend (config, { isDev }) {
             // Extend only webpack config for client-bundle
             if (isDev) {

@@ -12,5 +12,7 @@ then
     cd $functions_directory && git pull
 else
     git clone git@github.com:GreenhouseStudios/sourcery-functions.git $functions_directory
+    cd $functions_directory
 fi
 
+yarn --cwd function

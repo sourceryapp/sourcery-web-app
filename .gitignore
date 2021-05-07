@@ -36,5 +36,6 @@ sw.*
 /chromedriver.log
 /tests_output
 
-# Cloud Functions
+# Cloud Functions & Emulator Stuff
 /functions
+/ui-debug.log
