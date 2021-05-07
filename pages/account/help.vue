@@ -53,15 +53,6 @@
   </v-layout>
 </template>
 
-<style type="text/css">
-    .indented{
-        padding:16px 16px 16px 48px;
-    }
-    .italics{
-        font-style: italic;
-    }
-</style>
-
 <script>
 export default {
     name: 'Help',
@@ -112,5 +103,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style type="text/css">
+.indented {
+    padding: 16px 16px 16px 48px;
+}
+.italics {
+    font-style: italic;
+}
 </style>

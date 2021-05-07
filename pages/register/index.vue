@@ -64,7 +64,7 @@
             background-color="#F3F1F6"
             @click:append="showPass = !showPass"
           >
-            <template v-slot:progress>
+            <template #progress>
               <v-progress-linear
                 :value="progress"
                 :color="color"
