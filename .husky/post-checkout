@@ -2,11 +2,13 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Update dependencies
+echo "Installing Dependencies"
 yarn
 
 
 # Install or update functions
 functions_directory="functions"
+echo "Installing Cloud Functions in $functions_directory"
 if [ -d "$functions_directory" ]
 then
     cd $functions_directory && git pull
@@ -15,4 +17,5 @@ else
     cd $functions_directory
 fi
 
-yarn --cwd function
+echo "Installing Dependencies for the Cloud Functions"
+yarn --cwd functions
