@@ -2,11 +2,13 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Update dependencies
+echo "[post-checkout] Installing Dependencies"
 yarn
 
 
 # Install or update functions
 functions_directory="functions"
+echo "[post-checkout] Installing Cloud Functions in $functions_directory"
 if [ -d "$functions_directory" ]
 then
     cd $functions_directory && git pull
@@ -15,4 +17,24 @@ else
     cd $functions_directory
 fi
 
-yarn --cwd function
+if [ -d "node_modules" ]
+then
+    echo "[post-checkout] Skipping 'yarn install' because node_modules already exists"
+else
+    echo "[post-checkout] Installing dependencies for Cloud Functions"
+    yarn install
+fi
+
+
+# Configure the Cloud Function environment
+echo "[post-checkout] Selecting Dev Environment"
+firebase use sourcery-dev
+
+if [ -f ".runtimeconfig.json" ]
+then
+    echo "[post-checkout] Runtime Config already exists. Skipping download."
+else
+    # Get config from dev project
+    echo "[post-checkout] Cloning Environment Variables from Remote Server"
+    yarn run localvars
+fi
