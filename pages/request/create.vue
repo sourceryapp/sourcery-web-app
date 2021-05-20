@@ -72,10 +72,8 @@
                 </v-icon>
               </v-card-title>
               <v-divider />
-              <v-card-subtitle
-                class="ma-0 blue lighten-5 info--text text--darken-4"
-              >
-                Due to the pandemic, documents can only be requested from our institutional partners.
+              <v-card-subtitle>
+                During the pandemic, documents can only be requested from our institutional partners.
               </v-card-subtitle>
               <!-- <v-card-text>
                 The following is a temporary selection tool for partner organizations

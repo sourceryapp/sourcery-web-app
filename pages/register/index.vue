@@ -5,12 +5,19 @@
         <h1 class="text-center">
           Register
         </h1>
-        <v-alert v-if="message" :value="true" type="error" class="mt-2 mb-2">
+        <v-alert
+          v-if="message"
+          :value="true"
+          text
+          type="error"
+          class="mt-2 mb-2"
+        >
           {{ message }}
         </v-alert>
         <v-alert
           :value="errorEmpty"
           type="error"
+          text
         >
           <span color="white">All fields are required.</span>
         </v-alert>
@@ -25,8 +32,7 @@
           autofocus="autofocus"
           validate-on-blur
           prepend-icon="mdi-account-circle"
-          filled
-          background-color="#F3F1F6"
+          outlined
         />
         <span v-for="(err, index) in errors.name" :key="index" class="red--text">{{ err }}</span>
         <v-text-field
@@ -39,8 +45,7 @@
           clearable
           validate-on-blur
           prepend-icon="mdi-email"
-          filled
-          background-color="#F3F1F6"
+          outlined
         />
         <span v-for="(err, index) in errors.email" :key="index" class="red--text">{{ err }}</span>
         <v-layout>
@@ -60,15 +65,14 @@
             validate-on-blur
             loading
             prepend-icon="mdi-security"
-            filled
-            background-color="#F3F1F6"
+            outlined
             @click:append="showPass = !showPass"
           >
             <template v-slot:progress>
               <v-progress-linear
                 :value="progress"
                 :color="color"
-                height="4"
+                height="2"
                 absolute
               />
             </template>
@@ -77,14 +81,14 @@
         <v-alert
           :value="errorLength"
           type="warning"
-          outline
+          text
         >
           <span color="white">Password length must be at least 8 characters.</span>
         </v-alert>
         <v-alert
           :value="errorSpecial"
           type="warning"
-          outline
+          text
         >
           <span color="white">Password must include a special character.</span>
         </v-alert>
@@ -97,8 +101,7 @@
           required
           validate-on-blur
           prepend-icon="mdi-phone"
-          filled
-          background-color="#F3F1F6"
+          outlined
         />
         <div class="hidden-xs-only">
           <v-btn
@@ -109,8 +112,9 @@
             value="Register"
             color="primary"
             :loading="loading"
+            class="mb-4"
           >
-            NEXT
+            Next
           </v-btn>
           <v-btn
             block
@@ -118,7 +122,6 @@
             color="primary"
             outlined
             to="/login"
-            style="border-color: #dad4ea"
           >
             Cancel
           </v-btn>
@@ -132,6 +135,7 @@
             value="Register"
             color="primary"
             :loading="loading"
+            class="mb-2"
           >
             Next
           </v-btn>
@@ -314,7 +318,7 @@ export default {
     position: fixed;
     bottom: 0;
     left: 0;
-    padding: 6px 12px;
+    padding: 12px;
     border-radius: 20px 20px 0px 0px;
     z-index: 5;
   }

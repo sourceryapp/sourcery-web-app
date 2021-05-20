@@ -9,7 +9,7 @@
           :value="loginError"
           type="error"
           transition="slide-y-transition"
-          outlined
+          text
         >
           Username or password is incorrect.
         </v-alert>
@@ -62,7 +62,7 @@
           Forgot password?
         </v-btn>
 
-        <v-divider class="mt-3 mb-3" />
+        <v-divider class="my-3" />
 
         <h2 class="text-center mb-2">
           Don't have an account?
