@@ -40,6 +40,7 @@ sw.*
 /functions
 /ui-debug.log
 /firebase-debug.log
+/.emulator-data
 
 # eslint
 /.eslintcache
