@@ -1,9 +1,9 @@
 <template>
   <footer class="footer__light">
     <div class="footer-content">
-      <a href="/">
+      <NuxtLink to="/">
         <img :src="$vuetify.theme.dark ? '/img/sourcery-logo-purple-dark.svg' : '/img/sourcery-logo-purple.svg'" alt="">
-      </a>
+      </NuxtLink>
       <div class="social-icons">
         <v-btn
           href="https://www.instagram.com/sourcery_app/"
@@ -51,7 +51,14 @@
 <script>
 export default {
     name: 'Footer',
-    props: ['text'],
+    props: {
+        text: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
+
     data () {
         return {
         }

@@ -10,9 +10,9 @@
         <v-layout>
           <v-spacer />
           <v-app-bar-title>
-            <nuxt-link id="wordmark-link" to="/">
+            <NuxtLink id="wordmark-link" to="/">
               <img id="logo" :src="$vuetify.theme.dark ? '/img/sourcery-wordmark-dark.svg' : '/img/sourcery-wordmark.svg'" alt="Sourcery Logo">
-            </nuxt-link>
+            </NuxtLink>
           </v-app-bar-title>
           <v-spacer />
         </v-layout>

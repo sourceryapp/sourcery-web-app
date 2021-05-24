@@ -231,7 +231,7 @@
           </p>
         </div>
         <v-btn
-          href="/about"
+          to="/about"
           color="primary"
           outlined
           x-large
