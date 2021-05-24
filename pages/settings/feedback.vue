@@ -1,42 +1,55 @@
 <template>
-  <v-app id="tube">
-    <v-form ref="feedbackForm" @submit.prevent="sendFeedback">
-      <v-card>
-        <v-card-title class="headline">
-          Feedback
-        </v-card-title>
-        <v-card-text>
-          <p>Complete this form to report a bug or request a feature.</p>
-          <v-text-field
-            v-model="formData.name"
-            label="Your Name"
-            :rules="[rules.required]"
-          />
-          <v-text-field
-            v-model="formData.topic"
-            label="Subject"
-            :rules="[rules.required]"
-          />
-          <v-textarea
-            v-model="formData.message"
-            name="message"
-            label="Message"
-            value=""
-            :rules="[rules.required]"
-          />
-        </v-card-text>
-        <v-card-actions>
-          <v-btn to="/dashboard">
-            Cancel
-          </v-btn>
-          <v-spacer />
-          <v-btn color="primary" dark type="submit">
-            Submit
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-form>
-  </v-app>
+  <v-layout>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <h1 class="mb-4">
+        Feedback
+      </h1>
+      <v-form ref="feedbackForm" @submit.prevent="sendFeedback">
+        <v-card outlined>
+          <v-card-title
+            :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
+          >
+            Feedback
+            <v-icon
+              :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
+            >
+              mdi-comment-quote
+            </v-icon>
+          </v-card-title>
+          <v-divider />
+          <v-card-text class="pb-0">
+            <p>Complete this form to report a bug or request a feature.</p>
+            <v-text-field
+              v-model="formData.name"
+              label="Your Name"
+              :rules="[rules.required]"
+              outlined
+            />
+            <v-text-field
+              v-model="formData.topic"
+              label="Subject"
+              :rules="[rules.required]"
+              outlined
+            />
+            <v-textarea
+              v-model="formData.message"
+              name="message"
+              label="Message"
+              value=""
+              :rules="[rules.required]"
+              outlined
+            />
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn color="primary" type="submit">
+              Submit
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

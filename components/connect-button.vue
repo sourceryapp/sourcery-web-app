@@ -1,5 +1,5 @@
 <template>
-  <v-btn :href="buttonLink" color="primary" @click="$emit('click', $event)">
+  <v-btn :href="buttonLink" color="primary" :outlined="!$store.getters['meta/canReceivePayments']" text @click="$emit('click', $event)">
     {{ buttonText }}
   </v-btn>
 </template>
@@ -24,7 +24,7 @@ export default {
             return this.$store.getters['meta/canReceivePayments'] ? this.stripeDashboardURL : this.stripeURL
         },
         buttonText () {
-            return this.$store.getters['meta/canReceivePayments'] ? 'Manage Your Payout Settings' : 'Connect to Stripe'
+            return this.$store.getters['meta/canReceivePayments'] ? 'Manage' : 'Connect to Stripe'
         },
         usermeta () {
             return this.$store.state.meta

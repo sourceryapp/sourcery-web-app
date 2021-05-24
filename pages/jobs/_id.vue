@@ -1,6 +1,13 @@
 <template>
   <v-layout>
-    <v-flex v-if="id !== null" xs12 sm8 offset-sm2>
+    <v-flex
+      v-if="id !== null"
+      xs12
+      sm8
+      xl6
+      offset-sm2
+      offset-xl3
+    >
       <v-card>
         <StaticMap
           :alt="`Satellite image of ${data.repository.name}`"
@@ -8,7 +15,7 @@
         />
         <v-card-title>
           <div>
-            <div class="headline">
+            <div class="text-h5">
               {{ data.label }}
             </div>
 
@@ -33,7 +40,7 @@
 
       <v-dialog v-model="message" width="500">
         <v-card>
-          <v-card-title class="headline grey lighten-2" primary-title>
+          <v-card-title class="text-h5 grey lighten-2" primary-title>
             What are the options?
           </v-card-title>
 

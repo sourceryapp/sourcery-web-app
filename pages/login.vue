@@ -1,15 +1,15 @@
 <template>
-  <v-layout row fill-height align-center>
+  <v-layout fill-height align-center>
     <v-flex xs12 sm6 offset-sm3 md4 offset-md4>
       <v-form @submit.prevent="login">
-        <h1 class="text-xs-center">
+        <h1 class="text-center">
           Log In
         </h1>
         <v-alert
           :value="loginError"
           type="error"
           transition="slide-y-transition"
-          outline
+          text
         >
           Username or password is incorrect.
         </v-alert>
@@ -20,11 +20,10 @@
           label="Email"
           :rules="emailRules"
           required
-          clearable
           validate-on-blur
-          prepend-icon="email"
+          prepend-icon="mdi-email"
           autofocus
-          box
+          outlined
         />
         <span v-for="(err, index) in errors.email" :key="index" class="text-red">{{ err }}</span>
         <v-text-field
@@ -33,36 +32,49 @@
           label="Password"
           required
           :type="showPass ? 'text' : 'password'"
-          :append-icon="showPass ? 'visibility' : 'visibility_off'"
+          :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
           :rules="[v => !!v || 'Password is required']"
-          prepend-icon="security"
+          prepend-icon="mdi-security"
           validate-on-blur
-          box
+          outlined
           @click:append="showPass = !showPass"
         />
         <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span>
-
         <v-btn
           block
           depressed
-          large
+          x-large
           type="submit"
           color="primary"
           :loading="loading"
           :disabled="loading"
+          style="font-weight: 800"
+          class="mb-1"
         >
           Log In
         </v-btn>
-        <v-btn block flat large to="/password">
+        <v-btn
+          block
+          text
+          large
+          to="/password"
+        >
           Forgot password?
         </v-btn>
 
-        <v-divider class="mt-3 mb-3" />
+        <v-divider class="my-3" />
 
-        <h2 class="text-xs-center">
-          Don't Have an Account?
+        <h2 class="text-center mb-2">
+          Don't have an account?
         </h2>
-        <v-btn block outline large color="primary" to="/register">
+        <v-btn
+          block
+          outlined
+          x-large
+          color="primary"
+          to="/register"
+          style="border-color: #dad4ea; font-weight: 800"
+        >
           Register
         </v-btn>
       </v-form>

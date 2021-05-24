@@ -1,6 +1,6 @@
 <template>
   <div class="bg pa-0">
-    <div id="title" v-ripple="{ class: `white--text` }" class="text-xs-center title" @click="dialog = true">
+    <div id="title" v-ripple="{ class: `white--text` }" class="text-center text-h6" @click="dialog = true">
       <v-dialog
         v-model="dialog"
         width="500"
@@ -38,7 +38,7 @@
           </v-card-title>
 
           <v-divider />
-          <v-card-text id="message-text" class="text-xs-left body-2">
+          <v-card-text id="message-text" class="text-left text-body-2">
             In light of the COVID-19 crisis, we are mindful of the fact that our users will be impacted in a myriad of ways. As many archives and libraries will either be closed or will have stricter access policies, that means that requests submitted through the Sourcery platform will go unclaimed and unfulfilled for much longer than usual. During this time, please note:
             <br><br>
             <ol>

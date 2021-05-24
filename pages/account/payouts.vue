@@ -1,32 +1,31 @@
 <template>
-  <v-app id="tube">
-    <v-flex xs12 sm6 offset-sm3>
-      <v-layout column fill-height>
-        <v-flex>
-          <v-card width="100%">
-            <v-card-title>
-              <h1>Payouts</h1>
-            </v-card-title>
-            <v-card-text>
-              <p v-if="!hasStripeID">
-                Before accepting payments, you must configure your payout options.
-              </p>
-              <p v-if="hasStripeID">
-                Your payout options have been configured. Use the button below to check your balance, change your payout configuration, or modify your payout schedule.
-              </p>
-              <p v-if="hasStripeID">
-                Estimated Balance: {{ balance }}
-              </p>
-            </v-card-text>
+  <v-layout>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <v-card
+        outlined
+      >
+        <v-card-title>
+          Payouts
+        </v-card-title>
+        <v-card-text>
+          <p v-if="!hasStripeID">
+            Before accepting payments, you must configure your payout options.
+          </p>
+          <p v-if="hasStripeID">
+            Your payout options have been configured. Use the button below to check your balance, change your payout configuration, or modify your payout schedule.
+          </p>
+          <p v-if="hasStripeID">
+            Estimated Balance: {{ balance }}
+          </p>
+        </v-card-text>
 
-            <v-card-actions>
-              <connect-button />
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
+        <v-card-actions>
+          <v-spacer />
+          <connect-button />
+        </v-card-actions>
+      </v-card>
     </v-flex>
-  </v-app>
+  </v-layout>
 </template>
 
 <script>

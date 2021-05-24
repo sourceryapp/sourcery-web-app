@@ -1,54 +1,95 @@
 <template>
-  <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
-      <h1>History</h1>
-      <v-list two-line>
-        <v-subheader>Archived Requests</v-subheader>
+  <v-layout>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <h1 class="mb-4">
+        History
+      </h1>
+
+      <v-card
+        outlined
+        class="mb-4"
+      >
+        <v-card-title
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+        >
+          Archived Requests
+          <v-spacer />
+          <v-icon
+            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
+          >
+            mdi-archive
+          </v-icon>
+        </v-card-title>
         <v-divider />
+        <v-list two-line>
+          <v-list-item v-if="requests.length == 0">
+            <v-list-item-content>
+              <v-list-item-subtitle>No past requests found.</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn color="primary" text to="/requests/create">
+                Create <span class="hidden-sm-and-down">&nbsp;Request</span>
+                <v-icon right>
+                  mdi-open-in-new
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
 
-        <v-list-tile v-if="requests.length == 0" to="/request/create">
-          <v-list-tile-content>
-            <v-list-tile-sub-title>No past requests found.</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <template v-for="(request, index) in requests">
+            <v-list-item :key="index" :to="'/request/' + request.id">
+              <v-list-item-content>
+                <v-list-item-title>{{ request.data().label }}</v-list-item-title>
+                <v-list-item-subtitle>{{ request.data().citation }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
+          </template>
+        </v-list>
+      </v-card>
 
-        <template v-for="(request, index) in requests">
-          <v-list-tile :key="index" :to="'/request/' + request.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
-        </template>
-      </v-list>
-
-      <v-list two-line class="mt-5">
-        <v-subheader>Completed Jobs</v-subheader>
+      <v-card
+        outlined
+        class="mb-4"
+      >
+        <v-card-title
+          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+        >
+          Completed Jobs
+          <v-spacer />
+          <v-icon
+            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
+          >
+            mdi-archive
+          </v-icon>
+        </v-card-title>
         <v-divider />
+        <v-list two-line>
+          <v-list-item v-if="jobs.length == 0">
+            <v-list-item-content>
+              <v-list-item-subtitle>No past jobs found.</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action>
+              <v-btn color="primary" text to="/jobs">
+                Find Job
+                <v-icon right>
+                  mdi-open-in-new
+                </v-icon>
+              </v-btn>
+            </v-list-item-action>
+          </v-list-item>
 
-        <v-list-tile v-if="jobs.length == 0" to="/jobs">
-          <v-list-tile-content>
-            <v-list-tile-sub-title>No past jobs found.</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <template v-for="(job, index) in jobs">
-          <v-list-tile :key="index" :to="'/jobs/' + job.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
-        </template>
-      </v-list>
-
-      <div class="text-xs-center mt-5">
-        <v-btn color="primary" to="/dashboard">
-          Back
-        </v-btn>
-      </div>
+          <template v-for="(job, index) in jobs">
+            <v-list-item :key="index" :to="'/jobs/' + job.id">
+              <v-list-item-content>
+                <v-list-item-title>{{ job.data().label }}</v-list-item-title>
+                <v-list-item-sub-title>{{ job.data().citation }}</v-list-item-sub-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
+          </template>
+        </v-list>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>

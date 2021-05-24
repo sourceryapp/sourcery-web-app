@@ -54,7 +54,7 @@ export default {
                 href:
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
             },
-            { rel: 'icon', type: 'image/png', href: '/img/favicon.png' },
+            { rel: 'icon', type: 'image/png', href: '/favicon.png' },
             { rel: 'apple-touch-icon', href: '/apple-icon.png' }
             // {rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
         ],
@@ -83,8 +83,10 @@ export default {
      * PWA Icons
      * @url https://pwa.nuxtjs.org/modules/icon.html
      */
-    icon: {
-        iconSrc: 'static/icon-fz.png'
+    pwa: {
+        icon: {
+            source: 'static/icon-fz.png'
+        }
     },
 
     /**
@@ -97,7 +99,8 @@ export default {
         description:
             'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
         mobileAppIOS: true,
-        favicon: false
+        favicon: false,
+        appleStatusBarStyle: 'default' // unfortunately Apple took away the possibility of having a white status bar with black icons on iOS 14
     },
 
     /**
@@ -119,7 +122,8 @@ export default {
         short_name: 'Sourcery',
         lang: 'en-US',
         orientation: 'portrait',
-        start_url: '/dashboard'
+        start_url: '/dashboard',
+        nativeUI: true
     },
 
     /*
@@ -138,7 +142,9 @@ export default {
         '~/plugins/request-extensions',
 
         // Sourcery API
-        '~/plugins/sourcery'
+        '~/plugins/sourcery',
+        { src: '~/plugins/vuetify.ts', ssr: false }
+
     ],
 
     /** pwa: {
@@ -224,19 +230,37 @@ export default {
 
     /**
      * Settings for @nuxtjs/vuetify
-     * TODO Upgrade to v2 of Vuetify.
      * @url https://github.com/nuxt-community/vuetify-module/
      */
     vuetify: {
         theme: {
-            primary: '#654EA3',
-            secondary: '#4E4B51',
-            accent: '#53AFAC',
-            error: '#b71c1c'
+            option: {
+                customProperties: true
+            },
+            themes: {
+                light: {
+                    primary: '#654EA3',
+                    secondary: '#4E4B51',
+                    accent: '#53AFAC',
+                    error: '#b71c1c'
+                },
+                dark: {
+                    primary: '#c5aeef',
+                    secondary: '#2f2740'
+                }
+            }
         },
         options: {
             customProperties: true
-        }
+        },
+        defaultAssets: {
+            font: {
+                family: 'Barlow'
+            },
+            icons: 'mdi'
+        },
+        treeShake: true,
+        customVariables: ['~/assets/variables.scss']
     },
 
     /**
@@ -317,5 +341,9 @@ export default {
                 }
             }
         }
+    },
+    server: {
+        host: '0.0.0.0',
+        port: 3000
     }
 }

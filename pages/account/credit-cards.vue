@@ -1,70 +1,61 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm6 offset-sm3>
-      <v-layout column fill-height>
-        <v-flex>
-          <v-card width="100%">
-            <v-card-title>
-              <h1>Payment Information</h1>
-            </v-card-title>
-            <v-card-text>
-              <v-list v-if="cards.data.length" two-line>
-                <v-subheader>
-                  Cards
-                </v-subheader>
-                <template v-for="(item, index) in cards.data">
-                  <v-divider :key="`divider-${index}`" />
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <h1 class="mb-4">
+        Payment Information
+      </h1>
+      <v-card outlined>
+        <v-card-title>
+          Cards
+        </v-card-title>
+        <v-list v-if="cards.data.length" two-line>
+          <template v-for="(item, index) in cards.data">
+            <v-list-item :key="`list-item-${index}`" two-line>
+              <v-list-item-avatar :key="`avatar-${index}`">
+                <i :class="`pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand" />
+              </v-list-item-avatar>
 
-                  <v-list-tile :key="`list-item-${index}`">
-                    <v-list-tile-avatar :key="`avatar-${index}`">
-                      <i :class="`pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand" />
-                    </v-list-tile-avatar>
-
-                    <v-list-tile-content :key="`content-${index}`">
-                      <v-layout style="width:100%" justify-space-between align-center>
-                        <v-list-tile-title>
-                          **** **** ****  {{ item.card.last4 }}
-                        </v-list-tile-title>
-                        <v-list-tile-sub-title>
-                          Exp: {{ item.card.exp_month }}/{{ item.card.exp_year }}
-                        </v-list-tile-sub-title>
-
-                        <v-flex />
-                      </v-layout>
-                    </v-list-tile-content>
-                    <v-list-tile-action>
-                      <p v-if="index == 0" class="caption font-weight-thin my-0">
-                        default
-                      </p>
-                      <v-btn v-else icon class="mx-1" @click="deleteCard(item.id)">
-                        <v-icon color="primary">
-                          delete
-                        </v-icon>
-                      </v-btn>
-                    </v-list-tile-action>
-                  </v-list-tile>
-                </template>
-              </v-list>
-              <p v-else>
-                You have no cards on file.
-              </p>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-layout
-                justify-end
-              >
-                <v-btn
-                  class="primary"
-                  @click="dialog=true"
+              <v-list-item-content :key="`content-${index}`">
+                <v-list-item-title
+                  class="font-weight-medium"
                 >
-                  Add Card
+                  •••• •••• ••••  {{ item.card.last4 }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  Exp: {{ item.card.exp_month }}/{{ item.card.exp_year }}
+                </v-list-item-subtitle>
+
+                <v-flex />
+              </v-list-item-content>
+              <v-list-item-action>
+                <p v-if="index == 0" class="text-caption my-0">
+                  default
+                </p>
+                <v-btn v-else icon class="mx-1" @click="deleteCard(item.id)">
+                  <v-icon color="primary">
+                    mdi-delete
+                  </v-icon>
                 </v-btn>
-              </v-layout>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
+              </v-list-item-action>
+            </v-list-item>
+            <v-divider v-if="index + 1 < cards.data.length" :key="`divider-${index}`" />
+          </template>
+        </v-list>
+        <p v-else>
+          You have no cards on file.
+        </p>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            class="primary"
+            depressed
+            @click="dialog=true"
+          >
+            Add Card
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-flex>
 
     <v-dialog v-model="dialog" width="450" max-width="100%">

@@ -36,6 +36,9 @@ sw.*
 /chromedriver.log
 /tests_output
 
+#VSCode Options
+.vscode
+
 # Cloud Functions & Emulator Stuff
 /functions
 /ui-debug.log

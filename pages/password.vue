@@ -29,7 +29,7 @@
             />
           </v-flex>
         </v-layout>
-        <v-layout row align-center justify-center>
+        <v-layout align-center justify-center>
           <v-btn @click="$router.go(-1)">
             Back
           </v-btn>

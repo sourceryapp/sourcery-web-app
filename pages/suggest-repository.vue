@@ -1,11 +1,11 @@
 <template>
-  <v-layout row fill-height align-center>
+  <v-layout fill-height align-center>
     <v-flex xs12 sm6 offset-sm3 lg4 offset-lg4>
       <v-form ref="repoForm" @submit.prevent="submitRepository">
-        <h1 class="text-xs-center">
+        <h1 class="text-center">
           Suggest Repository
         </h1>
-        <h4 class="text-xs-center">
+        <h4 class="text-center">
           Please provide as much information as possible. Note, not all information is necessary.
         </h4>
         <v-text-field

@@ -130,6 +130,7 @@
 
 <script>
 export default {
+    name: 'PrivacyPolicy',
     data () {
         return {
             sourceryEmail: 'support@sourceryapp.org'

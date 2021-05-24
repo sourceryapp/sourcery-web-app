@@ -1,6 +1,6 @@
 <template>
   <v-card>
-    <v-card-title class="headline">
+    <v-card-title class="text-h5">
       Add a new card
     </v-card-title>
     <v-card-text>
@@ -30,7 +30,7 @@
             hint="You are authorizing Sourcery to send instructions to the financial institution that issued my card to take payments from my card account in accordance with the terms of my agreement with you."
             :persistent-hint="true"
           />
-          <p class="caption my-2" />
+          <p class="text-caption my-2" />
 
           <v-layout
             class="mt-4"

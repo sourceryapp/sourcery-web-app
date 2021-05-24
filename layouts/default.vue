@@ -1,68 +1,110 @@
 <template>
   <v-app id="tube">
+    <v-icon>
+      mdi-caret-right
+    </v-icon>
+    <v-app-bar
+      app
+      :color="$vuetify.theme.dark ? '#121212' : 'white'"
+      max-height="84px"
+      elevate-on-scroll
+    >
+      <v-app-bar-nav-icon
+        v-if="user"
+        color="primary"
+        class="float-left"
+        @click="drawer = !drawer"
+      />
+      <v-spacer />
+      <v-app-bar-title :class="user ? 'mt-2 ma-0 ml-n8' : 'mt-2 ma-0'">
+        <nuxt-link id="wordmark-link" to="/dashboard">
+          <img id="logo" :src="$vuetify.theme.dark ? '/img/sourcery-wordmark-dark.svg' : '/img/sourcery-wordmark.svg'" alt="Sourcery Logo">
+        </nuxt-link>
+      </v-app-bar-title>
+      <v-spacer />
+    </v-app-bar>
     <v-navigation-drawer
       v-if="user"
       v-model="drawer"
-      class="primary"
-      dark
-      right
       app
+      bottom
+      :class="$vuetify.breakpoint.mobile ? 'rounded-t-xl' : ''"
     >
-      <v-list color="red" class="pa-0" three-line>
-        <v-list-tile>
-          <v-list-tile-avatar size="50" class="mr-3">
+      <v-list
+        style="background: rgb(146, 79, 190); background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);"
+        dark
+      >
+        <v-list-item>
+          <v-list-item-avatar>
             <img :src="gravatar">
-          </v-list-tile-avatar>
-          <v-list-tile-content v-if="user">
-            <v-list-tile-title>{{ user.displayName }}</v-list-tile-title>
-            <v-list-tile-sub-title>{{ user.email }}</v-list-tile-sub-title>
-            <v-list-tile-sub-title v-if="isOrgMember">
+          </v-list-item-avatar>
+        </v-list-item>
+        <v-list-item two-line>
+          <v-list-item-content v-if="user">
+            <v-list-item-title class="text-h6">
+              {{ user.displayName }}
+            </v-list-item-title>
+            <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
+            <v-list-item-subtitle v-if="isOrgMember">
               Institutional Account
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
 
       <v-divider />
 
-      <v-list dense class="pt-0" two-line>
-        <v-list-tile
-          v-for="item in items1"
-          :key="item.title"
-          :to="item.link"
-          nuxt
-          active-class="accent accent--text text--lighten-5"
+      <v-list dense nav>
+        <v-list-item-group
+          color="primary"
         >
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
+          <v-list-item
+            v-for="item in items1"
+            :key="item.title"
+            :to="item.link"
+            nuxt
+            exact
+            class="hidden-sm-and-down"
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
 
-          <v-list-tile-content>
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <v-list-tile nuxt active-class @click="dialog=true">
-          <v-list-tile-action>
-            <v-icon>power_settings_new</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Log Out</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+        <v-divider class="my-2 hidden-sm-and-down" />
+        <v-list-item-group
+          color="primary"
+        >
+          <v-list-item
+            v-for="item in items2"
+            :key="item.title"
+            :to="item.link"
+            nuxt
+            exact
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+        <v-list-item nuxt active-class @click="dialog=true">
+          <v-list-item-action>
+            <v-icon>mdi-logout</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Log Out</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar color="white" light fixed app>
-      <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="user"></v-toolbar-side-icon> -->
-
-      <v-toolbar-title style="display:flex; justify-content:center; width: 100%" class="ma-0">
-        <nuxt-link id="wordmark-link" to="/">
-          <img id="logo" src="/img/sourcery-wordmark.svg" alt="Sourcery Logo">
-        </nuxt-link>
-      </v-toolbar-title>
-
-      <!-- Stupid Hack to center align the wordmark -->
-      <!-- <v-toolbar-side-icon style="visibility: hidden" v-if="user"></v-toolbar-side-icon> -->
-    </v-toolbar>
     <v-content pa0>
       <v-container fill-height>
         <v-layout
@@ -72,61 +114,50 @@
         </v-layout>
       </v-container>
     </v-content>
-    <v-bottom-nav
-      v-if="user"
-      :value="true"
+    <v-bottom-navigation
+      v-if="user && $vuetify.breakpoint.mobile"
       app
-      fixed
+      grow
+      color="primary"
     >
       <v-btn
-        flat
         value="dashboard"
         to="/dashboard"
-        color="primary"
       >
         <span>Dashboard</span>
-        <v-icon>dashboard</v-icon>
+        <v-icon>mdi-view-dashboard</v-icon>
       </v-btn>
 
       <v-btn
-        flat
         value="add"
         to="/request/create"
-        color="primary"
       >
         <span>New Request</span>
-        <v-icon>add_circle</v-icon>
+        <v-icon>mdi-plus-circle</v-icon>
       </v-btn>
 
       <!-- <v-btn
-        flat
         value="search"
         to="/jobs"
-        color="primary"
       >
         <span>Find Jobs</span>
-        <v-icon>search</v-icon>
+        <v-icon>mdi-briefcase-search</v-icon>
       </v-btn> -->
 
       <v-btn
-        flat
         value="settings"
-        color="primary"
-        active-class=""
-        :class="drawer ? 'v-btn--active' :''"
-        @click.stop="drawer = !drawer"
+        to="/settings"
       >
         <span>Settings</span>
-        <v-icon>settings</v-icon>
+        <v-icon>mdi-cog</v-icon>
       </v-btn>
-    </v-bottom-nav>
-
+    </v-bottom-navigation>
     <v-dialog
       v-model="dialog"
-      max-width="290"
+      max-width="400"
     >
       <v-card>
-        <v-card-title class="headline">
+        <v-card-title>
           Are you sure you want to log out?
         </v-card-title>
 
@@ -134,18 +165,18 @@
           <v-spacer />
 
           <v-btn
-            color="primary"
-            nuxt
-            active-class
-            @click="logout()"
-          >
-            Log Out
-          </v-btn>
-
-          <v-btn
+            text
             @click="dialog = false"
           >
             Cancel
+          </v-btn>
+          <v-btn
+            color="error"
+            nuxt
+            text
+            @click="logout()"
+          >
+            Log Out
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -165,15 +196,21 @@ export default {
         drawer: null,
         dialog: false,
         items1: [
-            { title: 'Edit Profile', icon: 'person', link: '/account/profile' },
-            { title: 'Payment Options', icon: 'credit_card', link: '/account/credit-cards' },
-            { title: 'Payouts', icon: 'account_balance', link: '/account/payouts' },
-            { title: 'Notifications', icon: 'notifications', link: '/settings/notifications' },
-            { title: 'History', icon: 'hourglass_full', link: '/request/history' },
-            { title: 'Privacy', icon: 'enhanced_encryption', link: '/privacy' },
-            { title: 'Terms and Conditions', icon: 'subject', link: '/terms' },
-            { title: 'Help', icon: 'help', link: '/account/help' },
-            { title: 'Feedback', icon: 'feedback', link: '/settings/feedback' }
+            // { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
+            { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+            { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
+            // { title: 'Find Jobs', icon: 'mdi-briefcase-search', link: '/jobs', desktopOnly: 'true' },
+        ],
+        items2: [
+            { title: 'History', icon: 'mdi-history', link: '/request/history' },
+            { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
+            // { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
+            // { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
+            // { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
+            // { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
+            // { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
+            { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
+            { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             // { title: 'Rate', icon: 'star', link: ''},
         ]
     }),
@@ -194,6 +231,14 @@ export default {
         })
     },
     mounted () {
+        const theme = localStorage.getItem('dark_theme')
+        if (theme) {
+            if (theme === 'true') {
+                this.$vuetify.theme.dark = true
+            } else {
+                this.$vuetify.theme.dark = false
+            }
+        }
     // console.log('Firebase: ', firebase);
     // console.log(this.$store);
     // console.log('Meta', this.$store.state.meta)
@@ -208,6 +253,10 @@ export default {
             } catch (error) {
                 console.log(error)
             }
+        },
+        toggleDark () {
+            this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+            localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString())
         }
     /** listenTokenRefresh() {
             const currentMessageToken = window.localStorage.getItem('messagingToken')
@@ -235,5 +284,11 @@ export default {
         width: 200px;
         max-width: 100%;
         height: auto;
+    }
+    #logo {
+      height: 48px
+    }
+    .v-dialog > .v-card > .v-card__actions {
+      padding: 8px
     }
 </style>
