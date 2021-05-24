@@ -124,7 +124,7 @@
                 max-width="320px"
                 transition="dialog-transition"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     text
@@ -199,7 +199,7 @@
                 max-width="360px"
                 transition="dialog-transition"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     text
@@ -263,7 +263,7 @@
                         outlined
                         @click:append="showPass = !showPass"
                       >
-                        <template v-slot:progress>
+                        <template #progress>
                           <v-progress-linear
                             :value="progress"
                             :color="color"
@@ -319,7 +319,7 @@
                 max-width="360px"
                 transition="dialog-transition"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     text
@@ -400,7 +400,7 @@
                 max-width="360px"
                 transition="dialog-transition"
               >
-                <template v-slot:activator="{ on, attrs }">
+                <template #activator="{ on, attrs }">
                   <v-btn
                     color="primary"
                     text

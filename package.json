@@ -6,18 +6,13 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
+    "local": "concurrently -k \"firebase emulators:start --import=.emulator-data --export-on-exit\" \"EMULATOR=local nuxt\"",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "yarn lint:js",
     "lint:fix": "yarn lint:js --fix",
-    "precommit": "yarn lint:js"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint:js",
-      "post-checkout": "yarn",
-      "post-merge": "git remote prune origin"
-    }
+    "precommit": "yarn lint:js",
+    "init": "npx husky install && .husky/post-checkout"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
@@ -28,10 +23,9 @@
     "@nuxtjs/toast": "^3.3.1",
     "accounting-js": "^1.1.1",
     "algoliasearch": "^4.8.3",
-    "babel-plugin-transform-remove-console": "^6.9.4",
-    "core-js": "^3.6.5",
+    "core-js": "^3.9.1",
     "cross-env": "^5.2.0",
-    "firebase": "^8.2.2",
+    "firebase": "^8.5.0",
     "geolib": "^3.0.3",
     "instantsearch.css": "^7.4.2",
     "js-cookie": "^2.2.0",
@@ -49,17 +43,21 @@
     "vue-instantsearch": "^2.7.0"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config": "^3.1.0",
-    "@nuxtjs/eslint-module": "^2.0.0",
     "@nuxtjs/vuetify": "^1.11.3",
+    "@nuxtjs/eslint-config": "^6.0.0",
+    "@nuxtjs/eslint-module": "^3.0.2",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "concurrently": "^6.0.2",
     "cookieparser": "^0.1.0",
-    "eslint": "^7.10.0",
-    "eslint-plugin-nuxt": "^1.0.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
+    "eslint": "^7.25.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-nuxt": "^2.0.0",
+    "eslint-plugin-vue": "^7.7.0",
     "faker": "^4.1.0",
-    "firebase-tools": "^9.2.0",
-    "husky": "^4.3.7",
+    "firebase-tools": "^9.10.2",
+    "husky": "^6.0.0",
     "prettier-eslint": "^12.0.0",
     "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.4"
   },

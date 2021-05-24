@@ -205,11 +205,15 @@ export default {
                     onAuthStateChangedAction: 'auth/onAuthStateChanged',
                     subscribeManually: false
                 },
-                ssr: false // default
-                // emulatorPort: 9099,
-                // emulatorHost: 'http://localhost'
+                ssr: false, // default
+
+                // if EMULATOR===local, use the Firestore Emulators
+                emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
             },
-            firestore: true,
+            firestore: {
+                // if EMULATOR===local, use the Firestore Emulators
+                emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
+            },
             functions: true,
             storage: true,
             remoteConfig: true
@@ -305,6 +309,12 @@ export default {
 
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
+        // Fix for this bug: https://github.com/babel/babel/issues/11622
+        babel: {
+            plugins: [
+                ['@babel/plugin-proposal-private-methods', { loose: true }]
+            ]
+        },
         extend (config, { isDev }) {
             // Extend only webpack config for client-bundle
             if (isDev) {

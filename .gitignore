@@ -38,3 +38,12 @@ sw.*
 
 #VSCode Options
 .vscode
+
+# Cloud Functions & Emulator Stuff
+/functions
+/ui-debug.log
+/firebase-debug.log
+/.emulator-data
+
+# eslint
+/.eslintcache

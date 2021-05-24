@@ -15,7 +15,7 @@
             lazy
             max-width="500"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-icon color="primary" ripple size="20" v-on="on" @click="dialog = true">
                 help_outline
               </v-icon>
@@ -47,7 +47,7 @@
             lazy
             max-width="500"
           >
-            <template v-slot:activator="{ on }">
+            <template #activator="{ on }">
               <v-icon color="primary" ripple size="20" v-on="on" @click="dialog = true">
                 help_outline
               </v-icon>
@@ -119,6 +119,9 @@ import connectButton from '~/components/connect-button.vue'
 export default {
 
     name: 'Complete',
+    components: {
+        'connect-button': connectButton
+    },
 
     /**
      * Don't show this page if onboarding is complete:
@@ -127,9 +130,6 @@ export default {
         if (store.getters['meta/onboardingComplete']) {
             redirect({ name: 'dashboard' })
         }
-    },
-    components: {
-        'connect-button': connectButton
     },
 
     /**

@@ -77,11 +77,11 @@ import Footer from '../components/footer'
 
 export default {
     name: 'About',
-    middleware: null,
-    layout: 'landing-beta',
     components: {
         'sourcery-footer': Footer
     },
+    layout: 'landing-beta',
+    middleware: null,
     data () {
         return {
             items: [
@@ -133,9 +133,6 @@ export default {
             // social: social
         }
     },
-    mounted () {},
-    methods: {
-    },
     head () {
         return {
             script: [
@@ -148,6 +145,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted () {},
+    methods: {
     }
 }
 </script>

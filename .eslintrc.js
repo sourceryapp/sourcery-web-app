@@ -1,5 +1,8 @@
 module.exports = {
     root: true,
+    globals: {
+        process: true
+    },
     env: {
         browser: true,
         node: true
@@ -18,6 +21,7 @@ module.exports = {
     // add your custom rules here
     rules: {
         indent: ['error', 4],
+        'no-import-assign': 'warn',
         'no-console': 'off',
         eqeqeq: ['error', 'smart'],
         camelcase: 'off', // TODO Enforce camelcase naming
