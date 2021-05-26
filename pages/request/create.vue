@@ -105,7 +105,7 @@
                             >
                               <v-list-tile-content>
                                 <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                                <v-list-tile-sub-title><span v-if="item.institution">{{ item.institution }}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-sub-title>
+                                <v-list-tile-subtitle><span v-if="item.institution">{{ item.institution }}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-subtitle>
                               </v-list-tile-content>
                               <v-list-tile-action>
                                 <v-tooltip top>

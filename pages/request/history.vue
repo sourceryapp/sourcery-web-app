@@ -83,7 +83,7 @@
             <v-list-item :key="index" :to="'/jobs/' + job.id">
               <v-list-item-content>
                 <v-list-item-title>{{ job.data().label }}</v-list-item-title>
-                <v-list-item-sub-title>{{ job.data().citation }}</v-list-item-sub-title>
+                <v-list-item-subtitle>{{ job.data().citation }}</v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
             <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />

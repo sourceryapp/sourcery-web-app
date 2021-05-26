@@ -105,7 +105,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-content pa0>
+    <v-main pa0>
       <v-container fill-height>
         <v-layout
           justify-center
@@ -113,7 +113,7 @@
           <nuxt />
         </v-layout>
       </v-container>
-    </v-content>
+    </v-main>
     <v-bottom-navigation
       v-if="user && $vuetify.breakpoint.mobile"
       app

@@ -75,11 +75,11 @@
                 >
                   {{ request.data().label }}
                 </v-list-item-title>
-                <v-list-item-sub-title
+                <v-list-item-subtitle
                   class="text-truncate"
                 >
                   {{ request.data().citation }}
-                </v-list-item-sub-title>
+                </v-list-item-subtitle>
               </v-list-item-content>
               <v-chip
                 color="deep-purple lighten-5"
@@ -137,11 +137,11 @@
                 >
                   {{ request.data().label }}
                 </v-list-item-title>
-                <v-list-item-sub-title
+                <v-list-item-subtitle
                   class="text-truncate"
                 >
                   {{ request.data().citation }}
-                </v-list-item-sub-title>
+                </v-list-item-subtitle>
               </v-list-item-content>
               <v-chip
                 color="deep-purple lighten-5"
@@ -190,7 +190,7 @@
             <v-list-item :key="index" :to="'/jobs/' + job.id">
               <v-list-item-content>
                 <v-list-item-title>{{ job.data().label }}</v-list-item-title>
-                <v-list-item-sub-title>{{ job.data().citation }}</v-list-item-sub-title>
+                <v-list-item-subtitle>{{ job.data().citation }}</v-list-item-subtitle>
               </v-list-item-content>
               <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip>
             </v-list-item>
