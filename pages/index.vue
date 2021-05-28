@@ -317,6 +317,19 @@ export default {
             // social: social
         }
     },
+    head () {
+        return {
+            script: [
+                {
+                    src:
+                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
+                    integrity:
+                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
+                    crossorigin: 'anonymous'
+                }
+            ]
+        }
+    },
     mounted () {},
     methods: {
         smoothScroll (target) {
@@ -351,19 +364,6 @@ export default {
             }
             // start scrolling
             scroller(scrollContainer, scrollContainer.scrollTop, targetY, 0)
-        }
-    },
-    head () {
-        return {
-            script: [
-                {
-                    src:
-                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
-                    integrity:
-                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
-                    crossorigin: 'anonymous'
-                }
-            ]
         }
     }
 }

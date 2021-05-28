@@ -133,9 +133,6 @@ export default {
             // social: social
         }
     },
-    mounted () {},
-    methods: {
-    },
     head () {
         return {
             script: [
@@ -148,6 +145,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted () {},
+    methods: {
     }
 }
 </script>
