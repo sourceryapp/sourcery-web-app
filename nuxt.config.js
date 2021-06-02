@@ -171,7 +171,7 @@ export default {
         middleware: [
             'auth-guard',
             'user-meta',
-            'account-type',
+            // 'account-type',
             'onboarding-complete'
         ]
     },
