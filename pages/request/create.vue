@@ -137,7 +137,7 @@
                 </v-btn>
               </v-card-actions> -->
             </v-card>
-            <v-item-group v-model="request.repository_id" mandatory>
+            <v-item-group mandatory>
               <v-item
                 v-for="repo in repositories"
                 v-slot="{ toggle }"
@@ -191,7 +191,7 @@
                           <v-btn
                             color="white"
                             class="black--text"
-                            @click="formState++; request.repository_id = repo.id"
+                            @click="selectRepository(repo.id)"
                           >
                             Select
                           </v-btn>
@@ -448,6 +448,11 @@ export default {
         console.log(this.repositories)
     },
     methods: {
+        selectRepository (id) {
+            this.request.repository_id = id
+            this.$store.commit('create/setRepositoryId', id)
+            this.formState++
+        },
         submitRequest () {
             this.isSaving = true
             this.$store.dispatch('create/insert').then((doc) => {
