@@ -353,7 +353,8 @@ export default {
         try {
             repositories = await app.$fire.firestore
                 .collection('repositories')
-                .where('organization', '!=', '')
+                // .where('organization', '!=', '') // This is the correct way, but for demo purposes, only show our partners.  Cannot combine != queries.
+                .where('institution', 'in', ['Folger Shakespeare Library', 'UConn', 'Northeastern University', 'Hartford Public Library'])
                 .orderBy('organization')
                 .orderBy('name', 'asc')
                 .get()
