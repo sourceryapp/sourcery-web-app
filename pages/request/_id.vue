@@ -70,7 +70,7 @@
 
         <Attachments />
 
-        <v-card v-if="isComplete" class="mt-3">
+        <!-- <v-card v-if="isComplete" class="mt-3">
           <v-card-title>
             <div class="text-h5" v-html="!isRatingSet ? 'Please Rate the Sourcerer' : 'Thank you for rating your Sourcerer!'" />
           </v-card-title>
@@ -87,7 +87,7 @@
               Save
             </v-btn>
           </v-card-actions>
-        </v-card>
+        </v-card> -->
       </template>
     </v-flex>
   </v-layout>
@@ -181,14 +181,14 @@ export default {
                     console.log(error)
                 })
             }
-        },
-        setRating () {
-            if (confirm(`This action cannot be undone. Would you like to rate this Sourcerer ${this.rating} stars?`)) {
-                this.$fire.firestore.collection('requests').doc(this.record.id).set({
-                    userRating: this.rating
-                }, { merge: true })
-            }
         }
+        // setRating () {
+        //     if (confirm(`This action cannot be undone. Would you like to rate this Sourcerer ${this.rating} stars?`)) {
+        //         this.$fire.firestore.collection('requests').doc(this.record.id).set({
+        //             userRating: this.rating
+        //         }, { merge: true })
+        //     }
+        // }
     }
 }
 </script>
