@@ -313,5 +313,11 @@ export default {
 </script>
 
 <style scoped>
-
+input[type="file"] {
+    cursor: pointer;
+}
+.theme--dark input[type="file"] {
+    color: black;
+    background-color: #efefef;
+}
 </style>
