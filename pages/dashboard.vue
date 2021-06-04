@@ -156,7 +156,7 @@
         </v-list>
       </v-card> -->
 
-      <!-- <v-card
+      <v-card
         outlined
       >
         <v-card-title
@@ -192,12 +192,14 @@
                 <v-list-item-title>{{ job.data().label }}</v-list-item-title>
                 <v-list-item-subtitle>{{ job.data().citation }}</v-list-item-subtitle>
               </v-list-item-content>
-              <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip>
+              <v-chip color="secondary" text-color="white">
+                {{ job.request().prettyStatus() }}
+              </v-chip>
             </v-list-item>
             <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
           </template>
         </v-list>
-      </v-card> -->
+      </v-card>
 
       <div class="text-center mt-5">
         <v-btn color="grey darken-1" to="/request/history" text>
@@ -250,9 +252,27 @@ export default {
                 .orderBy('created_at', 'desc')
                 .get()
 
+            // Retrieve the organizations that the user is an owner of.
+            const org_owned = await app.$fire.firestore
+                .collection('organization')
+                .where('owner', '==', store.getters['auth/activeUser'].uid)
+                .get()
+            const org_ids = org_owned.docs.map((i) => {
+                return i.id
+            })
+
+            // Retrieve the repositories that belong to the organizations.
+            const repositories_owned = await app.$fire.firestore
+                .collection('repositories')
+                .where('organization', 'in', org_ids)
+                .get()
+            const repo_ids = repositories_owned.docs.map((j) => {
+                return j.id
+            })
+
             const jobs = await app.$fire.firestore
                 .collection('requests')
-                .where('vendor_id', '==', store.getters['auth/activeUser'].uid)
+                .where('repository_id', 'in', repo_ids)
                 .where('status', '==', 'picked_up')
                 .orderBy('created_at', 'desc')
                 .get()

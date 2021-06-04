@@ -27,7 +27,10 @@
               <strong>Status</strong>: {{ prettyStatus }}
             </div>
             <div class="">
-              <strong>Repository</strong>: {{ data.repository.institution }}
+              <strong>Repository</strong>: {{ data.repository.name }}
+            </div>
+            <div class="">
+              <strong>Institution</strong>: {{ data.repository.institution }}
             </div>
           </div>
         </v-card-title>
