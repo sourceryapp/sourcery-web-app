@@ -170,6 +170,33 @@ export const actions = {
             return Promise.all(organizations)
         }
         return []
+    },
+
+    /**
+     * Get the IDs of repositories owned.
+     */
+    async getRepositoryIdsOwned ({ state, rootGetters }) {
+        const org_owned = await this.$fire.firestore
+            .collection('organization')
+            .where('owner', '==', rootGetters['auth/activeUser'].uid)
+            .get()
+        const org_ids = org_owned.docs.map((i) => {
+            return i.id
+        })
+
+        // Cannot proceed if orgs empty.
+        if (org_ids.length > 0) {
+            // Retrieve the repositories that belong to the organizations.
+            const repositories_owned = await this.$fire.firestore
+                .collection('repositories')
+                .where('organization', 'in', org_ids)
+                .get()
+            const repo_ids = repositories_owned.docs.map((j) => {
+                return j.id
+            })
+            return repo_ids
+        }
+        return []
     }
 }
 

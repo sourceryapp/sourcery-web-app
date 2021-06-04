@@ -175,15 +175,15 @@
           <v-list-item v-if="jobs.length == 0">
             <v-list-item-content>
               <v-list-item-title>No Active Jobs</v-list-item-title>
-              <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle>
+              <!-- <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle> -->
             </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon ripple to="/jobs">
-                <v-icon color="grey">
-                  mdi-magnify
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
+            <!-- <v-list-item-action>
+            <v-btn icon ripple to="/jobs">
+              <v-icon color="grey">
+                mdi-magnify
+              </v-icon>
+            </v-btn>
+            </v-list-item-action> -->
           </v-list-item>
 
           <template v-for="(job, index) in jobs">
@@ -252,40 +252,29 @@ export default {
                 .orderBy('created_at', 'desc')
                 .get()
 
-            // Retrieve the organizations that the user is an owner of.
-            const org_owned = await app.$fire.firestore
-                .collection('organization')
-                .where('owner', '==', store.getters['auth/activeUser'].uid)
-                .get()
-            const org_ids = org_owned.docs.map((i) => {
-                return i.id
-            })
+            let jobs = []
 
-            // Retrieve the repositories that belong to the organizations.
-            const repositories_owned = await app.$fire.firestore
-                .collection('repositories')
-                .where('organization', 'in', org_ids)
-                .get()
-            const repo_ids = repositories_owned.docs.map((j) => {
-                return j.id
-            })
+            const repo_ids = await store.dispatch('meta/getRepositoryIdsOwned')
 
-            const jobs = await app.$fire.firestore
-                .collection('requests')
-                .where('repository_id', 'in', repo_ids)
-                .where('status', '==', 'picked_up')
-                .orderBy('created_at', 'desc')
-                .get()
+            // Don't proceed unless we have repos.
+            if (repo_ids.length > 0) {
+                const jobs_collection = await app.$fire.firestore
+                    .collection('requests')
+                    .where('repository_id', 'in', repo_ids)
+                    .where('status', '==', 'picked_up')
+                    .orderBy('created_at', 'desc')
+                    .get()
+                jobs = jobs_collection.docs
+            }
 
             /**
              * Filter out archived records
              */
             return {
                 requests: requests.docs.filter(doc => !doc.request().isArchived()),
-                jobs: jobs.docs,
+                jobs,
                 organizations,
                 reserved_requests
-
             }
         }
     },
