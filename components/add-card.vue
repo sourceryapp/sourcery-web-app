@@ -84,7 +84,6 @@ export default {
         })
     },
     async mounted () {
-        console.log(this.value)
         // Get the client secret and store it
         const { data: { client_secret } } = await this.setupIntents()
         this.client_secret = client_secret

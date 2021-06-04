@@ -27,7 +27,7 @@
               <v-list-item-subtitle>No past requests found.</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn color="primary" text to="/requests/create">
+              <v-btn color="primary" text to="/request/create">
                 Create <span class="hidden-sm-and-down">&nbsp;Request</span>
                 <v-icon right>
                   mdi-open-in-new

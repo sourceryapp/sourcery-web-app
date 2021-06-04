@@ -171,7 +171,7 @@ export default {
         middleware: [
             'auth-guard',
             'user-meta',
-            'account-type',
+            // 'account-type',
             'onboarding-complete'
         ]
     },
@@ -214,7 +214,7 @@ export default {
                 // if EMULATOR===local, use the Firestore Emulators
                 emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
             },
-            functions: true,
+            functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
             storage: true,
             remoteConfig: true
         }

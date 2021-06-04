@@ -153,7 +153,7 @@ export const actions = {
      */
     // delete: ({state, commit, dispatch}) => $fire.firestore.collection('requests').doc(state.id).delete(),
     async insert ({ state, commit, dispatch, rootGetters }) {
-    // Generate a label for the request
+        // Generate a label for the request
         commit('setLabel')
 
         // Created now

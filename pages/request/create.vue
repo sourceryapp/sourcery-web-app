@@ -137,7 +137,7 @@
                 </v-btn>
               </v-card-actions> -->
             </v-card>
-            <v-item-group v-model="request.repository_id" mandatory>
+            <v-item-group mandatory>
               <v-item
                 v-for="repo in repositories"
                 v-slot="{ toggle }"
@@ -191,7 +191,7 @@
                           <v-btn
                             color="white"
                             class="black--text"
-                            @click="formState++; request.repository_id = repo.id"
+                            @click="selectRepository(repo.id)"
                           >
                             Select
                           </v-btn>
@@ -353,7 +353,8 @@ export default {
         try {
             repositories = await app.$fire.firestore
                 .collection('repositories')
-                .where('organization', '!=', '')
+                // .where('organization', '!=', '') // This is the correct way, but for demo purposes, only show our partners.  Cannot combine != queries.
+                .where('institution', 'in', ['Folger Shakespeare Library', 'UConn', 'Northeastern University', 'Hartford Public Library'])
                 .orderBy('organization')
                 .orderBy('name', 'asc')
                 .get()
@@ -448,6 +449,11 @@ export default {
         console.log(this.repositories)
     },
     methods: {
+        selectRepository (id) {
+            this.request.repository_id = id
+            this.$store.commit('create/setRepositoryId', id)
+            this.formState++
+        },
         submitRequest () {
             this.isSaving = true
             this.$store.dispatch('create/insert').then((doc) => {
