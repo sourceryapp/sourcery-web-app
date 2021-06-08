@@ -156,7 +156,7 @@
         </v-list>
       </v-card> -->
 
-      <!-- <v-card
+      <v-card
         outlined
       >
         <v-card-title
@@ -175,15 +175,15 @@
           <v-list-item v-if="jobs.length == 0">
             <v-list-item-content>
               <v-list-item-title>No Active Jobs</v-list-item-title>
-              <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle>
+              <!-- <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle> -->
             </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon ripple to="/jobs">
-                <v-icon color="grey">
-                  mdi-magnify
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
+            <!-- <v-list-item-action>
+            <v-btn icon ripple to="/jobs">
+              <v-icon color="grey">
+                mdi-magnify
+              </v-icon>
+            </v-btn>
+            </v-list-item-action> -->
           </v-list-item>
 
           <template v-for="(job, index) in jobs">
@@ -192,12 +192,14 @@
                 <v-list-item-title>{{ job.data().label }}</v-list-item-title>
                 <v-list-item-subtitle>{{ job.data().citation }}</v-list-item-subtitle>
               </v-list-item-content>
-              <v-chip color="secondary" text-color="white">{{job.request().prettyStatus()}}</v-chip>
+              <v-chip color="secondary" text-color="white">
+                {{ job.request().prettyStatus() }}
+              </v-chip>
             </v-list-item>
             <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
           </template>
         </v-list>
-      </v-card> -->
+      </v-card>
 
       <div class="text-center mt-5">
         <v-btn color="grey darken-1" to="/request/history" text>
@@ -250,22 +252,29 @@ export default {
                 .orderBy('created_at', 'desc')
                 .get()
 
-            const jobs = await app.$fire.firestore
-                .collection('requests')
-                .where('vendor_id', '==', store.getters['auth/activeUser'].uid)
-                .where('status', '==', 'picked_up')
-                .orderBy('created_at', 'desc')
-                .get()
+            let jobs = []
+
+            const repo_ids = await store.dispatch('meta/getRepositoryIdsOwned')
+
+            // Don't proceed unless we have repos.
+            if (repo_ids.length > 0) {
+                const jobs_collection = await app.$fire.firestore
+                    .collection('requests')
+                    .where('repository_id', 'in', repo_ids)
+                    .where('status', '==', 'picked_up')
+                    .orderBy('created_at', 'desc')
+                    .get()
+                jobs = jobs_collection.docs
+            }
 
             /**
              * Filter out archived records
              */
             return {
                 requests: requests.docs.filter(doc => !doc.request().isArchived()),
-                jobs: jobs.docs,
+                jobs,
                 organizations,
                 reserved_requests
-
             }
         }
     },

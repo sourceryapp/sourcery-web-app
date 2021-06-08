@@ -106,10 +106,10 @@
                 <figcaption class="group pa-2 grey mb-3">
                   <v-layout justify-space-around>
                     <v-icon dark @click="viewUpload(n)">
-                      search
+                      mdi-magnify
                     </v-icon>
                     <v-icon dark @click="deleteUpload(n)">
-                      delete
+                      mdi-delete
                     </v-icon>
                   </v-layout>
                 </figcaption>
@@ -204,7 +204,8 @@ export default {
             uploadFieldName: 'photos',
             currentImage: '',
             viewerDialog: false,
-            fileCount: 0
+            fileCount: 0,
+            repositories_owned: []
         }
     },
     computed: {
@@ -236,11 +237,14 @@ export default {
          * Returns true if the current user is the vendor for this request
          */
         userIsVendor () {
-            return this.$store.state.auth.authUser.uid === this.data.vendor_id
+            return this.repositories_owned.includes(this.data.repository_id)
+            // return this.$store.state.auth.authUser.uid === this.data.vendor_id
         }
     },
     mounted () {
-        console.log(this.data)
+        this.retrieveRepositoryIdsOwned().then((data) => {
+            this.repositories_owned = data
+        })
     },
     methods: {
         resetUploadForm () {
@@ -298,11 +302,22 @@ export default {
                     this.$router.push({ name: 'dashboard' })
                 })
             }
+        },
+
+        async retrieveRepositoryIdsOwned () {
+            const ids = await this.$store.dispatch('meta/getRepositoryIdsOwned')
+            return ids
         }
     }
 }
 </script>
 
 <style scoped>
-
+input[type="file"] {
+    cursor: pointer;
+}
+.theme--dark input[type="file"] {
+    color: black;
+    background-color: #efefef;
+}
 </style>

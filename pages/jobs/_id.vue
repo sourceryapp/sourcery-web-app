@@ -27,15 +27,26 @@
               <strong>Status</strong>: {{ prettyStatus }}
             </div>
             <div class="">
-              <strong>Repository</strong>: {{ data.repository.institution }}
+              <strong>Repository</strong>: {{ data.repository.name }}
+            </div>
+            <div class="">
+              <strong>Institution</strong>: {{ data.repository.institution }}
             </div>
           </div>
         </v-card-title>
-        <v-card-actions>
-          <!-- <v-btn color="primary" to="/">Edit</v-btn>
-          <v-btn color="primary" @click="message=true">Delete</v-btn> -->
-          <!-- <v-btn color="primary" to="/" v-if="isComplete'"><v-icon left>cloud_download</v-icon>Download</v-btn> -->
-        </v-card-actions>
+        <!-- <v-card-actions>
+          <v-btn color="primary" to="/">
+            Edit
+          </v-btn>
+          <v-btn color="primary" @click="message=true">
+            Delete
+          </v-btn>
+          <v-btn v-if="isComplete" color="primary" to="/">
+            <v-icon left>
+              cloud_download
+            </v-icon>Download
+          </v-btn>
+        </v-card-actions> -->
       </v-card>
 
       <v-dialog v-model="message" width="500">
