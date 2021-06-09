@@ -11,7 +11,7 @@
         During the beta, users can request documents located in the Boston and New York metro areas, and at the University of Connecticut.
       </v-alert>
 
-      <v-alert
+      <!-- <v-alert
         :value="!canReceivePayments"
         type="warning"
         class="mt-4 mb-4"
@@ -22,7 +22,7 @@
             Configure
           </v-btn>
         </v-layout>
-      </v-alert>
+      </v-alert> -->
 
       <v-card
         outlined
@@ -107,7 +107,7 @@
                     <br>
                     {{ job.data().repository.city }}, {{ job.data().repository.state }} {{ job.data().repository.postal_code }}
                   </v-flex>
-                  <v-flex>
+                  <!-- <v-flex>
                     <p
                       color="primary--text"
                       class="primary--text text-h3 font-weight-bold"
@@ -116,7 +116,7 @@
                     <p class="grey--text text--darken-1">
                       (Estimated payout for a {{ job.data().pages }} page fulfillment.)
                     </p>
-                  </v-flex>
+                  </v-flex> -->
                 </v-layout>
               </v-container>
               <v-card-actions>
