@@ -8,7 +8,7 @@
           Payouts
         </v-card-title>
         <v-card-text>
-          <p v-if="!hasStripeID">
+          <!-- <p v-if="!hasStripeID">
             Before accepting payments, you must configure your payout options.
           </p>
           <p v-if="hasStripeID">
@@ -16,12 +16,13 @@
           </p>
           <p v-if="hasStripeID">
             Estimated Balance: {{ balance }}
-          </p>
+          </p> -->
+          <p>Payouts are currently not active.</p>
         </v-card-text>
 
         <v-card-actions>
           <v-spacer />
-          <connect-button />
+          <!-- <connect-button /> -->
         </v-card-actions>
       </v-card>
     </v-flex>
@@ -29,13 +30,13 @@
 </template>
 
 <script>
-import connectButton from '~/components/connect-button.vue'
+// import connectButton from '~/components/connect-button.vue'
 
 export default {
     name: 'Payouts',
-    components: {
-        'connect-button': connectButton
-    },
+    // components: {
+    //     'connect-button': connectButton
+    // },
     data () {
         return {
             stripeConnect: null

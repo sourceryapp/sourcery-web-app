@@ -540,7 +540,7 @@
           </v-list-item>
         </v-list>
         <v-divider />
-        <v-list v-if="hasStripeID" two-line subheader>
+        <!-- <v-list v-if="hasStripeID" two-line subheader>
           <v-subheader>
             Payouts
           </v-subheader>
@@ -579,7 +579,7 @@
               <connect-button />
             </v-list-item-action>
           </v-list-item>
-        </v-list>
+        </v-list> -->
       </v-card>
       <v-card
         outlined
@@ -785,7 +785,7 @@
 
 <script>
 import addCard from '~/components/add-card.vue'
-import connectButton from '~/components/connect-button.vue'
+// import connectButton from '~/components/connect-button.vue'
 import privacyPolicy from '~/pages/privacy.vue'
 import termsOfService from '~/pages/terms.vue'
 
@@ -793,7 +793,7 @@ export default {
     name: 'Settings',
     components: {
         'add-card': addCard,
-        'connect-button': connectButton,
+        // 'connect-button': connectButton,
         'privacy-policy': privacyPolicy,
         'terms-of-service': termsOfService
     },
