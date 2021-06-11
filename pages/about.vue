@@ -1,64 +1,52 @@
 <template>
   <div class="page-container">
-    <div id="content-wrap">
-      <v-app-bar
-        :color="$vuetify.theme.dark ? '#121212' : 'white'"
-        max-height="84px"
-        elevate-on-scroll
-        app
-      >
-        <v-layout>
-          <v-spacer />
-          <v-app-bar-title>
-            <NuxtLink id="wordmark-link" to="/">
-              <img id="logo" :src="$vuetify.theme.dark ? '/img/sourcery-wordmark-dark.svg' : '/img/sourcery-wordmark.svg'" alt="Sourcery Logo">
-            </NuxtLink>
-          </v-app-bar-title>
-          <v-spacer />
-        </v-layout>
-      </v-app-bar>
-      <v-layout style="margin-top: 84px">
-        <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-          <h1 class="mb-4">
-            About
+    <div id="content-wrap" class="mb-8">
+      <sourcery-header text="About Sourcery" />
+      <v-layout>
+        <v-flex xs12 sm6 xl4 offset-sm3 offset-xl4>
+          <h1 class="text-center my-24 text-h2 font-weight-medium">
+            About Sourcery
           </h1>
           <v-expansion-panels flat>
             <v-expansion-panel
               v-for="(item,i) in items"
               :key="i"
+              class="mb-4"
             >
-              <v-expansion-panel-header class="text-h6">
-                {{ item.question }}
-              </v-expansion-panel-header>
-              <v-expansion-panel-content class="mt-2">
-                <div v-if="item.answer">
-                  {{ item.answer }}
-                </div>
-                <!-- who are we -->
-                <div v-if="item.answer_link">
-                  {{ item.answer_link }}
-                  <a href="https://digitalscholar.org/">{{ item.answer_link01 }}</a>
-                  {{ item.answer_link02 }}
-                  <a href="https://greenhousestudios.uconn.edu/">{{ item.answer_link03 }}</a>
-                  {{ item.answer_link04 }}
-                </div>
-                <!-- when is sourcery coming -->
-                <div v-if="item.answer_link1">
-                  {{ item.answer_link1 }} <a href="https://sourceryapp.org/">{{ item.answer_link2 }}</a> {{ item.answer_link3 }}
-                </div>
-                <div v-if="item.answer2">
-                  <br>
-                  {{ item.answer2 }}
-                </div>
-                <div v-if="item.answer3">
-                  <br>
-                  {{ item.answer3 }}
-                </div>
-                <div v-if="item.answer4">
-                  <br>
-                  {{ item.answer4 }}
-                </div>
-              </v-expansion-panel-content>
+              <v-card outlined>
+                <v-expansion-panel-header class="text-h6">
+                  {{ item.question }}
+                </v-expansion-panel-header>
+                <v-expansion-panel-content class="mt-2">
+                  <div v-if="item.answer">
+                    {{ item.answer }}
+                  </div>
+                  <!-- who are we -->
+                  <div v-if="item.answer_link">
+                    {{ item.answer_link }}
+                    <a href="https://digitalscholar.org/">{{ item.answer_link01 }}</a>
+                    {{ item.answer_link02 }}
+                    <a href="https://greenhousestudios.uconn.edu/">{{ item.answer_link03 }}</a>
+                    {{ item.answer_link04 }}
+                  </div>
+                  <!-- when is sourcery coming -->
+                  <div v-if="item.answer_link1">
+                    {{ item.answer_link1 }} <a href="https://sourceryapp.org/">{{ item.answer_link2 }}</a> {{ item.answer_link3 }}
+                  </div>
+                  <div v-if="item.answer2">
+                    <br>
+                    {{ item.answer2 }}
+                  </div>
+                  <div v-if="item.answer3">
+                    <br>
+                    {{ item.answer3 }}
+                  </div>
+                  <div v-if="item.answer4">
+                    <br>
+                    {{ item.answer4 }}
+                  </div>
+                </v-expansion-panel-content>
+              </v-card>
             </v-expansion-panel>
           </v-expansion-panels>
         </v-flex>
@@ -74,11 +62,13 @@
  * @url https://github.com/apertureless/vue-cookie-law#--vue-cookie-law
  */
 import Footer from '../components/footer'
+import Header from '../components/purple-header.vue'
 
 export default {
     name: 'About',
     components: {
-        'sourcery-footer': Footer
+        'sourcery-footer': Footer,
+        'sourcery-header': Header
     },
     layout: 'landing-beta',
     middleware: null,
