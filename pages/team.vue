@@ -40,7 +40,7 @@
                 <v-col class="flex-grow-0">
                   <v-img
                     :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
-                    lazy-src="/img/team/g_icon-placeholder.jpg"
+                    lazy-src="/img/team/team-placeholder.jpg"
                     height="188"
                     width="152"
                     class="rounded-lg"
@@ -82,7 +82,7 @@
                 lazy-src="/img/team/g_icon-placeholder.jpg"
                 height="188"
                 width="152"
-                class="rounded"
+                class="rounded-lg"
               />
               <v-list-item two-line class="pl-0 pt-0">
                 <v-list-item-content>

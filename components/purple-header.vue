@@ -36,9 +36,6 @@
         </v-btn>
       </div>
     </div>
-    <!-- <h1 class="text-center white--text text-h3 font-weight-medium">
-      {{ text }}
-    </h1> -->
   </header>
 </template>
 
@@ -46,11 +43,6 @@
 export default {
     name: 'Header',
     props: {
-        text: {
-            type: String,
-            required: false
-        }
-
     },
 
     data () {
@@ -68,7 +60,7 @@ export default {
 
 <style scoped>
 header {
-    padding: 32px 72px;
+    padding: 12px 72px;
     background: rgb(146, 79, 190);
     background: linear-gradient(
         135deg,
@@ -83,5 +75,8 @@ header {
 h1 {
     margin-top: 64px;
     margin-bottom: 64px;
+}
+#logo {
+  height: 32px
 }
 </style>
