@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
     <div id="content-wrap" class="px-4">
-      <sourcery-header class="mx-n4" text="Meet the Team" />
+      <sourcery-header class="mx-n4" />
       <!-- <v-app-bar
         :color="$vuetify.theme.dark ? '#121212' : 'white'"
         height="84px"
@@ -36,8 +36,8 @@
               flat
               class="mb-12"
             >
-              <v-row class="align-center">
-                <v-col class="flex-grow-0">
+              <v-row class="align-center flex-wrap">
+                <v-col class="flex-grow-0 flex-shrink-1">
                   <v-img
                     :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
                     lazy-src="/img/team/team-placeholder.jpg"
@@ -47,7 +47,7 @@
                   />
                 </v-col>
                 <v-col class="flex-grow-1">
-                  <v-list-item two-line class="pl-2">
+                  <v-list-item two-line class="pl-0 pl-sm-2">
                     <v-list-item-content class="pt-0">
                       <v-list-item-title style="font-size:1.8rem">
                         {{ member.name }}
@@ -57,7 +57,7 @@
                       </v-list-item-subtitle>
                     </v-list-item-content>
                   </v-list-item>
-                  <p class="mt-1 pl-2 mb-0 text--primary">
+                  <p class="mt-1 pl-sm-2 mb-0 text--primary">
                     {{ member.bio }}
                   </p>
                 </v-col>
@@ -79,7 +79,7 @@
             >
               <v-img
                 :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
-                lazy-src="/img/team/g_icon-placeholder.jpg"
+                lazy-src="/img/team/team-placeholder.jpg"
                 height="188"
                 width="152"
                 class="rounded-lg"

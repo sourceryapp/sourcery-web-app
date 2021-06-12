@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
-    <div id="content-wrap" class="mb-8">
-      <sourcery-header text="About Sourcery" />
+    <div id="content-wrap" class="mb-8 px-4">
+      <sourcery-header class="mx-n4" />
       <v-layout>
         <v-flex xs12 sm6 xl4 offset-sm3 offset-xl4>
           <h1 class="text-center my-24 text-h2 font-weight-medium">

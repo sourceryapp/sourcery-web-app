@@ -1,10 +1,10 @@
 <template>
-  <header>
+  <header class="py-4 px-4 px-md-16">
     <div class="nav-bar d-flex justify-space-between align-center">
       <NuxtLink id="wordmark-link" to="/">
         <img id="logo" src="/img/logo-wordmark-beta-white.svg" alt="Sourcery Logo">
       </NuxtLink>
-      <div class="d-flex">
+      <div class="d-none d-sm-flex">
         <v-btn
           text
           color="white"
@@ -35,6 +35,68 @@
           {{ user ? 'Dashboard' : 'Login' }}
         </v-btn>
       </div>
+      <v-menu>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="white"
+            icon
+            v-bind="attrs"
+            class="d-flex d-sm-none"
+            v-on="on"
+          >
+            <v-icon>mdi-menu</v-icon>
+          </v-btn>
+        </template>
+        <v-list dense nav>
+          <v-list-item
+            to="/"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/about"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-information</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>About</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/team"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-account-multiple</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Team</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-if="user"
+            to="/dashboard"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-view-dashboard</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Dashboard</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            v-else
+            to="/login"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-login</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Login</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </header>
 </template>
@@ -60,7 +122,6 @@ export default {
 
 <style scoped>
 header {
-    padding: 12px 72px;
     background: rgb(146, 79, 190);
     background: linear-gradient(
         135deg,
