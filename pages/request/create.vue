@@ -160,6 +160,7 @@
                       <v-row>
                         <v-col class="d-flex justify-end">
                           <img
+                            v-if="repo.data().show_org_photo"
                             :src="`/img/institution/${repo.data().organization}.png`"
                             alt="alt"
                             height="48px"
