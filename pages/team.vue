@@ -237,13 +237,13 @@ export default {
             ]
         }
     },
-    mounted () {},
-    methods: {
-    },
     head () {
         return {
 
         }
+    },
+    mounted () {},
+    methods: {
     }
 }
 </script>

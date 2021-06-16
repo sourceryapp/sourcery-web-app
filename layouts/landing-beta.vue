@@ -18,19 +18,6 @@ export default {
             // scrollYPosition:null
         }
     },
-    mounted () {
-    // let sticky = this.$refs.sticky;
-    // window.addEventListener('scroll', throttle(function(e) {
-
-        //     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        //         sticky.classList.add('sticky--small')
-
-        //     } else {
-        //         sticky.classList.remove('sticky--small')
-
-    //     }
-    // }, 500));
-    },
     head () {
         return {
             script: [
@@ -49,6 +36,19 @@ export default {
 
             ]
         }
+    },
+    mounted () {
+    // let sticky = this.$refs.sticky;
+    // window.addEventListener('scroll', throttle(function(e) {
+
+        //     if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        //         sticky.classList.add('sticky--small')
+
+        //     } else {
+        //         sticky.classList.remove('sticky--small')
+
+    //     }
+    // }, 500));
     }
 }
 </script>

@@ -15,7 +15,7 @@
         Due to the pandemic, documents can only be requested from our institutional partners.
       </v-alert> -->
 
-      <v-alert
+      <!-- <v-alert
         :value="!canMakePayments"
         type="warning"
         class="mt-4 mb-4"
@@ -24,7 +24,7 @@
         <v-btn :to="{name: 'account-credit-cards'}">
           Add Card
         </v-btn>
-      </v-alert>
+      </v-alert> -->
       <v-stepper
         v-model="formState"
         class="elevation-0 transparent"
@@ -343,7 +343,7 @@
                 <v-spacer />
                 <v-btn
                   id="submit-request"
-                  :disabled="!request.pricing.total || !canMakePayments || isSaving"
+                  :disabled="!request.pricing.total || isSaving"
                   :loading="loadingCost || isSaving"
                   class="primary"
                   depressed
