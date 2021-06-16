@@ -38,3 +38,8 @@ body {
     min-width: 200px;
     height: auto;
 }
+
+.my-24 {
+    margin-top: 96px !important;
+    margin-bottom: 96px !important;
+}

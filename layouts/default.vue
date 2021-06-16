@@ -6,7 +6,7 @@
     <v-app-bar
       app
       :color="$vuetify.theme.dark ? '#121212' : 'white'"
-      max-height="84px"
+      height="84px"
       elevate-on-scroll
     >
       <v-app-bar-nav-icon

@@ -29,7 +29,8 @@ export default {
             '/index-new',
             '/terms',
             '/privacy',
-            '/cookies-notice'
+            '/cookies-notice',
+            '/team'
         ]
     },
 

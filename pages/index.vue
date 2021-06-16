@@ -1,6 +1,15 @@
 <template>
   <div id="content" class="site-content">
-    <header class="landing-header">
+    <v-fade-transition>
+      <sourcery-header
+        v-if="!isIntersecting"
+        style="position:fixed; width: 100%"
+      />
+    </v-fade-transition>
+    <header
+      v-intersect="onIntersect"
+      class="landing-header"
+    >
       <div class="header-content">
         <img
           class="header__logo"
@@ -54,7 +63,7 @@
       offset-xl4
     >
       <v-container>
-        <h1 id="meet" class="mt-2">
+        <h1 id="meet" class="mt-8">
           Meet Sourcery
         </h1>
         <v-row class="align-center">
@@ -304,33 +313,20 @@
  */
 import CookieLaw from 'vue-cookie-law'
 import Footer from '../components/footer'
+import Header from '../components/purple-header.vue'
+
 export default {
     name: 'Home',
     components: {
         CookieLaw,
-        'sourcery-footer': Footer
+        'sourcery-footer': Footer,
+        'sourcery-header': Header
     },
     layout: 'landing-beta',
     middleware: null,
-    data () {
-        return {
-            // social: social
-        }
-    },
-    head () {
-        return {
-            script: [
-                {
-                    src:
-                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
-                    integrity:
-                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
-                    crossorigin: 'anonymous'
-                }
-            ]
-        }
-    },
-    mounted () {},
+    data: () => ({
+        isIntersecting: true
+    }),
     methods: {
         smoothScroll (target) {
             let scrollContainer = target
@@ -364,6 +360,22 @@ export default {
             }
             // start scrolling
             scroller(scrollContainer, scrollContainer.scrollTop, targetY, 0)
+        },
+        onIntersect (entries, observer) {
+            this.isIntersecting = entries[0].isIntersecting
+        }
+    },
+    head () {
+        return {
+            script: [
+                {
+                    src:
+                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
+                    integrity:
+                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
+                    crossorigin: 'anonymous'
+                }
+            ]
         }
     }
 }
