@@ -303,12 +303,31 @@
                       inputmode="numeric"
                     />
                   </v-flex>
-                  <v-flex v-if="request.pricing.total" xs5 offset-xs1>
+                  <v-flex xs5 offset-xs1>
                     <p class="text-caption mb-0 primary--text font-weight-medium">
                       Cost Will Not Exceed
                     </p>
-                    <p id="price" class="text-h4 pt-0 font-weight-bold">
+                    <!-- <p id="price" class="text-h4 pt-0 font-weight-bold">
                       {{ toDollars(request.pricing.total) }}
+                    </p> -->
+                    <p id="price" class="text-h4 pt-0 font-weight-bold">
+                      $0.00
+
+                      <v-tooltip
+                        bottom
+                      >
+                        <template #activator="{ on, attrs }">
+                          <v-icon
+                            color="primary"
+                            dark
+                            v-bind="attrs"
+                            v-on="on"
+                          >
+                            mdi-information
+                          </v-icon>
+                        </template>
+                        <span>During the development phase, Sourcery does not charge for any requests.</span>
+                      </v-tooltip>
                     </p>
                   </v-flex>
                 </v-layout>
