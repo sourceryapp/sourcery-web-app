@@ -105,23 +105,16 @@ export default {
                 .where('status', '==', 'archived')
                 .orderBy('created_at', 'desc')
                 .get()
-
-            const jobs = await app.$fire.firestore
-                .collection('requests')
-                .where('vendor_id', '==', store.getters['auth/activeUser'].uid)
-                .orderBy('created_at', 'desc')
-                .get()
-
             return {
-                requests: requests.docs,
-                jobs: jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+                requests: requests.docs
             }
         }
     },
     data () {
         return {
             requests: [],
-            jobs: []
+            jobs: [],
+            repositories_owned: []
         }
     },
     computed: {
@@ -130,10 +123,25 @@ export default {
         }
     },
     mounted () {
-    // this.$axios
-    //     .$get('/requests')
-    //     .then(response => (this.requests = response.data));
-    // console.log(this.requests.docs);
+        this.retrieveRepositoryIdsOwned().then((ids) => {
+            this.repositories_owned = ids
+            this.fetchJobs()
+        })
+    },
+    methods: {
+        async retrieveRepositoryIdsOwned () {
+            const ids = await this.$store.dispatch('meta/getRepositoryIdsOwned')
+            return ids
+        },
+        async fetchJobs () {
+            const jobs = await this.$fire.firestore
+                .collection('requests')
+                .where('repository_id', 'in', this.repositories_owned)
+                .orderBy('created_at', 'desc')
+                .get()
+
+            this.jobs = jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+        }
     }
 }
 </script>
