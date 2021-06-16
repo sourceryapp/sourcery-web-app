@@ -36,7 +36,7 @@
         </v-btn>
       </div>
       <v-menu>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-btn
             color="white"
             icon
