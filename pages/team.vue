@@ -39,7 +39,7 @@
               <v-row class="align-center flex-wrap">
                 <v-col class="flex-grow-0 flex-shrink-1">
                   <v-img
-                    :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
+                    :src="'/img/team/' + member.name.split(' ').pop().toLowerCase() + '.jpg'"
                     lazy-src="/img/team/team-placeholder.jpg"
                     height="188"
                     width="152"
@@ -78,7 +78,7 @@
               width="176"
             >
               <v-img
-                :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
+                :src="'/img/team/' + member.name.split(' ').pop().toLowerCase() + '.jpg'"
                 lazy-src="/img/team/team-placeholder.jpg"
                 height="188"
                 width="152"
