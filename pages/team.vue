@@ -27,7 +27,7 @@
             Current Members
           </h1> -->
           <div
-            v-for="member in members.sort((a, b) => (a.name.split(' ').pop() > b.name.split(' ').pop()) ? 1 : -1)"
+            v-for="member in members_sorted"
             :key="member.name"
           >
             <v-card
@@ -39,7 +39,7 @@
               <v-row class="align-center flex-wrap">
                 <v-col class="flex-grow-0 flex-shrink-1">
                   <v-img
-                    :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
+                    :src="'/img/team/' + member.name.split(' ').pop().toLowerCase() + '.jpg'"
                     lazy-src="/img/team/team-placeholder.jpg"
                     height="188"
                     width="152"
@@ -70,7 +70,7 @@
           </h1>
           <div class="d-flex flex-wrap mx-sm-n12 justify-center justify-sm-space-between">
             <v-card
-              v-for="member in alumni.sort((a, b) => (a.name.split(' ').pop() > b.name.split(' ').pop()) ? 1 : -1)"
+              v-for="member in alumni_sorted"
               :key="member.name"
               color="transparent"
               flat
@@ -78,7 +78,7 @@
               width="176"
             >
               <v-img
-                :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
+                :src="'/img/team/' + member.name.split(' ').pop().toLowerCase() + '.jpg'"
                 lazy-src="/img/team/team-placeholder.jpg"
                 height="188"
                 width="152"
@@ -239,11 +239,23 @@ export default {
     },
     head () {
         return {
-
+        }
+    },
+    computed: {
+        members_sorted () {
+            const members_copy = [...this.members].sort(this.sortByLastName)
+            return members_copy
+        },
+        alumni_sorted () {
+            const alumni_copy = [...this.alumni].sort(this.sortByLastName)
+            return alumni_copy
         }
     },
     mounted () {},
     methods: {
+        sortByLastName (a, b) {
+            return a.name.split(' ').pop() > b.name.split(' ').pop() ? 1 : -1
+        }
     }
 }
 </script>
