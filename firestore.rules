@@ -28,8 +28,9 @@ service cloud.firestore {
      request.resource.data.pricing == resource.data.pricing &&
      request.resource.data.repository == resource.data.repository &&
      request.resource.data.repository_id == resource.data.repository_id
-    )
-
+    ) ||
+    get(/databases/$(database)/documents/organization/$(get(/databases/$(database)/documents/repositories/$(resource.data.repository_id)).data.organization)).data.owner == request.auth.uid
+		
   }
 
   //areas
@@ -73,6 +74,18 @@ service cloud.firestore {
 
   // organizations
       match /organization/{document} {
+        allow read: if request.auth != null;
+      // allow read, update, delete: if false;
+    }
+    
+    // organization-slugs
+    match /organization-slugs/{slug} {
+        allow read: if request.auth != null;
+      // allow read, update, delete: if false;
+    }
+    
+    // admin references
+    match /admins/{admin} {
         allow read: if request.auth != null;
       // allow read, update, delete: if false;
     }

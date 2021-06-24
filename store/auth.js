@@ -33,7 +33,8 @@ export const mutations = {
                 uid: authUser.uid,
                 email: authUser.email,
                 photoURL: authUser.photoURL,
-                displayName: authUser.displayName
+                displayName: authUser.displayName,
+                admin: authUser.admin
             }
         }
     },
@@ -78,6 +79,17 @@ export const actions = {
             try {
                 const idToken = await authUser.getIdToken(true)
                 console.info('idToken', idToken)
+            } catch (e) {
+                console.error(e)
+            }
+
+            // An attempt to detect if a user is an admin.
+            // No intention for this information to be used outside of 'dev helpers' on frontend.
+            try {
+                const admin = await this.$fire.firestore.collection('admins').doc(authUser.email).get()
+                if (admin.exists) {
+                    authUser.admin = true
+                }
             } catch (e) {
                 console.error(e)
             }
