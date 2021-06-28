@@ -131,6 +131,12 @@ export const mutations = {
         Object.keys(s).forEach((key) => {
             state[key] = s[key]
         })
+    },
+    setRepository (state, val) {
+        state.repository = val
+        if (val.id) {
+            state.repository_id = val.id
+        }
     }
 
 }

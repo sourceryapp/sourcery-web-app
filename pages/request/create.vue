@@ -192,7 +192,7 @@
                           <v-btn
                             color="white"
                             class="black--text"
-                            @click="selectRepository(repo.id)"
+                            @click="selectRepositoryObj(repo)"
                           >
                             Select
                           </v-btn>
@@ -243,6 +243,7 @@
                 Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
               </v-card-subtitle>
               <v-card-text>
+                <p>Currently requesting from: {{ request.repository.name }} - {{ request.repository.institution }}</p>
                 <v-textarea
                   id="citation"
                   v-model="citation"
@@ -465,13 +466,26 @@ export default {
         }
     },
     mounted () {
-    // console.log(this.request);
-        console.log(this.repositories)
+        console.log('BKKKK', this.$store.state.create.repository)
+        if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
+            this.selectRepositoryFromStateOutsideComponent(this.$store.state.create.repository)
+        }
     },
     methods: {
-        selectRepository (id) {
-            this.request.repository_id = id
-            this.$store.commit('create/setRepositoryId', id)
+        selectRepositoryFromStateOutsideComponent (repo) {
+            this.request.repository_id = repo.id
+            this.request.repository = repo
+            this.$store.commit('create/setRepository', repo)
+            this.formState++
+        },
+        selectRepositoryObj (repo) {
+            this.request.repository_id = repo.id
+            const repo_clone = {
+                id: repo.id,
+                ...repo.data()
+            }
+            this.request.repository = repo_clone
+            this.$store.commit('create/setRepository', repo_clone)
             this.formState++
         },
         submitRequest () {

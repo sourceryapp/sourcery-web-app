@@ -1,7 +1,8 @@
 const initialState = () => {
     return {
         organizations: [],
-        organization: {}
+        organization: {},
+        organization_repositories: []
     }
 }
 
@@ -13,6 +14,9 @@ export const getters = {
     },
     getOrganizations (state) {
         return state.organizations
+    },
+    getOrganizationRepositories (state) {
+        return state.organization_repositories
     }
 }
 
@@ -27,6 +31,10 @@ export const mutations = {
 
     SET_ORGANIZATIONS: (state, val) => {
         state.organizations = val
+    },
+
+    SET_ORGANIZATION_REPOSITORIES: (state, val) => {
+        state.organization_repositories = val
     }
 }
 
@@ -45,7 +53,7 @@ export const actions = {
         }
     },
 
-    async getOrganization ({ commit }, identifier) {
+    async getOrganization ({ commit, dispatch }, identifier) {
         // Organization Slugs are to enable both ID & pretty URL
         const organization_slug = await this.$fire.firestore.collection('organization-slugs').doc(identifier).get()
         let orgid = identifier
@@ -61,6 +69,24 @@ export const actions = {
                 id: organization.id,
                 ...organization.data()
             })
+
+            dispatch('getOrganizationRepositories')
+        }
+    },
+
+    async getOrganizationRepositories ({ commit, state }) {
+        const organization_repositories = await this.$fire.firestore.collection('repositories')
+            .where('organization', '==', state.organization.id)
+            .get()
+
+        if (organization_repositories) {
+            const org_repos = organization_repositories.docs.map((or) => {
+                return {
+                    id: or.id,
+                    ...or.data()
+                }
+            })
+            commit('SET_ORGANIZATION_REPOSITORIES', org_repos)
         }
     }
 }
