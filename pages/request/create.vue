@@ -466,7 +466,6 @@ export default {
         }
     },
     mounted () {
-        console.log('BKKKK', this.$store.state.create.repository)
         if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
             this.selectRepositoryFromStateOutsideComponent(this.$store.state.create.repository)
         }
