@@ -7,25 +7,28 @@
         Organizations
       </h1>
 
-      <v-item-group>
-        <organization-card
-          v-for="org in organizations"
-          :key="org.id"
-          :organization="org"
-        />
-      </v-item-group>
+      <v-card>
+        <v-list v-if="organizations">
+          <template
+            v-for="(org, index) in organizations"
+          >
+            <organization-list-item :key="org.id" :organization="org" />
+            <v-divider v-if="index !== organizations.length - 1" :key="org.id + 'd'" />
+          </template>
+        </v-list>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import OrganizationCard from '@/components/organization-card.vue'
+import OrganizationListItem from '~/components/organization-list-item.vue'
 
 export default {
     name: 'Organizations',
     components: {
-        OrganizationCard
+        OrganizationListItem
     },
     data: () => ({
 
