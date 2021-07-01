@@ -95,6 +95,41 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
+
+        <v-divider
+          v-if="user.admin"
+          class="my-2 hidden-sm-and-down"
+        />
+        <v-subheader v-if="user.admin">
+          DEV ONLY
+        </v-subheader>
+
+        <v-list-item-group
+          v-if="user.admin"
+          color="primary"
+        >
+          <v-list-item
+            v-for="item in devItems"
+            :key="item.title"
+            :to="item.link"
+            nuxt
+            exact
+          >
+            <v-list-item-icon>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+
+        <v-divider
+          v-if="user.admin"
+          class="my-2 hidden-sm-and-down"
+        />
+
         <v-list-item nuxt active-class @click="dialog=true">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
@@ -212,12 +247,12 @@ export default {
             { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
             { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             // { title: 'Rate', icon: 'star', link: ''},
+        ],
+        devItems: [
+            { title: 'Organizations', icon: 'mdi-account-group', link: '/o' }
         ]
     }),
     computed: {
-        user () {
-            return this.$store.getters['auth/activeUser']
-        },
         gravatar () {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
         },
@@ -227,7 +262,8 @@ export default {
             balance: 'meta/balance',
             canMakePayments: 'meta/canMakePayments',
             onboardingComplete: 'meta/onboardingComplete',
-            isOrgMember: 'meta/isOrgMember'
+            isOrgMember: 'meta/isOrgMember',
+            user: 'auth/activeUser'
         })
     },
     mounted () {
