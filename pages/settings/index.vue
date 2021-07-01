@@ -852,7 +852,7 @@ export default {
             },
             theme: localStorage.getItem('dark_theme'),
             // Notifications logic
-            agentBool: this.$store.state.meta.agentUpdates,
+            agentBool: this.$store.state.meta.agentUpdates !== false,
             pushBool: this.$store.state.meta.agentPush,
             // token: this.$store.state.meta.token,
             updateSuccess: false,
