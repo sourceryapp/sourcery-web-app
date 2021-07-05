@@ -22,7 +22,7 @@
                 {{ data.label }}
               </div>
 
-              <span class="grey--text text--darken-4 citation">{{ data.citation }}</span>
+              <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ data.citation }}</span>
 
               <v-divider class="mt-3 mb-3" />
 
