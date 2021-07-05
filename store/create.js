@@ -75,7 +75,7 @@ export const getters = {
     /**
      * Returns a human-readable version of status
      */
-    prettyStatus: (state, getters) => state.status.replace('_', ' '),
+    prettyStatus: (state, getters) => this.$utils.uppercaseFirstLetters(state.status.replace('_', ' ')),
 
     /**
      * This is just a utility function to determine whether the
@@ -190,7 +190,7 @@ export const actions = {
 
     getOrganizationUser ({ state, commit, dispatch }, orgId) {
         return this.$fire.firestore.collection('organization').doc(orgId).get().then((doc) => {
-            return doc.data().users[0]
+            return doc.data().owner
         })
     }
 }

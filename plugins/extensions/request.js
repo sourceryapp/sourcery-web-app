@@ -64,7 +64,14 @@ export default function () {
         /**
          * Returns a human-readable version of status
          */
-        prettyStatus: () => this.data().status.replace('_', ' ')
+        prettyStatus: () => {
+            let str = this.data().status.replace('_', ' ')
+            const s = str.split(' ')
+            for (let i = 0; i < s.length; i++) {
+                s[i] = s[i][0].toUpperCase() + s[i].substr(1)
+            }
+            return s.join(' ')
+        }
 
     }
 }

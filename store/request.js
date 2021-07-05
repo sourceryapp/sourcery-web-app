@@ -52,7 +52,7 @@ export const getters = {
     /**
      * Returns a human-readable version of status
      */
-    prettyStatus: (state, getters) => getters.data.status.replace('_', ' ')
+    prettyStatus: (state, getters) => this.$utils.uppercaseFirstLetters(getters.data.status.replace('_', ' '))
 }
 
 /**
