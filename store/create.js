@@ -113,7 +113,7 @@ export const mutations = {
     },
     setLabel (state, value = false) {
     // Set the label to the given value or as a truncated citation
-        state.label = value || state.citation.match(/^(\w(\s*))+/)[0]
+        state.label = value || state.citation.match(/^(\w(\s|\.|\(|\))*)+/)[0].trim()
     },
     setStatusDraft (state) {
         state.status = DRAFT
