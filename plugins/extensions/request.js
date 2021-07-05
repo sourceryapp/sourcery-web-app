@@ -63,6 +63,7 @@ export default function () {
 
         /**
          * Returns a human-readable version of status
+         * Uppercases and removes underscores.
          */
         prettyStatus: () => {
             let str = this.data().status.replace('_', ' ')
