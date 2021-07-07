@@ -20,6 +20,19 @@ export default ({ app }, inject) => {
             getLastName: str => str.split(' ').slice(-1).join(' '),
 
             /**
+             * Uppercase First Letters
+             * Assumes str is a string, with words divided by spaces
+             * "picked up" would return "Picked Up"
+             */
+            uppercaseFirstLetters: (str) => {
+                const s = str.split(' ')
+                for (let i = 0; i < s.length; i++) {
+                    s[i] = s[i][0].toUpperCase() + s[i].substr(1)
+                }
+                return s.join(' ')
+            },
+
+            /**
              * Builds a query string from an object of parameters
              */
             buildQueryString: params =>

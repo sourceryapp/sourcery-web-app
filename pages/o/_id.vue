@@ -20,7 +20,7 @@
         <v-card-title
           :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
         >
-          Archive Repositories
+          Repositories
         </v-card-title>
         <v-divider />
         <v-list v-if="repositories">

@@ -75,7 +75,14 @@ export const getters = {
     /**
      * Returns a human-readable version of status
      */
-    prettyStatus: (state, getters) => state.status.replace('_', ' '),
+    prettyStatus: (state, getters) => {
+        const str = state.status.replace('_', ' ')
+        const s = str.split(' ')
+        for (let i = 0; i < s.length; i++) {
+            s[i] = s[i][0].toUpperCase() + s[i].substr(1)
+        }
+        return s.join(' ')
+    },
 
     /**
      * This is just a utility function to determine whether the
@@ -106,7 +113,7 @@ export const mutations = {
     },
     setLabel (state, value = false) {
     // Set the label to the given value or as a truncated citation
-        state.label = value || state.citation.match(/^(\w(\s*))+/)[0]
+        state.label = value || state.citation.match(/^(\w(\s|\.|\(|\))*)+/)[0].trim()
     },
     setStatusDraft (state) {
         state.status = DRAFT
@@ -190,7 +197,7 @@ export const actions = {
 
     getOrganizationUser ({ state, commit, dispatch }, orgId) {
         return this.$fire.firestore.collection('organization').doc(orgId).get().then((doc) => {
-            return doc.data().users[0]
+            return doc.data().owner
         })
     }
 }

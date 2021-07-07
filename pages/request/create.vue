@@ -75,67 +75,6 @@
               <v-card-subtitle>
                 During the pandemic, documents can only be requested from our institutional partners.
               </v-card-subtitle>
-              <!-- <v-card-text>
-                The following is a temporary selection tool for partner organizations
-              <v-radio-group v-model="request.repository_id">
-                <v-radio
-                  v-for="repo in repositories"
-                  :key="repo.id"
-                  color="primary"
-                  :label="repo.data().name"
-                  :value="repo.id"
-                  class="font-weight-medium"
-                />
-              </v-radio-group>
-               https://www.algolia.com/doc/api-reference/widgets/instantsearch/vue/
-              <ais-instant-search :search-client="searchClient" :index-name="searchIndex">
-                      <ais-search-box v-model="repoSearchText" placeholder="Repository Name" />
-                      <ais-configure
-                        :hitsPerPage="15"
-                      />
-                      <ais-hits>
-                        <v-list id="repo-search" slot-scope="{items}" two-line subheader>
-                          <template v-for="(item, index) in items">
-                            <v-list-tile
-                              :key="item.objectID"
-                              avatar
-                              ripple
-                              :class="item.objectID === repository_id ? 'deep-purple lighten-4' : ''"
-                              @click="repoSelection(item)"
-                            >
-                              <v-list-tile-content>
-                                <v-list-tile-title>{{ item.name }}</v-list-tile-title>
-                                <v-list-tile-subtitle><span v-if="item.institution">{{ item.institution }}, </span>{{ item.city }}, {{ item.state }}</v-list-tile-subtitle>
-                              </v-list-tile-content>
-                              <v-list-tile-action>
-                                <v-tooltip top>
-                                  <template v-if="isMemberRepo(item)" v-slot:activator="{ on }">
-                                    <v-icon color="primary" dark v-on="on">
-                                      business
-                                    </v-icon>
-                                  </template>
-                                  <span>Partner Institution</span>
-                                </v-tooltip>
-                              </v-list-tile-action>
-                            </v-list-tile>
-                            <v-divider :key="index" />
-                          </template>
-                        </v-list>
-                      </ais-hits>
-                    </ais-instant-search>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer />
-                <v-btn
-                  id="next-repo"
-                  color="primary"
-                  :disabled="!request.repository_id"
-                  depressed
-                  @click="formState++"
-                >
-                  Next
-                </v-btn>
-              </v-card-actions> -->
             </v-card>
             <v-item-group mandatory>
               <v-item
@@ -243,7 +182,7 @@
                 Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
               </v-card-subtitle>
               <v-card-text>
-                <p>Currently requesting from: {{ request.repository.name }} - {{ request.repository.institution }}</p>
+                <p>Currently requesting from: {{ repository_name }}</p>
                 <v-textarea
                   id="citation"
                   v-model="citation"
@@ -267,7 +206,7 @@
                   id="next-citation"
                   depressed
                   color="primary"
-                  :disabled="citation.length < 10"
+                  :disabled="citation.length < 4"
                   @click="formState++"
                 >
                   Next
@@ -454,6 +393,12 @@ export default {
             set (value) {
                 this.$store.commit('create/setRepositoryId', value)
             }
+        },
+        repository_name () {
+            if (this.request.repository.name === this.request.repository.institution) {
+                return this.request.repository.name
+            }
+            return `${this.request.repository.name} - ${this.request.repository.institution}`
         }
     },
     watch: {

@@ -320,6 +320,8 @@ export default {
             // Extend only webpack config for client-bundle
             if (isDev) {
                 config.devtool = 'source-map'
+                // Locally, nuxt might have issues serving chunks greater than this size.
+                config.optimization.splitChunks.maxSize = 40000
             }
 
             // Fix during development
