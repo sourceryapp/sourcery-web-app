@@ -30,7 +30,9 @@ export default {
             '/terms',
             '/privacy',
             '/cookies-notice',
-            '/team'
+            '/team',
+            '/archiveSpace',
+            '/archiveSpace/'
         ]
     },
 
@@ -173,7 +175,8 @@ export default {
             'auth-guard',
             'user-meta',
             // 'account-type',
-            'onboarding-complete'
+            'onboarding-complete',
+            'archiveSpace'
         ]
     },
 
@@ -345,6 +348,6 @@ export default {
     },
     server: {
         host: '0.0.0.0',
-        port: 3000
+        port: 3002
     }
 }
