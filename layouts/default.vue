@@ -10,7 +10,6 @@
       elevate-on-scroll
     >
       <v-app-bar-nav-icon
-        v-if="user"
         color="primary"
         class="float-left"
         @click="drawer = !drawer"
@@ -24,7 +23,6 @@
       <v-spacer />
     </v-app-bar>
     <v-navigation-drawer
-      v-if="user"
       v-model="drawer"
       app
       bottom
@@ -36,23 +34,32 @@
       >
         <v-list-item>
           <v-list-item-avatar>
-            <img :src="gravatar">
+            <img v-if="user" :src="gravatar">
+            <img v-else src="https://www.gravatar.com/avatar/?d=mp">
           </v-list-item-avatar>
         </v-list-item>
         <v-list-item two-line>
-          <v-list-item-content v-if="user">
-            <v-list-item-title class="text-h6">
+          <v-list-item-content>
+            <v-list-item-title v-if="user" class="text-h6">
               {{ user.displayName }}
             </v-list-item-title>
-            <v-list-item-subtitle>{{ user.email }}</v-list-item-subtitle>
+            <v-list-item-title v-else class="text-h6">
+              Logged Out
+            </v-list-item-title>
+            <v-list-item-subtitle v-if="user">
+              {{ user.email }}
+            </v-list-item-subtitle>
             <v-list-item-subtitle v-if="isOrgMember">
               Institutional Account
+            </v-list-item-subtitle>
+            <v-list-item-subtitle v-if="!user">
+              Log in for access to all features.
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
 
-      <v-divider />
+      <v-divider v-if="user" />
 
       <v-list dense nav>
         <v-list-item-group
@@ -77,6 +84,7 @@
         </v-list-item-group>
         <v-divider class="my-2 hidden-sm-and-down" />
         <v-list-item-group
+          v-if="user"
           color="primary"
         >
           <v-list-item
@@ -97,15 +105,15 @@
         </v-list-item-group>
 
         <v-divider
-          v-if="user.admin"
+          v-if="user && user.admin"
           class="my-2 hidden-sm-and-down"
         />
-        <v-subheader v-if="user.admin">
+        <v-subheader v-if="user && user.admin">
           DEV ONLY
         </v-subheader>
 
         <v-list-item-group
-          v-if="user.admin"
+          v-if="user && user.admin"
           color="primary"
         >
           <v-list-item
@@ -126,11 +134,11 @@
         </v-list-item-group>
 
         <v-divider
-          v-if="user.admin"
+          v-if="user && user.admin"
           class="my-2 hidden-sm-and-down"
         />
 
-        <v-list-item nuxt active-class @click="dialog=true">
+        <v-list-item v-if="user" nuxt active-class @click="dialog=true">
           <v-list-item-action>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-action>

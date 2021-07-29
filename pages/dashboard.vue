@@ -5,6 +5,16 @@
         Dashboard
       </h1>
 
+      <v-card
+        v-if="!user"
+        outlined
+      >
+        <v-card-title>You are Logged Out</v-card-title>
+        <v-card-text>
+          <span>Please log in to access the full set of features in Sourcery.</span>
+        </v-card-text>
+      </v-card>
+
       <!-- <template v-for="(snapshot, index) in reserved_requests">
         <v-card v-if="snapshot.size !== 0" :key="index" flat class="mb-5">
           <v-card-title>Jobs to Claim or Release</v-card-title>
@@ -33,6 +43,7 @@
         </v-card>
       </template> -->
       <v-card
+        v-if="user"
         outlined
         class="mb-4"
       >
@@ -157,6 +168,7 @@
       </v-card> -->
 
       <v-card
+        v-if="user"
         outlined
       >
         <v-card-title
@@ -223,7 +235,7 @@ export default {
 
     name: 'Dashboard',
     async asyncData ({ params, store, app }) {
-        if (store.getters['auth/activeUser'].uid) {
+        if (store.getters['auth/activeUser'] && store.getters['auth/activeUser'].uid) {
             const organizations = null
             // const reserve_queries = [];
             const reserved_requests = null
@@ -293,7 +305,10 @@ export default {
             isResearcher: 'meta/isResearcher',
             isSourcerer: 'meta/isSourcerer',
             isOrgMember: 'meta/isOrgMember'
-        })
+        }),
+        isLoggedIn () {
+            return this.user && this.user.uid
+        }
     },
     mounted () {
         // console.log(this.organizations)
