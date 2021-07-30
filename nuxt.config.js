@@ -31,7 +31,8 @@ export default {
             '/privacy',
             '/cookies-notice',
             '/team',
-            '/dashboard'
+            '/dashboard',
+            '/request/create'
         ]
     },
 

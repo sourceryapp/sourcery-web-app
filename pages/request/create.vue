@@ -5,15 +5,16 @@
         Create Request
       </h1>
 
-      <!-- <v-alert
+      <v-alert
+        v-if="!user"
         icon="mdi-information"
         text
         type="info"
-        class="mt-1 mb-0"
+        class="mt-3 mb-0"
         dismissible
       >
-        Due to the pandemic, documents can only be requested from our institutional partners.
-      </v-alert> -->
+        You will need to log in before completely submitting a request.
+      </v-alert>
 
       <!-- <v-alert
         :value="!canMakePayments"
