@@ -34,7 +34,7 @@
             Sign Up
           </v-btn>
           <v-btn
-            to="/dashboard"
+            to="/login"
             x-large
             block
             color="white"
@@ -271,7 +271,7 @@
         </v-container>
         <div class="cta-buttons">
           <v-btn
-            to="/dashboard"
+            to="/login"
             x-large
             block
             color="primary"
