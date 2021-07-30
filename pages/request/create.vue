@@ -434,20 +434,24 @@ export default {
             this.formState++
         },
         submitRequest () {
-            this.isSaving = true
-            this.$store.dispatch('create/insert').then((doc) => {
-                this.$toast.success('Your request has been submitted!')
-                this.isSaving = false
-                console.log('Inserted:', doc.id)
-                this.$store.commit('create/reset')
-                this.$router.push({ name: 'dashboard' })
-            }).catch((error) => {
-                console.log(error)
-                if (error) {
+            if (!this.user) {
+                alert('Not logged in.')
+            } else {
+                this.isSaving = true
+                this.$store.dispatch('create/insert').then((doc) => {
+                    this.$toast.success('Your request has been submitted!')
                     this.isSaving = false
-                    this.$toast.error('There was a problem saving your request.')
-                }
-            })
+                    console.log('Inserted:', doc.id)
+                    this.$store.commit('create/reset')
+                    this.$router.push({ name: 'dashboard' })
+                }).catch((error) => {
+                    console.log(error)
+                    if (error) {
+                        this.isSaving = false
+                        this.$toast.error('There was a problem saving your request.')
+                    }
+                })
+            }
         },
 
         async getCost () {
