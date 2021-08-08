@@ -334,6 +334,14 @@ export default {
                     fix: true
                 }
             })
+
+            // Support for typescript imports from js files
+            config.resolve.extensions.push('.ts', '.tsx')
+            config.module.rules.push({
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                loader: 'ts-loader'
+            })
         },
 
         // Disable Console messages in production builds

@@ -215,7 +215,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Organization } from '~/models'
 
+const org = new Organization()
+org.name = 'something'
 // TODO Not sure why addToHomeScreen is here
 // addToHomescreen()
 export default {
