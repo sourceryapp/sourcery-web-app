@@ -144,7 +144,7 @@ export default {
 
         // Sourcery API
         '~/plugins/sourcery',
-        { src: '~/plugins/vuetify.ts', ssr: false }
+        { src: '~/plugins/vuetify', ssr: false }
 
     ],
 
