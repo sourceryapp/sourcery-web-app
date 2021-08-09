@@ -249,7 +249,8 @@ export default {
             // { title: 'Rate', icon: 'star', link: ''},
         ],
         devItems: [
-            { title: 'Organizations', icon: 'mdi-account-group', link: '/o' }
+            { title: 'Organizations', icon: 'mdi-account-group', link: '/o' },
+            { title: 'Database', icon: 'mdi-database', link: '/admin/organizations' }
         ]
     }),
     computed: {

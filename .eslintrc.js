@@ -27,7 +27,10 @@ module.exports = {
         camelcase: 'off', // TODO Enforce camelcase naming
         'vue/no-v-html': 'off',
         'vue/attribute-hyphenation': 'off',
-        'vuetify/no-deprecated-classes': 'error'
+        'vuetify/no-deprecated-classes': 'error',
+        'vue/valid-v-slot': ['error', {
+            allowModifiers: true
+        }]
     },
-    ignorePatterns: ['/tests/', '/static/'] // Disable these for now
+    ignorePatterns: ['/tests/', '/static/', '**/*.ts'] // Disable these for now
 }
