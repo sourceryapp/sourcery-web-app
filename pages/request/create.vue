@@ -16,33 +16,9 @@
         You will need to log in before completely submitting a request.
       </v-alert>
 
-      <v-dialog
-        v-model="notLoggedInDialogOpen"
-        max-width="600"
-      >
-        <v-card>
-          <v-card-title>
-            You must be logged in to complete this action.
-          </v-card-title>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              text
-              @click="notLoggedInDialogOpen = false"
-            >
-              Cancel
-            </v-btn>
-            <v-btn
-              color="primary"
-              text
-              nuxt
-              to="/login"
-            >
-              Log In
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+      <register-to-submit-request-dialog
+        ref="register_to_submit_request_dialog"
+      />
 
       <!-- <v-alert
         :value="!canMakePayments"
@@ -334,9 +310,13 @@ import { mapGetters } from 'vuex'
 import algoliasearch from 'algoliasearch/lite'
 import 'instantsearch.css/themes/algolia-min.css'
 
+// Components
+import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
+
 export default {
     name: 'Create',
     auth: true,
+    components: { RegisterToSubmitRequestDialog },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
@@ -356,7 +336,7 @@ export default {
     },
     data () {
         return {
-            notLoggedInDialogOpen: false,
+            // notLoggedInDialogOpen: false,
             repositories: [],
             repository: null,
             areas: null,
@@ -369,6 +349,7 @@ export default {
             },
             formState: 1,
             isSaving: false,
+            newUserEmailAddress: '',
 
             // Algolia
             searchClient: algoliasearch(
@@ -464,7 +445,9 @@ export default {
         },
         submitRequest () {
             if (!this.user) {
-                this.notLoggedInDialogOpen = true
+                console.log(this.$refs.register_to_submit_request_dialog)
+                this.$refs.register_to_submit_request_dialog.openDialog()
+                // this.notLoggedInDialogOpen = true
             } else {
                 this.isSaving = true
                 this.$store.dispatch('create/insert').then((doc) => {
