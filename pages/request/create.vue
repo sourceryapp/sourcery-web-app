@@ -20,6 +20,10 @@
         ref="register_to_submit_request_dialog"
       />
 
+      <finish-email-link-registration-dialog
+        ref="finish_email_link_registration_dialog"
+      />
+
       <!-- <v-alert
         :value="!canMakePayments"
         type="warning"
@@ -253,10 +257,10 @@
                     <p class="text-caption mb-0 primary--text font-weight-medium">
                       Cost Will Not Exceed
                     </p>
-                    <!-- <p id="price" class="text-h4 pt-0 font-weight-bold">
+                    <p v-if="!nulledRequestPricing" id="price" class="text-h4 pt-0 font-weight-bold">
                       {{ toDollars(request.pricing.total) }}
-                    </p> -->
-                    <p id="price" class="text-h4 pt-0 font-weight-bold">
+                    </p>
+                    <p v-else id="price" class="text-h4 pt-0 font-weight-bold">
                       $0.00
 
                       <v-tooltip
@@ -312,11 +316,12 @@ import 'instantsearch.css/themes/algolia-min.css'
 
 // Components
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
+import FinishEmailLinkRegistrationDialog from '@/components/finish-email-link-registration.vue'
 
 export default {
     name: 'Create',
     auth: true,
-    components: { RegisterToSubmitRequestDialog },
+    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
@@ -336,7 +341,6 @@ export default {
     },
     data () {
         return {
-            // notLoggedInDialogOpen: false,
             repositories: [],
             repository: null,
             areas: null,
@@ -350,6 +354,7 @@ export default {
             formState: 1,
             isSaving: false,
             newUserEmailAddress: '',
+            nulledRequestPricing: true,
 
             // Algolia
             searchClient: algoliasearch(
@@ -425,6 +430,26 @@ export default {
         if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
             this.selectRepositoryFromStateOutsideComponent(this.$store.state.create.repository)
         }
+        if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
+            console.log('This is a sign in with email link!')
+            const saved_info = JSON.parse(localStorage.getItem('sourceryEmailSignInWith'))
+            console.log(saved_info)
+            if (saved_info) {
+                if (saved_info.request) {
+                    const repo = this.repositories.find(e => e.id === saved_info.request.repository_id)
+                    if (!repo) {
+                        return false
+                    }
+                    this.selectRepositoryObj(repo)
+                    this.citation = saved_info.request.citation
+                    this.pages = saved_info.request.pages
+                    this.formState = 3
+                }
+                if (saved_info.email) {
+                    this.$refs.finish_email_link_registration_dialog.openDialog()
+                }
+            }
+        }
     },
     methods: {
         selectRepositoryFromStateOutsideComponent (repo) {
@@ -445,9 +470,12 @@ export default {
         },
         submitRequest () {
             if (!this.user) {
-                console.log(this.$refs.register_to_submit_request_dialog)
-                this.$refs.register_to_submit_request_dialog.openDialog()
-                // this.notLoggedInDialogOpen = true
+                // Right now we are nulling prices, in beta.  But this is ready for when we need to add pricing models back in.
+                if (!this.nulledRequestPricing && this.request.pricing.total > 0) {
+                    this.$refs.register_to_submit_request_dialog.openDialog()
+                } else {
+                    this.$refs.register_to_submit_request_dialog.openWithRegisterIntent()
+                }
             } else {
                 this.isSaving = true
                 this.$store.dispatch('create/insert').then((doc) => {
