@@ -108,8 +108,7 @@ export default {
 
                 this.$fire.auth.sendSignInLinkToEmail(this.newUserEmailAddress, emailSignUpConfig)
                     .then(() => {
-                        console.log('Register email send successfully.')
-                        this.submitResultAlert.body = 'Email sent successfully'
+                        this.submitResultAlert.body = 'Please check your email for a link to register.'
                         this.submitResultAlert.type = 'success'
                         this.submitResultAlert.show = true
                         localStorage.setItem('sourceryEmailSignInWith', JSON.stringify({

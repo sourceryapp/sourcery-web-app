@@ -6,6 +6,13 @@
       >
         Settings
       </h1>
+
+      <v-alert
+        v-if="!user.hasPassword"
+        type="warning"
+      >
+        Set a password to access the full functionality of Sourcery.
+      </v-alert>
       <v-card
         outlined
         class="mb-4"
@@ -206,14 +213,14 @@
                     v-bind="attrs"
                     v-on="on"
                   >
-                    Change
+                    {{ changePasswordShortLabel }}
                   </v-btn>
                 </template>
                 <v-card>
                   <v-card-title
                     :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
                   >
-                    Change Password
+                    {{ changePasswordLabel }}
                   </v-card-title>
                   <v-divider />
                   <v-form @submit.prevent="resetPass">
@@ -238,6 +245,7 @@
                         <span color="white">An Error Has Occurred. Please Try Again Later.</span>
                       </v-alert>
                       <v-text-field
+                        v-if="user.hasPassword"
                         id="oldpassword"
                         v-model="oldpassword"
                         type="password"
@@ -259,19 +267,9 @@
                         counter
                         error-count="2"
                         validate-on-blur
-                        loading
                         outlined
                         @click:append="showPass = !showPass"
-                      >
-                        <template #progress>
-                          <v-progress-linear
-                            :value="progress"
-                            :color="color"
-                            height="4"
-                            absolute
-                          />
-                        </template>
-                      </v-text-field>
+                      />
                     </v-card-text>
                     <v-card-actions>
                       <v-spacer />
@@ -784,6 +782,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import addCard from '~/components/add-card.vue'
 // import connectButton from '~/components/connect-button.vue'
 import privacyPolicy from '~/pages/privacy.vue'
@@ -862,9 +861,9 @@ export default {
         }
     },
     computed: {
-        user () {
-            return this.$fire.auth.currentUser
-        },
+        ...mapGetters({
+            user: 'auth/activeUser'
+        }),
         nameIsValid () {
             return this.name !== ''
         },
@@ -872,13 +871,6 @@ export default {
         // https://uxmovement.com/forms/why-the-confirm-password-field-must-die/
         passwordIsValid () {
             return this.newpassword.length >= 8 && this.special_characters.some(substring => this.newpassword.includes(substring))
-            // text fields do not match
-            //
-            // if (this.newpassword !== this.confirmpassword || this.newpassword === '') {
-            //     return false
-            // } else {
-            //     return true
-            // }
         },
         emailIsValid () {
             return this.email !== '' && this.password !== ''
@@ -899,6 +891,18 @@ export default {
         },
         hasStripeID () {
             return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
+        },
+        changePasswordLabel () {
+            if (!this.user.hasPassword) {
+                return 'Set Password'
+            }
+            return 'Change Password'
+        },
+        changePasswordShortLabel () {
+            if (!this.user.hasPassword) {
+                return 'Set'
+            }
+            return 'Change'
         }
     },
     mounted () {
@@ -924,25 +928,39 @@ export default {
             }
         },
         resetPass () {
-            this.$fire.auth.currentUser.reauthenticateWithCredential(
-                this.$fireModule.auth.EmailAuthProvider.credential(
-                    this.$fire.auth.currentUser.email,
-                    this.oldpassword
-                )
-            ).then((success) => {
-                const user = this.$fire.auth.currentUser
-                const newPassword = this.newpassword
-
-                user.updatePassword(newPassword).then((success) => {
-                    this.passSuccess = true
-                    this.$toast.success('New password successfully saved.')
+            if (!this.user.hasPassword) {
+                this.updatePass()
+            } else {
+                this.$fire.auth.currentUser.reauthenticateWithCredential(
+                    this.$fireModule.auth.EmailAuthProvider.credential(
+                        this.$fire.auth.currentUser.email,
+                        this.oldpassword
+                    )
+                ).then((success) => {
+                    this.updatePass()
                 }).catch((error) => {
-                    console.log('unknown error', error)
-                    this.passError = true
+                    console.log('error', error)
+                    this.passFail = true
                 })
+            }
+        },
+        updatePass () {
+            const user = this.$fire.auth.currentUser
+            const newPassword = this.newpassword
+            const hadPW = this.user.hasPassword
+
+            user.updatePassword(newPassword).then((success) => {
+                this.$toast.success('New password successfully saved.')
+                this.newpassword = ''
+                this.oldpassword = ''
+                this.$store.commit('auth/SET_AUTH_USER_HAS_PASSWORD')
+                // Close the dialog if already had a password, since the modal will now represent a different action (Change Password) from Set Password.
+                if (!hadPW) {
+                    this.dialogPassword = false
+                }
             }).catch((error) => {
-                console.log('error', error)
-                this.passFail = true
+                console.log('unknown error', error)
+                this.passError = true
             })
         },
         changeUserEmail () {

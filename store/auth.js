@@ -34,7 +34,8 @@ export const mutations = {
                 email: authUser.email,
                 photoURL: authUser.photoURL,
                 displayName: authUser.displayName,
-                admin: authUser.admin
+                admin: authUser.admin,
+                hasPassword: authUser.hasPassword
             }
         }
     },
@@ -52,6 +53,12 @@ export const mutations = {
             // Do something with the authUser and the claims object...
         }
         console.groupEnd()
+    },
+
+    SET_AUTH_USER_HAS_PASSWORD: (state) => {
+        if (state.authUser) {
+            state.authUser.hasPassword = true
+        }
     }
 }
 
@@ -85,10 +92,18 @@ export const actions = {
 
             // An attempt to detect if a user is an admin.
             // No intention for this information to be used outside of 'dev helpers' on frontend.
+            // Also detect password status for account.
             try {
                 const admin = await this.$fire.firestore.collection('admins').doc(authUser.email).get()
                 if (admin.exists) {
                     authUser.admin = true
+                }
+
+                const hasPW = await this.$utils.getCurrentUserHasPassword()
+                if (hasPW) {
+                    authUser.hasPassword = true
+                } else {
+                    authUser.hasPassword = false
                 }
             } catch (e) {
                 console.error(e)

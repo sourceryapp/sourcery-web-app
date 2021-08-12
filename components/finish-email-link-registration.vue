@@ -92,8 +92,7 @@ export default {
                         this.alert.body = 'Successful registration!'
                         this.alert.show = true
                         this.hasSubmittedSuccessfully = true
-                        console.log('Successful registration!')
-                        console.log(result)
+                        this.$emit('finishRegistration')
                     })
                     .catch((error) => {
                         this.alert.type = 'error'

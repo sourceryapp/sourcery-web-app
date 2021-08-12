@@ -79,6 +79,31 @@ export default ({ app }, inject) => {
             },
 
             /**
+             * Returns true if the current authenticated user has a password.
+             * @returns Boolean
+             */
+            getCurrentUserHasPassword: async () => {
+                if (app.$fire.auth.currentUser) {
+                    try {
+                        const methods = await app.$fire.auth.fetchSignInMethodsForEmail(app.$fire.auth.currentUser.email)
+                        if (methods.includes(app.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                            // Has a password.
+                            return true
+                        }
+                        if (methods.includes(app.$fireModule.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD)) {
+                            // Has passwordless login.
+                            return false
+                        }
+                    } catch (error) {
+                        console.log(error)
+                        return false
+                    }
+                }
+                // Assume by default there is not a password, especially if no user.
+                return false
+            },
+
+            /**
              * Simple Currency Formatter
              * Assumes USD
              */

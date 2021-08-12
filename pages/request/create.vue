@@ -13,8 +13,16 @@
         class="mt-3 mb-0"
         dismissible
       >
-        You will need to log in before completely submitting a request.
+        You will need to register before completely submitting a request.
       </v-alert>
+
+      <call-to-action-alert
+        v-if="user && !user.hasPassword"
+        message="In order to gain access to the full features of Sourcery, you must set a password."
+        to="/settings"
+        type="warning"
+        action-text="Set Password."
+      />
 
       <register-to-submit-request-dialog
         ref="register_to_submit_request_dialog"
@@ -317,11 +325,12 @@ import 'instantsearch.css/themes/algolia-min.css'
 // Components
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
 import FinishEmailLinkRegistrationDialog from '@/components/finish-email-link-registration.vue'
+import CallToActionAlert from '@/components/call-to-action-alert.vue'
 
 export default {
     name: 'Create',
     auth: true,
-    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog },
+    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog, CallToActionAlert },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
@@ -506,13 +515,6 @@ export default {
         },
         toDollars (cents) {
             return this.$utils.currencyFormat(cents)
-        },
-        testSelect (id) {
-            console.log(id)
-        },
-        repoSelection (repo) {
-            // console.log(repo.objectID, repo);
-            this.repository_id = repo.objectID
         }
     }
 }
