@@ -1,6 +1,9 @@
 <template>
   <v-layout fill-height align-center>
     <v-flex xs12 sm6 offset-sm3 md4 offset-md4>
+      <register-to-submit-request
+        ref="login_with_link_dialog"
+      />
       <v-form @submit.prevent="login">
         <h1 class="text-center">
           Log In
@@ -55,6 +58,17 @@
         </v-btn>
         <v-btn
           block
+          depressed
+          x-large
+          color="primary"
+          style="font-weight: 800"
+          class="mb-1"
+          @click="loginWithOneTimeLink()"
+        >
+          Log In With One-Time Link
+        </v-btn>
+        <v-btn
+          block
           text
           large
           to="/password"
@@ -84,8 +98,11 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import registerToSubmitRequest from '@/components/register-to-submit-request.vue'
+
 export default {
     name: 'Login',
+    components: { registerToSubmitRequest },
     layout: 'default',
     data () {
         return {
@@ -136,6 +153,10 @@ export default {
                 this.loginError = true
                 this.loading = false
             }
+        },
+
+        loginWithOneTimeLink () {
+            this.$refs.login_with_link_dialog.openWithLoginIntent(this.email)
         }
     }
 }

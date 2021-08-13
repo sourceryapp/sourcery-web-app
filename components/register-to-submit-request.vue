@@ -4,25 +4,26 @@
       ref="register_new_email_form"
       v-model="form_valid"
       lazy-validation
+      @submit.prevent="register()"
     >
       <v-card>
-        <v-card-title>Register to Submit Request</v-card-title>
+        <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
           <p>{{ bodyText }}</p>
           <v-text-field
-            v-if="allowRegister"
+            v-if="allowRegister || loggingIn"
             v-model="newUserEmailAddress"
             label="Email Address"
             :rules="emailRules"
             required
           />
-          <p v-if="allowRegister">
+          <p v-if="allowRegister && !loggingIn">
             Already registered? <NuxtLink to="/login">
               Login Here
             </NuxtLink>
           </p>
           <!-- eslint-disable-next-line -->
-          <p v-if="allowRegister">By submitting your email address to Sourcery you agree to our <NuxtLink to="/terms">Terms &amp; Conditions</NuxtLink>, and have reviewed our <NuxtLink to="/privacy">Privacy Policy</NuxtLink>.</p>
+          <p v-if="showPrivacyTermsWarning">By submitting your email address to Sourcery you agree to our <NuxtLink to="/terms">Terms &amp; Conditions</NuxtLink>, and have reviewed our <NuxtLink to="/privacy">Privacy Policy</NuxtLink>.</p>
           <!-- skipped -->
 
           <v-alert
@@ -34,13 +35,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn v-if="!hasSubmitted" text @click="closeDialog()">
-            Cancel
-          </v-btn>
-          <v-btn v-if="allowRegister && !hasSubmitted" color="primary" text @click="register()">
+          <v-btn v-if="allowRegister && !hasSubmitted" color="primary" text type="submit">
             Register
           </v-btn>
-          <v-btn v-if="!allowRegister" color="primary" text nuxt to="/login">
+          <v-btn v-if="!allowRegister && !loggingIn" color="primary" text nuxt to="/login">
+            Login
+          </v-btn>
+          <v-btn v-if="loggingIn && !hasSubmitted && submitResultAlert.type != `error`" color="primary" text type="submit">
             Login
           </v-btn>
           <v-btn
@@ -50,6 +51,9 @@
             @click="closeDialog()"
           >
             Close
+          </v-btn>
+          <v-btn v-if="!hasSubmitted" text @click="closeDialog()">
+            Cancel
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,6 +73,7 @@ export default {
                 v => /.+@.+\..+/.test(v) || 'Email must be valid'
             ],
             allowRegister: false,
+            loggingIn: false,
             submitResultAlert: {
                 show: false,
                 body: 'There has been an error registering.',
@@ -81,8 +86,24 @@ export default {
         bodyText () {
             if (this.allowRegister) {
                 return 'In order to submit a request, you must be registered with Sourcery.  Please log in, or submit your email address to register with us.'
+            } else if (this.loggingIn) {
+                return 'Please submit your email address to receive a link to login via email.'
             }
             return 'In order to submit a paid request, you must be registered with Sourcery.  Please log in to proceed.'
+        },
+        showPrivacyTermsWarning () {
+            if (this.allowRegister || this.loggingIn) {
+                return true
+            }
+            return false
+        },
+        title () {
+            if (this.allowRegister) {
+                return 'Register to Submit Request'
+            } else if (this.loggingIn) {
+                return 'Log In with One Time Link'
+            }
+            return 'Account Required - Paid Request'
         }
     },
     methods: {
@@ -94,6 +115,13 @@ export default {
         },
         openWithRegisterIntent () {
             this.allowRegister = true
+            this.openDialog()
+        },
+        openWithLoginIntent (email = '') {
+            if (email) {
+                this.newUserEmailAddress = email
+            }
+            this.loggingIn = true
             this.openDialog()
         },
         register () {
@@ -108,17 +136,27 @@ export default {
 
                 this.$fire.auth.sendSignInLinkToEmail(this.newUserEmailAddress, emailSignUpConfig)
                     .then(() => {
-                        this.submitResultAlert.body = 'Please check your email for a link to register.'
+                        if (this.loggingIn) {
+                            this.submitResultAlert.body = 'Please check your email for a link to login.'
+                        } else {
+                            this.submitResultAlert.body = 'Please check your email for a link to register.'
+                        }
                         this.submitResultAlert.type = 'success'
                         this.submitResultAlert.show = true
-                        localStorage.setItem('sourceryEmailSignInWith', JSON.stringify({
+                        const localStateData = {
                             email: this.newUserEmailAddress,
                             request: {
                                 citation: this.$store.state.create.citation,
                                 pages: this.$store.state.create.pages,
                                 repository_id: this.$store.state.create.repository_id
-                            }
-                        }))
+                            },
+                            loginIntent: false
+                        }
+
+                        if (this.loggingIn) {
+                            localStateData.loginIntent = true
+                        }
+                        localStorage.setItem('sourceryEmailSignInWith', JSON.stringify(localStateData))
                         this.hasSubmitted = true
                     })
                     .catch((error) => {

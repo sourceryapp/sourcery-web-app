@@ -444,7 +444,7 @@ export default {
             const saved_info = JSON.parse(localStorage.getItem('sourceryEmailSignInWith'))
             console.log(saved_info)
             if (saved_info) {
-                if (saved_info.request) {
+                if (saved_info.request && saved_info.request.repository_id) {
                     const repo = this.repositories.find(e => e.id === saved_info.request.repository_id)
                     if (!repo) {
                         return false
@@ -455,7 +455,8 @@ export default {
                     this.formState = 3
                 }
                 if (saved_info.email) {
-                    this.$refs.finish_email_link_registration_dialog.openDialog()
+                    const intent = saved_info.loginIntent ? 'login' : ''
+                    this.$refs.finish_email_link_registration_dialog.openDialog(intent)
                 }
             }
         }

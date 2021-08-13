@@ -8,10 +8,11 @@
       v-model="formValid"
     >
       <v-card>
-        <v-card-title>Finish Registration</v-card-title>
+        <v-card-title>{{ title }}</v-card-title>
         <v-card-text>
           <p>{{ bodyText }}</p>
           <v-text-field
+            v-if="needsDisplayName"
             v-model="name"
             label="Display Name (Only if First Registration)"
             :rules="nameRules"
@@ -38,7 +39,7 @@
             :disabled="!formValid"
             @click="finishRegistration()"
           >
-            Finish Registration
+            {{ registrationButtonText }}
           </v-btn>
           <v-btn
             v-if="hasSubmittedSuccessfully"
@@ -73,7 +74,8 @@ export default {
                 body: 'There has been some error registering.'
             },
             hasSubmittedSuccessfully: false,
-            isFirstTimeAccount: false
+            isFirstTimeAccount: false,
+            isLoggingIn: false
         }
     },
     computed: {
@@ -87,6 +89,21 @@ export default {
             return [
                 v => (!v || v.length < 100) || 'Display Name is too long.'
             ]
+        },
+        title () {
+            if (this.isLoggingIn) {
+                return 'Log In With Link'
+            }
+            return 'Finish Registration'
+        },
+        needsDisplayName () {
+            return this.isFirstTimeAccount || !this.isLoggingIn
+        },
+        registrationButtonText () {
+            if (this.isLoggingIn) {
+                return 'Finish Login'
+            }
+            return 'Finish Registration'
         }
     },
     created () {
@@ -96,7 +113,10 @@ export default {
         }
     },
     methods: {
-        openDialog () {
+        openDialog (intent = '') {
+            if (intent && intent === 'login') {
+                this.isLoggingIn = true
+            }
             this.open = true
         },
         closeDialog () {
@@ -133,7 +153,11 @@ export default {
                     const result = await this.$fire.auth.signInWithEmailLink(this.registrationEmail, window.location.href)
                     localStorage.removeItem('sourceryEmailSignInWith')
                     this.alert.type = 'success'
-                    this.alert.body = 'Successful registration!'
+                    if (this.isLoggingIn) {
+                        this.alert.body = 'Successful Login!'
+                    } else {
+                        this.alert.body = 'Successful registration!'
+                    }
                     this.alert.show = true
                     this.hasSubmittedSuccessfully = true
 
