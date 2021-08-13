@@ -485,6 +485,8 @@ export default {
                 } else {
                     this.$refs.register_to_submit_request_dialog.openWithRegisterIntent()
                 }
+            } else if (!this.user.hasPassword) {
+                // no password, so we need to limit the request to 1.
             } else {
                 this.isSaving = true
                 this.$store.dispatch('create/insert').then((doc) => {
