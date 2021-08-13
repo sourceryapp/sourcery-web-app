@@ -76,6 +76,9 @@
                 <v-text-field v-model="current.address" label="Address" />
               </v-flex>
               <v-flex xs12>
+                <v-text-field v-model="current.slug" label="URL Slug" />
+              </v-flex>
+              <v-flex xs12>
                 <v-text-field v-model="current.owner" label="Account Owner" />
               </v-flex>
             </v-layout>
@@ -130,7 +133,6 @@ export default {
         }
     },
     async fetch () {
-        this.organizations = []
         await this.$fire.firestore.collection('organization').get().then((docs) => {
             if (!docs.empty) {
                 docs.forEach((doc) => {
@@ -141,14 +143,16 @@ export default {
     },
     mounted () {},
     methods: {
+        select (id) {
+            // Select the current/chosen organization to edit
+            this.current = this.organizations.find(org => org.id === id)
+        },
         refresh () {
             this.organizations = []
             this.$fetch()
         },
         editOrg (id) {
-            // Select the current/chosen organization to edit
-            this.current = this.organizations.find(org => org.id === id)
-
+            this.select(id)
             // Show the editor
             this.modal = true
         },
@@ -156,19 +160,18 @@ export default {
             this.saving = true
             this.current.save()
                 .then((ref) => {
+                    this.organizations.unshift(this.current)
                     this.$toast.success('Saved!')
-                    if (ref) {
-                        // It's a new doc, so refresh the list
-                        this.refresh()
-                    }
                 }).catch((error) => {
                     this.$toast.error(error)
                 }).finally(() => {
                     this.saving = false
                     this.modal = false
                 })
+            console.log(this.current)
         },
-        deleteOrg () {
+        deleteOrg (id) {
+            this.select(id)
             if (confirm('Are you sure you want to delete this Organization?')) {
                 this.current.delete()
                     .then(() => {

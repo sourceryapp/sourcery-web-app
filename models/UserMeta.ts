@@ -1,8 +1,8 @@
 import firebase from "firebase/app";
 
-const COLLECTION = 'organization'
+const COLLECTION = 'user-meta'
 
-export class Organization {
+export class UserMeta {
     id: string;
     name: string;
     address: string;
@@ -25,14 +25,8 @@ export class Organization {
         return firebase.app().firestore()
     }
 
-    static fromSnapshot(document: firebase.firestore.DocumentSnapshot): Organization{
-        return new Organization(
-            document.id,
-            document.data()?.name,
-            document.data()?.address,
-            document.data()?.owner,
-            document.data()?.slug
-        );
+    static fromSnapshot(document: firebase.firestore.DocumentSnapshot){
+
     }
 
     /**
