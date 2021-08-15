@@ -1,10 +1,11 @@
 <template>
-  <div id="content" class="site-content">
-    <admin-menu />
+  <v-layout>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <admin-menu />
 
-    <v-card-title primary-title />
+      <v-card-title primary-title />
 
-    <!-- <v-card-text>
+      <!-- <v-card-text>
       <ul v-for="(org, key) in organizations" :key="org.id">
         <li>
           <a @click="editOrg(key)">
@@ -14,91 +15,92 @@
       </ul>
     </v-card-text> -->
 
-    <v-data-table :headers="tableHeaders" :items="organizations" class="">
-      <template #top>
-        <v-toolbar
-          flat
-        >
-          <v-toolbar-title>Organizations</v-toolbar-title>
-          <v-divider
-            class="mx-4"
-            inset
-            vertical
-          />
-          <v-spacer />
-          <v-btn
-            color="primary"
-            dark
-            class="mb-2"
-            @click="newOrg()"
+      <v-data-table :headers="tableHeaders" :items="organizations" class="">
+        <template #top>
+          <v-toolbar
+            flat
           >
-            New Org
-          </v-btn>
-        </v-toolbar>
-      </template>
-
-      <template #item="{ item: org }">
-        <tr>
-          <td>{{ org.name }}</td>
-          <td>{{ org.address }}</td>
-          <td>{{ org.slug }}</td>
-          <td>
-            <v-icon
-              small
-              class="mr-2"
-              @click="editOrg(org.id)"
+            <v-toolbar-title>Organizations</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            />
+            <v-spacer />
+            <v-btn
+              color="primary"
+              dark
+              class="mb-2"
+              @click="newOrg()"
             >
-              mdi-pencil
-            </v-icon>
-            <v-icon
-              small
-              @click="deleteOrg(org.id)"
-            >
-              mdi-delete
-            </v-icon>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
+              New Org
+            </v-btn>
+          </v-toolbar>
+        </template>
 
-    <v-dialog v-if="current" v-model="modal" max-width="600px">
-      <v-card>
-        <v-card-title class="text-h5 grey lighten-2" style="" primary-title>
-          <span>{{ current.id ? current.name : 'New Organization' }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field v-model="current.name" label="Name" required />
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="current.address" label="Address" />
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="current.slug" label="URL Slug" />
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="current.owner" label="Account Owner" />
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn v-if="current.id" style @click="deleteOrg">
-            <v-icon left>
-              mdi-delete
-            </v-icon>Delete
-          </v-btn>
+        <template #item="{ item: org }">
+          <tr>
+            <td>{{ org.name }}</td>
+            <td>{{ org.address }}</td>
+            <td>{{ org.slug }}</td>
+            <td>
+              <v-icon
+                small
+                class="mr-2"
+                @click="editOrg(org.id)"
+              >
+                mdi-pencil
+              </v-icon>
+              <v-icon
+                small
+                @click="deleteOrg(org.id)"
+              >
+                mdi-delete
+              </v-icon>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
 
-          <v-btn color="primary" :loading="saving" @click="saveOrg">
-            Save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      <v-dialog v-if="current" v-model="modal" max-width="600px">
+        <v-card>
+          <v-card-title class="text-h5 grey lighten-2" style="" primary-title>
+            <span>{{ current.id ? current.name : 'New Organization' }}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field v-model="current.name" label="Name" required />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.address" label="Address" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.slug" label="URL Slug" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.owner" label="Account Owner" />
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn v-if="current.id" style @click="deleteOrg">
+              <v-icon left>
+                mdi-delete
+              </v-icon>Delete
+            </v-btn>
+
+            <v-btn color="primary" :loading="saving" @click="saveOrg">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

@@ -75,7 +75,7 @@ export class Repository {
     private create(){
         let db = this.getInstance()
         let docRef = db.collection(COLLECTION).doc();
-        // this.id = docRef.id
+        this.id = docRef.id
         return docRef.set(this.toFirestore())
     }
 

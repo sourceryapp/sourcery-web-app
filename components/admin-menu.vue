@@ -1,11 +1,11 @@
 <template>
-  <ul>
-    <li v-for="(link, index) in links" :key="index">
-      <NuxtLink :to="link.href">
+  <v-tabs optional left>
+    <template v-for="(link, index) in links">
+      <v-tab :key="index" :to="link.href">
         {{ link.text }}
-      </NuxtLink>
-    </li>
-  </ul>
+      </v-tab>
+    </template>
+  </v-tabs>
 </template>
 
 <script>
@@ -32,15 +32,15 @@ export default {
                 {
                     href: '/admin/repositories',
                     text: 'Repositories'
-                },
-                {
-                    href: '/admin/requests',
-                    text: 'Requests'
-                },
-                {
-                    href: '/admin/users',
-                    text: 'Users'
                 }
+                // {
+                //     href: '/admin/requests',
+                //     text: 'Requests'
+                // },
+                // {
+                //     href: '/admin/users',
+                //     text: 'Users'
+                // }
             ]
         }
     }
@@ -48,10 +48,5 @@ export default {
 </script>
 
 <style scoped>
-ul {
-    display: flex;
-    justify-content: space-between;
-    list-style-type: none;
-    padding:0;
-}
+
 </style>
