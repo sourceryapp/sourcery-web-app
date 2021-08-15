@@ -159,6 +159,17 @@
     </v-navigation-drawer>
     <v-main pa0>
       <v-container fill-height>
+        <v-row>
+          <v-col>
+            <call-to-action-alert
+              v-if="user && !user.hasPassword"
+              message="In order to gain access to the full features of Sourcery, you must set a password."
+              to="/settings"
+              type="warning"
+              action-text="Set Password."
+            />
+          </v-col>
+        </v-row>
         <v-layout
           justify-center
         >

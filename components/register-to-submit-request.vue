@@ -35,6 +35,13 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
+          <v-btn
+            :color="closeButtonType"
+            text
+            @click="closeDialog()"
+          >
+            {{ closeButtonText }}
+          </v-btn>
           <v-btn v-if="allowRegister && !hasSubmitted" color="primary" text type="submit">
             Register
           </v-btn>
@@ -43,17 +50,6 @@
           </v-btn>
           <v-btn v-if="loggingIn && !hasSubmitted && submitResultAlert.type != `error`" color="primary" text type="submit">
             Login
-          </v-btn>
-          <v-btn
-            v-if="hasSubmitted"
-            color="primary"
-            text
-            @click="closeDialog()"
-          >
-            Close
-          </v-btn>
-          <v-btn v-if="!hasSubmitted" text @click="closeDialog()">
-            Cancel
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -104,6 +100,18 @@ export default {
                 return 'Log In with One Time Link'
             }
             return 'Account Required - Paid Request'
+        },
+        closeButtonText () {
+            if (this.hasSubmitted) {
+                return 'Close'
+            }
+            return 'Cancel'
+        },
+        closeButtonType () {
+            if (this.hasSubmitted) {
+                return 'primary'
+            }
+            return ''
         }
     },
     methods: {

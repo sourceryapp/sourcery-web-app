@@ -97,7 +97,7 @@ export default {
             return 'Finish Registration'
         },
         needsDisplayName () {
-            return this.isFirstTimeAccount || !this.isLoggingIn
+            return this.isFirstTimeAccount
         },
         registrationButtonText () {
             if (this.isLoggingIn) {
@@ -110,6 +110,7 @@ export default {
         const saved_info = JSON.parse(localStorage.getItem('sourceryEmailSignInWith'))
         if (saved_info && saved_info.email) {
             this.registrationEmail = saved_info.email
+            this.profileExists()
         }
     },
     methods: {
@@ -126,7 +127,7 @@ export default {
             this.$refs.finish_email_link_registration_form.validate()
         },
         async profileExists () {
-            if (this.formValid) {
+            if (this.registrationEmail) {
                 try {
                     const result = await this.$fire.auth.fetchSignInMethodsForEmail(this.registrationEmail)
                     if (result) {

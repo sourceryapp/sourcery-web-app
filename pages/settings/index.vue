@@ -7,12 +7,6 @@
         Settings
       </h1>
 
-      <v-alert
-        v-if="!user.hasPassword"
-        type="warning"
-      >
-        Set a password to access the full functionality of Sourcery.
-      </v-alert>
       <v-card
         outlined
         class="mb-4"
@@ -208,7 +202,7 @@
               >
                 <template #activator="{ on, attrs }">
                   <v-btn
-                    color="primary"
+                    :color="passwordActionButtonType"
                     text
                     v-bind="attrs"
                     v-on="on"
@@ -903,6 +897,12 @@ export default {
                 return 'Set'
             }
             return 'Change'
+        },
+        passwordActionButtonType () {
+            if (!this.user.hasPassword) {
+                return 'warning'
+            }
+            return 'primary'
         }
     },
     mounted () {

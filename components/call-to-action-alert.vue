@@ -1,6 +1,7 @@
 <template>
   <v-alert
     :type="type"
+    class="warning-with-cta"
   >
     {{ message }}
     <NuxtLink :to="to">
@@ -33,3 +34,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.warning-with-cta.warning .v-alert__content a {
+  color: black;
+}
+</style>
