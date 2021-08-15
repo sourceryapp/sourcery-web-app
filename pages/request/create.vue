@@ -16,6 +16,10 @@
         You will need to register before completely submitting a request.
       </v-alert>
 
+      <reached-request-limit-dialog
+        ref="reached_request_limit_dialog"
+      />
+
       <!-- <call-to-action-alert
         v-if="user && !user.hasPassword"
         message="In order to gain access to the full features of Sourcery, you must set a password."
@@ -325,12 +329,13 @@ import 'instantsearch.css/themes/algolia-min.css'
 // Components
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
 import FinishEmailLinkRegistrationDialog from '@/components/finish-email-link-registration.vue'
+import ReachedRequestLimitDialog from '@/components/reached-request-limit-dialog.vue'
 // import CallToActionAlert from '@/components/call-to-action-alert.vue'
 
 export default {
     name: 'Create',
     auth: true,
-    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog },
+    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog, ReachedRequestLimitDialog },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
@@ -486,8 +491,9 @@ export default {
                 } else {
                     this.$refs.register_to_submit_request_dialog.openWithRegisterIntent()
                 }
-            } else if (!this.user.hasPassword) {
+            } else if (!this.user.hasPassword && this.user.hasRequests) {
                 // no password, so we need to limit the request to 1.
+                this.$refs.reached_request_limit_dialog.openDialog()
             } else {
                 this.isSaving = true
                 this.$store.dispatch('create/insert').then((doc) => {
@@ -495,6 +501,7 @@ export default {
                     this.isSaving = false
                     console.log('Inserted:', doc.id)
                     this.$store.commit('create/reset')
+                    this.$store.commit('auth/SET_AUTH_USER_HAS_REQUESTS')
                     this.$router.push({ name: 'dashboard' })
                 }).catch((error) => {
                     console.log(error)

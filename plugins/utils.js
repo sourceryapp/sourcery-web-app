@@ -82,10 +82,15 @@ export default ({ app }, inject) => {
              * Returns true if the current authenticated user has a password.
              * @returns Boolean
              */
-            getCurrentUserHasPassword: async () => {
-                if (app.$fire.auth.currentUser) {
+            getCurrentUserHasPassword: async (authUser = {}) => {
+                let currentUser = authUser
+                if (!authUser) {
+                    console.log('no authuser')
+                    currentUser = app.$fire.auth.currentUser
+                }
+                if (currentUser) {
                     try {
-                        const methods = await app.$fire.auth.fetchSignInMethodsForEmail(app.$fire.auth.currentUser.email)
+                        const methods = await app.$fire.auth.fetchSignInMethodsForEmail(currentUser.email)
                         if (methods.includes(app.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                             // Has a password.
                             return true

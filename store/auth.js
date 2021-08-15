@@ -35,7 +35,8 @@ export const mutations = {
                 photoURL: authUser.photoURL,
                 displayName: authUser.displayName,
                 admin: authUser.admin,
-                hasPassword: authUser.hasPassword
+                hasPassword: authUser.hasPassword,
+                hasRequests: authUser.hasRequests
             }
         }
     },
@@ -58,6 +59,12 @@ export const mutations = {
     SET_AUTH_USER_HAS_PASSWORD: (state) => {
         if (state.authUser) {
             state.authUser.hasPassword = true
+        }
+    },
+
+    SET_AUTH_USER_HAS_REQUESTS: (state) => {
+        if (state.authUser) {
+            state.authUser.hasRequests = true
         }
     }
 }
@@ -99,11 +106,18 @@ export const actions = {
                     authUser.admin = true
                 }
 
-                const hasPW = await this.$utils.getCurrentUserHasPassword()
+                authUser.hasPassword = false
+
+                const hasPW = await this.$utils.getCurrentUserHasPassword(authUser)
                 if (hasPW) {
                     authUser.hasPassword = true
+                }
+
+                const req = await this.$fire.firestore.collection('requests').where('client_id', '==', authUser.uid).limit(1).get()
+                if (req.docs && req.docs.length > 0) {
+                    authUser.hasRequests = true
                 } else {
-                    authUser.hasPassword = false
+                    authUser.hasRequests = false
                 }
             } catch (e) {
                 console.error(e)
