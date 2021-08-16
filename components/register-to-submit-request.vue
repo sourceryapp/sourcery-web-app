@@ -171,7 +171,16 @@ export default {
                         this.hasSubmitted = true
                     })
                     .catch((error) => {
-                        this.submitResultAlert.body = `${error.code}: ${error.message}`
+                        const general_error_message = 'Something went wrong.'
+                        const messages = {
+                            'auth/unauthorized-continue-uri': 'This domain is not authorized to send emails.',
+                            'auth/argument-error': general_error_message,
+                            'auth/invalid-email': 'Email provided was not valid.',
+                            'auth/missing-android-pkg-name': general_error_message,
+                            'auth/missing-continue-uri': 'Redirect link is not valid.',
+                            'auth/invalid-continue-uri': 'Redirect link is not valid.'
+                        }
+                        this.submitResultAlert.body = messages[error.code]
                         this.submitResultAlert.type = 'error'
                         this.submitResultAlert.show = true
                     })
