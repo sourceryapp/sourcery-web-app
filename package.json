@@ -6,7 +6,7 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "local": "concurrently -k \"firebase emulators:start --import=.emulator-data --export-on-exit\" \"EMULATOR=local nuxt\"",
+    "local": "concurrently \"firebase emulators:start --import=.emulator-data --export-on-exit\" \"EMULATOR=local yarn run dev\"",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
     "lint": "yarn lint:js",
