@@ -135,10 +135,13 @@ export default {
         register () {
             this.validateRegisterNewEmailForm()
             if (this.form_valid) {
+                const url = window.location
+                const emailRedirectUrl = `${url.origin}/request/create`
+
                 // Valid
                 const emailSignUpConfig = {
                     // URL to return to.  Must be an authorized domain in Firebase Authentication.
-                    url: 'http://bs-local.com:3000/request/create',
+                    url: emailRedirectUrl,
                     handleCodeInApp: true
                 }
 
