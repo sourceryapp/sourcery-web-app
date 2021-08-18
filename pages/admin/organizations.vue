@@ -64,7 +64,7 @@
 
       <v-dialog v-if="current" v-model="modal" max-width="600px">
         <v-card>
-          <v-card-title class="text-h5 grey lighten-2" style="" primary-title>
+          <v-card-title class="text-h5" style="" primary-title>
             <span>{{ current.id ? current.name : 'New Organization' }}</span>
           </v-card-title>
           <v-card-text>

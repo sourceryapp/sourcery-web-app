@@ -10,8 +10,9 @@ export class Repository {
     address1?: string;
     address2?: string;
     city?: string;
-    country_code?: string;
-    geo?: string;
+    country_code?: 'US';
+    latitude?: string;
+    longitude?: string;
     institution?: string;
     name?: string;
     postal_code?: string;
@@ -33,7 +34,8 @@ export class Repository {
         repository.address2 = document.data()?.address2
         repository.city = document.data()?.city
         repository.country_code = document.data()?.country_code
-        repository.geo = document.data()?.geo
+        repository.latitude = document.data()?.geo.latitude
+        repository.longitude = document.data()?.geo.longitude
         repository.institution = document.data()?.institution
         repository.name = document.data()?.name
         repository.postal_code = document.data()?.postal_code
@@ -53,7 +55,7 @@ export class Repository {
     }
 
     /**
-     * Save Organization
+     * Save repository
      * Wrapper/Traffic function for create() and update()
      */
     public save(){
@@ -61,7 +63,7 @@ export class Repository {
     }
 
     /**
-     * Delete Organization
+     * Delete repository
      */
     public delete(){
         let db = this.getInstance()
@@ -69,7 +71,7 @@ export class Repository {
     }
 
     /**
-     * Generates an ID and creates a new organization
+     * Generates an ID and creates a new repository
      * from our properties.
      */
     private create(){
@@ -80,7 +82,7 @@ export class Repository {
     }
 
     /**
-     * Updates an existing organization
+     * Updates an existing repository
      */
     private update(){
         let db = this.getInstance()

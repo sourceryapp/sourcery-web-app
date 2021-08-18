@@ -35,7 +35,7 @@
               color="primary"
               dark
               class="mb-2"
-              @click="newOrg()"
+              @click="newRepo()"
             >
               New Repo
             </v-btn>
@@ -68,44 +68,63 @@
             </td>
           </tr>
         </template>
-        <v-dialog v-if="current" v-model="modal" max-width="600px">
-          <v-card>
-            <v-card-title class="text-h5 grey lighten-2" style="" primary-title>
-              <span>{{ current.id ? current.name : 'New Organization' }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12>
-                    <v-text-field v-model="current.name" label="Name" required />
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field v-model="current.address" label="Address" />
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field v-model="current.slug" label="URL Slug" />
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-text-field v-model="current.owner" label="Account Owner" />
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn v-if="current.id" style @click="deleteOrg">
-                <v-icon left>
-                  mdi-delete
-                </v-icon>Delete
-              </v-btn>
-
-              <v-btn color="primary" :loading="saving" @click="saveOrg">
-                Save
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
       </v-data-table>
+
+      <v-dialog v-if="current" v-model="modal" max-width="600px">
+        <v-card>
+          <v-card-title class="text-h5" style="" primary-title>
+            <span>{{ current.id ? current.name : 'New Repository' }}</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field v-model="current.name" label="Repository/Archive Name" required />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.institution" label="Institution Name" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.address1" label="Address" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.address2" label="Address Line 2" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.city" label="City" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.state" label="State/Province" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.postal_code" label="Postal Code" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.country" label="Country Code" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.latitude" label="Latitude" />
+                </v-flex>
+                <v-flex xs12>
+                  <v-text-field v-model="current.longitude" label="Longitude" />
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn v-if="current.id" style @click="deleteRepo()">
+              <v-icon left>
+                mdi-delete
+              </v-icon>Delete
+            </v-btn>
+
+            <v-btn color="primary" :loading="saving" @click="saveRepo()">
+              Save
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     <!-- <v-card-text>
       <ul v-for="repo in repositories" :key="repo.id">
         <li>{{ repo.name }}</li>
@@ -124,6 +143,7 @@ export default {
     data () {
         return {
             repositories: [],
+            current: null,
             tableHeaders: [
                 {
                     text: 'Name',
@@ -147,7 +167,8 @@ export default {
             ],
             search: '',
             modal: false,
-            loading: true
+            loading: true,
+            saving: false
         }
     },
     async fetch () {
@@ -162,6 +183,19 @@ export default {
     },
     mounted () {},
     methods: {
+        select (id) {
+            // Select the current/chosen repository to edit
+            this.current = this.repositories.find(repo => repo.id === id)
+        },
+        editRepo (id) {
+            this.select(id)
+            // Show the editor
+            this.modal = true
+        },
+        newRepo () {
+            this.current = new Repository()
+            this.modal = true
+        }
 
     }
 }
