@@ -6,23 +6,10 @@
       >
         Settings
       </h1>
-      <v-card
-        outlined
-        class="mb-4"
-      >
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+      <sourcery-card title="General" icon="mdi-cog">
+        <v-list
+          color="transparent"
         >
-          General
-          <v-spacer />
-          <v-icon
-            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-          >
-            mdi-cog
-          </v-icon>
-        </v-card-title>
-        <v-divider />
-        <v-list>
           <v-list-item>
             <v-list-item-avatar
               :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
@@ -83,24 +70,11 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-      </v-card>
-      <v-card
-        outlined
-        class="mb-4"
-      >
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+      </sourcery-card>
+      <sourcery-card title="Profile" icon="mdi-account-details">
+        <v-list
+          color="transparent"
         >
-          Profile
-          <v-spacer />
-          <v-icon
-            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-          >
-            mdi-account-details
-          </v-icon>
-        </v-card-title>
-        <v-divider />
-        <v-list>
           <v-list-item>
             <v-list-item-avatar
               :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
@@ -452,24 +426,14 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-      </v-card>
-      <v-card
-        outlined
-        class="mb-4"
-      >
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
+      </sourcery-card>
+      <sourcery-card title="Payment Information" icon="mdi-credit-card-outline">
+        <v-list
+          v-if="cards.data.length"
+          two-line
+          subheader
+          color="transparent"
         >
-          Payment Information
-          <v-spacer />
-          <v-icon
-            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-          >
-            mdi-credit-card-outline
-          </v-icon>
-        </v-card-title>
-        <v-divider />
-        <v-list v-if="cards.data.length" two-line subheader>
           <v-subheader>
             Cards
           </v-subheader>
@@ -529,7 +493,10 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-        <v-list v-else>
+        <v-list
+          v-else
+          color="transparent"
+        >
           <v-subheader>
             Cards
           </v-subheader>
@@ -539,79 +506,7 @@
             </v-list-item-title>
           </v-list-item>
         </v-list>
-        <v-divider />
-        <!-- <v-list v-if="hasStripeID" two-line subheader>
-          <v-subheader>
-            Payouts
-          </v-subheader>
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-avatar>
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-currency-usd-circle
-                </v-icon>
-              </v-avatar>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>{{ balance }}</v-list-item-title>
-              <v-list-item-subtitle>Estimated Balance</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <connect-button />
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <v-list v-else>
-          <v-subheader>
-            Payouts
-          </v-subheader>
-          <v-alert type="warning" text class="mx-4">
-            Before accepting payments, you must configure your payout options.
-          </v-alert>
-          <v-list-item dense>
-            <v-list-item-title />
-            <v-list-item-action>
-              <v-spacer />
-              <connect-button />
-            </v-list-item-action>
-          </v-list-item>
-        </v-list> -->
-      </v-card>
-      <v-card
-        outlined
-        class="mb-4"
-      >
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-        >
-          About
-          <v-spacer />
-          <v-icon
-            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-          >
-            mdi-information
-          </v-icon>
-        </v-card-title>
-        <v-expansion-panels accordion flat>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Privacy Policy</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <privacy-policy />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-          <v-expansion-panel>
-            <v-expansion-panel-header>Terms and Conditions</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <terms-of-service />
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-        <v-divider />
-      </v-card>
+      </sourcery-card>
       <!-- <v-tabs
         slider-color="primary"
       >
@@ -786,16 +681,14 @@
 <script>
 import addCard from '~/components/add-card.vue'
 // import connectButton from '~/components/connect-button.vue'
-import privacyPolicy from '~/pages/privacy.vue'
-import termsOfService from '~/pages/terms.vue'
+import SourceryCard from '~/components/card-with-header.vue'
 
 export default {
     name: 'Settings',
     components: {
         'add-card': addCard,
         // 'connect-button': connectButton,
-        'privacy-policy': privacyPolicy,
-        'terms-of-service': termsOfService
+        'sourcery-card': SourceryCard
     },
     async asyncData ({ params, store, app }) {
         const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
@@ -1019,6 +912,10 @@ export default {
 
 .theme--light.v-btn-toggle:not(.v-btn-toggle--group) .v-btn.v-btn .v-icon {
   color: inherit
+}
+
+.v-expansion-panel {
+  background: transparent !important
 }
 
 .v-expansion-panel-header {

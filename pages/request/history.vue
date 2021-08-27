@@ -4,24 +4,8 @@
       <h1 class="mb-4">
         History
       </h1>
-
-      <v-card
-        outlined
-        class="mb-4"
-      >
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-        >
-          Archived Requests
-          <v-spacer />
-          <v-icon
-            :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-          >
-            mdi-archive
-          </v-icon>
-        </v-card-title>
-        <v-divider />
-        <v-list two-line>
+      <sourcery-card title="Archived Requests" icon="mdi-archive">
+        <v-list two-line color="transparent">
           <v-list-item v-if="requests.length == 0">
             <v-list-item-content>
               <v-list-item-subtitle>No past requests found.</v-list-item-subtitle>
@@ -46,7 +30,7 @@
             <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
           </template>
         </v-list>
-      </v-card>
+      </sourcery-card>
 
       <v-card
         outlined
@@ -95,8 +79,13 @@
 </template>
 
 <script>
+import SourceryCard from '~/components/card-with-header.vue'
+
 export default {
     name: 'History',
+    components: {
+        'sourcery-card': SourceryCard
+    },
     async asyncData ({ params, store, app }) {
         if (store.getters['auth/activeUser'].uid) {
             const requests = await app.$fire.firestore

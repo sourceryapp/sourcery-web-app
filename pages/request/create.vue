@@ -1,10 +1,6 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <h1>
-        Create Request
-      </h1>
-
       <!-- <v-alert
         icon="mdi-information"
         text
@@ -30,7 +26,7 @@
         class="elevation-0 transparent"
       >
         <v-stepper-header
-          class="elevation-0 "
+          class="elevation-0 my-4"
         >
           <v-stepper-step
             :complete="formState > 1"
@@ -57,25 +53,11 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
-            <v-card
-              outlined
-              class="mb-4"
-            >
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                Where is your document located?
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-map-marker
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-subtitle>
+            <sourcery-card title="Where is your document located?">
+              <v-card-subtitle class="pa-4 mt-0">
                 During the pandemic, documents can only be requested from our institutional partners.
               </v-card-subtitle>
-            </v-card>
+            </sourcery-card>
             <v-item-group mandatory>
               <v-item
                 v-for="repo in repositories"
@@ -93,7 +75,7 @@
                     gradient="135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%"
                     width="100%"
                     aspect-ratio="4"
-                    min-height="180px"
+                    min-height="240px"
                   >
                     <v-container class="fill-height">
                       <v-row>
@@ -129,13 +111,14 @@
                         </v-col>
                         <v-col cols="2" class="d-flex flex-row-reverse align-end">
                           <v-btn
+                            v-if="$vuetify.breakpoint.smAndUp"
                             color="white"
                             class="black--text"
                             @click="selectRepositoryObj(repo)"
                           >
                             Select
                           </v-btn>
-                          <!-- <v-avatar
+                          <v-avatar
                             v-if="active"
                             class="deep-purple lighten-5 align-end"
                           >
@@ -144,7 +127,7 @@
                             >
                               mdi-check
                             </v-icon>
-                          </v-avatar> -->
+                          </v-avatar>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -165,39 +148,33 @@
             </v-item-group>
           </v-stepper-content>
           <v-stepper-content step="2">
-            <v-card outlined>
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                What is the citation for your document?
-                <v-spacer />
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-format-quote-close
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-subtitle>
+            <sourcery-card title="What is the citation for your document?">
+              <v-card-subtitle class="pt-4 pl-6 mt-0 pr-4">
                 Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
               </v-card-subtitle>
               <v-card-text>
-                <p>Currently requesting from: {{ repository_name }}</p>
                 <v-textarea
                   id="citation"
                   v-model="citation"
                   name="citation"
                   label="Citation"
                   auto-grow
-                  filled
+                  outlined
                   rows="1"
                   hide-details="auto"
+                  class="my-2"
                 />
+                <p
+                  class="pl-2 "
+                >
+                  Currently requesting from: {{ repository_name }}
+                </p>
               </v-card-text>
               <v-card-actions>
                 <v-btn
                   text
-                  @click="formState--"
+                  @click="
+                    formState--"
                 >
                   Previous
                 </v-btn>
@@ -212,25 +189,13 @@
                   Next
                 </v-btn>
               </v-card-actions>
-            </v-card>
+            </sourcery-card>
           </v-stepper-content>
           <v-stepper-content step="3">
-            <v-card outlined>
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                How long is your document?
-                <v-spacer />
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-book-open-page-variant
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
+            <sourcery-card title="How long is your document?">
+              <v-card-text class="pa-4 mt-0">
                 <v-layout>
-                  <v-flex xs6>
+                  <v-flex xs2>
                     <p />
                     <v-text-field
                       id="pages"
@@ -240,11 +205,12 @@
                       type="number"
                       value="1"
                       min="1"
-                      filled
+                      outlined
                       inputmode="numeric"
+                      class="text-body-1"
                     />
                   </v-flex>
-                  <v-flex xs5 offset-xs1>
+                  <v-flex xs5 offset-xs5>
                     <p class="text-caption mb-0 primary--text font-weight-medium">
                       Cost Will Not Exceed
                     </p>
@@ -292,7 +258,7 @@
                   Submit
                 </v-btn>
               </v-card-actions>
-            </v-card>
+            </sourcery-card>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -303,11 +269,15 @@
 <script>
 import { mapGetters } from 'vuex'
 import algoliasearch from 'algoliasearch/lite'
+import SourceryCard from '~/components/card-with-header.vue'
 import 'instantsearch.css/themes/algolia-min.css'
 
 export default {
     name: 'Create',
     auth: true,
+    components: {
+        'sourcery-card': SourceryCard
+    },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
