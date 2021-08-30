@@ -108,9 +108,17 @@ export const actions = {
 
                 authUser.hasPassword = false
 
-                const hasPW = await this.$utils.getCurrentUserHasPassword(authUser)
-                if (hasPW) {
-                    authUser.hasPassword = true
+                try {
+                    const methods = await this.$fire.auth.fetchSignInMethodsForEmail(authUser.email)
+                    if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                        // Has a password.
+                        authUser.hasPassword = true
+                    }
+                    // if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD)) {
+                    //     // Has passwordless login.
+                    // }
+                } catch (error) {
+                    console.log(error)
                 }
 
                 const req = await this.$fire.firestore.collection('requests').where('client_id', '==', authUser.uid).limit(1).get()
