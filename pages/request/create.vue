@@ -61,7 +61,7 @@
             <v-item-group mandatory>
               <v-item
                 v-for="repo in repositories"
-                v-slot="{ toggle }"
+                v-slot="{ active, toggle }"
                 :key="repo.id"
               >
                 <v-card
@@ -72,7 +72,7 @@
                   <v-img
                     :src="`/img/repo/${repo.id}.jpg`"
                     class="align-stretch"
-                    gradient="135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%"
+                    :gradient="active ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
                     width="100%"
                     aspect-ratio="4"
                     min-height="240px"
@@ -118,16 +118,19 @@
                           >
                             Select
                           </v-btn>
-                          <v-avatar
-                            v-if="active"
-                            class="deep-purple lighten-5 align-end"
-                          >
-                            <v-icon
-                              class="primary--text text--darken-4"
+                          <v-fab-transition>
+                            <v-btn
+                              v-if="active && $vuetify.breakpoint.xs"
+                              color="white"
+                              fab
+                              small
+                              @click="selectRepositoryObj(repo)"
                             >
-                              mdi-check
-                            </v-icon>
-                          </v-avatar>
+                              <v-icon>
+                                mdi-arrow-right
+                              </v-icon>
+                            </v-btn>
+                          </v-fab-transition>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -160,15 +163,11 @@
                   label="Citation"
                   auto-grow
                   outlined
-                  rows="1"
-                  hide-details="auto"
+                  rows="3"
+                  :hint="'Currently requesting from: ' + repository_name"
+                  persistent-hint
                   class="my-2"
                 />
-                <p
-                  class="pl-2 "
-                >
-                  Currently requesting from: {{ repository_name }}
-                </p>
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -194,50 +193,55 @@
           <v-stepper-content step="3">
             <sourcery-card title="How long is your document?">
               <v-card-text class="pa-4 mt-0">
-                <v-layout>
-                  <v-flex xs2>
-                    <p />
-                    <v-text-field
-                      id="pages"
-                      v-model="pages"
-                      name="pages"
-                      label="Maximum Pages"
-                      type="number"
-                      value="1"
-                      min="1"
-                      outlined
-                      inputmode="numeric"
-                      class="text-body-1"
-                    />
-                  </v-flex>
-                  <v-flex xs5 offset-xs5>
-                    <p class="text-caption mb-0 primary--text font-weight-medium">
-                      Cost Will Not Exceed
-                    </p>
-                    <!-- <p id="price" class="text-h4 pt-0 font-weight-bold">
+                <v-container>
+                  <v-row class="align-center">
+                    <v-col class="col-4 offset-1">
+                      <v-text-field
+                        id="pages"
+                        v-model="pages"
+                        name="pages"
+                        label="Maximum Pages"
+                        type="text"
+                        value="1"
+                        min="1"
+                        outlined
+                        suffix="pages"
+                        hide-details="auto"
+                        inputmode="numeric"
+                        class="text-body-1"
+                      />
+                    </v-col>
+                    <v-col>
+                      <v-flex class="justify-center">
+                        <p class="text-caption mb-0 primary--text font-weight-medium text-center">
+                          Cost Will Not Exceed
+                        </p>
+                        <!-- <p id="price" class="text-h4 pt-0 font-weight-bold">
                       {{ toDollars(request.pricing.total) }}
                     </p> -->
-                    <p id="price" class="text-h4 pt-0 font-weight-bold">
-                      $0.00
-
-                      <v-tooltip
-                        bottom
-                      >
-                        <template #activator="{ on, attrs }">
-                          <v-icon
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
+                        <p id="price" class="text-h4 pt-0 font-weight-bold text-center">
+                          $0.00
+                          <v-tooltip
+                            bottom
                           >
-                            mdi-information
-                          </v-icon>
-                        </template>
-                        <span>During the development phase, Sourcery does not charge for any requests.</span>
-                      </v-tooltip>
-                    </p>
-                  </v-flex>
-                </v-layout>
+                            <template #activator="{ on, attrs }">
+                              <v-icon
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span>During the development phase, Sourcery does not charge for any requests.</span>
+                          </v-tooltip>
+                        </p>
+                      </v-flex>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-flex class="flex-row justify-center" />
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -461,4 +465,12 @@ export default {
     .active .checkmark{
         display: inline-block;
     } */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>

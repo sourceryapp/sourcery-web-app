@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     v-if="user"
-    v-model="drawer"
+    :value="drawer"
     app
     bottom
     :class="$vuetify.breakpoint.mobile ? 'rounded-t-xl' : ''"
@@ -47,7 +47,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="font-weight-medium">
+            <v-list-item-title class="text-subtitle-2">
               {{ item.title }}
             </v-list-item-title>
           </v-list-item-content>
@@ -69,7 +69,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title class="font-weight-medium">
+            <v-list-item-title class="text-subtitle-2">
               {{ item.title }}
             </v-list-item-title>
           </v-list-item-content>
@@ -100,7 +100,9 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title class="text-subtitle-2">
+              {{ item.title }}
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="toggleDark()">
@@ -110,7 +112,9 @@
             </v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Toggle Dark Mode</v-list-item-title>
+            <v-list-item-title class="text-subtitle-2">
+              Toggle Dark Mode
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -125,11 +129,13 @@
           <v-icon>mdi-logout</v-icon>
         </v-list-item-action>
         <v-list-item-content>
-          <v-list-item-title>Log Out</v-list-item-title>
+          <v-list-item-title class="text-subtitle-2">
+            Log Out
+          </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <template v-slot:append>
+    <template #append>
       <v-list nav dense>
         <v-list-item-group color="primary">
           <v-list-item
@@ -138,7 +144,7 @@
             :to="item.link"
             nuxt
             exact
-            style="min-height: 24px;"
+            style="min-height: 18px;"
           >
             <v-list-item-content>
               <v-list-item-title>
@@ -255,5 +261,8 @@ export default {
 <style scoped>
 .v-list-item__title, .v-list-item__subtitle {
   white-space: wrap;
+}
+.v-list-item--dense .v-list-item__content, .v-list--dense .v-list-item .v-list-item__content {
+  padding: 4px 0;
 }
 </style>

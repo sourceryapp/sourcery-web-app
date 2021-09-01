@@ -237,6 +237,10 @@ export default {
             ]
         }
     },
+    head () {
+        return {
+        }
+    },
     computed: {
         members_sorted () {
             const members_copy = [...this.members].sort(this.sortByLastName)
@@ -251,10 +255,6 @@ export default {
     methods: {
         sortByLastName (a, b) {
             return a.name.split(' ').pop() > b.name.split(' ').pop() ? 1 : -1
-        }
-    },
-    head () {
-        return {
         }
     }
 }

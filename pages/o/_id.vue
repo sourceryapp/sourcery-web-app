@@ -10,7 +10,7 @@
         :height="repositories[0] ? '360px' : '240px'"
         class="pa-0"
       >
-        <template v-slot:img="{ props }">
+        <template #img="{ props }">
           <v-img
             v-bind="props"
             :gradient="repositories[0] ? '0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%' : '0deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%'"
@@ -119,13 +119,13 @@ export default {
         'sourcery-nav-drawer': NavigationDrawer,
         'sourcery-card': SourceryCard
     },
-    async fetch () {
-        await this.getOrganization(this.$route.params.id)
-    },
     data: () => ({
         drawer: null
 
     }),
+    async fetch () {
+        await this.getOrganization(this.$route.params.id)
+    },
     computed: {
         ...mapGetters({
             organization: 'organizations/getOrganization',
