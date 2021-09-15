@@ -10,7 +10,7 @@
       elevate-on-scroll
     >
       <v-app-bar-nav-icon
-        v-if="user && $vuetify.breakpoint.smAndDown"
+        v-if="user && $vuetify.breakpoint.mobile"
         color="primary"
         class="float-left"
         @click="drawer !== null ? drawer = !drawer : drawer = $vuetify.breakpoint.mobile"

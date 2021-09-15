@@ -32,12 +32,12 @@ export default {
     components: {
         OrganizationListItem
     },
-    data: () => ({
-
-    }),
     async fetch () {
         await this.getOrganizations()
     },
+    data: () => ({
+
+    }),
     computed: {
         ...mapGetters({
             organizations: 'organizations/getOrganizations'

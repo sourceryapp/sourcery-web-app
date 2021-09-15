@@ -6,54 +6,59 @@
       </h1> -->
 
       <sourcery-card title="Your Requests" icon="mdi-file-search" class="mt-16">
-        <v-list two-line color="transparent" class="px-2 pt-4">
-          <v-list-item v-if="requests.length == 0" to="/request/create">
-            <v-list-item-content>
-              <v-list-item-title class="font-weight-medium">
-                No Active Requests
-              </v-list-item-title>
-              <v-list-item-subtitle class="mt-1">
-                Click to create a new request.
-              </v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon class="mr-n2">
-                <v-icon color="grey">
-                  mdi-plus-circle
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
-
-          <template v-for="(request, index) in requests">
-            <v-list-item
+        <template v-for="(request) in requests">
+          <v-hover
+            v-slot="{ hover }"
+            :key="request.id"
+          >
+            <v-card
               v-if="requests && !request.request().isArchived()"
-              :key="request.id"
               :to="'/request/' + request.id"
+              class="my-4 rounded-lg"
+              outlined
             >
-              <v-list-item-content>
-                <v-list-item-title
-                  class="text-truncate"
-                >
-                  {{ request.data().label }}
-                </v-list-item-title>
-                <v-list-item-subtitle
-                  class="text-truncate"
-                >
-                  {{ request.data().citation }}
-                </v-list-item-subtitle>
-              </v-list-item-content>
-              <v-chip
-                color="deep-purple lighten-5"
-                text-color="primary darken-2"
-                style="text-transform: capitalize"
-              >
-                {{ request.request().prettyStatus() }}
-              </v-chip>
-            </v-list-item>
-            <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`" />
-          </template>
-        </v-list>
+              <v-container>
+                <v-row>
+                  <v-col class="pa-0">
+                    <v-card-title>
+                      {{ request.data().label }}
+                    </v-card-title>
+                    <v-card-subtitle>
+                      {{ request.data().citation }}
+                      <br>
+                      {{ request.data().repository.name }}
+                      <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
+                    </v-card-subtitle>
+                    <v-fade-transition>
+                      <v-overlay
+                        v-if="hover"
+                        absolute
+                        color="primary"
+                        opacity="0.1"
+                        class="rounded-lg"
+                        z-index="1"
+                      />
+                    </v-fade-transition>
+                  </v-col>
+                  <v-col
+                    cols="auto"
+                    class="d-flex align-center justify-center rounded-r-lg px-4"
+                    z-index="2"
+                    :style="
+                      'background: var(--sourcery-' + (request.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
+                  >
+                    <p
+                      class="font-weight-bold text-button ma-0"
+                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+                    >
+                      {{ request.request().prettyStatus() }}
+                    </p>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-hover>
+        </template>
       </sourcery-card>
       <!-- <sourcery-card title="Your Jobs" icon="mdi-briefcase">
         <v-list two-line color="transparent" class="px-2">
@@ -138,6 +143,7 @@ export default {
             const requests = await app.$fire.firestore
                 .collection('requests')
                 .where('client_id', '==', store.getters['auth/activeUser'].uid)
+                .orderBy('status', 'desc')
                 .orderBy('created_at', 'desc')
                 .get()
 

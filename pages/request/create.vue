@@ -72,7 +72,7 @@
                   <v-img
                     :src="`/img/repo/${repo.id}.jpg`"
                     class="align-stretch"
-                    :gradient="active ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
+                    :gradient="active && $vuetify.breakpoint.xs ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
                     width="100%"
                     aspect-ratio="4"
                     min-height="240px"

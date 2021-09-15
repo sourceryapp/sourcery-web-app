@@ -327,19 +327,6 @@ export default {
     data: () => ({
         isIntersecting: true
     }),
-    head () {
-        return {
-            script: [
-                {
-                    src:
-                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
-                    integrity:
-                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
-                    crossorigin: 'anonymous'
-                }
-            ]
-        }
-    },
     methods: {
         smoothScroll (target) {
             let scrollContainer = target
@@ -376,6 +363,19 @@ export default {
         },
         onIntersect (entries, observer) {
             this.isIntersecting = entries[0].isIntersecting
+        }
+    },
+    head () {
+        return {
+            script: [
+                {
+                    src:
+                        'https://cdnjs.cloudflare.com/ajax/libs/stickybits/3.7.2/stickybits.min.js',
+                    integrity:
+                        'sha256-pytD+8MI6QUO5dayaQjTboZuqXv8YU05ZuQFl4NijpM=',
+                    crossorigin: 'anonymous'
+                }
+            ]
         }
     }
 }

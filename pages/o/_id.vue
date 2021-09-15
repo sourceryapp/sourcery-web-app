@@ -119,13 +119,13 @@ export default {
         'sourcery-nav-drawer': NavigationDrawer,
         'sourcery-card': SourceryCard
     },
+    async fetch () {
+        await this.getOrganization(this.$route.params.id)
+    },
     data: () => ({
         drawer: null
 
     }),
-    async fetch () {
-        await this.getOrganization(this.$route.params.id)
-    },
     computed: {
         ...mapGetters({
             organization: 'organizations/getOrganization',
