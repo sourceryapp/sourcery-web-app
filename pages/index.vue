@@ -13,7 +13,7 @@
       <div class="header-content">
         <img
           class="header__logo"
-          src="../static/img/logo-wordmark-beta-white.svg"
+          src="../static/img/logo-wordmark-white.svg"
           alt=""
         >
         <img

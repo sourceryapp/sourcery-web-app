@@ -1,10 +1,6 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <h1>
-        Create Request
-      </h1>
-
       <v-alert
         v-if="!user"
         icon="mdi-information"
@@ -51,7 +47,7 @@
         class="elevation-0 transparent"
       >
         <v-stepper-header
-          class="elevation-0 "
+          class="elevation-0 my-4"
         >
           <v-stepper-step
             :complete="formState > 1"
@@ -78,29 +74,15 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content step="1">
-            <v-card
-              outlined
-              class="mb-4"
-            >
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                Where is your document located?
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-map-marker
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-subtitle>
+            <sourcery-card title="Where is your document located?">
+              <v-card-subtitle class="pa-4 mt-0">
                 During the pandemic, documents can only be requested from our institutional partners.
               </v-card-subtitle>
-            </v-card>
+            </sourcery-card>
             <v-item-group mandatory>
               <v-item
                 v-for="repo in repositories"
-                v-slot="{ toggle }"
+                v-slot="{ active, toggle }"
                 :key="repo.id"
               >
                 <v-card
@@ -111,10 +93,10 @@
                   <v-img
                     :src="`/img/repo/${repo.id}.jpg`"
                     class="align-stretch"
-                    gradient="135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%"
+                    :gradient="active && $vuetify.breakpoint.xs ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
                     width="100%"
                     aspect-ratio="4"
-                    min-height="180px"
+                    min-height="240px"
                   >
                     <v-container class="fill-height">
                       <v-row>
@@ -150,22 +132,26 @@
                         </v-col>
                         <v-col cols="2" class="d-flex flex-row-reverse align-end">
                           <v-btn
+                            v-if="$vuetify.breakpoint.smAndUp"
                             color="white"
                             class="black--text"
                             @click="selectRepositoryObj(repo)"
                           >
                             Select
                           </v-btn>
-                          <!-- <v-avatar
-                            v-if="active"
-                            class="deep-purple lighten-5 align-end"
-                          >
-                            <v-icon
-                              class="primary--text text--darken-4"
+                          <v-fab-transition>
+                            <v-btn
+                              v-if="active && $vuetify.breakpoint.xs"
+                              color="white"
+                              fab
+                              small
+                              @click="selectRepositoryObj(repo)"
                             >
-                              mdi-check
-                            </v-icon>
-                          </v-avatar> -->
+                              <v-icon>
+                                mdi-arrow-right
+                              </v-icon>
+                            </v-btn>
+                          </v-fab-transition>
                         </v-col>
                       </v-row>
                     </v-container>
@@ -186,39 +172,29 @@
             </v-item-group>
           </v-stepper-content>
           <v-stepper-content step="2">
-            <v-card outlined>
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                What is the citation for your document?
-                <v-spacer />
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-format-quote-close
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-subtitle>
+            <sourcery-card title="What is the citation for your document?">
+              <v-card-subtitle class="pt-4 pl-6 mt-0 pr-4">
                 Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collection, etc.).
               </v-card-subtitle>
               <v-card-text>
-                <p>Currently requesting from: {{ repository_name }}</p>
                 <v-textarea
                   id="citation"
                   v-model="citation"
                   name="citation"
                   label="Citation"
                   auto-grow
-                  filled
-                  rows="1"
-                  hide-details="auto"
+                  outlined
+                  rows="3"
+                  :hint="'Currently requesting from: ' + repository_name"
+                  persistent-hint
+                  class="my-2"
                 />
               </v-card-text>
               <v-card-actions>
                 <v-btn
                   text
-                  @click="formState--"
+                  @click="
+                    formState--"
                 >
                   Previous
                 </v-btn>
@@ -233,66 +209,60 @@
                   Next
                 </v-btn>
               </v-card-actions>
-            </v-card>
+            </sourcery-card>
           </v-stepper-content>
           <v-stepper-content step="3">
-            <v-card outlined>
-              <v-card-title
-                :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-              >
-                How long is your document?
-                <v-spacer />
-                <v-icon
-                  :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-                >
-                  mdi-book-open-page-variant
-                </v-icon>
-              </v-card-title>
-              <v-divider />
-              <v-card-text>
-                <v-layout>
-                  <v-flex xs6>
-                    <p />
-                    <v-text-field
-                      id="pages"
-                      v-model="pages"
-                      name="pages"
-                      label="Maximum Pages"
-                      type="number"
-                      value="1"
-                      min="1"
-                      filled
-                      inputmode="numeric"
-                    />
-                  </v-flex>
-                  <v-flex xs5 offset-xs1>
-                    <p class="text-caption mb-0 primary--text font-weight-medium">
-                      Cost Will Not Exceed
-                    </p>
-                    <p v-if="!nulledRequestPricing" id="price" class="text-h4 pt-0 font-weight-bold">
+            <sourcery-card title="How long is your document?">
+              <v-card-text class="pa-4 mt-0">
+                <v-container>
+                  <v-row class="align-center">
+                    <v-col class="col-4 offset-1">
+                      <v-text-field
+                        id="pages"
+                        v-model="pages"
+                        name="pages"
+                        label="Maximum Pages"
+                        type="text"
+                        value="1"
+                        min="1"
+                        outlined
+                        suffix="pages"
+                        hide-details="auto"
+                        inputmode="numeric"
+                        class="text-body-1"
+                      />
+                    </v-col>
+                    <v-col>
+                      <v-flex class="justify-center">
+                        <p class="text-caption mb-0 primary--text font-weight-medium text-center">
+                          Cost Will Not Exceed
+                        </p>
+                        <!-- <p id="price" class="text-h4 pt-0 font-weight-bold">
                       {{ toDollars(request.pricing.total) }}
-                    </p>
-                    <p v-else id="price" class="text-h4 pt-0 font-weight-bold">
-                      $0.00
-
-                      <v-tooltip
-                        bottom
-                      >
-                        <template #activator="{ on, attrs }">
-                          <v-icon
-                            color="primary"
-                            dark
-                            v-bind="attrs"
-                            v-on="on"
+                    </p> -->
+                        <p id="price" class="text-h4 pt-0 font-weight-bold text-center">
+                          $0.00
+                          <v-tooltip
+                            bottom
                           >
-                            mdi-information
-                          </v-icon>
-                        </template>
-                        <span>During the development phase, Sourcery does not charge for any requests.</span>
-                      </v-tooltip>
-                    </p>
-                  </v-flex>
-                </v-layout>
+                            <template #activator="{ on, attrs }">
+                              <v-icon
+                                color="primary"
+                                dark
+                                v-bind="attrs"
+                                v-on="on"
+                              >
+                                mdi-information-outline
+                              </v-icon>
+                            </template>
+                            <span>During the development phase, Sourcery does not charge for any requests.</span>
+                          </v-tooltip>
+                        </p>
+                      </v-flex>
+                    </v-col>
+                  </v-row>
+                </v-container>
+                <v-flex class="flex-row justify-center" />
               </v-card-text>
               <v-card-actions>
                 <v-btn
@@ -313,7 +283,7 @@
                   Submit
                 </v-btn>
               </v-card-actions>
-            </v-card>
+            </sourcery-card>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -330,12 +300,18 @@ import 'instantsearch.css/themes/algolia-min.css'
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
 import FinishEmailLinkRegistrationDialog from '@/components/finish-email-link-registration.vue'
 import ReachedRequestLimitDialog from '@/components/reached-request-limit-dialog.vue'
+import SourceryCard from '@/components/card-with-header.vue'
 // import CallToActionAlert from '@/components/call-to-action-alert.vue'
 
 export default {
     name: 'Create',
     auth: true,
-    components: { RegisterToSubmitRequestDialog, FinishEmailLinkRegistrationDialog, ReachedRequestLimitDialog },
+    components: {
+        RegisterToSubmitRequestDialog,
+        FinishEmailLinkRegistrationDialog,
+        ReachedRequestLimitDialog,
+        'sourcery-card': SourceryCard
+    },
     async asyncData ({ params, store, app }) {
         let repositories = { docs: [] }
         try {
@@ -548,4 +524,12 @@ export default {
     .active .checkmark{
         display: inline-block;
     } */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
 </style>

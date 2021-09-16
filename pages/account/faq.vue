@@ -18,17 +18,12 @@
           <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
         </v-card-text>
       </v-card> -->
-      <v-card outlined>
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-        >
-          FAQ
-        </v-card-title>
-        <v-divider />
+      <sourcery-card title="FAQ">
         <v-expansion-panels flat tile>
           <v-expansion-panel
             v-for="(item,i) in items"
             :key="i"
+            color="transparent"
           >
             <v-expansion-panel-header class="text-h6">
               {{ item.question }}
@@ -57,14 +52,19 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-      </v-card>
+      </sourcery-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+import SourceryCard from '~/components/card-with-header.vue'
+
 export default {
     name: 'FAQ',
+    components: {
+        'sourcery-card': SourceryCard
+    },
     data () {
         return {
             items: [
@@ -115,5 +115,8 @@ export default {
 <style scoped>
 .v-expansion-panel-header {
   padding: 16px
+}
+.v-expansion-panel {
+  background: transparent !important
 }
 </style>

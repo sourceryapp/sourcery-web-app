@@ -5,19 +5,8 @@
         Feedback
       </h1>
       <v-form ref="feedbackForm" @submit.prevent="sendFeedback">
-        <v-card outlined>
-          <v-card-title
-            :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-          >
-            Feedback
-            <v-icon
-              :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-            >
-              mdi-comment-quote
-            </v-icon>
-          </v-card-title>
-          <v-divider />
-          <v-card-text class="pb-0">
+        <sourcery-card title="Feedback" icon="mdi-comment-quote">
+          <v-card-text class="pb-0 pt-4">
             <p>Complete this form to report a bug or request a feature.</p>
             <v-text-field
               v-model="formData.name"
@@ -46,15 +35,20 @@
               Submit
             </v-btn>
           </v-card-actions>
-        </v-card>
+        </sourcery-card>
       </v-form>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-export default {
+import SourceryCard from '~/components/card-with-header.vue'
 
+export default {
+    name: 'Feedback',
+    components: {
+        'sourcery-card': SourceryCard
+    },
     data () {
         return {
             formData: {
