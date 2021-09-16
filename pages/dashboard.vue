@@ -73,7 +73,7 @@
         </template>
       </sourcery-card>
       <sourcery-card v-if="user" title="Your Jobs" icon="mdi-briefcase">
-        <none-found-card v-if="requests.length == 0" text="No Active Jobs." />
+        <none-found-card v-if="jobs.length == 0" text="No Active Jobs." />
 
         <template v-for="job in jobs">
           <v-hover
