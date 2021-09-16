@@ -12,6 +12,12 @@
       </v-card>
 
       <sourcery-card v-if="user" title="Your Requests" icon="mdi-file-search" class="mt-16">
+        <none-found-card v-if="requests.length == 0" text="No Active Requests." to="/request/create">
+          Create<span class="hidden-sm-and-down">&nbsp;Request</span>
+          <v-icon right>
+            mdi-open-in-new
+          </v-icon>
+        </none-found-card>
         <template v-for="(request) in requests">
           <v-hover
             v-slot="{ hover }"
@@ -66,36 +72,62 @@
           </v-hover>
         </template>
       </sourcery-card>
-      <!-- <sourcery-card title="Your Jobs" icon="mdi-briefcase">
-        <v-list two-line color="transparent" class="px-2">
-          <v-list-item v-if="jobs.length == 0">
-            <v-list-item-content>
-              <v-list-item-title>No Active Jobs</v-list-item-title>
-              <v-list-item-subtitle>Click to find available jobs.</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn icon ripple to="/jobs">
-                <v-icon color="grey">
-                  mdi-magnify
-                </v-icon>
-              </v-btn>
-            </v-list-item-action>
-          </v-list-item>
+      <sourcery-card v-if="user" title="Your Jobs" icon="mdi-briefcase">
+        <none-found-card v-if="requests.length == 0" text="No Active Jobs." />
 
-          <template v-for="(job, index) in jobs">
-            <v-list-item :key="index" :to="'/jobs/' + job.id">
-              <v-list-item-content>
-                <v-list-item-title>{{ job.data().label }}</v-list-item-title>
-                <v-list-item-subtitle>{{ job.data().citation }}</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-chip color="secondary" text-color="white">
-                {{ job.request().prettyStatus() }}
-              </v-chip>
-            </v-list-item>
-            <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`" />
-          </template>
-        </v-list>
-      </sourcery-card> -->
+        <template v-for="job in jobs">
+          <v-hover
+            v-slot="{ hover }"
+            :key="`j` + job.id"
+          >
+            <v-card
+              v-if="job && !job.request().isArchived()"
+              :to="'/jobs/' + job.id"
+              class="my-4 rounded-lg"
+              outlined
+            >
+              <v-container>
+                <v-row>
+                  <v-col class="pa-0">
+                    <v-card-title>
+                      {{ job.data().label }}
+                    </v-card-title>
+                    <v-card-subtitle>
+                      {{ job.data().citation }}
+                      <br>
+                      {{ job.data().repository.name }}
+                    </v-card-subtitle>
+                    <v-fade-transition>
+                      <v-overlay
+                        v-if="hover"
+                        absolute
+                        color="primary"
+                        opacity="0.1"
+                        class="rounded-lg"
+                        z-index="1"
+                      />
+                    </v-fade-transition>
+                  </v-col>
+                  <v-col
+                    cols="auto"
+                    class="d-flex align-center justify-center rounded-r-lg px-4"
+                    z-index="2"
+                    :style="
+                      'background: var(--sourcery-' + (job.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
+                  >
+                    <p
+                      class="font-weight-bold text-button ma-0"
+                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+                    >
+                      {{ job.request().prettyStatus() }}
+                    </p>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-hover>
+        </template>
+      </sourcery-card>
 
       <div v-if="user" class="text-center mt-8">
         <v-btn color="grey darken-1" to="/request/history" text>
@@ -111,6 +143,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import NoneFoundCard from '@/components/none-found-card.vue'
 import SourceryCard from '~/components/card-with-header.vue'
 
 // TODO Not sure why addToHomeScreen is here
@@ -120,7 +153,8 @@ export default {
 
     name: 'Dashboard',
     components: {
-        'sourcery-card': SourceryCard
+        'sourcery-card': SourceryCard,
+        'none-found-card': NoneFoundCard
     },
     async asyncData ({ params, store, app }) {
         if (store.getters['auth/activeUser'] && store.getters['auth/activeUser'].uid) {
