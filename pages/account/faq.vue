@@ -1,23 +1,6 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <h1 class="mb-4">
-        FAQ
-      </h1>
-      <!-- <v-banner>
-        <div class="text-h5">
-          Need help?
-        </div>
-        Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.
-      </v-banner>
-      <v-card-title class="text-h5">
-        Need Help?
-      </v-card-title>
-      <v-card>
-        <v-card-text>
-          <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
-        </v-card-text>
-      </v-card> -->
       <sourcery-card title="FAQ">
         <v-expansion-panels flat tile>
           <v-expansion-panel

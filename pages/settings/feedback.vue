@@ -1,9 +1,6 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <h1 class="mb-4">
-        Feedback
-      </h1>
       <v-form ref="feedbackForm" @submit.prevent="sendFeedback">
         <sourcery-card title="Feedback" icon="mdi-comment-quote">
           <v-card-text class="pb-0 pt-4">
