@@ -5,7 +5,7 @@
         History
       </h1>
       <sourcery-card title="Archived Requests" icon="mdi-archive">
-        <none-found-card v-if="requests.length == 0" text="No past requests found." to="/request/create">
+        <none-found-card v-if="requests.length == 0 || requests[0].id" text="No past requests found." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
           <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
             mdi-open-in-new
