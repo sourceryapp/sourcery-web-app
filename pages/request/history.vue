@@ -68,7 +68,7 @@
         </v-list>
       </sourcery-card>
 
-      <sourcery-card title="Completed Jobs" icon="mdi-archive">
+      <sourcery-card v-if="isOrgMember" title="Completed Jobs" icon="mdi-archive">
         <none-found-card v-if="jobs.length == 0" text="No past jobs found." />
         <template v-for="job in jobs">
           <v-hover
@@ -130,6 +130,7 @@
 
 <script>
 import NoneFoundCard from '@/components/none-found-card.vue'
+import { mapGetters } from 'vuex'
 import SourceryCard from '~/components/card-with-header.vue'
 
 export default {
@@ -161,7 +162,10 @@ export default {
     computed: {
         user () {
             return this.$store.getters['auth/activeUser']
-        }
+        },
+        ...mapGetters({
+            isOrgMember: 'meta/isOrgMember'
+        })
     },
     mounted () {
         this.retrieveRepositoryIdsOwned().then((ids) => {
