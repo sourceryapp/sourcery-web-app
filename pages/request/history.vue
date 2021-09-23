@@ -7,7 +7,7 @@
       <sourcery-card title="Archived Requests" icon="mdi-archive">
         <none-found-card v-if="requests.length == 0" text="No past requests found." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
-          <v-icon right>
+          <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
             mdi-open-in-new
           </v-icon>
         </none-found-card>
@@ -149,7 +149,7 @@ export default {
                 .get()
             console.log(requests.docs)
             return {
-                requests: requests.docs
+                requests: Array.from(requests.docs)
             }
         }
     },

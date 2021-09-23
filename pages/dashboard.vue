@@ -14,7 +14,7 @@
       <sourcery-card v-if="user" title="Your Requests" icon="mdi-file-search" class="mt-16">
         <none-found-card v-if="requests.length == 0" text="No Active Requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
-          <v-icon right>
+          <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
             mdi-open-in-new
           </v-icon>
         </none-found-card>
