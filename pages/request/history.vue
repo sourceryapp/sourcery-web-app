@@ -147,6 +147,7 @@ export default {
                 .where('status', '==', 'archived')
                 .orderBy('created_at', 'desc')
                 .get()
+            console.log(requests.docs)
             return {
                 requests: requests.docs
             }
@@ -179,13 +180,15 @@ export default {
             return ids
         },
         async fetchJobs () {
-            const jobs = await this.$fire.firestore
-                .collection('requests')
-                .where('repository_id', 'in', this.repositories_owned)
-                .orderBy('created_at', 'desc')
-                .get()
+            if (this.repositories_owned.length > 0) {
+                const jobs = await this.$fire.firestore
+                    .collection('requests')
+                    .where('repository_id', 'in', this.repositories_owned)
+                    .orderBy('created_at', 'desc')
+                    .get()
 
-            this.jobs = jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+                this.jobs = jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+            }
         }
     }
 }
