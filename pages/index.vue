@@ -5,12 +5,12 @@
 				<img class="header__logo" src="../static/img/logo-wordmark-beta-white.svg" alt="">
 				<img class="header__mockup" src="../static/img/sourcery-mockup-no-shadow.png" alt="">
 				<div class="header__buttons">
-					<a href="/register" class="button button__mobile-block button__lg button__white">
+					<a href="https://mailchi.mp/4de98c4698dd/coming-soon" class="button button__mobile-block button__lg button__white" target="mailchimp">
 						Sign Up
 					</a>
-					<a href="/login" class="button button__mobile-block button__lg button__outline button__white-outline">
+					<!-- <a href="/login" class="button button__mobile-block button__lg button__outline button__white-outline">
 						Log In
-					</a>
+					</a> -->
 				</div>
 				<div class="header__slogan">
 					<h1>Your sources, like magic</h1>
@@ -120,7 +120,7 @@
 				<a href="/about" class="button button__sm button__outline button__mobile-block button__purple">Learn More</a>
 			</div>
 		</section>
-		
+
 		<section id="cta">
 			<div class="section-container">
 				<div class="section-header">
@@ -128,10 +128,10 @@
 					<h1 id="ready">Ready to try Sourcery?</h1>
 				</div>
 				<div class="cta-buttons">
-					<a href="/login" class="button button___mobile-block button__lg button__outline">
+					<!-- <a href="/login" class="button button___mobile-block button__lg button__outline">
 						Log In
-					</a>
-					<a href="/register" class="button button___mobile-block button__lg button__purple">
+					</a> -->
+					<a href="https://mailchi.mp/4de98c4698dd/coming-soon" class="button button___mobile-block button__lg button__purple" target="mailchimp">
 						Sign Up
 					</a>
 				</div>
@@ -139,7 +139,7 @@
 		</section>
 
 		<footer class="footer__light">
-			
+
 			<div class="footer-content">
 				<a href="https://sourceryapp.org/">
 					<img src="../static/img/sourcery-logo-purple.svg" alt="">
@@ -167,7 +167,7 @@
 		</footer>
 
 		<footer>
-			
+
 		</footer>
 
 		<script
@@ -280,7 +280,7 @@ header {
 	margin: 0 auto;
 	display: grid;
 	align-items: center;
-	grid-template-areas: 
+	grid-template-areas:
 		"logo"
 		"mockup"
 		"buttons"
@@ -504,7 +504,7 @@ footer {
 	}
 
 	.header-content {
-		grid-template-areas: 
+		grid-template-areas:
 			"logo mockup"
 			"slogan mockup"
 			"buttons mockup";
@@ -525,12 +525,12 @@ footer {
 		grid-template-columns: 1fr 1fr;
 		align-items: center;
 	}
-	
+
 	.feature-illustration {
 		flex: 1;
 		height: 100%;
 	}
-	
+
 	.feature__text-first .feature-desc{
 		order: -1;
 	}
