@@ -381,7 +381,7 @@ header {
 }
 
 .button {
-	transition: transform 100ms ease-in;
+	transition: transform 100ms ease-in, border-radius 100ms ease-in;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -393,7 +393,8 @@ header {
 }
 
 .button:hover, .button:focus {
-	transform: scale(1.02);
+	transform: scale(1.03);
+	border-radius: 8px;
 }
 
 .button:active {
@@ -528,8 +529,6 @@ footer {
 	.feature-illustration {
 		flex: 1;
 		height: 100%;
-		/* width: auto; */
-		/* width: 50%; */
 	}
 
 	.feature__text-first .feature-desc{
@@ -538,7 +537,6 @@ footer {
 
 	.feature-desc {
 		flex: 1;
-		/* width: 50%; */
 		color: var(--sourcery-900);
 	}
 
