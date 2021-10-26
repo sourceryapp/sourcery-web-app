@@ -1,163 +1,162 @@
 <template>
-    <v-card>
-        <v-card-title class="headline">Add a new card</v-card-title>
-        <v-card-text>
-            <v-card flat color="transparent">
-                <v-form @submit.prevent="addCard">
+  <v-card>
+    <v-card-title class="text-h5">
+      Add a new card
+    </v-card-title>
+    <v-card-text>
+      <v-card flat color="transparent">
+        <v-form @submit.prevent="addCard">
+          <div class="form-row">
+            <!-- Used to display form errors. -->
+            <v-alert
+              id="card-errors"
+              :value="error"
+              type="error"
+              class="my-2"
+              role="alert"
+            >
+              {{ error.message }}
+            </v-alert>
 
-                    <div class="form-row">
+            <v-text-field v-model="nameOnCard" type="text" name="name" label="Name on Card" />
+            <div ref="card" class="mt-3">
+              Loading...
+            </div>
+          </div>
 
-                        <!-- Used to display form errors. -->
-                        <v-alert
-                        :value="error"
-                        type="error"
-                        class="my-2"
-                        id="card-errors"
-                        role="alert"
-                        >
-                            {{ error.message }}
-                        </v-alert>
+          <v-checkbox
+            v-model="agree"
+            label="I permit Sourcery to use this card for payments."
+            hint="You are authorizing Sourcery to send instructions to the financial institution that issued my card to take payments from my card account in accordance with the terms of my agreement with you."
+            :persistent-hint="true"
+          />
+          <p class="text-caption my-2" />
 
-                        <v-text-field type="text" name="name" v-model="nameOnCard" label="Name on Card"></v-text-field>
-                        <div ref="card" class="mt-3">Loading...</div>
-
-
-                    </div>
-
-                    <v-checkbox
-                    v-model="agree"
-                    label="I permit Sourcery to use this card for payments."
-                    hint="You are authorizing Sourcery to send instructions to the financial institution that issued my card to take payments from my card account in accordance with the terms of my agreement with you."
-                    :persistent-hint="true"
-                    ></v-checkbox>
-                    <p class="caption my-2"></p>
-
-                    <v-layout
-                        class="mt-4"
-                        justify-end
-
-                    >
-                        <v-btn
-                        @click="dialog=true"
-                        class="primary"
-                        type="submit"
-                        :loading="loading"
-                        :disabled="!agree"
-                        >
-                        Add Card
-                        </v-btn>
-                    </v-layout>
-                </v-form>
-
-            </v-card>
-        </v-card-text>
-    </v-card>
-
-
+          <v-layout
+            class="mt-4"
+            justify-end
+          >
+            <v-btn
+              class="primary"
+              type="submit"
+              :loading="loading"
+              :disabled="!agree"
+              @click="dialog=true"
+            >
+              Add Card
+            </v-btn>
+          </v-layout>
+        </v-form>
+      </v-card>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
+/* global Stripe */
 import { mapGetters } from 'vuex'
-import { functions } from "~/plugins/firebase-client-init.js"
 
-let stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY);
-let elements = stripe.elements();
+const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY)
+const elements = stripe.elements()
 
+export default {
+    name: 'AddCard',
+    data () {
+        return {
+            cardElement: null,
+            nameOnCard: this.$store.getters['auth/activeUser'].displayName,
+            error: false,
+            setupIntents: this.$fire.functions.httpsCallable('stripeSetupIntents'),
+            saveCard: this.$fire.functions.httpsCallable('stripeSaveCard'),
+            agree: false,
+            client_secret: false,
+            loading: false,
+            show: false
+        }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'auth/activeUser',
+            isResearcher: 'meta/isResearcher',
+            isSourcerer: 'meta/isSourcerer',
+            balance: 'meta/balance',
+            canMakePayments: 'meta/canMakePayments'
+        })
+    },
+    async mounted () {
+        // Get the client secret and store it
+        const { data: { client_secret } } = await this.setupIntents()
+        this.client_secret = client_secret
 
-	export default {
-        name: "addCard",
-		data() {
-			return {
-                cardElement: null,
-                nameOnCard: this.$store.state.auth.user.displayName,
-                error: false,
-                setupIntents: functions.httpsCallable('stripeSetupIntents'),
-                saveCard: functions.httpsCallable('stripeSaveCard'),
-                agree: false,
-                client_secret: false,
-                loading: false,
-                show: false
-			}
-        },
-        methods: {
-            addCard(){
-                this.loading = true;
-                stripe.confirmCardSetup(
-                    this.client_secret,
-                    {
-                    payment_method: {
-                        card: this.cardElement,
-                        billing_details: {
-                            name: this.nameOnCard,
-                        },
-                    },
-                    }
-                ).then(result => {
-                    if (result.error) {
-                        this.error = result.error;
-                        this.loading = false;
-                    } else {
-                        // The setup has succeeded. Display a success message and send
-                        // result.setupIntent.payment_method to your server to save the
-                        // card to a Customer
-                        console.log("Success", result);
-                        this.saveCard({
-                            customer: this.$store.state.meta.stripeCustomerId,
-                            payment_method: result.setupIntent.payment_method
-                        }).then(async result => {
-                            if(result.data.object == 'customer'){
-                                this.$store.commit('meta/setStripeCustomerId', result.data.id);
-                                await this.$store.dispatch('meta/save', 'stripeCustomerId');
-                            }
-                            this.cardAdded();
-                        })
-
-                    }
-                });
-            },
-            /** Runs when a card is successfully added */
-            cardAdded(){
-                this.$emit('done');
-                this.loading = false;
-                this.agree = false;
-                this.cardElement.clear();
-            }
-        },
-        computed: {
-            ...mapGetters({
-                user: 'auth/activeUser',
-                isResearcher: 'meta/isResearcher',
-                isSourcerer: 'meta/isSourcerer',
-                balance: 'meta/balance',
-                canMakePayments: 'meta/canMakePayments'
-            }),
-        },
-        async mounted() {
-            console.log(this.value);
-            // Get the client secret and store it
-            let {data: { client_secret }} = await this.setupIntents();
-            this.client_secret = client_secret;
-
-            // Setup the card element for stripe
-            // Get a previously generated card, if it exists.
-            this.cardElement = elements.getElement('card') || elements.create('card', {
+        // Setup the card element for stripe
+        // Get a previously generated card, if it exists.
+        this.cardElement = elements.getElement('card') || elements.create('card', {
+            style: {
                 base: {
                     color: '#32325d',
                     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
                     fontSmoothing: 'antialiased',
                     fontSize: '16px',
                     '::placeholder': {
-                    color: '#aab7c4'
+                        color: '#aab7c4'
                     }
                 },
                 invalid: {
                     color: '#fa755a',
                     iconColor: '#fa755a'
                 }
-            });
-            this.cardElement.mount(this.$refs.card);
+            }
+        })
+        if (typeof this.$refs.card !== 'undefined') {
+            this.cardElement.mount(this.$refs.card)
+        } else {
+            console.warn('this.$refs.card is not defined', this.$refs)
         }
-	}
+    },
+    methods: {
+        addCard () {
+            this.loading = true
+            stripe.confirmCardSetup(
+                this.client_secret,
+                {
+                    payment_method: {
+                        card: this.cardElement,
+                        billing_details: {
+                            name: this.nameOnCard
+                        }
+                    }
+                }
+            ).then((result) => {
+                if (result.error) {
+                    this.error = result.error
+                    this.loading = false
+                } else {
+                    // The setup has succeeded. Display a success message and send
+                    // result.setupIntent.payment_method to your server to save the
+                    // card to a Customer
+                    console.log('Success', result)
+                    this.saveCard({
+                        customer: this.$store.state.meta.stripeCustomerId,
+                        payment_method: result.setupIntent.payment_method
+                    }).then(async (result) => {
+                        if (result.data.object === 'customer') {
+                            this.$store.commit('meta/setStripeCustomerId', result.data.id)
+                            await this.$store.dispatch('meta/save', 'stripeCustomerId')
+                        }
+                        this.cardAdded()
+                    })
+                }
+            })
+        },
+        /** Runs when a card is successfully added */
+        cardAdded () {
+            this.$emit('done')
+            this.loading = false
+            this.agree = false
+            this.cardElement.clear()
+        }
+    }
+}
 </script>
 
 <style scoped>

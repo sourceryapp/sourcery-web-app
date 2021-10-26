@@ -1,22 +1,33 @@
 module.exports = {
-  root: true,
-  env: {
-    browser: true,
-    node: true,
-    es6: true
-  },
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
-  extends: [
-    // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential'
-  ],
-  // required to lint *.vue files
-  plugins: [
-    'vue'
-  ],
-  // add your custom rules here
-  rules: {}
+    root: true,
+    globals: {
+        process: true
+    },
+    env: {
+        browser: true,
+        node: true
+    },
+    parserOptions: {
+        parser: 'babel-eslint'
+    },
+    extends: [
+        '@nuxtjs',
+        'plugin:vue/base',
+        'plugin:nuxt/base'
+    ],
+    plugins: [
+        'vuetify'
+    ],
+    // add your custom rules here
+    rules: {
+        indent: ['error', 4],
+        'no-import-assign': 'warn',
+        'no-console': 'off',
+        eqeqeq: ['error', 'smart'],
+        camelcase: 'off', // TODO Enforce camelcase naming
+        'vue/no-v-html': 'off',
+        'vue/attribute-hyphenation': 'off',
+        'vuetify/no-deprecated-classes': 'error'
+    },
+    ignorePatterns: ['/tests/', '/static/'] // Disable these for now
 }

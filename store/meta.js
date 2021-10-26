@@ -1,7 +1,3 @@
-import { Utils } from "~/modules/utilities"
-import firebase from 'firebase/app'
-import { db } from "~/plugins/firebase-client-init.js";
-
 /**
  * Any properties for the meta state should be added
  * to this function.
@@ -13,6 +9,8 @@ const initialState = () => {
         balance: {},
         phone: null,
         agentUpdates: null,
+        agentPush: null,
+        token: null,
         newsUpdates: null,
         requestUpdates: null,
         location: null,
@@ -21,24 +19,20 @@ const initialState = () => {
         sourcerer: false,
         stripeCustomerId: false,
         cards: false,
+        organizations: []
     }
 }
 
 /**
  * The initial state uses the initialState() function
  */
-export const state = initialState;
-
+export const state = initialState
 
 /**
  * Getters for our metadata
  */
 export const getters = {
-    balance: (state, getters) =>  {
-        if(state.balance && state.balance.available){
-            return Utils.currencyFormat(state.balance.available[0].amount, state.balance.available[0].currency)
-        }
-    },
+    balance: (state, getters) => state.balance && state.balance.available ? state.balance : 0,
     /**
      * Check to see if Stripe Connect has been linked
      */
@@ -55,6 +49,11 @@ export const getters = {
     isResearcher: (state, getters) => (state.researcher === true),
 
     /**
+     * Is this user an organization member?
+     */
+    isOrgMember: (state, getters) => (Array.isArray(state.organizations) && (state.organizations.length > 0)),
+
+    /**
      * Can the user receive payments?
      */
     canReceivePayments: (state, getters) => (typeof state.stripe.access_token !== 'undefined'),
@@ -67,57 +66,64 @@ export const getters = {
     /**
      * Has the user completed onboarding?
      */
-    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false),
+    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false)
 }
-
 
 export const mutations = {
     /* this method is not good and needs to go at some point */
-    set(state, obj){
-        state = Object.assign(state, obj);
+    set (state, obj) {
+        state = Object.assign(state, obj)
     },
-    setStripe(state, obj={}) {
+    setStripe (state, obj = {}) {
         console.info('New Stripe data being stored to Vuex:', obj)
-        state.stripe = obj;
+        state.stripe = obj
     },
-    setPhone(state, obj=null){
-        state.phone = obj;
+    setPhone (state, obj = null) {
+        state.phone = obj
     },
-    setAgent(state, obj=null) {
-        state.agentUpdates = obj;
+    setAgent (state, obj = null) {
+        state.agentUpdates = obj
     },
-    setNews(state, obj=null) {
-        state.newsUpdates = obj;
+    setPush (state, obj = null) {
+        state.agentPush = obj
     },
-    setRequest(state, obj=null) {
-        state.requestUpdates = obj;
+    setToken (state, obj = null) {
+        state.token = obj
     },
-    setLocation(state, obj=null){
-        state.location = new firebase.firestore.GeoPoint(obj.latitude, obj.longitude);
+    setNews (state, obj = null) {
+        state.newsUpdates = obj
     },
-    setSourcerer(state, val){
-        state.sourcerer = val;
+    setRequest (state, obj = null) {
+        state.requestUpdates = obj
     },
-    setResearcher(state, val) {
-        state.researcher = val;
+    setLocation (state, obj = null) {
+        state.location = obj
     },
-    balance(state, obj){
+    setSourcerer (state, val) {
+        state.sourcerer = val
+    },
+    setResearcher (state, val) {
+        state.researcher = val
+    },
+    balance (state, obj) {
         state.balance = obj
     },
-    setOnboardingComplete(state, val){
-        state.onboardingComplete = val;
+    setOnboardingComplete (state, val) {
+        state.onboardingComplete = val
     },
-    setStripeCustomerId(state, id){
-        state.stripeCustomerId = id;
+    setStripeCustomerId (state, id) {
+        state.stripeCustomerId = id
     },
-    reset(state) {
+    setOrganizations (state, orgs) {
+        state.organizations = orgs
+    },
+    reset (state) {
         const s = initialState()
-        Object.keys(s).forEach(key => {
+        Object.keys(s).forEach((key) => {
             state[key] = s[key]
         })
     }
 }
-
 
 /**
  * Available properties within actions
@@ -131,22 +137,66 @@ export const mutations = {
 }
  */
 export const actions = {
-    async save({state, rootGetters}, key){
-        return await db.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
+    async save ({ state, rootGetters }, key) {
+        return await this.$fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
-        }, { merge: true });
+        }, { merge: true })
     },
     /**
      * Updates the current user location
      */
-    updateCurrentLocation({state, commit, dispatch}){
-        navigator.geolocation.getCurrentPosition( ({coords}) => {
-            commit('setLocation', coords)
-            dispatch('save', 'location');
+    updateCurrentLocation ({ state, commit, dispatch }) {
+        navigator.geolocation.getCurrentPosition(({ coords }) => {
+            commit('setLocation', new this.$fireModule.firestore.GeoPoint(coords.latitude, coords.longitude))
+            dispatch('save', 'location')
         }, () => {
             // Failed - User won't give access
             console.info('Geolocation failed in meta.js')
-        });
+        })
+    },
+
+    /**
+     * Getting Organizations for the current user
+     * @todo Need to add organizations to each user before using this method
+     * @param {object} context
+     * @returns {array} A collection of organizations for the current user
+     */
+    getOrganizations ({ state, commit, dispatch }) {
+        if (Array.isArray(state.organizations)) {
+            const organizations = []
+            state.organizations.forEach((org) => {
+                organizations.push(this.$fire.firestore.collection('organization').doc(org).get())
+            })
+            return Promise.all(organizations)
+        }
+        return []
+    },
+
+    /**
+     * Get the IDs of repositories owned.
+     */
+    async getRepositoryIdsOwned ({ state, rootGetters }) {
+        const org_owned = await this.$fire.firestore
+            .collection('organization')
+            .where('owner', '==', rootGetters['auth/activeUser'].uid)
+            .get()
+        const org_ids = org_owned.docs.map((i) => {
+            return i.id
+        })
+
+        // Cannot proceed if orgs empty.
+        if (org_ids.length > 0) {
+            // Retrieve the repositories that belong to the organizations.
+            const repositories_owned = await this.$fire.firestore
+                .collection('repositories')
+                .where('organization', 'in', org_ids)
+                .get()
+            const repo_ids = repositories_owned.docs.map((j) => {
+                return j.id
+            })
+            return repo_ids
+        }
+        return []
     }
 }
 

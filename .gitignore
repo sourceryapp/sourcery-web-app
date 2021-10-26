@@ -3,6 +3,7 @@ node_modules
 
 # logs
 npm-debug.log
+yarn-error.log
 
 # Nuxt build
 .nuxt
@@ -30,3 +31,19 @@ sw.*
 
 # Firestore hosting cache
 /.firebase
+
+# Nightwatch Testing
+/chromedriver.log
+/tests_output
+
+#VSCode Options
+.vscode
+
+# Cloud Functions & Emulator Stuff
+/functions
+/ui-debug.log
+/firebase-debug.log
+/.emulator-data
+
+# eslint
+/.eslintcache

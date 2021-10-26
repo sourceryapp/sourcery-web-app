@@ -1,42 +1,73 @@
-import { Auth, GoogleAuthProvider } from '~/plugins/firebase-client-init.js'
-import Cookies from 'js-cookie'
-import { Utils } from '~/modules/utilities.js';
-
-
-// user props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
+// authUser props:  { uid, displayName, photoURL, email, emailVerified, phoneNumber }
 const initialState = () => {
     return {
-        user: null,
-        loading: false
+        authUser: null
     }
 }
 
-export const state = initialState;
+export const state = initialState
 
 export const getters = {
-    activeUser: (state, getters) => {
-        return state.user
+    isLoggedIn: (state) => {
+        try {
+            return state.authUser.uid !== null
+        } catch {
+            return false
+        }
     },
-    isLoading: (state, getters) => {
-        return state.loading
+
+    activeUser: (state) => {
+        return state.authUser
     }
-};
+}
 
 export const mutations = {
-    setUser(state, payload) {
-        state.user = payload;
+    RESET_STORE: (state) => {
+        Object.assign(state, initialState())
     },
-    setLoading(state, payload) {
-        state.loading = payload
-    },
-    reset(state) {
-        const s = initialState()
-        Object.keys(s).forEach(key => {
-            state[key] = s[key]
-        })
-    }
-};
 
+    SET_AUTH_USER: (state, { authUser }) => {
+        if (authUser) {
+            console.log('SET_AUTH_USER called', authUser)
+            state.authUser = {
+                uid: authUser.uid,
+                email: authUser.email,
+                photoURL: authUser.photoURL,
+                displayName: authUser.displayName,
+                admin: authUser.admin,
+                hasPassword: authUser.hasPassword,
+                hasRequests: authUser.hasRequests
+            }
+        }
+    },
+
+    ON_AUTH_STATE_CHANGED_MUTATION: (state, { authUser, claims }) => {
+        console.group('ON_AUTH_STATE_CHANGED_MUTATION')
+        console.info('User/Claims', authUser, claims)
+        if (!authUser) {
+            console.log('User not authenticated')
+
+            // claims = null
+            // perform logout operations
+        } else {
+            console.log('User authenticated!')
+            // Do something with the authUser and the claims object...
+        }
+        console.groupEnd()
+    },
+
+    SET_AUTH_USER_HAS_PASSWORD: (state) => {
+        if (state.authUser) {
+            state.authUser.hasPassword = true
+        }
+    },
+
+    SET_AUTH_USER_HAS_REQUESTS: (state) => {
+        if (state.authUser) {
+            state.authUser.hasRequests = true
+        }
+    }
+}
 
 /**
  * Available properties within actions
@@ -50,30 +81,61 @@ export const mutations = {
 }
  */
 export const actions = {
-    async signInWithGooglePopup({ commit }) {
-        commit('setLoading', true)
-        let authData = await Auth.signInWithPopup(GoogleAuthProvider);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
-    },
+    async onAuthStateChanged ({ commit }, { authUser }) {
+        console.group('onAuthStateChanged')
+        if (!authUser) {
+            console.log('Resetting auth store')
+            commit('RESET_STORE')
+            console.groupEnd()
+            return
+        }
+        if (authUser && authUser.getIdToken) {
+            try {
+                const idToken = await authUser.getIdToken(true)
+                console.info('idToken', idToken)
+            } catch (e) {
+                console.error(e)
+            }
 
-    async signIn({ commit }, { email, password }) {
-        commit('setLoading', true);
-        let authData = await Auth.signInWithEmailAndPassword(email, password);
-        const token = await Auth.currentUser.getIdToken(true)
-        Cookies.set('token', token);
-        commit('setUser', Auth.currentUser);
-        commit('setLoading', false);
-        return "Someone";
-    },
+            // An attempt to detect if a user is an admin.
+            // No intention for this information to be used outside of 'dev helpers' on frontend.
+            // Also detect password status for account.
+            try {
+                const admin = await this.$fire.firestore.collection('admins').doc(authUser.email).get()
+                if (admin.exists) {
+                    authUser.admin = true
+                }
 
-    async signOut({commit, rootState}) {
-        await Auth.signOut()
-        Cookies.remove('token');
-        Cookies.remove('user');
-        commit('reset'); // auth/reset
+                authUser.hasPassword = false
 
-        // Also reset meta store for this user
-        commit('meta/reset', null, { root: true })
+                try {
+                    const methods = await this.$fire.auth.fetchSignInMethodsForEmail(authUser.email)
+                    if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                        // Has a password.
+                        authUser.hasPassword = true
+                    }
+                    // if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD)) {
+                    //     // Has passwordless login.
+                    // }
+                } catch (error) {
+                    console.log(error)
+                }
+
+                const req = await this.$fire.firestore.collection('requests').where('client_id', '==', authUser.uid).limit(1).get()
+                if (req.docs && req.docs.length > 0) {
+                    authUser.hasRequests = true
+                } else {
+                    authUser.hasRequests = false
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        }
+        if (authUser) {
+            console.log('Setting user', authUser)
+            commit('SET_AUTH_USER', { authUser })
+        }
+
+        console.groupEnd()
     }
-};
+}

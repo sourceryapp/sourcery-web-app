@@ -1,102 +1,197 @@
 <template>
-  <v-layout row>
-    <v-flex xs12 sm6 offset-sm3>
-      <h1>History</h1>
-      <v-list two-line>
-        <v-subheader>Past Requests</v-subheader>
-        <v-divider></v-divider>
+  <v-layout>
+    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+      <h1 class="mb-4">
+        History
+      </h1>
+      <sourcery-card title="Archived Requests" icon="mdi-archive">
+        <none-found-card v-if="requests.length == 0 || requests[0].id" text="No past requests found." to="/request/create">
+          Create<span class="hidden-sm-and-down">&nbsp;Request</span>
+          <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
+            mdi-open-in-new
+          </v-icon>
+        </none-found-card>
+        <v-list two-line color="transparent">
+          <template v-for="(request) in requests">
+            <v-hover
+              v-slot="{ hover }"
+              :key="request.id"
+            >
+              <v-card
+                v-if="requests && !request.request().isArchived()"
+                :to="'/request/' + request.id"
+                class="my-4 rounded-lg"
+                outlined
+              >
+                <v-container>
+                  <v-row>
+                    <v-col class="pa-0">
+                      <v-card-title>
+                        {{ request.data().label }}
+                      </v-card-title>
+                      <v-card-subtitle>
+                        {{ request.data().citation }}
+                        <br>
+                        {{ request.data().repository.name }}
+                        <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
+                      </v-card-subtitle>
+                      <v-fade-transition>
+                        <v-overlay
+                          v-if="hover"
+                          absolute
+                          color="primary"
+                          opacity="0.1"
+                          class="rounded-lg"
+                          z-index="1"
+                        />
+                      </v-fade-transition>
+                    </v-col>
+                    <v-col
+                      cols="auto"
+                      class="d-flex align-center justify-center rounded-r-lg px-4"
+                      z-index="2"
+                      :style="
+                        'background: var(--sourcery-' + (request.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
+                    >
+                      <p
+                        class="font-weight-bold text-button ma-0"
+                        :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+                      >
+                        {{ request.request().prettyStatus() }}
+                      </p>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
+            </v-hover>
+          </template>
+        </v-list>
+      </sourcery-card>
 
-        <v-list-tile v-if="requests.length == 0" to="/request/create">
-          <v-list-tile-content>
-            <v-list-tile-sub-title>No past requests found.</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <template v-for="(request, index) in requests">
-          <v-list-tile :key="index" :to="'/request/' + request.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ request.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ request.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider v-if="index + 1 < requests.length" :key="`divider-${index}`"></v-divider>
+      <sourcery-card v-if="isOrgMember" title="Completed Jobs" icon="mdi-archive">
+        <none-found-card v-if="jobs.length == 0" text="No past jobs found." />
+        <template v-for="job in jobs">
+          <v-hover
+            v-slot="{ hover }"
+            :key="`j-` + job.id"
+          >
+            <v-card
+              v-if="job && !job.request().isArchived()"
+              :to="'/jobs/' + job.id"
+              class="my-4 rounded-lg"
+              outlined
+            >
+              <v-container>
+                <v-row>
+                  <v-col class="pa-0">
+                    <v-card-title>
+                      {{ job.data().label }}
+                    </v-card-title>
+                    <v-card-subtitle>
+                      {{ job.data().citation }}
+                      <br>
+                      {{ job.data().repository.name }}
+                      <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
+                    </v-card-subtitle>
+                    <v-fade-transition>
+                      <v-overlay
+                        v-if="hover"
+                        absolute
+                        color="primary"
+                        opacity="0.1"
+                        class="rounded-lg"
+                        z-index="1"
+                      />
+                    </v-fade-transition>
+                  </v-col>
+                  <v-col
+                    cols="auto"
+                    class="d-flex align-center justify-center rounded-r-lg px-4"
+                    z-index="2"
+                    :style="
+                      'background: var(--sourcery-' + (job.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
+                  >
+                    <p
+                      class="font-weight-bold text-button ma-0"
+                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+                    >
+                      {{ job.request().prettyStatus() }}
+                    </p>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-hover>
         </template>
-      </v-list>
-
-
-      <v-list two-line class="mt-5">
-        <v-subheader>Past Jobs</v-subheader>
-        <v-divider></v-divider>
-
-        <v-list-tile v-if="jobs.length == 0" to="/jobs">
-          <v-list-tile-content>
-            <v-list-tile-sub-title>No past jobs found.</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <template v-for="(job, index) in jobs">
-          <v-list-tile :key="index" :to="'/jobs/' + job.id">
-            <v-list-tile-content>
-              <v-list-tile-title>{{ job.data().label }}</v-list-tile-title>
-              <v-list-tile-sub-title>{{ job.data().citation }}</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider v-if="index + 1 < jobs.length" :key="`divider-${index}`"></v-divider>
-        </template>
-      </v-list>
-
-      <div class="text-xs-center mt-5">
-        <v-btn color="primary" to="/dashboard">Back</v-btn>
-      </div>
+      </sourcery-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { db } from "~/plugins/firebase-client-init.js";
+import NoneFoundCard from '@/components/none-found-card.vue'
+import { mapGetters } from 'vuex'
+import SourceryCard from '~/components/card-with-header.vue'
+
 export default {
-  name: "history",
-  async asyncData({ params, store }) {
-    if (store.getters['auth/activeUser'].uid) {
-
-        let requests = await db
-                .collection("requests")
-                .where("client_id", "==", store.getters['auth/activeUser'].uid)
-                .where("status", "==", "archived")
-                .orderBy("created_at", "desc")
-                .get();
-
-        let jobs = await db
-                .collection("requests")
-                .where("vendor_id", "==", store.getters['auth/activeUser'].uid)
-                .where("status", "==", "archived")
-                .orderBy("created_at", "desc")
+    name: 'History',
+    components: {
+        'sourcery-card': SourceryCard,
+        'none-found-card': NoneFoundCard
+    },
+    async asyncData ({ params, store, app }) {
+        if (store.getters['auth/activeUser'].uid) {
+            const requests = await app.$fire.firestore
+                .collection('requests')
+                .where('client_id', '==', store.getters['auth/activeUser'].uid)
+                .where('status', '==', 'archived')
+                .orderBy('created_at', 'desc')
                 .get()
-
+            console.log(requests.docs)
+            return {
+                requests: Array.from(requests.docs)
+            }
+        }
+    },
+    data () {
         return {
-            requests: requests.docs,
-            jobs: jobs.docs.filter( doc => doc.request().isArchived() || doc.request().isComplete() )
-        };
+            requests: [],
+            jobs: [],
+            repositories_owned: []
+        }
+    },
+    computed: {
+        user () {
+            return this.$store.getters['auth/activeUser']
+        },
+        ...mapGetters({
+            isOrgMember: 'meta/isOrgMember'
+        })
+    },
+    mounted () {
+        this.retrieveRepositoryIdsOwned().then((ids) => {
+            this.repositories_owned = ids
+            this.fetchJobs()
+        })
+    },
+    methods: {
+        async retrieveRepositoryIdsOwned () {
+            const ids = await this.$store.dispatch('meta/getRepositoryIdsOwned')
+            return ids
+        },
+        async fetchJobs () {
+            if (this.repositories_owned.length > 0) {
+                const jobs = await this.$fire.firestore
+                    .collection('requests')
+                    .where('repository_id', 'in', this.repositories_owned)
+                    .orderBy('created_at', 'desc')
+                    .get()
+
+                this.jobs = jobs.docs.filter(doc => doc.request().isArchived() || doc.request().isComplete())
+            }
+        }
     }
-  },
-  computed: {
-    user() {
-      return this.$store.getters['auth/activeUser'];
-    }
-  },
-  data: function() {
-    return {
-      requests: [],
-      jobs: []
-    };
-  },
-  mounted() {
-    // this.$axios
-    //     .$get('/requests')
-    //     .then(response => (this.requests = response.data));
-    // console.log(this.requests.docs);
-  }
-};
+}
 </script>
 
 <style scoped>
