@@ -33,9 +33,17 @@
           >
             Sign Up
           </v-btn> -->
-          <a href="https://mailchi.mp/4de98c4698dd/coming-soon" class="button button__mobile-block button__lg button__white" target="mailchimp">
+          <v-btn
+            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            x-large
+            block
+            color="white"
+            class="black--text text-h5 font-weight-bold"
+            height="76px"
+            target="mailchimp"
+          >
             Sign Up
-          </a>
+          </v-btn>
           <v-btn
             v-if="!isProd"
             to="/login"
