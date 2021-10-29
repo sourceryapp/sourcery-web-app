@@ -22,7 +22,7 @@
           alt=""
         >
         <div class="header__buttons">
-          <v-btn
+          <!-- <v-btn
             to="/register"
             x-large
             block
@@ -32,8 +32,20 @@
             depressed
           >
             Sign Up
+          </v-btn> -->
+          <v-btn
+            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            x-large
+            block
+            color="white"
+            class="black--text text-h5 font-weight-bold"
+            height="76px"
+            target="mailchimp"
+          >
+            Sign Up
           </v-btn>
           <v-btn
+            v-if="!isProd"
             to="/login"
             x-large
             block
@@ -338,6 +350,14 @@ export default {
                     crossorigin: 'anonymous'
                 }
             ]
+        }
+    },
+    computed: {
+        isProd () {
+            if (process.env.BASE_URL && process.env.BASE_URL === 'https://sourceryapp.org') {
+                return true
+            }
+            return false
         }
     },
     methods: {
