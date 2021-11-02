@@ -283,6 +283,7 @@
         </v-container>
         <div class="cta-buttons">
           <v-btn
+            v-if="!isProd"
             to="/login"
             x-large
             block
@@ -293,7 +294,7 @@
           >
             Log In
           </v-btn>
-          <v-btn
+          <!-- <v-btn
             to="/register"
             x-large
             block
@@ -301,6 +302,17 @@
             class="text-h5 font-weight-bold"
             height="76px"
             depressed
+          >
+            Sign Up
+          </v-btn> -->
+          <v-btn
+            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            x-large
+            block
+            color="white"
+            class="black--text text-h5 font-weight-bold"
+            height="76px"
+            target="mailchimp"
           >
             Sign Up
           </v-btn>

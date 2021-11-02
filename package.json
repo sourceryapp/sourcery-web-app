@@ -1,6 +1,6 @@
 {
   "name": "sourcery-web-app",
-  "version": "1.0.0-beta.10",
+  "version": "1.0.0-beta.11",
   "private": true,
   "scripts": {
     "dev": "nuxt",
