@@ -160,7 +160,6 @@
 
 export default {
     name: 'Register',
-
     /**
    * Don't require auth for this page.
    */
@@ -207,7 +206,8 @@ export default {
                 email: [],
                 password: [],
                 confirm_password: []
-            }
+            },
+            archiveSpace: this.$store.state.archive.archiveOrigin
 
         }
     },
@@ -237,7 +237,11 @@ export default {
                         displayName: this.name
                     }, { merge: true })
 
-                    this.$router.push('/dashboard')
+                    if (this.archiveSpace) {
+                        this.$router.push('/request/create')
+                    } else {
+                        this.$router.push({ name: '/dashboard' })
+                    }
                 })
             }).catch((error) => {
                 const messages = {

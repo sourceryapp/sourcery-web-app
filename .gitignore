@@ -19,6 +19,7 @@ sw.*
 
 # Stupid mac files
 .DS_Store
+*/.DS_Store
 
 # No np lock files
 /package-lock.json

@@ -441,6 +441,13 @@ export default {
                 }
             }
         }
+        // Handle request coming from archiveSpace, otherwise ensure no data is left over.
+        if (this.$store.state.archive.archiveOrigin) {
+            console.log('Recieving from archive space')
+            this.processArchiveSpace()
+        } else {
+            this.$store.commit('create/cleanArchive')
+        }
     },
     methods: {
         selectRepositoryFromStateOutsideComponent (repo) {
@@ -501,6 +508,33 @@ export default {
         },
         toDollars (cents) {
             return this.$utils.currencyFormat(cents)
+        },
+        testSelect (id) {
+            console.log(id)
+        },
+        repoSelection (repo) {
+            // console.log(repo.objectID, repo);
+            this.repository_id = repo.objectID
+        },
+        processArchiveSpace () {
+            const archiveSpaceInfo = this.$store.state.archive.archiveInfo
+            // set archivespace info
+            this.$store.commit('create/setArchiveOrigin')
+            this.$store.commit('create/setArchiveOrg', archiveSpaceInfo.organization_id)
+            // set repo
+            console.log('Processing archive space, these are repositories on load:', this.repositories)
+            for (const repo in this.repositories) {
+                if (this.repositories[repo].data().name === archiveSpaceInfo.record_repo) {
+                    this.selectRepositoryObj(this.repositories[repo])
+                    // this.$store.commit('create/setRepositoryId', this.repositories[repo].id)
+                }
+            }
+            // set citation
+            this.$store.commit('create/setCitation', archiveSpaceInfo.record_cite)
+            // update formState
+            this.formState = 2
+            // reset all instances of archivespace from the store (does not remove info from create, handled above)
+            this.$store.commit('archive/reset')
         }
     }
 }

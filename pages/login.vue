@@ -120,7 +120,8 @@ export default {
                 password: [],
                 email: []
             },
-            errorMessage: ''
+            errorMessage: '',
+            archiveSpace: this.$store.state.archive.archiveOrigin
         }
     },
     computed: {
@@ -133,7 +134,11 @@ export default {
         user (val) {
             console.log('Watched User val', val)
             if (val) {
-                this.$router.push({ name: 'dashboard' })
+                if (this.archiveSpace) {
+                    this.$router.push('/request/create')
+                } else {
+                    this.$router.push({ name: 'dashboard' })
+                }
             }
         }
     },
