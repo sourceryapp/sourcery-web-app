@@ -23,7 +23,9 @@ const initialState = () => {
         repository: {},
         repository_id: null,
         status: 'pending',
-        vendor_id: ''
+        vendor_id: '',
+        archiveOrigin: false,
+        archiveOrg: null
     }
 }
 
@@ -144,8 +146,18 @@ export const mutations = {
         if (val.id) {
             state.repository_id = val.id
         }
+    },
+    setArchiveOrigin (state) {
+        state.archiveOrigin = true
+    },
+    setArchiveOrg (state, value) {
+        state.archiveOrg = value
+    },
+    cleanArchive (state) {
+        state.archiveOrigin = false
+        state.archiveOrg = null
+        state.citation = ''
     }
-
 }
 
 /**
@@ -179,19 +191,23 @@ export const actions = {
         state.client_id = rootGetters['auth/activeUser'].uid
 
         // If a member repo, set to picked_up by the vendor
-        if (rootGetters['create/isMemberRepo'](state.repository)) {
+        if ((rootGetters['create/isMemberRepo'](state.repository)) || state.archiveOrigin) {
             // Set as picked_up
             commit('setStatusPickedUp')
 
             // Set the vendor_id
-            state.vendor_id = await dispatch('getOrganizationUser', state.repository.organization)
+            if (state.archiveOrigin) { state.vendor_id = await dispatch('getOrganizationUser', state.archiveOrg) } else { state.vendor_id = await dispatch('getOrganizationUser', state.repository.organization) }
         }
         return this.$fire.firestore.collection('requests').add(state)
     },
 
     getRepositoryById ({ state, commit, dispatch }, id) {
         return this.$fire.firestore.collection('repositories').doc(id).get().then((doc) => {
-            return doc.data()
+            if (doc.exists) {
+                return doc.data()
+            } else {
+                return {}
+            }
         })
     },
 

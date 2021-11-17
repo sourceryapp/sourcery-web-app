@@ -12,15 +12,15 @@
           z-index="2"
           :style="'background: var(--sourcery-500'"
         >
-          <a
-            class="font-weight-bold text-button ma-0"
+          <NuxtLink
+            class="font-weight-bold text-button ma-0 text-decoration-none"
             :class="
               $vuetify.theme.dark ? 'black--text' : 'white--text'
             "
             :to="to"
           >
             <slot />
-          </a>
+          </NuxtLink>
         </v-col>
       </v-row>
     </v-container>
