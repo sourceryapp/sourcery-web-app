@@ -1,34 +1,12 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <h1 class="mb-4">
-        FAQ
-      </h1>
-      <!-- <v-banner>
-        <div class="text-h5">
-          Need help?
-        </div>
-        Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.
-      </v-banner>
-      <v-card-title class="text-h5">
-        Need Help?
-      </v-card-title>
-      <v-card>
-        <v-card-text>
-          <p>Please email us at <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a>.</p>
-        </v-card-text>
-      </v-card> -->
-      <v-card outlined>
-        <v-card-title
-          :class="$vuetify.theme.dark ? 'flex-nowrap justify-space-between primary--text text--lighten-2 secondary' : 'flex-nowrap justify-space-between primary--text text--darken-2 deep-purple lighten-5'"
-        >
-          FAQ
-        </v-card-title>
-        <v-divider />
+      <sourcery-card title="FAQ">
         <v-expansion-panels flat tile>
           <v-expansion-panel
             v-for="(item,i) in items"
             :key="i"
+            color="transparent"
           >
             <v-expansion-panel-header class="text-h6">
               {{ item.question }}
@@ -57,14 +35,19 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-      </v-card>
+      </sourcery-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
+import SourceryCard from '~/components/card-with-header.vue'
+
 export default {
     name: 'FAQ',
+    components: {
+        'sourcery-card': SourceryCard
+    },
     data () {
         return {
             items: [
@@ -115,5 +98,8 @@ export default {
 <style scoped>
 .v-expansion-panel-header {
   padding: 16px
+}
+.v-expansion-panel {
+  background: transparent !important
 }
 </style>

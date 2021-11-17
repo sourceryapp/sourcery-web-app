@@ -3,41 +3,8 @@
     <v-icon>
       mdi-caret-right
     </v-icon>
-    <v-app-bar
-      app
-      :color="$vuetify.theme.dark ? '#121212' : 'white'"
-      height="84px"
-      elevate-on-scroll
-    >
-      <v-app-bar-nav-icon
-        v-if="$vuetify.breakpoint.mobile"
-        color="primary"
-        class="float-left"
-        @click="drawer = !drawer"
-      />
-      <v-spacer />
-      <v-app-bar-title :class="user && $vuetify.breakpoint.smAndDown ? 'mt-2 ma-0 ml-n8' : 'mt-2 ma-0'">
-        <nuxt-link id="wordmark-link" to="/dashboard">
-          <img id="logo" :src="$vuetify.theme.dark ? '/img/wordmark-beta-dark.svg' : '/img/wordmark-beta.svg'" alt="Sourcery Logo">
-        </nuxt-link>
-      </v-app-bar-title>
-      <v-spacer />
-    </v-app-bar>
-    <sourcery-nav-drawer v-model="drawer" :drawer="drawer" />
-
     <v-main pa0>
       <v-container fill-height>
-        <v-row>
-          <v-col>
-            <call-to-action-alert
-              v-if="user && !user.hasPassword"
-              message="In order to gain access to the full features of Sourcery, you must set a password."
-              to="/settings"
-              type="warning"
-              action-text="Set Password."
-            />
-          </v-col>
-        </v-row>
         <v-layout
           justify-center
         >
@@ -118,18 +85,35 @@
 <script>
 import { mapGetters } from 'vuex'
 import md5 from 'md5'
-import NavigationDrawer from '~/components/nav-drawer.vue'
 
 export default {
-    components: {
-        'sourcery-nav-drawer': NavigationDrawer
-    },
     // props: {
     //     source: String
     // },
     data: () => ({
-        drawer: true,
-        dialog: false
+        drawer: null,
+        dialog: false,
+        items1: [
+            // { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
+            { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+            { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
+            // { title: 'Find Jobs', icon: 'mdi-briefcase-search', link: '/jobs', desktopOnly: 'true' },
+        ],
+        items2: [
+            { title: 'History', icon: 'mdi-history', link: '/request/history' },
+            { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
+            // { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
+            // { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
+            // { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
+            // { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
+            // { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
+            { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
+            { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
+            // { title: 'Rate', icon: 'star', link: ''},
+        ],
+        devItems: [
+            { title: 'Organizations', icon: 'mdi-account-group', link: '/o' }
+        ]
     }),
     computed: {
         gravatar () {

@@ -34,7 +34,9 @@ export const mutations = {
                 email: authUser.email,
                 photoURL: authUser.photoURL,
                 displayName: authUser.displayName,
-                admin: authUser.admin
+                admin: authUser.admin,
+                hasPassword: authUser.hasPassword,
+                hasRequests: authUser.hasRequests
             }
         }
     },
@@ -52,6 +54,18 @@ export const mutations = {
             // Do something with the authUser and the claims object...
         }
         console.groupEnd()
+    },
+
+    SET_AUTH_USER_HAS_PASSWORD: (state) => {
+        if (state.authUser) {
+            state.authUser.hasPassword = true
+        }
+    },
+
+    SET_AUTH_USER_HAS_REQUESTS: (state) => {
+        if (state.authUser) {
+            state.authUser.hasRequests = true
+        }
     }
 }
 
@@ -85,10 +99,33 @@ export const actions = {
 
             // An attempt to detect if a user is an admin.
             // No intention for this information to be used outside of 'dev helpers' on frontend.
+            // Also detect password status for account.
             try {
                 const admin = await this.$fire.firestore.collection('admins').doc(authUser.email).get()
                 if (admin.exists) {
                     authUser.admin = true
+                }
+
+                authUser.hasPassword = false
+
+                try {
+                    const methods = await this.$fire.auth.fetchSignInMethodsForEmail(authUser.email)
+                    if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                        // Has a password.
+                        authUser.hasPassword = true
+                    }
+                    // if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD)) {
+                    //     // Has passwordless login.
+                    // }
+                } catch (error) {
+                    console.log(error)
+                }
+
+                const req = await this.$fire.firestore.collection('requests').where('client_id', '==', authUser.uid).limit(1).get()
+                if (req.docs && req.docs.length > 0) {
+                    authUser.hasRequests = true
+                } else {
+                    authUser.hasRequests = false
                 }
             } catch (e) {
                 console.error(e)

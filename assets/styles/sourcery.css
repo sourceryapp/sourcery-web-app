@@ -1,3 +1,9 @@
+:root {
+    --sourcery-500: hsl(256, 35%, 47%);
+    --sourcery-700: hsl(256, 35%, 30%);
+    --sourcery-900: hsl(256, 35%, 19%);
+}
+
 body {
     font-family: 'Barlow','Roboto', Arial, Helvetica, sans-serif;
 }
@@ -9,6 +15,12 @@ body {
 .theme--light.application {
     background: #FAF9FB;
     color: #362C52;
+}
+
+.theme--dark.v-application {
+    --sourcery-500: hsl(261, 67%, 81%);
+    --sourcery-700: hsl(261, 67%, 87%);
+    --sourcery-900: hsl(261, 67%, 91%);
 }
 
 .v-btn {

@@ -7,13 +7,15 @@
         Organizations
       </h1>
 
-      <v-card>
+      <v-card
+        outlined
+      >
         <v-list v-if="organizations">
           <template
             v-for="(org, index) in organizations"
           >
             <organization-list-item :key="org.id" :organization="org" />
-            <v-divider v-if="index !== organizations.length - 1" :key="org.id + 'd'" />
+            <v-divider v-if="index !== organizations.length - 1" :key="org.id + 'd'" class="my-2" />
           </template>
         </v-list>
       </v-card>

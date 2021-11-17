@@ -2,7 +2,7 @@
   <footer class="footer__light">
     <div class="footer-content">
       <NuxtLink to="/">
-        <img :src="$vuetify.theme.dark ? '/img/sourcery-logo-purple-dark.svg' : '/img/sourcery-logo-purple.svg'" alt="">
+        <img :src="$vuetify.theme.dark ? '/img/logo-wordmark-dark.svg' : '/img/logo-wordmark.svg'" alt="">
       </NuxtLink>
       <div class="social-icons">
         <v-btn

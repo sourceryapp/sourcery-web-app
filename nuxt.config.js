@@ -30,7 +30,9 @@ export default {
             '/terms',
             '/privacy',
             '/cookies-notice',
-            '/team'
+            '/team',
+            '/dashboard',
+            '/request/create'
         ]
     },
 
