@@ -76,7 +76,7 @@
             :key="`j-` + job.id"
           >
             <v-card
-              v-if="job && !job.request().isArchived()"
+              v-if="job"
               :to="'/jobs/' + job.id"
               class="my-4 rounded-lg"
               outlined
