@@ -125,7 +125,12 @@ export default {
 
     }),
     async fetch () {
-        await this.getOrganization(this.$route.params.id)
+        try {
+            await this.getOrganization(this.$route.params.id)
+        } catch (error) {
+            console.error(error)
+            this.$router.replace('/dashboard')
+        }
     },
     computed: {
         ...mapGetters({

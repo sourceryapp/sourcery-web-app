@@ -11,8 +11,14 @@ export default function ({ store, redirect, route, $config }) {
         return redirect('/dashboard')
     }
 
+    const isOrganizationPage = route.path.startsWith('/o/')
+
     // If the user isn't logged in
-    if (!isLoggedIn && !$config.publicPaths.includes(route.path)) {
+    if (
+        !isLoggedIn &&
+        !$config.publicPaths.includes(route.path) &&
+        !isOrganizationPage
+    ) {
         console.warn('User not logged in. Redirecting')
         console.groupEnd()
         return redirect('/login')

@@ -456,7 +456,6 @@
                   default
                 </v-btn>
                 <v-btn
-                  v-else
                   color="primary"
                   text
                   @click="deleteCard(item.id)"
