@@ -1,142 +1,23 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <v-card
-        v-if="!user"
-        outlined
-      >
-        <v-card-title>You are Logged Out</v-card-title>
-        <v-card-text>
-          <span>Please log in to access the full set of features in Sourcery.</span>
-        </v-card-text>
-      </v-card>
+      <logged-out-card />
+      <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-16" icon="mdi-briefcase">
+        <none-found-card v-if="jobs.length == 0" text="This organization has no outstanding requests that need service." />
 
-      <sourcery-card v-if="user" title="Your Requests" icon="mdi-file-search" class="mt-16">
-        <none-found-card v-if="requests.length == 0" text="No Active Requests." to="/request/create">
+        <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" />
+      </sourcery-card>
+      <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-16">
+        <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
           <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
             mdi-open-in-new
           </v-icon>
         </none-found-card>
-        <template v-for="(request) in requests">
-          <v-hover
-            v-slot="{ hover }"
-            :key="request.id"
-          >
-            <v-card
-              v-if="requests && !request.request().isArchived()"
-              :to="'/request/' + request.id"
-              class="my-4 rounded-lg"
-              outlined
-            >
-              <v-container>
-                <v-row>
-                  <v-col class="pa-0">
-                    <v-card-title>
-                      {{ request.data().label }}
-                    </v-card-title>
-                    <v-card-subtitle>
-                      {{ request.data().citation }}
-                      <br>
-                      {{ request.data().repository.name }}
-                      <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
-                    </v-card-subtitle>
-                    <v-fade-transition>
-                      <v-overlay
-                        v-if="hover"
-                        absolute
-                        color="primary"
-                        opacity="0.1"
-                        class="rounded-lg"
-                        z-index="1"
-                      />
-                    </v-fade-transition>
-                  </v-col>
-                  <v-col
-                    cols="auto"
-                    class="d-flex align-center justify-center rounded-r-lg px-4"
-                    z-index="2"
-                    :style="
-                      'background: var(--sourcery-' + (request.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
-                  >
-                    <p
-                      class="font-weight-bold text-button ma-0"
-                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
-                    >
-                      {{ request.request().prettyStatus() }}
-                    </p>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-hover>
-        </template>
-      </sourcery-card>
-      <sourcery-card v-if="user && isOrgMember" title="Your Jobs" icon="mdi-briefcase">
-        <none-found-card v-if="jobs.length == 0" text="No Active Jobs." />
 
-        <template v-for="job in jobs">
-          <v-hover
-            v-slot="{ hover }"
-            :key="`j` + job.id"
-          >
-            <v-card
-              v-if="job && !job.request().isArchived()"
-              :to="'/jobs/' + job.id"
-              class="my-4 rounded-lg"
-              outlined
-            >
-              <v-container>
-                <v-row>
-                  <v-col class="pa-0">
-                    <v-card-title>
-                      {{ job.data().label }}
-                    </v-card-title>
-                    <v-card-subtitle>
-                      {{ job.data().citation }}
-                      <br>
-                      {{ job.data().repository.name }}
-                    </v-card-subtitle>
-                    <v-fade-transition>
-                      <v-overlay
-                        v-if="hover"
-                        absolute
-                        color="primary"
-                        opacity="0.1"
-                        class="rounded-lg"
-                        z-index="1"
-                      />
-                    </v-fade-transition>
-                  </v-col>
-                  <v-col
-                    cols="auto"
-                    class="d-flex align-center justify-center rounded-r-lg px-4"
-                    z-index="2"
-                    :style="
-                      'background: var(--sourcery-' + (job.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
-                  >
-                    <p
-                      class="font-weight-bold text-button ma-0"
-                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
-                    >
-                      {{ job.request().prettyStatus() }}
-                    </p>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-hover>
-        </template>
+        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" />
       </sourcery-card>
-
-      <div v-if="user" class="text-center mt-8">
-        <v-btn color="grey darken-1" to="/request/history" text>
-          <v-icon left>
-            mdi-history
-          </v-icon>
-          View History
-        </v-btn>
-      </div>
+      <view-history-button v-if="user" />
     </v-flex>
   </v-layout>
 </template>
@@ -145,16 +26,18 @@
 import { mapGetters } from 'vuex'
 import NoneFoundCard from '@/components/none-found-card.vue'
 import SourceryCard from '~/components/card-with-header.vue'
+import LoggedOutCard from '~/components/logged-out-card.vue'
+import ViewHistoryButton from '~/components/view-history-button.vue'
+import RequestListing from '~/components/request-listing.vue'
 
-// TODO Not sure why addToHomeScreen is here
-// addToHomescreen()
 export default {
-    // middleware: 'auth-guard',
-
     name: 'Dashboard',
     components: {
         'sourcery-card': SourceryCard,
-        'none-found-card': NoneFoundCard
+        'none-found-card': NoneFoundCard,
+        LoggedOutCard,
+        ViewHistoryButton,
+        RequestListing
     },
     async asyncData ({ params, store, app }) {
         if (store.getters['auth/activeUser'] && store.getters['auth/activeUser'].uid) {
@@ -232,10 +115,6 @@ export default {
         isLoggedIn () {
             return this.user && this.user.uid
         }
-    },
-    mounted () {
-        // console.log(this.organizations)
-    //   console.log(this.reserved_requests)
     },
     methods: {
         getOrganizationFromRequest (request) {
