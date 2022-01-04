@@ -33,3 +33,18 @@
     </v-list-item-action>
   </v-list-item>
 </template>
+
+<script>
+export default {
+    data: () => {
+        return {
+            theme: localStorage.getItem('dark_theme')
+        }
+    },
+    methods: {
+        setTheme () {
+            localStorage.setItem('dark_theme', this.theme)
+        }
+    }
+}
+</script>

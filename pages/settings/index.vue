@@ -11,114 +11,24 @@
           color="transparent"
         >
           <toggle-theme />
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-bell
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Notifications</v-list-item-title>
-              <v-list-item-subtitle>Receive email alerts for nearby jobs</v-list-item-subtitle>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-switch
-                v-model="agentBool"
-                :hint="alertHint"
-                :persistent-hint="false"
-                color="primary"
-                :readonly="!deviceHasGeoLocation"
-                inset
-                @change="updateNotifications"
-              />
-            </v-list-item-action>
-          </v-list-item>
+          <toggle-notifications />
         </v-list>
       </sourcery-card>
       <sourcery-card title="Profile" icon="mdi-account-details">
         <v-list
           color="transparent"
         >
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-account
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Name</v-list-item-title>
-              <v-list-item-subtitle v-once v-text="name" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-dialog
-                v-model="dialogName"
-                scrollable
-                persistent
-                :overlay="false"
-                max-width="320px"
-                transition="dialog-transition"
-              >
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    Change
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title
-                    :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-                  >
-                    Change Name
-                  </v-card-title>
-                  <v-divider />
-                  <v-form ref="detailsForm" @submit.prevent="updateDetails">
-                    <v-card-text>
-                      <v-text-field
-                        id="displayName"
-                        v-model.lazy="name"
-                        type="text"
-                        label="Your Name"
-                        name="displayName"
-                        :rules="[rules.required]"
-                        outlined
-                        hide-details="auto"
-                      />
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer />
-                      <v-btn
-                        text
-                        @click="dialogName = false; name = $store.getters['auth/activeUser'].displayName"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        type="submit"
-                        color="primary"
-                        text
-                        @click="dialogName = false"
-                      >
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-form>
-                </v-card>
-              </v-dialog>
-            </v-list-item-action>
-          </v-list-item>
-          <!-- <v-divider inset /> -->
+          <dialog-edit-setting
+            title="Name"
+            icon="mdi-account"
+            label="Your Name"
+            property-name="displayName"
+            vuex-root="auth/activeUser"
+            vuex-action="auth/setUpdatedProfileProperty"
+            toast-success="Saved name successfully."
+            :rules="[$sourceryForms.rules.required]"
+          />
+
           <v-list-item>
             <v-list-item-avatar
               :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
@@ -228,162 +138,25 @@
               </v-dialog>
             </v-list-item-action>
           </v-list-item>
-          <!-- <v-divider inset /> -->
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-email
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Email</v-list-item-title>
-              <v-list-item-subtitle v-once v-text="email" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-dialog
-                v-model="dialogEmail"
-                scrollable
-                persistent
-                :overlay="false"
-                max-width="360px"
-                transition="dialog-transition"
-              >
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    Change
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title
-                    :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-                  >
-                    Change Email
-                  </v-card-title>
-                  <v-divider />
-                  <v-card-text>
-                    <v-form @submit.prevent="changeUserEmail">
-                      <v-text-field
-                        id="email"
-                        v-model="email"
-                        label="Enter New Email"
-                        name="email"
-                        outlined
-                      />
-                      <v-text-field
-                        id="epass"
-                        v-model="epass"
-                        type="password"
-                        label="Enter Password"
-                        name="epass"
-                        outlined
-                      />
-                    </v-form>
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer />
-                    <v-btn
-                      text
-                      @click="dialogEmail = false"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      type="submit"
-                      color="primary"
-                      text
-                      :disabled="!emailIsValid"
-                    >
-                      Save
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </v-list-item-action>
-          </v-list-item>
-          <!-- <v-divider inset /> -->
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-phone
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Phone</v-list-item-title>
-              <v-list-item-subtitle v-once v-text="phone" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-dialog
-                v-model="dialogPhone"
-                scrollable
-                persistent
-                :overlay="false"
-                max-width="360px"
-                transition="dialog-transition"
-              >
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    Change
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title
-                    :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-                  >
-                    Change Phone Number
-                  </v-card-title>
-                  <v-divider />
-                  <v-form ref="detailsForm" @submit.prevent="setPhone">
-                    <v-card-text>
-                      <v-text-field
-                        id="phoneNumber"
-                        v-model="phone"
-                        type="text"
-                        label="Your Phone Number"
-                        name="phoneNumber"
-                        outlined
-                        hide-details="auto"
-                        :rules="[rules.required]"
-                      />
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer />
-                      <v-btn
-                        text
-                        @click="dialogPhone = false"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        type="submit"
-                        color="primary"
-                        text
-                      >
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-form>
-                </v-card>
-              </v-dialog>
-            </v-list-item-action>
-          </v-list-item>
+
+          <dialog-readonly-setting
+            title="Email"
+            icon="mdi-email"
+            label="Email"
+            propertyName="email"
+            vuexRoot="auth/activeUser"
+          />
+
+          <dialog-edit-setting
+            title="Phone"
+            icon="mdi-phone"
+            label="Display Phone Number"
+            property-name="phone"
+            vuex-root="meta/editMeta"
+            vuex-action="meta/updateAndSave"
+            toast-success="Saved phone successfully."
+            :rules="[$sourceryForms.rules.required]"
+          />
         </v-list>
       </sourcery-card>
       <sourcery-card title="Payment Information" icon="mdi-credit-card-outline">
@@ -475,6 +248,9 @@ import addCard from '@/components/add-card.vue'
 // import connectButton from '@/components/connect-button.vue'
 import SourceryCard from '@/components/card-with-header.vue'
 import ToggleTheme from '@/components/toggle-theme.vue'
+import ToggleNotifications from '@/components/toggle-notifications.vue'
+import DialogEditSetting from '@/components/dialog-edit-setting.vue'
+import DialogReadonlySetting from '@/components/dialog-readonly-setting.vue'
 
 export default {
     name: 'Settings',
@@ -482,7 +258,10 @@ export default {
         'add-card': addCard,
         // 'connect-button': connectButton,
         'sourcery-card': SourceryCard,
-        ToggleTheme
+        ToggleTheme,
+        ToggleNotifications,
+        DialogEditSetting,
+        DialogReadonlySetting
     },
     async asyncData ({ params, store, app }) {
         const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
@@ -495,17 +274,7 @@ export default {
     },
     data () {
         return {
-            name: this.$store.getters['auth/activeUser'].displayName || null,
-            email: this.$store.getters['auth/activeUser'].email,
-            // phone: this.$store.getters['auth/activeUser'].phoneNumber || null,
             epass: '',
-            emailSuccess: false,
-            emailFail: false,
-            emailError: false,
-            // Phone variables
-            phone: this.$store.state.meta.phone,
-            confirmPhone: '',
-            phoneSuccess: false,
             // Password variables
             oldpassword: '',
             newpassword: '',
@@ -515,10 +284,7 @@ export default {
             passFail: false,
             passError: false,
             // Dialog Controls
-            dialogName: false,
             dialogPassword: false,
-            dialogEmail: false,
-            dialogPhone: false,
             dialogAddCard: false,
             // Field Rules
             rules: {
@@ -537,13 +303,7 @@ export default {
             cards: {
                 data: []
             },
-            theme: localStorage.getItem('dark_theme'),
-            // Notifications logic
-            agentBool: this.$store.state.meta.agentUpdates !== false,
-            pushBool: this.$store.state.meta.agentPush,
-            // token: this.$store.state.meta.token,
             updateSuccess: false,
-            alertHint: 'Please choose "Allow" if prompted by your device/browser.',
             geoError: 'You need to enable location services to use this feature.',
             deviceHasGeoLocation: false // Starts as read-only until we confirm geolocation
         }
@@ -562,9 +322,6 @@ export default {
         },
         emailIsValid () {
             return this.email !== '' && this.password !== ''
-        },
-        giveEmail () {
-            return this.user.email
         },
         giveName () {
             console.log('name:', this.user.name)
@@ -657,24 +414,6 @@ export default {
                 this.passError = true
             })
         },
-        changeUserEmail () {
-            this.$fire.auth.currentUser.reauthenticateWithCredential(
-                this.$fireModule.auth.EmailAuthProvider.credential(
-                    this.$fire.auth.currentUser.email,
-                    this.epass
-                )
-            ).then((success) => {
-                const user = this.$fire.auth.currentUser
-                user.updateEmail(this.email).then((success) => {
-                    this.emailSuccess = true
-                }).catch((error) => {
-                    console.log('error after reauthenticate', error)
-                })
-            }).catch((error) => {
-                console.log(error)
-                this.emailFail = true
-            })
-        },
         forgotLog () {
             this.$fire.auth.signOut().then(() => {
                 console.log('logout complete')
@@ -683,37 +422,11 @@ export default {
                 console.log(error)
             })
         },
-        async setPhone () {
-            if (this.phone !== null) {
-                // Update phone number on the server
-                await this.$fire.firestore.collection('user-meta').doc(this.$store.getters['auth/activeUser'].uid).set({
-                    phone: this.phone
-                }, { merge: true })
-
-                // Update in local store
-                this.$store.commit('meta/setPhone', this.phone)
-                this.phoneSuccess = true
-                this.$toast.success('New phone number successfully saved.')
-                this.dialogPhone = false
-            }
-        },
-        changeTheme () {
-            // for some reason this doesn't work, even though this.theme gets properly updated by the button toggle group so for now the logic stays in the button group
-            this.$vuetify.theme.dark = this.theme
-        },
-        setTheme () {
-            localStorage.setItem('dark_theme', this.theme)
-        },
         done () {
             // Close the dialog
             this.dialog = false
 
             this.reload()
-        },
-        async updateNotifications () {
-            this.$store.commit('meta/setAgent', this.agentBool)
-            await this.$store.dispatch('meta/save', 'agentUpdates')
-            this.$toast.success('Notification preference successfully saved.')
         }
     }
 }

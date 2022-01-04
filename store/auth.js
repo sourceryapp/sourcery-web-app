@@ -18,6 +18,14 @@ export const getters = {
 
     activeUser: (state) => {
         return state.authUser
+    },
+    getPropByName (state) {
+        return (propName) => {
+            if (propName in state) {
+                return state[propName]
+            }
+            return false
+        }
     }
 }
 
@@ -137,5 +145,31 @@ export const actions = {
         }
 
         console.groupEnd()
+    },
+
+    async setUpdatedProfileProperty ({ commit, state }, { keyName, keyValue }) {
+        // Firebase user, not vuex.
+        const user = this.$fire.auth.currentUser
+
+        const updateObj = {}
+        updateObj[keyName] = keyValue
+
+        // Update firebase profile data.  Unique to users.
+        await user.updateProfile(updateObj)
+
+        // Get new vuex copy
+        const currentUserObj = state.authUser
+        currentUserObj[keyName] = keyValue
+
+        // Try to update user meta.
+        try {
+            await this.$fire.firestore.collection('user-meta').doc(state.authUser.uid).set({
+                [keyName]: keyValue
+            }, { merge: true })
+        } catch (e) {
+            console.error(e)
+        }
+
+        commit('SET_AUTH_USER', currentUserObj)
     }
 }
