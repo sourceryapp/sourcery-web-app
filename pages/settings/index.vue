@@ -10,39 +10,7 @@
         <v-list
           color="transparent"
         >
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-brightness-7
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Theme</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn-toggle v-model="theme" mandatory color="primary" @change="setTheme">
-                <v-btn value="false" @click="$vuetify.theme.dark = false">
-                  <v-icon class="hidden-sm-and-down" left>
-                    mdi-brightness-7
-                  </v-icon>
-                  <span>Light</span>
-                </v-btn>
-                <v-btn value="true" @click="$vuetify.theme.dark = true">
-                  <v-icon class="hidden-sm-and-down" left>
-                    mdi-brightness-3
-                  </v-icon>
-                  <span>Dark</span>
-                </v-btn>
-                <!-- <v-btn value="null" @click="$vuetify.theme.dark = window.matchMedia('(prefers-color-scheme: dark)')">
-                  Auto
-                </v-btn> -->
-              </v-btn-toggle>
-            </v-list-item-action>
-          </v-list-item>
+          <toggle-theme />
           <v-list-item>
             <v-list-item-avatar
               :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
@@ -503,16 +471,18 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import addCard from '~/components/add-card.vue'
-// import connectButton from '~/components/connect-button.vue'
-import SourceryCard from '~/components/card-with-header.vue'
+import addCard from '@/components/add-card.vue'
+// import connectButton from '@/components/connect-button.vue'
+import SourceryCard from '@/components/card-with-header.vue'
+import ToggleTheme from '@/components/toggle-theme.vue'
 
 export default {
     name: 'Settings',
     components: {
         'add-card': addCard,
         // 'connect-button': connectButton,
-        'sourcery-card': SourceryCard
+        'sourcery-card': SourceryCard,
+        ToggleTheme
     },
     async asyncData ({ params, store, app }) {
         const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')

@@ -110,8 +110,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import SourceryCard from '~/components/card-with-header.vue'
-import NavigationDrawer from '~/components/nav-drawer.vue'
+import SourceryCard from '@/components/card-with-header.vue'
+import NavigationDrawer from '@/components/nav-drawer.vue'
 
 export default {
     name: 'Organization',

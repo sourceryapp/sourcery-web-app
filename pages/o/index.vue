@@ -25,7 +25,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import OrganizationListItem from '~/components/organization-list-item.vue'
+import OrganizationListItem from '@/components/organization-list-item.vue'
 
 export default {
     name: 'Organizations',

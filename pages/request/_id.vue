@@ -95,8 +95,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import StaticMap from '~/components/static-map'
-import Attachments from '~/components/attachments'
+import StaticMap from '@/components/static-map'
+import Attachments from '@/components/attachments'
 
 export default {
     name: 'RequestId',

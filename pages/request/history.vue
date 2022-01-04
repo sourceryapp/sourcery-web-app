@@ -18,59 +18,7 @@
 
       <sourcery-card v-if="isOrgMember" title="Organization Completed Requests" icon="mdi-archive">
         <none-found-card v-if="jobs.length == 0" text="No past requests found." />
-        <template v-for="job in jobs">
-          <v-hover
-            v-slot="{ hover }"
-            :key="`j-` + job.id"
-          >
-            <v-card
-              v-if="job"
-              :to="'/jobs/' + job.id"
-              class="my-4 rounded-lg"
-              outlined
-            >
-              <v-container>
-                <v-row>
-                  <v-col class="pa-0">
-                    <v-card-title>
-                      {{ job.data().label }}
-                    </v-card-title>
-                    <v-card-subtitle>
-                      {{ job.data().citation }}
-                      <br>
-                      {{ job.data().repository.name }}
-                      <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
-                    </v-card-subtitle>
-                    <v-fade-transition>
-                      <v-overlay
-                        v-if="hover"
-                        absolute
-                        color="primary"
-                        opacity="0.1"
-                        class="rounded-lg"
-                        z-index="1"
-                      />
-                    </v-fade-transition>
-                  </v-col>
-                  <v-col
-                    cols="auto"
-                    class="d-flex align-center justify-center rounded-r-lg px-4"
-                    z-index="2"
-                    :style="
-                      'background: var(--sourcery-' + (job.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
-                  >
-                    <p
-                      class="font-weight-bold text-button ma-0"
-                      :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
-                    >
-                      {{ job.request().prettyStatus() }}
-                    </p>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-hover>
-        </template>
+        <request-listing v-for="job in jobs" :key="`ajl-${job.id}`" :request="job" />
       </sourcery-card>
     </v-flex>
   </v-layout>
@@ -79,8 +27,8 @@
 <script>
 import NoneFoundCard from '@/components/none-found-card.vue'
 import { mapGetters } from 'vuex'
-import SourceryCard from '~/components/card-with-header.vue'
-import RequestListing from '~/components/request-listing.vue'
+import SourceryCard from '@/components/card-with-header.vue'
+import RequestListing from '@/components/request-listing.vue'
 
 export default {
     name: 'History',

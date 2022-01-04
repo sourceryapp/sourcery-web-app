@@ -66,7 +66,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import addCard from '~/components/add-card.vue'
+import addCard from '@/components/add-card.vue'
 
 export default {
     name: 'CreditCards',

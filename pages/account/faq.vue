@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import SourceryCard from '~/components/card-with-header.vue'
+import SourceryCard from '@/components/card-with-header.vue'
 
 export default {
     name: 'FAQ',

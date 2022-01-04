@@ -25,10 +25,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import NoneFoundCard from '@/components/none-found-card.vue'
-import SourceryCard from '~/components/card-with-header.vue'
-import LoggedOutCard from '~/components/logged-out-card.vue'
-import ViewHistoryButton from '~/components/view-history-button.vue'
-import RequestListing from '~/components/request-listing.vue'
+import SourceryCard from '@/components/card-with-header.vue'
+import LoggedOutCard from '@/components/logged-out-card.vue'
+import ViewHistoryButton from '@/components/view-history-button.vue'
+import RequestListing from '@/components/request-listing.vue'
 
 export default {
     name: 'Dashboard',
