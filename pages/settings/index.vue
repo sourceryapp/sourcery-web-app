@@ -29,115 +29,7 @@
             :rules="[$sourceryForms.rules.required]"
           />
 
-          <v-list-item>
-            <v-list-item-avatar
-              :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-            >
-              <v-icon
-                :class="$vuetify.theme.dark ? 'primary--text text--lighten-2' : 'primary--text text--darken-2'"
-              >
-                mdi-lock
-              </v-icon>
-            </v-list-item-avatar>
-            <v-list-item-content>
-              <v-list-item-title>Password</v-list-item-title>
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-dialog
-                v-model="dialogPassword"
-                scrollable
-                persistent
-                :overlay="false"
-                max-width="360px"
-                transition="dialog-transition"
-              >
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    :color="passwordActionButtonType"
-                    text
-                    v-bind="attrs"
-                    v-on="on"
-                  >
-                    {{ changePasswordShortLabel }}
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title
-                    :class="$vuetify.theme.dark ? 'primary--text text--lighten-2 secondary' : 'primary--text text--darken-2 deep-purple lighten-5'"
-                  >
-                    {{ changePasswordLabel }}
-                  </v-card-title>
-                  <v-divider />
-                  <v-form @submit.prevent="resetPass">
-                    <v-card-text>
-                      <v-alert
-                        :value="passSuccess"
-                        type="success"
-                      >
-                        <span color="white">Password successfully changed.</span>
-                      </v-alert>
-                      <v-alert
-                        :value="passFail"
-                        type="error"
-                        text
-                      >
-                        <span color="white">Old Password is incorrect.</span>
-                      </v-alert>
-                      <v-alert
-                        :value="passError"
-                        type="error"
-                      >
-                        <span color="white">An Error Has Occurred. Please Try Again Later.</span>
-                      </v-alert>
-                      <v-text-field
-                        v-if="user.hasPassword"
-                        id="oldpassword"
-                        v-model="oldpassword"
-                        type="password"
-                        label="Old Password"
-                        name="oldpassword"
-                        :rules="[rules.required]"
-                        outlined
-                      />
-                      <v-text-field
-                        id="newpassword"
-                        v-model="newpassword"
-                        name="password"
-                        label="New Password"
-                        messages="At least 8 characters and 1 special character."
-                        :rules="passRules"
-                        :type="showPass ? 'text' : 'password'"
-                        :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                        required
-                        counter
-                        error-count="2"
-                        validate-on-blur
-                        outlined
-                        @click:append="showPass = !showPass"
-                      />
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer />
-                      <v-btn
-                        text
-                        @click="dialogPassword = false;"
-                      >
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        type="submit"
-                        color="primary"
-                        :disabled="!passwordIsValid"
-                        text
-                      >
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-form>
-                </v-card>
-              </v-dialog>
-            </v-list-item-action>
-          </v-list-item>
+          <dialog-edit-password />
 
           <dialog-readonly-setting
             title="Email"
@@ -160,108 +52,33 @@
         </v-list>
       </sourcery-card>
       <sourcery-card title="Payment Information" icon="mdi-credit-card-outline">
-        <v-list
-          v-if="cards.data.length"
-          two-line
-          subheader
-          color="transparent"
-        >
-          <v-subheader>
-            Cards
-          </v-subheader>
-          <template v-for="(item, index) in cards.data">
-            <v-list-item :key="`list-item-${index}`" two-line>
-              <v-list-item-avatar
-                :key="`avatar-${index}`"
-                :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
-                height="32px"
-                rounded
-              >
-                <i :class="$vuetify.theme.dark ? `primary--text text--lighten-2 pf pf-${item.card.brand}` : `primary--text text--darken-2 pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand" />
-              </v-list-item-avatar>
-
-              <v-list-item-content :key="`content-${index}`">
-                <v-list-item-title
-                  class="font-weight-medium"
-                >
-                  •••• •••• ••••  {{ item.card.last4 }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                  Exp: {{ item.card.exp_month }}/{{ item.card.exp_year }}
-                </v-list-item-subtitle>
-
-                <v-flex />
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn v-if="index == 0" disabled text color="grey darken--2">
-                  default
-                </v-btn>
-                <v-btn
-                  color="primary"
-                  text
-                  @click="deleteCard(item.id)"
-                >
-                  Remove
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-            <!-- <v-divider v-if="index + 1 < cards.data.length" :key="`divider-${index}`" inset /> -->
-          </template>
-          <v-list-item dense>
-            <v-list-item-title />
-            <v-list-item-action>
-              <v-spacer />
-              <v-btn
-                color="primary"
-                outlined
-                @click="dialogAddCard = !dialogAddCard"
-              >
-                Add Card
-              </v-btn>
-              <v-dialog v-model="dialogAddCard" width="450" max-width="100%">
-                <add-card @done="done" />
-              </v-dialog>
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-        <v-list
-          v-else
-          color="transparent"
-        >
-          <v-subheader>
-            Cards
-          </v-subheader>
-          <v-list-item>
-            <v-list-item-title>
-              You have no cards on file.
-            </v-list-item-title>
-          </v-list-item>
-        </v-list>
+        <manage-credit-cards
+          :initial-cards="cards"
+        />
       </sourcery-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import addCard from '@/components/add-card.vue'
-// import connectButton from '@/components/connect-button.vue'
 import SourceryCard from '@/components/card-with-header.vue'
 import ToggleTheme from '@/components/toggle-theme.vue'
 import ToggleNotifications from '@/components/toggle-notifications.vue'
 import DialogEditSetting from '@/components/dialog-edit-setting.vue'
 import DialogReadonlySetting from '@/components/dialog-readonly-setting.vue'
+import DialogEditPassword from '@/components/dialog-edit-password.vue'
+import ManageCreditCards from '@/components/manage-credit-cards.vue'
 
 export default {
     name: 'Settings',
     components: {
-        'add-card': addCard,
-        // 'connect-button': connectButton,
-        'sourcery-card': SourceryCard,
+        SourceryCard,
         ToggleTheme,
         ToggleNotifications,
         DialogEditSetting,
-        DialogReadonlySetting
+        DialogReadonlySetting,
+        DialogEditPassword,
+        ManageCreditCards
     },
     async asyncData ({ params, store, app }) {
         const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
@@ -274,159 +91,9 @@ export default {
     },
     data () {
         return {
-            epass: '',
-            // Password variables
-            oldpassword: '',
-            newpassword: '',
-            confirmpassword: '',
-            showPass: false,
-            passSuccess: false,
-            passFail: false,
-            passError: false,
-            // Dialog Controls
-            dialogPassword: false,
-            dialogAddCard: false,
-            // Field Rules
-            rules: {
-                required: value => !!value || 'This field is required.',
-                counter: value => value.length <= 20 || 'Max 20 characters',
-                email: (value) => {
-                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                    return pattern.test(value) || 'Invalid e-mail.'
-                }
-            },
-            special_characters: ['~', '!', '@', '#', '$', '%', '^', '&', '*', '_', '-', '+', '=', '`', '|', '(', ')', '{', '}', '[', ']', ':', ';', "'", '<', '>', ',', '.', '?', '/'],
-            passRules: [
-                v => v.length >= 8 || 'Password must be at least 8 characters',
-                v => this.special_characters.some(substring => v.includes(substring)) || 'Password must contain 1 special character'
-            ],
             cards: {
                 data: []
-            },
-            updateSuccess: false,
-            geoError: 'You need to enable location services to use this feature.',
-            deviceHasGeoLocation: false // Starts as read-only until we confirm geolocation
-        }
-    },
-    computed: {
-        ...mapGetters({
-            user: 'auth/activeUser'
-        }),
-        nameIsValid () {
-            return this.name !== ''
-        },
-        // rewriting this to not require confirm field
-        // https://uxmovement.com/forms/why-the-confirm-password-field-must-die/
-        passwordIsValid () {
-            return this.newpassword.length >= 8 && this.special_characters.some(substring => this.newpassword.includes(substring))
-        },
-        emailIsValid () {
-            return this.email !== '' && this.password !== ''
-        },
-        giveName () {
-            console.log('name:', this.user.name)
-            return this.user.name
-        },
-        usermeta () {
-            return this.$store.state.meta
-        },
-        balance () {
-            const { available } = this.$store.getters['meta/balance']
-            return this.$utils.currencyFormat(available[0].amount, available[0].currency)
-        },
-        hasStripeID () {
-            return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
-        },
-        changePasswordLabel () {
-            if (!this.user.hasPassword) {
-                return 'Set Password'
             }
-            return 'Change Password'
-        },
-        changePasswordShortLabel () {
-            if (!this.user.hasPassword) {
-                return 'Set'
-            }
-            return 'Change'
-        },
-        passwordActionButtonType () {
-            if (!this.user.hasPassword) {
-                return 'warning'
-            }
-            return 'primary'
-        }
-    },
-    mounted () {
-    // console.log(Auth.currentUser);
-        this.deviceHasGeoLocation = Boolean(navigator.geolocation)
-    },
-    methods: {
-        async updateDetails () {
-            if (this.$refs.detailsForm.validate()) {
-                // console.log(this.phone, this.name);
-                const user = this.$fire.auth.currentUser
-
-                /**
-                     * Can't set phoneNumber here
-                     * @url https://www.reddit.com/r/Firebase/comments/70slpi/can_you_update_phonenumber_from_userprofile/
-                     */
-                await user.updateProfile({ // @todo Move this to Vuex
-                    displayName: this.name
-                    // phoneNumber: this.phone,
-                })
-                this.$store.commit('auth/SET_AUTH_USER', user)
-                this.$toast.success('New name successfully saved.')
-            }
-        },
-        resetPass () {
-            if (!this.user.hasPassword) {
-                this.updatePass()
-            } else {
-                this.$fire.auth.currentUser.reauthenticateWithCredential(
-                    this.$fireModule.auth.EmailAuthProvider.credential(
-                        this.$fire.auth.currentUser.email,
-                        this.oldpassword
-                    )
-                ).then((success) => {
-                    this.updatePass()
-                }).catch((error) => {
-                    console.log('error', error)
-                    this.passFail = true
-                })
-            }
-        },
-        updatePass () {
-            const user = this.$fire.auth.currentUser
-            const newPassword = this.newpassword
-            const hadPW = this.user.hasPassword
-
-            user.updatePassword(newPassword).then((success) => {
-                this.$toast.success('New password successfully saved.')
-                this.newpassword = ''
-                this.oldpassword = ''
-                this.$store.commit('auth/SET_AUTH_USER_HAS_PASSWORD')
-                // Close the dialog if already had a password, since the modal will now represent a different action (Change Password) from Set Password.
-                if (!hadPW) {
-                    this.dialogPassword = false
-                }
-            }).catch((error) => {
-                console.log('unknown error', error)
-                this.passError = true
-            })
-        },
-        forgotLog () {
-            this.$fire.auth.signOut().then(() => {
-                console.log('logout complete')
-                this.$router.replace('/password')
-            }).catch((error) => {
-                console.log(error)
-            })
-        },
-        done () {
-            // Close the dialog
-            this.dialog = false
-
-            this.reload()
         }
     }
 }

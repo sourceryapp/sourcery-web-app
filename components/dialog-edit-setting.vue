@@ -109,6 +109,10 @@ export default {
         toastSuccess: {
             type: String,
             default: 'Setting saved successfully.'
+        },
+        password: {
+            type: Boolean,
+            default: false
         }
     },
     data () {

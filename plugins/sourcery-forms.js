@@ -2,6 +2,8 @@
  * Intended to inject $sourceryForms into application, so we can have global form rules.
  */
 
+const special_characters = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '_', '-', '+', '=', '`', '|', '(', ')', '{', '}', '[', ']', ':', ';', "'", '<', '>', ',', '.', '?', '/']
+
 export default ({ app }, inject) => {
     const sourceryForms = (() => {
         return {
@@ -14,10 +16,10 @@ export default ({ app }, inject) => {
                 },
                 password: [
                     v => v.length >= 8 || 'Password must be at least 8 characters',
-                    v => this.special_characters.some(substring => v.includes(substring)) || 'Password must contain 1 special character'
+                    v => special_characters.some(substring => v.includes(substring)) || 'Password must contain 1 special character'
                 ]
             },
-            special_characters: ['~', '!', '@', '#', '$', '%', '^', '&', '*', '_', '-', '+', '=', '`', '|', '(', ')', '{', '}', '[', ']', ':', ';', "'", '<', '>', ',', '.', '?', '/']
+            special_characters
         }
     })()
 
