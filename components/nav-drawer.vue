@@ -222,7 +222,7 @@ export default {
             items2: [
                 { title: 'History', icon: 'mdi-history', link: '/request/history' },
                 { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
-                { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
+                { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
                 { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             ],
             devItems: [
