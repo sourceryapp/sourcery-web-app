@@ -21,7 +21,7 @@
           type="email"
           name="email"
           label="Email"
-          :rules="emailRules"
+          :rules="[$sourceryForms.rules.required, $sourceryForms.rules.email]"
           required
           validate-on-blur
           prepend-icon="mdi-email"
@@ -36,7 +36,7 @@
           required
           :type="showPass ? 'text' : 'password'"
           :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[v => !!v || 'Password is required']"
+          :rules="[$sourceryForms.rules.required]"
           prepend-icon="mdi-security"
           validate-on-blur
           outlined
@@ -108,10 +108,6 @@ export default {
         return {
             valid: true,
             email: '',
-            emailRules: [
-                v => !!v || 'Email is required',
-                v => /.+@.+/.test(v) || 'Email must be valid'
-            ],
             password: '',
             showPass: false,
             loginError: false,
@@ -129,27 +125,11 @@ export default {
             user: 'auth/activeUser'
         })
     },
-    watch: {
-        // Not a fan of this (@bdaley): https://github.com/nuxt-community/firebase-module/issues/148#issuecomment-611474296
-        user (val) {
-            console.log('Watched User val', val)
-            if (val) {
-                if (this.archiveSpace) {
-                    this.$router.push('/request/create')
-                } else {
-                    this.$router.push({ name: 'dashboard' })
-                }
-            }
-        }
-    },
     methods: {
 
         async login () {
             this.loading = true
             this.loginError = false
-
-            // @url https://firebase.google.com/docs/auth/web/start#sign_in_existing_users
-            console.log('logging in')
             try {
                 await this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
                 console.log('Logged in!')

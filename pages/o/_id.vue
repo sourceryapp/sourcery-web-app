@@ -1,67 +1,10 @@
 <template>
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
-      <sourcery-nav-drawer :drawer="drawer " />
-      <v-app-bar
-        :src="repositories[0] ? `/img/repo/${repositories[0].id}.jpg` : ''"
-        app
-        dark
-        elevate-on-scroll
-        :height="repositories[0] ? '360px' : '240px'"
-        class="pa-0"
-      >
-        <template #img="{ props }">
-          <v-img
-            v-bind="props"
-            :gradient="repositories[0] ? '0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%' : '0deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%'"
-          />
-        </template>
-        <v-container class="d-flex px-0" fill-height justify-center>
-          <v-row class="align-self-start" align="center" style="height: 76px; filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.25)) drop-shadow(0px 8px 24px rgba(0, 0, 0, 0.1));">
-            <v-app-bar-nav-icon
-              v-if="user"
-              color="white"
-              class="float-left"
-              @click="drawer !== null ? drawer = !drawer : drawer = $vuetify.breakpoint.mobile"
-            />
-            <v-spacer />
-            <v-app-bar-title :class="user ? 'mt-2 ma-0 ml-n8 mr-4' : 'mt-2 ma-0 mr-4'">
-              <nuxt-link id="wordmark-link" to="/dashboard">
-                <img
-                  id="logo"
-                  src="/img/sourcery-wordmark-white.svg"
-                  alt="Sourcery Logo"
-                >
-              </nuxt-link>
-            </v-app-bar-title>
-            <v-spacer />
-          </v-row>
-          <v-row class="align-self-end" align="center">
-            <v-col>
-              <h1
-                v-if="organization"
-                class="mb-2 text-h3 text-center font-weight-bold"
-                style="text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25), 0px 8px 24px rgba(0, 0, 0, 0.1);"
-              >
-                {{ organization.name }}
-              </h1>
-
-              <h1
-                v-else
-              >
-                Invalid Organization
-              </h1>
-
-              <p
-                class="text-h5 text-center"
-                style="text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.25), 0px 8px 24px rgba(0, 0, 0, 0.1);"
-              >
-                {{ organization.address }}
-              </p>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-app-bar>
+      <organization-app-bar
+        :repositories="repositories"
+        :organization="organization"
+      />
       <sourcery-card title="Repositories" class="mt-4">
         <v-list
           v-if="repositories"
@@ -111,19 +54,14 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import SourceryCard from '@/components/card-with-header.vue'
-import NavigationDrawer from '@/components/nav-drawer.vue'
+import OrganizationAppBar from '@/components/organization-app-bar.vue'
 
 export default {
     name: 'Organization',
     components: {
-        'sourcery-nav-drawer': NavigationDrawer,
-        'sourcery-card': SourceryCard
+        SourceryCard,
+        OrganizationAppBar
     },
-    layout: 'app-no-nav-drawer',
-    data: () => ({
-        drawer: null
-
-    }),
     async fetch () {
         try {
             await this.getOrganization(this.$route.params.id)

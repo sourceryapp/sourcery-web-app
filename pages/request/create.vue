@@ -552,12 +552,6 @@ export default {
     .v-list-item__title {
       white-space: normal;
     }
-    /* .checkmark {
-        display:none;
-    }
-    .active .checkmark{
-        display: inline-block;
-    } */
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;

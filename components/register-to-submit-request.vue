@@ -14,7 +14,7 @@
             v-if="allowRegister || loggingIn"
             v-model="newUserEmailAddress"
             label="Email Address"
-            :rules="emailRules"
+            :rules="[$sourceryForms.rules.required, $sourceryForms.rules.email]"
             required
           />
           <p v-if="allowRegister && !loggingIn">
@@ -64,10 +64,6 @@ export default {
             open: false,
             newUserEmailAddress: '',
             form_valid: true,
-            emailRules: [
-                v => !!v || 'Email is required.',
-                v => /.+@.+\..+/.test(v) || 'Email must be valid'
-            ],
             allowRegister: false,
             loggingIn: false,
             submitResultAlert: {
