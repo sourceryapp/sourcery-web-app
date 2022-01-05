@@ -2,6 +2,13 @@ const initialState = () => {
     return {
         organizations: [],
         organization: {},
+        // Not used yet, but intended to hold dashboard information.  Firebase cant currently count records without detrimental performance.
+        organization_counts: {
+            new: 0,
+            progress: 0,
+            completed: 0,
+            revenue: '$0'
+        },
         organization_repositories: []
     }
 }
@@ -17,6 +24,9 @@ export const getters = {
     },
     getOrganizationRepositories (state) {
         return state.organization_repositories
+    },
+    getOrganizationCounts (state) {
+        return state.organization_counts
     }
 }
 
