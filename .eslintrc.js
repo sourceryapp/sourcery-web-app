@@ -27,7 +27,11 @@ module.exports = {
         camelcase: 'off', // TODO Enforce camelcase naming
         'vue/no-v-html': 'off',
         'vue/attribute-hyphenation': 'off',
-        'vuetify/no-deprecated-classes': 'error'
+        'vuetify/no-deprecated-classes': 'error',
+        'vue/valid-v-slot': ['error', {
+            allowModifiers: true
+        }],
+        'vue/script-setup-uses-vars': 'off' // This is not in eslint anymore apparently and breaks IDE
     },
-    ignorePatterns: ['/tests/', '/static/'] // Disable these for now
+    ignorePatterns: ['/tests/', '/static/', '**/*.ts'] // Disable these for now
 }

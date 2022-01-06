@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import NoneFoundCard from '@/components/none-found-card.vue'
 import { mapGetters } from 'vuex'
+import NoneFoundCard from '@/components/none-found-card.vue'
 import SourceryCard from '@/components/card-with-header.vue'
 import RequestListing from '@/components/request-listing.vue'
 
