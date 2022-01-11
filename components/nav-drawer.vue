@@ -225,9 +225,6 @@ export default {
                 { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
                 { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             ],
-            devItems: [
-                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
-            ],
             bottomItems: [
                 { title: 'Privacy Policy', link: '/privacy' },
                 { title: 'Terms and Conditions', link: '/terms' }
@@ -241,8 +238,23 @@ export default {
         },
         ...mapGetters({
             isOrgMember: 'meta/isOrgMember',
-            user: 'auth/activeUser'
-        })
+            user: 'auth/activeUser',
+            supabaseIsAuthenticated: 'supabase/isAuthenticated'
+        }),
+        devItems () {
+            const items = [
+                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+            ]
+            const supa = { title: 'Supabase', icon: 'mdi-relation-many-to-many', link: '/supabase' }
+
+            if (!this.supabaseIsAuthenticated) {
+                supa.title = 'Supabase Login'
+                supa.link = '/login/supabase'
+            }
+
+            items.push(supa)
+            return items
+        }
     },
     created () {
         this.$nuxt.$on('toggle-nav-drawer', this.toggle)

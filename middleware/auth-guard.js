@@ -22,8 +22,15 @@ export default function ({ store, redirect, route, $config }) {
         console.warn('User not logged in. Redirecting')
         console.groupEnd()
         return redirect('/login')
-    } else {
-        console.info('User is logged in or visiting a public page')
-        console.groupEnd()
     }
+
+    const isSupabaseAuthenticated = store.getters['supabase/isAuthenticated']
+    if (!isSupabaseAuthenticated && $config.supabasePrivatePaths.includes(route.path)) {
+        console.warn('Supabase Not Authenticated, Log in with Supabase')
+        console.groupEnd()
+        return redirect('/login/supabase')
+    }
+
+    console.info('User is logged in or visiting a public page')
+    console.groupEnd()
 }

@@ -35,6 +35,9 @@ export default {
             '/request/create',
             '/archiveSpace',
             '/archiveSpace/'
+        ],
+        supabasePrivatePaths: [
+            '/supabase'
         ]
     },
 
@@ -82,7 +85,13 @@ export default {
     /*
      ** Env File
      */
-    env,
+    env: {
+        supabase: {
+            url: process.env.SUPABASE_URL || 'https://csfzqcahdlzghhzgbvtq.supabase.co',
+            key: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODgyNjk3MSwiZXhwIjoxOTU0NDAyOTcxfQ.KcnzkZVg-vi0LUAj8VZ-CkXvjq7xXkDkcC_0-Y2_hZc'
+        },
+        ...env
+    },
 
     /**
      * PWA Icons
@@ -151,8 +160,9 @@ export default {
 
         // Sourcery API
         '~/plugins/sourcery',
-        { src: '~/plugins/vuetify.ts', ssr: false }
+        { src: '~/plugins/vuetify.ts', ssr: false },
 
+        '~/plugins/supabase'
     ],
 
     /** pwa: {
@@ -316,6 +326,9 @@ export default {
         '@nuxtjs/vuetify'
     ],
 
+    // Required to read .ts files in other nuxt files.
+    extensions: ['ts', 'tsx'],
+
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
         // Fix for this bug: https://github.com/babel/babel/issues/11622
@@ -324,6 +337,7 @@ export default {
                 ['@babel/plugin-proposal-private-methods', { loose: true }]
             ]
         },
+        additionalExtensions: ['ts', 'tsx'],
         extend (config, { isDev }) {
             // Extend only webpack config for client-bundle
             if (isDev) {
