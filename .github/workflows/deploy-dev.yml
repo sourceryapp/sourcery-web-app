@@ -29,10 +29,11 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     - run: yarn install --ignore-engines
     - run: NODE_ENV=development yarn run generate
-    - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOURCERY_DEV }}'
-          projectId: sourcery-dev
-          channelId: live
-          target: sourcery-dev
+    - name: Deploy to Firebase
+      uses: FirebaseExtended/action-hosting-deploy@v0
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOURCERY_DEV }}'
+        channelId: live
+        projectId: sourcery-dev
+        target: sourcery-dev
