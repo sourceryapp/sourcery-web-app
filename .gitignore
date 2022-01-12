@@ -49,3 +49,6 @@ sw.*
 
 # eslint
 /.eslintcache
+
+# DB Migrations Temp
+db
