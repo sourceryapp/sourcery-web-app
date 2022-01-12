@@ -66,7 +66,24 @@ export const getters = {
     /**
      * Has the user completed onboarding?
      */
-    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false)
+    onboardingComplete: (state, getters) => (state.onboardingComplete !== null && state.onboardingComplete !== false),
+
+    agentUpdates: state => state.agentUpdates,
+
+    getPropByName (state) {
+        return (propName) => {
+            if (propName in state) {
+                return state[propName]
+            }
+            return false
+        }
+    },
+
+    editMeta: (state) => {
+        return {
+            phone: state.phone
+        }
+    }
 }
 
 export const mutations = {
@@ -141,6 +158,16 @@ export const actions = {
         return await this.$fire.firestore.collection('user-meta').doc(rootGetters['auth/activeUser'].uid).set({
             [key]: state[key]
         }, { merge: true })
+    },
+
+    async updateAndSave ({ dispatch, commit, state }, { keyName, keyValue }) {
+        const s = initialState()
+        Object.assign(s, state)
+        if (keyName in s) {
+            s[keyName] = keyValue
+        }
+        commit('set', s)
+        return await dispatch('save', keyName)
     },
     /**
      * Updates the current user location

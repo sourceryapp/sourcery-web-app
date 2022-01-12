@@ -114,7 +114,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import connectButton from '~/components/connect-button.vue'
+import connectButton from '@/components/connect-button.vue'
 
 export default {
 

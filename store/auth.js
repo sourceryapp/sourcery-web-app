@@ -18,6 +18,14 @@ export const getters = {
 
     activeUser: (state) => {
         return state.authUser
+    },
+    getPropByName (state) {
+        return (propName) => {
+            if (propName in state) {
+                return state[propName]
+            }
+            return false
+        }
     }
 }
 
@@ -29,14 +37,24 @@ export const mutations = {
     SET_AUTH_USER: (state, { authUser }) => {
         if (authUser) {
             console.log('SET_AUTH_USER called', authUser)
+            const { uid, email, photoURL, displayName, admin, hasPassword, hasRequests } = authUser
+            console.log({
+                uid,
+                email,
+                photoURL,
+                displayName,
+                admin,
+                hasPassword,
+                hasRequests
+            })
             state.authUser = {
-                uid: authUser.uid,
-                email: authUser.email,
-                photoURL: authUser.photoURL,
-                displayName: authUser.displayName,
-                admin: authUser.admin,
-                hasPassword: authUser.hasPassword,
-                hasRequests: authUser.hasRequests
+                uid,
+                email,
+                photoURL,
+                displayName,
+                admin,
+                hasPassword,
+                hasRequests
             }
         }
     },
@@ -106,13 +124,13 @@ export const actions = {
                     authUser.admin = true
                 }
 
-                authUser.hasPassword = false
-
                 try {
                     const methods = await this.$fire.auth.fetchSignInMethodsForEmail(authUser.email)
                     if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                         // Has a password.
                         authUser.hasPassword = true
+                    } else {
+                        authUser.hasPassword = false
                     }
                     // if (methods.includes(this.$fireModule.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD)) {
                     //     // Has passwordless login.
@@ -134,8 +152,35 @@ export const actions = {
         if (authUser) {
             console.log('Setting user', authUser)
             commit('SET_AUTH_USER', { authUser })
+            this.app.router.push('/dashboard')
         }
 
         console.groupEnd()
+    },
+
+    async setUpdatedProfileProperty ({ commit, state }, { keyName, keyValue }) {
+        // Firebase user, not vuex.
+        const user = this.$fire.auth.currentUser
+
+        const updateObj = {}
+        updateObj[keyName] = keyValue
+
+        // Update firebase profile data.  Unique to users.
+        await user.updateProfile(updateObj)
+
+        // Get new vuex copy
+        const currentUserObj = state.authUser
+        currentUserObj[keyName] = keyValue
+
+        // Try to update user meta.
+        try {
+            await this.$fire.firestore.collection('user-meta').doc(state.authUser.uid).set({
+                [keyName]: keyValue
+            }, { merge: true })
+        } catch (e) {
+            console.error(e)
+        }
+
+        commit('SET_AUTH_USER', currentUserObj)
     }
 }

@@ -146,6 +146,9 @@ export default {
         // Extensions for the request object
         '~/plugins/request-extensions',
 
+        // Sourcery Form Rules
+        '~/plugins/sourcery-forms',
+
         // Sourcery API
         '~/plugins/sourcery',
         { src: '~/plugins/vuetify.ts', ssr: false }

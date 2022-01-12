@@ -1,6 +1,6 @@
 <template>
   <v-navigation-drawer
-    :value="drawer"
+    v-model="open"
     app
     bottom
     :class="$vuetify.breakpoint.mobile ? 'rounded-t-xl' : ''"
@@ -48,7 +48,6 @@
           :to="item.link"
           nuxt
           exact
-          class="hidden-sm-and-down"
         >
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
@@ -61,7 +60,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
-      <v-divider v-if="user" class="my-2 hidden-sm-and-down" />
+      <v-divider v-if="user" class="my-2" />
       <v-list-item-group
         v-if="user"
         color="primary"
@@ -87,7 +86,7 @@
 
       <v-divider
         v-if="user && user.admin"
-        class="my-2 hidden-sm-and-down"
+        class="my-2"
       />
       <v-subheader v-if="user && user.admin">
         DEV ONLY
@@ -129,7 +128,7 @@
       </v-list-item-group>
 
       <v-divider
-        class="my-2 hidden-sm-and-down"
+        class="my-2"
       />
 
       <v-list-item v-if="user" nuxt active-class @click="dialog=true">
@@ -213,68 +212,40 @@ import md5 from 'md5'
 
 export default {
     name: 'NavigationDrawer',
-    props: {
-        drawer: {
-            type: Boolean,
-            required: false,
-            default: null
+    data () {
+        return {
+            dialog: false,
+            items1: [
+                { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+                { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
+            ],
+            items2: [
+                { title: 'History', icon: 'mdi-history', link: '/request/history' },
+                { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
+                { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
+                { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
+            ],
+            devItems: [
+                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+            ],
+            bottomItems: [
+                { title: 'Privacy Policy', link: '/privacy' },
+                { title: 'Terms and Conditions', link: '/terms' }
+            ],
+            open: !(this.$vuetify.breakpoint.mobile)
         }
     },
-    data: () => ({
-        dialog: false,
-        items1: [
-            // { title: 'Edit Profile', icon: 'mdi-account', link: '/account/profile' },
-            { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
-            { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
-            // { title: 'Find Jobs', icon: 'mdi-briefcase-search', link: '/jobs', desktopOnly: 'true' },
-        ],
-        items2: [
-            { title: 'History', icon: 'mdi-history', link: '/request/history' },
-            { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
-            // { title: 'Payment Options', icon: 'mdi-credit-card-outline', link: '/account/credit-cards' },
-            // { title: 'Payouts', icon: 'mdi-currency-usd-circle', link: '/account/payouts' },
-            // { title: 'Notifications', icon: 'mdi-bell', link: '/settings/notifications' },
-            // { title: 'Privacy', icon: 'mdi-security', link: '/privacy' },
-            // { title: 'Terms and Conditions', icon: 'mdi-text-subject', link: '/terms' },
-            { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/account/faq' },
-            { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
-            // { title: 'Rate', icon: 'star', link: ''},
-        ],
-        devItems: [
-            { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
-        ],
-        bottomItems: [
-            { title: 'Privacy Policy', link: '/privacy' },
-            { title: 'Terms and Conditions', link: '/terms' }
-        ]
-    }),
     computed: {
         gravatar () {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
         },
         ...mapGetters({
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments',
-            onboardingComplete: 'meta/onboardingComplete',
             isOrgMember: 'meta/isOrgMember',
             user: 'auth/activeUser'
         })
     },
-    mounted () {
-        const theme = localStorage.getItem('dark_theme')
-        if (theme) {
-            if (theme === 'true') {
-                this.$vuetify.theme.dark = true
-            } else {
-                this.$vuetify.theme.dark = false
-            }
-        }
-    // console.log('Firebase: ', firebase);
-    // console.log(this.$store);
-    // console.log('Meta', this.$store.state.meta)
-    // this.listenTokenRefresh();
+    created () {
+        this.$nuxt.$on('toggle-nav-drawer', this.toggle)
     },
     methods: {
         async logout () {
@@ -289,20 +260,10 @@ export default {
         toggleDark () {
             this.$vuetify.theme.dark = !this.$vuetify.theme.dark
             localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString())
+        },
+        toggle () {
+            this.open = !this.open
         }
-    /** listenTokenRefresh() {
-            const currentMessageToken = window.localStorage.getItem('messagingToken')
-            console.log('currentMessageToken', currentMessageToken);
-            if(!!currentMessageToken){
-                messaging.onTokenRefresh(function() {
-                    messaging.getToken().then(function(token) {
-                        this.saveToken(token);
-                    }).catch(function(err) {
-                        console.log('Unable to retrieve refreshed token ', err);
-                    });
-                });
-            }
-        },**/
     }
 }
 </script>

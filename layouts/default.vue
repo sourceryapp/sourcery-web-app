@@ -4,6 +4,7 @@
       mdi-caret-right
     </v-icon>
     <v-app-bar
+      v-if="$route.name !== 'o-id'"
       app
       :color="$vuetify.theme.dark ? '#121212' : 'white'"
       height="84px"
@@ -13,7 +14,7 @@
         v-if="$vuetify.breakpoint.mobile"
         color="primary"
         class="float-left"
-        @click="drawer = !drawer"
+        @click.stop="toggleDrawer()"
       />
       <v-spacer />
       <v-app-bar-title :class="user && $vuetify.breakpoint.smAndDown ? 'mt-2 ma-0 ml-n8' : 'mt-2 ma-0'">
@@ -23,14 +24,14 @@
       </v-app-bar-title>
       <v-spacer />
     </v-app-bar>
-    <sourcery-nav-drawer v-model="drawer" :drawer="drawer" />
+    <sourcery-nav-drawer ref="navdrawer" />
 
     <v-main pa0>
       <v-container fill-height>
         <v-row>
           <v-col>
             <call-to-action-alert
-              v-if="user && !user.hasPassword"
+              v-if="user && user.hasPassword !== undefined && !user.hasPassword"
               message="In order to gain access to the full features of Sourcery, you must set a password."
               to="/settings"
               type="warning"
@@ -45,103 +46,23 @@
         </v-layout>
       </v-container>
     </v-main>
-    <v-bottom-navigation
-      v-if="user && $vuetify.breakpoint.mobile"
-      app
-      grow
-      color="primary"
-    >
-      <v-btn
-        value="dashboard"
-        to="/dashboard"
-      >
-        <span>Dashboard</span>
-        <v-icon>mdi-view-dashboard</v-icon>
-      </v-btn>
 
-      <v-btn
-        value="add"
-        to="/request/create"
-      >
-        <span>New Request</span>
-        <v-icon>mdi-plus-circle</v-icon>
-      </v-btn>
-
-      <!-- <v-btn
-        value="search"
-        to="/jobs"
-      >
-        <span>Find Jobs</span>
-        <v-icon>mdi-briefcase-search</v-icon>
-      </v-btn> -->
-
-      <v-btn
-        value="settings"
-        to="/settings"
-      >
-        <span>Settings</span>
-        <v-icon>mdi-cog</v-icon>
-      </v-btn>
-    </v-bottom-navigation>
-    <v-dialog
-      v-model="dialog"
-      max-width="400"
-    >
-      <v-card>
-        <v-card-title>
-          Are you sure you want to log out?
-        </v-card-title>
-
-        <v-card-actions>
-          <v-spacer />
-
-          <v-btn
-            text
-            @click="dialog = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="error"
-            nuxt
-            text
-            @click="logout()"
-          >
-            Log Out
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <bottom-navigation />
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import md5 from 'md5'
-import NavigationDrawer from '~/components/nav-drawer.vue'
+import NavigationDrawer from '@/components/nav-drawer.vue'
+import BottomNavigation from '@/components/bottom-navigation.vue'
 
 export default {
     components: {
-        'sourcery-nav-drawer': NavigationDrawer
+        'sourcery-nav-drawer': NavigationDrawer,
+        BottomNavigation
     },
-    // props: {
-    //     source: String
-    // },
-    data: () => ({
-        drawer: true,
-        dialog: false
-    }),
     computed: {
-        gravatar () {
-            return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
-        },
         ...mapGetters({
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments',
-            onboardingComplete: 'meta/onboardingComplete',
-            isOrgMember: 'meta/isOrgMember',
             user: 'auth/activeUser'
         })
     },
@@ -154,38 +75,11 @@ export default {
                 this.$vuetify.theme.dark = false
             }
         }
-    // console.log('Firebase: ', firebase);
-    // console.log(this.$store);
-    // console.log('Meta', this.$store.state.meta)
-    // this.listenTokenRefresh();
     },
     methods: {
-        async logout () {
-            try {
-                await this.$fire.auth.signOut()
-                this.dialog = false
-                this.$router.replace('/login')
-            } catch (error) {
-                console.log(error)
-            }
-        },
-        toggleDark () {
-            this.$vuetify.theme.dark = !this.$vuetify.theme.dark
-            localStorage.setItem('dark_theme', this.$vuetify.theme.dark.toString())
+        toggleDrawer () {
+            this.$nuxt.$emit('toggle-nav-drawer')
         }
-    /** listenTokenRefresh() {
-            const currentMessageToken = window.localStorage.getItem('messagingToken')
-            console.log('currentMessageToken', currentMessageToken);
-            if(!!currentMessageToken){
-                messaging.onTokenRefresh(function() {
-                    messaging.getToken().then(function(token) {
-                        this.saveToken(token);
-                    }).catch(function(err) {
-                        console.log('Unable to retrieve refreshed token ', err);
-                    });
-                });
-            }
-        },**/
     }
 }
 </script>

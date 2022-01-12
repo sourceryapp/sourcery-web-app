@@ -33,7 +33,7 @@ export default ({ app }, inject) => {
         html: null
     }
     obj.send = async (options) => {
-        console.log('FEEDBQCK', app, this)
+        console.log('FEEDBACK', app, this)
 
         return await app.$fire.firestore.collection(obj.collection).add({
             to: obj.to,

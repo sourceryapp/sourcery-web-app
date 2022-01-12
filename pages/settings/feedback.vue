@@ -8,13 +8,13 @@
             <v-text-field
               v-model="formData.name"
               label="Your Name"
-              :rules="[rules.required]"
+              :rules="[$sourceryForms.rules.required]"
               outlined
             />
             <v-text-field
               v-model="formData.topic"
               label="Subject"
-              :rules="[rules.required]"
+              :rules="[$sourceryForms.rules.required]"
               outlined
             />
             <v-textarea
@@ -22,7 +22,7 @@
               name="message"
               label="Message"
               value=""
-              :rules="[rules.required]"
+              :rules="[$sourceryForms.rules.required]"
               outlined
             />
           </v-card-text>
@@ -39,12 +39,12 @@
 </template>
 
 <script>
-import SourceryCard from '~/components/card-with-header.vue'
+import SourceryCard from '@/components/card-with-header.vue'
 
 export default {
     name: 'Feedback',
     components: {
-        'sourcery-card': SourceryCard
+        SourceryCard
     },
     data () {
         return {
@@ -53,14 +53,6 @@ export default {
                 email: this.$store.state.user ? this.$store.state.user.email : '',
                 message: null,
                 topic: null
-            },
-            rules: {
-                required: value => !!value || 'Required.',
-                counter: value => value.length <= 20 || 'Max 20 characters',
-                email: (value) => {
-                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                    return pattern.test(value) || 'Invalid e-mail.'
-                }
             }
         }
     },
@@ -82,7 +74,7 @@ export default {
                 this.$refs.feedbackForm.reset()
 
                 // Return to previous page
-                this.$router.go(-1)
+                this.$router.push('/dashboard')
             }
         }
     }
