@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: "Checkout master branch"
-      uses: actions/checkout@v2-beta
+      uses: actions/checkout@v2
       with:
         ref: 'master'
     - name: webfactory/ssh-agent
@@ -29,13 +29,10 @@ jobs:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     - run: yarn install --ignore-engines
     - run: NODE_ENV=development yarn run generate
-    - name: Deploy to Firebase
-      uses: w9jds/firebase-action@7d6b2b058813e1224cdd4db255b2f163ae4084d3
-      env:
-        PROJECT: sourcery-dev
-        TARGET: sourcery-dev
-        NODE_ENV: development
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      with:
-        entrypoint: sh
-        args: -c bin/deploy.sh
+    - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOURCERY_DEV }}'
+          projectId: sourcery-dev
+          channelId: live
+          target: sourcery-dev

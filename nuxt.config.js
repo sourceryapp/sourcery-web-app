@@ -37,7 +37,9 @@ export default {
             '/archiveSpace/'
         ],
         supabasePrivatePaths: [
-            '/supabase'
+            '/supabase',
+            '/supabase/payment',
+            '/supabase/settings'
         ]
     },
 

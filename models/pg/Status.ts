@@ -2,7 +2,7 @@ import { supabase } from '~/plugins/supabase'
 
 const TABLE_NAME = 'public.status'
 
-interface SourceryStatus {
+export interface SourceryStatus {
     id: BigInteger,
     name: string
 }

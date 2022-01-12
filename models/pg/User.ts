@@ -2,7 +2,7 @@ import { supabase } from '~/plugins/supabase'
 
 const TABLE_NAME = 'user'
 
-interface SourceryUser {
+export interface SourceryUser {
     id: string
     name: string
     email: string
