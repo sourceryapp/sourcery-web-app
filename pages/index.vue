@@ -34,13 +34,12 @@
             Sign Up
           </v-btn> -->
           <v-btn
-            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            to="/join-us"
             x-large
             block
             color="white"
             class="black--text text-h5 font-weight-bold"
             height="76px"
-            target="mailchimp"
           >
             Sign Up
           </v-btn>
@@ -306,13 +305,12 @@
             Sign Up
           </v-btn> -->
           <v-btn
-            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            to="/join-us"
             x-large
             block
             color="white"
             class="black--text text-h5 font-weight-bold"
             height="76px"
-            target="mailchimp"
           >
             Sign Up
           </v-btn>
@@ -349,7 +347,8 @@ export default {
     layout: 'landing-beta',
     middleware: null,
     data: () => ({
-        isIntersecting: true
+        isIntersecting: true,
+        mailchimpLink: 'https://mailchi.mp/4de98c4698dd/coming-soon'
     }),
     head () {
         return {

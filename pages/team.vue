@@ -194,6 +194,11 @@ export default {
                     name: 'Brian Kelleher',
                     title: 'Developer',
                     bio: 'Prior to working for the Digital Experience Group, Brian worked as a web developer for University Communications at UConn, where he created and managed WordPress websites such as the premier news website UConn Today.  Brian was also the principle web developer for a live-streaming video startup where he created web and native mobile applications, and worked extensively with emerging cloud technology.'
+                },
+                {
+                    name: 'Carly Wanner-Hyde',
+                    title: 'Project Lead / Head Designer - alpha version',
+                    bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
                 }
             ],
             alumni: [
