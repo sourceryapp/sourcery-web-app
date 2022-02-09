@@ -89,10 +89,6 @@ export default {
      ** Env File
      */
     env: {
-        supabase: {
-            url: process.env.SUPABASE_URL || 'https://csfzqcahdlzghhzgbvtq.supabase.co',
-            key: process.env.SUPABASE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYzODgyNjk3MSwiZXhwIjoxOTU0NDAyOTcxfQ.KcnzkZVg-vi0LUAj8VZ-CkXvjq7xXkDkcC_0-Y2_hZc'
-        },
         ...env
     },
 

@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
 export const supabase = createClient(
-    process.env.supabase.url,
-    process.env.supabase.key
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_KEY
 )
 export default function setStore ({ store, app: { router } }) {
     console.log('setting supabase store from plugin')
