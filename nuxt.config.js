@@ -34,7 +34,8 @@ export default {
             '/dashboard',
             '/request/create',
             '/archiveSpace',
-            '/archiveSpace/'
+            '/archiveSpace/',
+            '/join-us'
         ],
         supabasePrivatePaths: [
             '/supabase',

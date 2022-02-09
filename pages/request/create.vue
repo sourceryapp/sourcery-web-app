@@ -516,6 +516,7 @@ export default {
             // console.log(repo.objectID, repo);
             this.repository_id = repo.objectID
         },
+        // TODO needs to be better.
         processArchiveSpace () {
             const archiveSpaceInfo = this.$store.state.archive.archiveInfo
             // set archivespace info
@@ -523,11 +524,23 @@ export default {
             this.$store.commit('create/setArchiveOrg', archiveSpaceInfo.organization_id)
             // set repo
             console.log('Processing archive space, these are repositories on load:', this.repositories)
+            let found = false
+            const alt_repos = []
             for (const repo in this.repositories) {
+                if (this.repositories[repo].data().organization === archiveSpaceInfo.organization_id) {
+                    alt_repos.push(this.repositories[repo])
+                }
                 if (this.repositories[repo].data().name === archiveSpaceInfo.record_repo) {
+                    found = true
                     this.selectRepositoryObj(this.repositories[repo])
                     // this.$store.commit('create/setRepositoryId', this.repositories[repo].id)
                 }
+            }
+
+            console.log(alt_repos)
+            if (!found && alt_repos.length > 0) {
+                console.log('there are some repos in this org, but none were originally declared')
+                this.selectRepositoryObj(alt_repos[0])
             }
             // set citation
             this.$store.commit('create/setCitation', archiveSpaceInfo.record_cite)

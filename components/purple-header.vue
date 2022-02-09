@@ -31,7 +31,7 @@
           class="ml-6"
           min-width="96px"
           large
-          href="https://mailchi.mp/4de98c4698dd/coming-soon"
+          to="/join-us"
         >
           Sign Up
         </v-btn>
@@ -109,7 +109,7 @@
           </v-list-item>
           <v-list-item
             v-if="isProd"
-            href="https://mailchi.mp/4de98c4698dd/coming-soon"
+            to="/join-us"
             color="white"
           >
             <v-list-item-icon>
