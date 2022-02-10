@@ -1,21 +1,15 @@
 import { supabase } from '~/plugins/supabase'
+import { definitions } from '~/types/supabase'
 
 const TABLE_NAME = 'user'
-
-export interface SourceryUser {
-    id: string
-    name: string
-    email: string
-    created_at: Date
-}
 
 export class User {
     id: string
     name: string
     email: string
-    created_at: Date
+    created_at: string
 
-    constructor({ id, name, email, created_at }: SourceryUser) {
+    constructor({ id, name, email, created_at }: User) {
         this.id = id
         this.name = name
         this.email = email
@@ -38,12 +32,15 @@ export class User {
         }
     }
 
-    private refreshFromSupabase(data : SourceryUser|SourceryUser[]|null) {
+    private refreshFromSupabase(data : User|User[]) {
         if ( !data ) {
             return false
         }
         if ( Array.isArray(data) ) {
-            data = { ...data[0] }
+            this.id = data[0].id
+            this.name = data[0].name
+            this.email = data[0].email
+            this.created_at = data[0].created_at
             return true
         }
         this.id = data.id
@@ -56,7 +53,7 @@ export class User {
     public async save() {
         if ( this.id ) {
             console.log('Property has an ID, update')
-            return await supabase.from<SourceryUser>(TABLE_NAME)
+            return await supabase.from<definitions['user']>(TABLE_NAME)
                 .update(this.toUpdateJSON())
                 .eq('id', this.id)
         } else {

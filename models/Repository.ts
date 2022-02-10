@@ -1,93 +1,50 @@
-import firebase from "firebase/app";
+import { supabase } from '~/plugins/supabase'
+import type { definitions } from '~/types/supabase'
 
-const COLLECTION = 'repository'
-
-
+const TABLE_NAME = 'repositories'
 
 export class Repository {
+    id: BigInt | null
+    name: string
+    address1: string
+    address2: string
+    city: string
+    state: string
+    postal_code: string
+    country_code: string
+    geography: string
+    active: boolean
+    organization_id: BigInt
+    featured_image_id: BigInt | null
+    created_at: string | null
 
-    id?: string;
-    address1?: string;
-    address2?: string;
-    city?: string;
-    country_code?: 'US';
-    latitude?: string;
-    longitude?: string;
-    institution?: string;
-    name?: string;
-    postal_code?: string;
-    secondary_location?: string;
-    state?: string;
-
-    /**
-     * Gets the current/active Firestore Instance
-     * @returns
-     */
-    public getInstance() {
-        return firebase.app().firestore()
+    constructor({
+        id = null,
+        name,
+        address1,
+        address2,
+        city,
+        state,
+        postal_code,
+        country_code,
+        geography,
+        active,
+        organization_id,
+        featured_image_id = null,
+        created_at = null
+    }: Repository) {
+        this.id = id,
+        this.name = name
+        this.address1 = address1
+        this.address2 = address2
+        this.city = city
+        this.state = state
+        this.postal_code = postal_code
+        this.country_code = country_code
+        this.geography = geography
+        this.active = active
+        this.organization_id = organization_id
+        this.featured_image_id = featured_image_id
+        this.created_at = created_at
     }
-
-    static fromSnapshot(document: firebase.firestore.DocumentSnapshot): Repository{
-        let repository = new Repository();
-        repository.id = document.id;
-        repository.address1 = document.data()?.address1
-        repository.address2 = document.data()?.address2
-        repository.city = document.data()?.city
-        repository.country_code = document.data()?.country_code
-        repository.latitude = document.data()?.geo.latitude
-        repository.longitude = document.data()?.geo.longitude
-        repository.institution = document.data()?.institution
-        repository.name = document.data()?.name
-        repository.postal_code = document.data()?.postal_code
-        repository.secondary_location = document.data()?.secondary_location
-        repository.state = document.data()?.state
-        return repository
-    }
-
-    /**
-     * toFirestore()
-     */
-    public toFirestore(): object {
-
-        return {
-
-        }
-    }
-
-    /**
-     * Save repository
-     * Wrapper/Traffic function for create() and update()
-     */
-    public save(){
-        return this.id === '' ? this.create() : this.update();
-    }
-
-    /**
-     * Delete repository
-     */
-    public delete(){
-        let db = this.getInstance()
-        return db.collection(COLLECTION).doc(this.id).delete()
-    }
-
-    /**
-     * Generates an ID and creates a new repository
-     * from our properties.
-     */
-    private create(){
-        let db = this.getInstance()
-        let docRef = db.collection(COLLECTION).doc();
-        this.id = docRef.id
-        return docRef.set(this.toFirestore())
-    }
-
-    /**
-     * Updates an existing repository
-     */
-    private update(){
-        let db = this.getInstance()
-        return db.collection(COLLECTION).doc(this.id).set(this.toFirestore())
-    }
-
-
 }

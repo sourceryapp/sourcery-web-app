@@ -1,86 +1,32 @@
-import firebase from "firebase/app";
+import { supabase } from '~/plugins/supabase'
+import type { definitions } from '~/types/supabase'
 
-const COLLECTION = 'organization'
+const TABLE_NAME = 'organizations'
 
 export class Organization {
-    id: string;
-    name: string;
-    address: string;
-    owner: string;
-    slug: string;
+    id: BigInt | null
+    address: string
+    name: string
+    slug: string
+    owner_id: string
+    featured_image_id: BigInt | null
+    created_at: string | null
 
-    constructor (id='', name='', address='', owner='', slug='') {
-        this.id = id
-        this.name = name
+    constructor({
+        id = null,
+        address,
+        name,
+        slug,
+        owner_id,
+        featured_image_id = null,
+        created_at = null
+    }: Organization) {
+        this.id = id,
         this.address = address
-        this.owner = owner
+        this.name = name
         this.slug = slug
+        this.owner_id = owner_id
+        this.featured_image_id = featured_image_id
+        this.created_at = created_at
     }
-
-    /**
-     * Gets the current/active Firestore Instance
-     * @returns
-     */
-    public getInstance() {
-        return firebase.app().firestore()
-    }
-
-    static fromSnapshot(document: firebase.firestore.DocumentSnapshot): Organization{
-        return new Organization(
-            document.id,
-            document.data()?.name,
-            document.data()?.address,
-            document.data()?.owner,
-            document.data()?.slug
-        );
-    }
-
-    /**
-     * toFirestore()
-     */
-    public toFirestore(): object {
-        return {
-            name: this.name,
-            address: this.address,
-            owner: this.owner,
-            slug: this.slug
-        }
-    }
-
-    /**
-     * Save Organization
-     * Wrapper/Traffic function for create() and update()
-     */
-    public save(){
-        return this.id === '' ? this.create() : this.update();
-    }
-
-    /**
-     * Delete Organization
-     */
-    public delete(){
-        let db = this.getInstance()
-        return db.collection(COLLECTION).doc(this.id).delete()
-    }
-
-    /**
-     * Generates an ID and creates a new organization
-     * from our properties.
-     */
-    private create(){
-        let db = this.getInstance()
-        let docRef = db.collection(COLLECTION).doc();
-        this.id = docRef.id
-        return docRef.set(this.toFirestore())
-    }
-
-    /**
-     * Updates an existing organization
-     */
-    private update(){
-        let db = this.getInstance()
-        return db.collection(COLLECTION).doc(this.id).set(this.toFirestore())
-    }
-
-
 }

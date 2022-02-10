@@ -2,16 +2,11 @@ import { supabase } from '~/plugins/supabase'
 
 const TABLE_NAME = 'public.status'
 
-export interface SourceryStatus {
-    id: BigInteger,
-    name: string
-}
-
 export class Status {
-    id: BigInteger
+    id: BigInt
     name: string
 
-    constructor({ id, name }: SourceryStatus) {
+    constructor({ id, name }: Status) {
         this.id = id,
         this.name = name
     }
@@ -23,12 +18,14 @@ export class Status {
         }
     }
 
-    private refresh(data : SourceryStatus|SourceryStatus[]|null) {
+    private refresh(data : Status|Status[]|null) {
         if ( !data ) {
             return false
         }
         if ( Array.isArray(data) ) {
-            data = { ...data[0] }
+            this.id = data[0].id
+            this.name = data[0].name
+            return true
         }
         this.id = data.id,
         this.name = data.name

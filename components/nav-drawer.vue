@@ -17,8 +17,8 @@
       </v-list-item>
       <v-list-item two-line>
         <v-list-item-content>
-          <v-list-item-title v-if="user" class="text-h6">
-            {{ user.displayName }}
+          <v-list-item-title v-if="userMeta" class="text-h6">
+            {{ userMeta.name }}
           </v-list-item-title>
           <v-list-item-title v-else class="text-h6">
             Logged Out
@@ -238,7 +238,8 @@ export default {
         },
         ...mapGetters({
             isOrgMember: 'meta/isOrgMember',
-            user: 'auth/activeUser',
+            user: 'supabase/authUser',
+            userMeta: 'supabase/authUserMeta',
             supabaseIsAuthenticated: 'supabase/isAuthenticated'
         }),
         devItems () {

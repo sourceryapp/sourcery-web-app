@@ -3,22 +3,8 @@ import { User } from '@supabase/supabase-js'
 
 const TABLE_NAME = 'payment_associations'
 
-export interface SourceryPaymentAssociation {
-    id?: BigInteger,
-    stripe_access_token: string,
-    stripe_livemode: Boolean,
-    stripe_refresh_token: string,
-    stripe_scope: string,
-    stripe_publishable_key: string,
-    stripe_user_id: string,
-    stripe_token_type: string,
-    stripe_customer_id: string,
-    user_id: string,
-    created_at?: Date
-}
-
 export class PaymentAssociation {
-    id?: BigInteger
+    id: BigInt | null
     stripe_access_token: string
     stripe_livemode: Boolean
     stripe_refresh_token: string
@@ -28,10 +14,10 @@ export class PaymentAssociation {
     stripe_token_type: string
     stripe_customer_id: string
     user_id: string
-    created_at?: Date
+    created_at: string | null
 
     constructor({ 
-        id = undefined,
+        id = null,
         stripe_access_token,
         stripe_livemode,
         stripe_refresh_token,
@@ -41,8 +27,8 @@ export class PaymentAssociation {
         stripe_token_type,
         stripe_customer_id,
         user_id,
-        created_at = undefined
-    }: SourceryPaymentAssociation) {
+        created_at = null
+    }: PaymentAssociation) {
         this.id = id
         this.stripe_access_token = stripe_access_token
         this.stripe_livemode = stripe_livemode

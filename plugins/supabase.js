@@ -7,6 +7,7 @@ export const supabase = createClient(
 export default function setStore ({ store, app: { router } }) {
     console.log('setting supabase store from plugin')
     store.commit('supabase/setAuthUser', supabase.auth.user())
+    store.dispatch('supabase/fetchUserMeta')
 
     supabase.auth.onAuthStateChange((_, session) => {
         console.log(_, session)
