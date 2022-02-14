@@ -32,24 +32,6 @@ export class User {
         }
     }
 
-    private refreshFromSupabase(data : User|User[]) {
-        if ( !data ) {
-            return false
-        }
-        if ( Array.isArray(data) ) {
-            this.id = data[0].id
-            this.name = data[0].name
-            this.email = data[0].email
-            this.created_at = data[0].created_at
-            return true
-        }
-        this.id = data.id
-        this.name = data.name
-        this.email = data.email
-        this.created_at = data.created_at
-        return true
-    }
-
     public async save() {
         if ( this.id ) {
             console.log('Property has an ID, update')
@@ -59,5 +41,14 @@ export class User {
         } else {
             throw Error('User object must contain an ID before saving.')
         }
+    }
+
+    public static async getById(user_id : string) {
+        let { data: user, error } = await supabase.from<User>('user').select('*').eq('id', user_id)
+        if ( Array.isArray(user) && user.length > 0 && user[0] && user[0].id ) {
+            const u = new User(user[0])
+            return u
+        }
+        return null
     }
 }

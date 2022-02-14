@@ -3,7 +3,7 @@ import { supabase } from '~/plugins/supabase'
 const TABLE_NAME = 'public.status'
 
 export class Status {
-    id: BigInt
+    id: number
     name: string
 
     constructor({ id, name }: Status) {
@@ -18,17 +18,14 @@ export class Status {
         }
     }
 
-    private refresh(data : Status|Status[]|null) {
-        if ( !data ) {
-            return false
+    public static async getById(id: number) {
+        let { data: status, error } = await supabase.from<Status>('user')
+            .select('*')
+            .eq('id', id)
+        if ( Array.isArray(status) && status.length > 0 && status[0] && status[0].id ) {
+            const s = new Status(status[0])
+            return s
         }
-        if ( Array.isArray(data) ) {
-            this.id = data[0].id
-            this.name = data[0].name
-            return true
-        }
-        this.id = data.id,
-        this.name = data.name
-        return true
+        return null
     }
 }

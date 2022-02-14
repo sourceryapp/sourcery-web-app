@@ -1,6 +1,7 @@
 import type { User } from "@supabase/supabase-js"
 import { PaymentAssociation } from '~/models/PaymentAssociation'
 import { User as SourceryUser } from '~/models/User'
+import { Organization } from '~/models/Organization'
 import { Commit } from 'vuex'
 import { supabase } from "~/plugins/supabase"
 
@@ -8,7 +9,8 @@ import { supabase } from "~/plugins/supabase"
 interface SupabaseState {
     authUser: User | null,
     authUserMeta: SourceryUser | null,
-    authUserPaymentAssociation: PaymentAssociation | null
+    authUserPaymentAssociation: PaymentAssociation | null,
+    authUserOrganizations: Organization[]
 }
 
 // Initialize state.
@@ -16,7 +18,8 @@ const initialState = () : SupabaseState => {
     return {
         authUser: null,
         authUserMeta: null,
-        authUserPaymentAssociation: null
+        authUserPaymentAssociation: null,
+        authUserOrganizations: []
     }
 }
 
@@ -34,6 +37,9 @@ export const getters = {
     },
     authUserPaymentAssociation(state: SupabaseState) {
         return state.authUserPaymentAssociation
+    },
+    ownsAnOrganization(state: SupabaseState) {
+        return state.authUserOrganizations.length > 0
     }
 }
 
@@ -47,8 +53,11 @@ export const mutations = {
     setAuthUserMeta(state: SupabaseState, value: SourceryUser) {
         state.authUserMeta = value
     },
+    setAuthUserOrganizations(state: SupabaseState, value: Organization[] ) {
+        state.authUserOrganizations = value
+    },
     clear(state: SupabaseState) {
-        state.authUser = null
+        state = initialState()
     }
 }
 
@@ -73,10 +82,19 @@ export const actions = {
     },
     async fetchUserMeta({ state, commit }: { state: SupabaseState, commit: Commit}) {
         if ( state.authUser ) {
-            let { data: user, error } = await supabase.from<SourceryUser>('user').select('*').eq('id', state.authUser.id)
-            if ( Array.isArray(user) && user.length > 0 && user[0] && user[0].id ) {
-                const u = new SourceryUser(user[0])
-                commit('setAuthUserMeta', u.toJSON())
+            const meta = await SourceryUser.getById(state.authUser.id)
+            if ( meta ) {
+                commit('setAuthUserMeta', meta.toJSON())
+                return true
+            }
+        }
+        return false
+    },
+    async fetchUserOrganizations({ state, commit }: { state: SupabaseState, commit: Commit}) {
+        if ( state.authUser ) {
+            const orgs = await Organization.getByOwner(state.authUser.id)
+            if ( orgs ) {
+                commit('setAuthUserOrganizations', orgs)
                 return true
             }
         }

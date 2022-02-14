@@ -207,8 +207,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import md5 from 'md5'
+import { supabase } from '~/plugins/supabase'
 
 export default {
     name: 'NavigationDrawer',
@@ -237,10 +238,10 @@ export default {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
         },
         ...mapGetters({
-            isOrgMember: 'meta/isOrgMember',
-            user: 'supabase/authUser',
-            userMeta: 'supabase/authUserMeta',
-            supabaseIsAuthenticated: 'supabase/isAuthenticated'
+            isOrgMember: 'supabaseAuth/ownsAnOrganization',
+            user: 'supabaseAuth/authUser',
+            userMeta: 'supabaseAuth/authUserMeta',
+            supabaseIsAuthenticated: 'supabaseAuth/isAuthenticated'
         }),
         devItems () {
             const items = [
@@ -261,10 +262,17 @@ export default {
         this.$nuxt.$on('toggle-nav-drawer', this.toggle)
     },
     methods: {
+        ...mapMutations({
+            clearAuth: 'supabaseAuth/clear'
+        }),
         async logout () {
             try {
-                await this.$fire.auth.signOut()
+                const { error } = await supabase.auth.signOut()
+                this.clearAuth()
                 this.dialog = false
+                if (error) {
+                    throw error
+                }
                 this.$router.replace('/login')
             } catch (error) {
                 console.log(error)

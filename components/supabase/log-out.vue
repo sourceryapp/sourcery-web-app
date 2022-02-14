@@ -16,7 +16,7 @@ export default {
     },
     methods: {
         ...mapMutations({
-            clearAuth: 'supabase/clear'
+            clearAuth: 'supabaseAuth/clear'
         }),
         async logout () {
             try {

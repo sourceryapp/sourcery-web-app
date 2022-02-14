@@ -4,7 +4,7 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'request_vendor'
 
 export class RequestVendor {
-    request_id: BigInt
+    request_id: number
     label: string
 
     constructor({

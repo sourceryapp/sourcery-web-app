@@ -4,8 +4,8 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'request_comments'
 
 export class RequestComment {
-    id: BigInt | null
-    request_id: BigInt
+    id: number | null
+    request_id: number
     user_id: string
     content: string
     created_at: string | null

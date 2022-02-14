@@ -4,8 +4,8 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'pricing_summaries'
 
 export class PricingSummary {
-    id: BigInt | null
-    request_id: BigInt
+    id: number | null
+    request_id: number
     base_fee: Number
     service_fee: Number
     total: Number

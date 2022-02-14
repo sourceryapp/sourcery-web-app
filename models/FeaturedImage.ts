@@ -4,7 +4,7 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'featured_images'
 
 export class FeaturedImage {
-    id: BigInt | null
+    id: number | null
     user_id: string
     url: string
     label: string

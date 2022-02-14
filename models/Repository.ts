@@ -4,7 +4,7 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'repositories'
 
 export class Repository {
-    id: BigInt | null
+    id: number | null
     name: string
     address1: string
     address2: string
@@ -14,8 +14,8 @@ export class Repository {
     country_code: string
     geography: string
     active: boolean
-    organization_id: BigInt
-    featured_image_id: BigInt | null
+    organization_id: number
+    featured_image_id: number | null
     created_at: string | null
 
     constructor({

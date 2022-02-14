@@ -4,12 +4,12 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'organizations'
 
 export class Organization {
-    id: BigInt | null
+    id: number | null
     address: string
     name: string
     slug: string
     owner_id: string
-    featured_image_id: BigInt | null
+    featured_image_id: number | null
     created_at: string | null
 
     constructor({
@@ -28,5 +28,17 @@ export class Organization {
         this.owner_id = owner_id
         this.featured_image_id = featured_image_id
         this.created_at = created_at
+    }
+
+    public static async getByOwner(user_id: string) {
+        let { data: organizations, error } = await supabase.from<Organization>('organizations')
+            .select('*')
+            .eq('owner_id', user_id)
+
+        if ( Array.isArray(organizations) && organizations.length > 0 && organizations[0] ) {
+            const orgs = organizations.map(x => new Organization(x))
+            return orgs
+        }
+        return []
     }
 }

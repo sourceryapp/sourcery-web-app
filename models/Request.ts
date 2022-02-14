@@ -4,11 +4,11 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'requests'
 
 export class Request {
-    id: BigInt | null
-    repository_id: BigInt
+    id: number | null
+    repository_id: number
     citation: string
     pages: number
-    status_id: BigInt
+    status_id: number
     user_id: string
     created_at: string | null
     updated_at: string | null

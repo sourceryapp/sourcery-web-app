@@ -4,11 +4,11 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'request_events'
 
 export class RequestEvent {
-    id: BigInt | null
-    request_id: BigInt
+    id: number | null
+    request_id: number
     user_id: string
     description: string
-    status_id: BigInt
+    status_id: number
     created_at: string | null
 
     constructor({

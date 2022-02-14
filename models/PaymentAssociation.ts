@@ -4,7 +4,7 @@ import { User } from '@supabase/supabase-js'
 const TABLE_NAME = 'payment_associations'
 
 export class PaymentAssociation {
-    id: BigInt | null
+    id: number | null
     stripe_access_token: string
     stripe_livemode: Boolean
     stripe_refresh_token: string

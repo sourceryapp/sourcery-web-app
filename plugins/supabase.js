@@ -6,19 +6,20 @@ export const supabase = createClient(
 )
 export default function setStore ({ store, app: { router } }) {
     console.log('setting supabase store from plugin')
-    store.commit('supabase/setAuthUser', supabase.auth.user())
-    store.dispatch('supabase/fetchUserMeta')
+    store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
+    store.dispatch('supabaseAuth/fetchUserMeta')
+    store.dispatch('supabaseAuth/fetchUserOrganizations')
 
     supabase.auth.onAuthStateChange((_, session) => {
         console.log(_, session)
         if (_ === 'SIGNED_OUT') {
-            store.commit('supabase/clear')
+            store.commit('supabaseAuth/clear')
             router.push('/login/supabase')
             return
         }
 
         if (session && session.user) {
-            store.commit('supabase/setAuthUser', session.user)
+            store.commit('supabaseAuth/setAuthUser', session.user)
         }
     })
 }

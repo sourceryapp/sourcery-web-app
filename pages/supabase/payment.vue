@@ -12,7 +12,7 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
     async asyncData ({ store }) {
-        const result = await store.dispatch('supabase/fetchAuthUserPaymentAssociation')
+        const result = await store.dispatch('supabaseAuth/fetchAuthUserPaymentAssociation')
         console.log(result)
         return {
             editingPaymentAssociation: store.state.supabase.authUserPaymentAssociation
@@ -20,12 +20,12 @@ export default {
     },
     computed: {
         ...mapGetters({
-            paymentAssociation: 'supabase/authUserPaymentAssociation'
+            paymentAssociation: 'supabaseAuth/authUserPaymentAssociation'
         })
     },
     methods: {
         ...mapActions({
-            save: 'supabase/saveAuthUserPaymentAssociation'
+            save: 'supabaseAuth/saveAuthUserPaymentAssociation'
         })
     }
 }

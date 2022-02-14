@@ -18,7 +18,7 @@ export default {
     components: { LogOut },
     computed: {
         ...mapGetters({
-            user: 'supabase/authUser'
+            user: 'supabaseAuth/authUser'
         })
     }
 }

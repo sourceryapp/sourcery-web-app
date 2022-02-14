@@ -68,7 +68,7 @@ export default {
     components: { SourceryCard },
     computed: {
         ...mapGetters({
-            user: 'supabase/authUser'
+            user: 'supabaseAuth/authUser'
         })
     }
 }

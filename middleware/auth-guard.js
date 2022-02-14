@@ -24,7 +24,7 @@ export default function ({ store, redirect, route, $config }) {
         return redirect('/login')
     }
 
-    const isSupabaseAuthenticated = store.getters['supabase/isAuthenticated']
+    const isSupabaseAuthenticated = store.getters['supabaseAuth/isAuthenticated']
     if (!isSupabaseAuthenticated && $config.supabasePrivatePaths.includes(route.path)) {
         console.warn('Supabase Not Authenticated, Log in with Supabase')
         console.groupEnd()

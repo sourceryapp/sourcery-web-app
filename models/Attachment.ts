@@ -4,8 +4,8 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'attachments'
 
 export class Attachment {
-    id: BigInt | null
-    request_id: BigInt
+    id: number | null
+    request_id: number
     user_id: string
     url: string
     mime: string

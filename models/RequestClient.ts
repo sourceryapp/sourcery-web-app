@@ -4,7 +4,7 @@ import type { definitions } from '~/types/supabase'
 const TABLE_NAME = 'request_clients'
 
 export class RequestClient {
-    request_id: BigInt
+    request_id: number
     label: string
 
     constructor({
