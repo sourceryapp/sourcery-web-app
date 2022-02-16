@@ -3,7 +3,6 @@ import { PaymentAssociation } from '~/models/PaymentAssociation'
 import { User as SourceryUser } from '~/models/User'
 import { Organization } from '~/models/Organization'
 import { Commit } from 'vuex'
-import { supabase } from "~/plugins/supabase"
 
 // Establish an interface for our Supabase state.
 interface SupabaseState {
@@ -40,6 +39,12 @@ export const getters = {
     },
     ownsAnOrganization(state: SupabaseState) {
         return state.authUserOrganizations.length > 0
+    },
+    userOrganizations(state: SupabaseState) {
+        return state.authUserOrganizations
+    },
+    userRepositories(state: SupabaseState) {
+        return state.authUserOrganizations.map(x => x.repositories).flat()
     }
 }
 

@@ -72,7 +72,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser'
+            user: 'supabaseAuth/authUser'
         })
     },
     methods: {

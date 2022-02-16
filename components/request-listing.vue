@@ -4,7 +4,7 @@
     :key="request.id"
   >
     <v-card
-      v-if="request && !request.request().isArchived()"
+      v-if="request"
       :to="'/request/' + request.id"
       class="my-4 rounded-lg"
       outlined
@@ -13,13 +13,12 @@
         <v-row>
           <v-col class="pa-0">
             <v-card-title>
-              {{ request.data().label }}
+              {{ label }}
             </v-card-title>
             <v-card-subtitle>
-              {{ request.data().citation }}
+              {{ request.citation }}
               <br>
-              {{ request.data().repository.name }}
-              <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
+              {{ request.repository.name }}
             </v-card-subtitle>
             <v-fade-transition>
               <v-overlay
@@ -37,13 +36,13 @@
             class="d-flex align-center justify-center rounded-r-lg px-4"
             z-index="2"
             :style="
-              'background: var(--sourcery-' + (request.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
+              'background: var(--sourcery-' + (request.status.name == 'Complete' ? '700' : '500') + ')'"
           >
             <p
               class="font-weight-bold text-button ma-0"
               :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
             >
-              {{ request.request().prettyStatus() }}
+              {{ request.status.name }}
             </p>
           </v-col>
         </v-row>
@@ -58,6 +57,18 @@ export default {
         request: {
             type: Object,
             required: true
+        },
+        client: {
+            type: Boolean,
+            default: true
+        }
+    },
+    computed: {
+        label () {
+            if (!this.client) {
+                return this.request.request_vendor.label
+            }
+            return this.request.request_client.label
         }
     }
 }

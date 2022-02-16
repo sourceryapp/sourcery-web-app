@@ -1,5 +1,6 @@
 import { supabase } from '~/plugins/supabase'
 import type { definitions } from '~/types/supabase'
+import { Repository } from '~/models/Repository'
 
 const TABLE_NAME = 'organizations'
 
@@ -11,6 +12,7 @@ export class Organization {
     owner_id: string
     featured_image_id: number | null
     created_at: string | null
+    repositories?: Repository[]
 
     constructor({
         id = null,
@@ -19,7 +21,8 @@ export class Organization {
         slug,
         owner_id,
         featured_image_id = null,
-        created_at = null
+        created_at = null,
+        repositories = undefined
     }: Organization) {
         this.id = id,
         this.address = address
@@ -28,11 +31,19 @@ export class Organization {
         this.owner_id = owner_id
         this.featured_image_id = featured_image_id
         this.created_at = created_at
+
+        if ( repositories ) {
+            this.repositories = repositories
+        }
+
     }
 
     public static async getByOwner(user_id: string) {
-        let { data: organizations, error } = await supabase.from<Organization>('organizations')
-            .select('*')
+        let { data: organizations, error } = await supabase.from('organizations')
+            .select(`
+                *,
+                repositories(*)
+            `)
             .eq('owner_id', user_id)
 
         if ( Array.isArray(organizations) && organizations.length > 0 && organizations[0] ) {

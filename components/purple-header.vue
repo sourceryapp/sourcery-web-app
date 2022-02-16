@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
     name: 'Header',
     props: {
@@ -135,9 +137,9 @@ export default {
     },
 
     computed: {
-        user () {
-            return this.$fire.auth.currentUser
-        },
+        ...mapGetters({
+            user: 'supabaseAuth/authUser'
+        }),
         isProd () {
             if (process.env.BASE_URL && process.env.BASE_URL === 'https://sourceryapp.org') {
                 return true

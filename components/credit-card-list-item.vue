@@ -51,8 +51,6 @@ export default {
     methods: {
         async deleteCard (id) {
             if (confirm('Are you sure you want to delete this card?')) {
-                console.log(this.$fire.functions)
-                console.log(this.$fire.$functions)
                 const stripeDeleteCard = this.$fire.functions.httpsCallable('stripeDeleteCard')
                 const { data } = await stripeDeleteCard({ card_id: id })
                 if (data.id) {
