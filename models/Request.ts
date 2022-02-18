@@ -3,6 +3,7 @@ import { Status } from '~/models/Status'
 import { Repository } from '~/models/Repository'
 import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
+import { Attachment } from '~/models/Attachment'
 
 const TABLE_NAME = 'requests'
 
@@ -21,6 +22,7 @@ export class Request {
     request_client?: RequestClient
     request_vendors?: RequestVendor[]
     request_vendor?: RequestVendor
+    attachments?: Attachment[]
 
     constructor({
         id = null,
@@ -34,7 +36,8 @@ export class Request {
         status = undefined,
         repository = undefined,
         request_clients = undefined,
-        request_vendors = undefined
+        request_vendors = undefined,
+        attachments = undefined
     }: Request) {
         this.id = id,
         this.repository_id = repository_id
@@ -46,19 +49,23 @@ export class Request {
         this.updated_at = updated_at
 
         if ( status ) {
-            this.status = status
+            this.status = new Status(status)
         }
 
         if ( repository ) {
-            this.repository = repository
+            this.repository = new Repository(repository)
         }
 
         if ( request_clients && request_clients.length > 0 ) {
-            this.request_client = request_clients[0]
+            this.request_client = new RequestClient(request_clients[0])
         }
 
         if ( request_vendors && request_vendors.length > 0 ) {
-            this.request_vendor = request_vendors[0]
+            this.request_vendor = new RequestVendor(request_vendors[0])
+        }
+
+        if ( attachments ) {
+            this.attachments = attachments.map(x => new Attachment(x))
         }
     }
 
@@ -127,5 +134,66 @@ export class Request {
         }
 
         return []
+    }
+
+    /**
+     * Returns a request with the Primary ID of given.
+     * @param id Primary ID
+     * @returns Request | null
+     */
+    public static async getById(id: string) {
+        let { data: request, error } = await supabase.from('requests')
+            .select(`
+                *,
+                status!requests_status_id_fkey (*),
+                repository:repositories (*),
+                request_clients (*),
+                request_vendors (*),
+                attachments (*)
+            `)
+            .eq('id', id)
+            .limit(1)
+            .single()
+
+        if ( request ) {
+            return new Request(request)
+        }
+        return null
+    }
+
+    /**
+     * Deletes the current request from persistant storage.
+     * @returns Request | null
+     */
+    async delete() {
+        const { data: request, error } = await supabase.from('requests')
+            .delete()
+            .eq('id', this.id)
+
+        if ( error ) {
+            console.log(error)
+        }
+
+        return request
+    }
+
+    /**
+     * Archives the current request.
+     * @returns Boolean Status of archiving.
+     */
+    async archive() {
+        const archive_status = await Status.getByName('Archived')
+        if ( archive_status ) {
+            const { data: replaced, error } = await supabase.from('requests')
+                .update({ status_id: archive_status.id })
+                .eq('id', this.id)
+
+            if ( error ) {
+                console.log(error)
+            }
+            this.status_id = archive_status.id
+            return true
+        }
+        return false
     }
 }

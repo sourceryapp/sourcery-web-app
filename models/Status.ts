@@ -19,13 +19,29 @@ export class Status {
     }
 
     public static async getById(id: number) {
-        let { data: status, error } = await supabase.from<Status>('user')
+        let { data: status, error } = await supabase.from<Status>('status')
             .select('*')
             .eq('id', id)
         if ( Array.isArray(status) && status.length > 0 && status[0] && status[0].id ) {
             const s = new Status(status[0])
             return s
         }
+        return null
+    }
+
+
+    public static async getByName(name : string) {
+        let { data: status, error } = await supabase.from<Status>('status')
+            .select('*')
+            .eq('name', name)
+            .limit(1)
+            .single()
+
+        if ( status && status.name ) {
+            const s = new Status(status)
+            return s
+        }
+
         return null
     }
 }

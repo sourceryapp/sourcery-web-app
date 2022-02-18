@@ -2,7 +2,7 @@
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <template v-if="!id">
-        <v-alert type="error" value="1">
+        <v-alert type="error" :value="true">
           The request does not exist or was deleted.
         </v-alert>
         <v-btn color="primary" to="/">
@@ -14,10 +14,10 @@
           <v-card-title>
             <div>
               <div class="text-h5">
-                {{ data.label }}
+                {{ request.request_client.label }}
               </div>
 
-              <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ data.citation }}</span>
+              <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
 
               <v-divider class="mt-3 mb-3" />
 
@@ -29,12 +29,12 @@
                 <strong>Status</strong>: {{ prettyStatus }}
               </div>
               <div class="">
-                <strong>Repository</strong>: {{ data.repository.institution }}
+                <strong>Repository</strong>: {{ request.repository.name }}
               </div>
             </div>
           </v-card-title>
-          <v-card-actions>
-            <v-btn v-if="isPending" color="primary" @click="cancel">
+          <v-card-actions v-if="isOwner">
+            <v-btn v-if="isSubmitted" color="primary" @click="cancel">
               Cancel
             </v-btn>
             <v-btn v-if="isComplete && !isArchived" color="primary" @click="archive">
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Attachments from '@/components/attachments'
 
 export default {
@@ -58,45 +58,26 @@ export default {
     components: {
         Attachments
     },
-    asyncData ({ params, store, error, app }) {
+    async asyncData ({ params, store }) {
     // Populate the Vuex Store
-        store.dispatch('request/init', params.id)
-
-        if (store.getters['auth/activeUser'].uid) {
-            return app.$fire.firestore.collection('requests').doc(params.id).get()
-                .then((doc) => {
-                    return {
-                        record: (doc.exists) ? doc : false,
-                        rating: (doc.exists) ? doc.data().userRating : 0
-                    }
-                })
-                .catch((e) => {
-                    console.log(e)
-                })
-        }
-    },
-    data () {
-        return {
-            record: false
-        }
+        await store.dispatch('supabaseRequest/getById', params.id)
     },
     computed: {
-        isRatingSet () {
-            return Boolean(this.data.userRating)
-        },
         ...mapGetters({
-            id: 'request/id',
-            data: 'request/data',
-            isComplete: 'request/isComplete',
-            isPending: 'request/isPending',
-            isPickedUp: 'request/isPickedUp',
-            isArchived: 'request/isArchived',
-            prettyStatus: 'request/prettyStatus'
+            id: 'supabaseRequest/id',
+            request: 'supabaseRequest/request',
+            isComplete: 'supabaseRequest/isComplete',
+            isPickedUp: 'supabaseRequest/isPickedUp',
+            isArchived: 'supabaseRequest/isArchived',
+            isSubmitted: 'supabaseRequest/isSubmitted',
+            prettyStatus: 'supabaseRequest/prettyStatus',
+            user: 'supabaseAuth/authUser'
         }),
         dateCreated () {
-            if (this.data && this.data.created_at) {
+            if (this.request && this.request.created_at) {
                 const t = new Date(Date.UTC(1970, 0, 1))
-                t.setUTCSeconds(this.data.created_at.seconds)
+                const c = new Date(this.request.created_at)
+                t.setUTCSeconds(c.getTime() / 1000)
 
                 // Current Time
                 const current = new Date()
@@ -117,31 +98,34 @@ export default {
                 return `${t.toLocaleString('default', { month: 'long' })} ${t.getDate()}, ${t.getFullYear()} (${elapsedString})`
             }
             return null
-        }
-    },
-    mounted () {
-    //  Listen for changes to this document
-        if (this.record && this.record.id) {
-            this.$fire.firestore.collection('requests').doc(this.record.id).onSnapshot((doc) => { this.record = doc })
+        },
+        isOwner () {
+            return this.user.id === this.request.user_id
         }
     },
     methods: {
-        archive () {
+        ...mapActions({
+            requestCancel: 'supabaseRequest/cancel',
+            requestArchive: 'supabaseRequest/archive'
+        }),
+        async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
-                this.$store.dispatch('request/markArchived').then((result) => {
+                const archive_status = await this.requestArchive()
+                if (archive_status) {
                     this.$router.push({ name: 'dashboard' })
-                }).catch((error) => {
-                    console.log(error)
-                })
+                } else {
+                    console.log('Error archiving request.')
+                }
             }
         },
-        cancel () {
+        async cancel () {
             if (confirm('Are you sure you want to cancel this request? This action cannot be undone.')) {
-                this.$store.dispatch('request/delete').then((result) => {
+                const delete_status = await this.requestCancel()
+                if (delete_status) {
                     this.$router.push({ name: 'dashboard' })
-                }).catch((error) => {
-                    console.log(error)
-                })
+                } else {
+                    console.log('Error deleting request.')
+                }
             }
         }
     }

@@ -31,9 +31,9 @@
       </v-card-text>
 
       <v-container grid-list-sm fluid>
-        <v-layout v-if="Array.isArray(data.attachments)" wrap>
+        <v-layout v-if="Array.isArray(request.attachments)" wrap>
           <v-flex
-            v-for="n in data.attachments.reverse()"
+            v-for="n in request.attachments.reverse()"
             :key="n"
             xs4
             d-flex
@@ -132,9 +132,9 @@
           </div>
         </v-card-title>
         <v-layout wrap>
-          <v-flex v-for="(attachment, index) in data.attachments" :key="index" xs3 class="pa-2">
-            <a :href="attachment + '&response-content-disposition=attachment; filename=something.jpg'" target="_blank" download>
-              <v-img :src="!attachment.isPDF() ? attachment : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
+          <v-flex v-for="(attachment, index) in request.attachments" :key="index" xs3 class="pa-2">
+            <a :href="attachment.url + '&response-content-disposition=attachment; filename=something.jpg'" target="_blank" download>
+              <v-img :src="!attachment.isPDF() ? attachment.url : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
             </a>
           </v-flex>
         </v-layout>
@@ -148,15 +148,15 @@
         fullscreen
         :scrollable="false"
       >
-        <v-card>
+        <v-card v-if="currentImage">
           <v-img
             v-if="!currentImage.isPDF()"
-            :src="currentImage"
+            :src="currentImage.url"
             :contain="true"
             max-height="90vh"
           />
 
-          <iframe v-else :src="currentImage" type="application/pdf" width="100%" style="height:90vh" />
+          <iframe v-else :src="currentImage.url" type="application/pdf" width="100%" style="height:90vh" />
 
           <v-spacer />
 
@@ -176,7 +176,7 @@
         </v-card>
       </v-dialog>
 
-      <v-btn v-if="isPickedUp && data.attachments && data.attachments.length" color="primary" @click="completeJob">
+      <v-btn v-if="isPickedUp && request.attachments && request.attachments.length" color="primary" @click="completeJob">
         All Done?
       </v-btn>
     </v-layout>
@@ -188,11 +188,6 @@ import { mapGetters } from 'vuex'
 
 const STATUS_INITIAL = 0; const STATUS_SAVING = 1; const STATUS_SUCCESS = 2; const STATUS_FAILED = 3
 
-/* eslint no-extend-native: ["error", { "exceptions": ["String"] }] */
-String.prototype.isPDF = function () {
-    return this.includes('.pdf')
-}
-
 export default {
     name: 'Attachments',
     data () {
@@ -202,21 +197,20 @@ export default {
             uploadError: null,
             currentStatus: null,
             uploadFieldName: 'photos',
-            currentImage: '',
+            currentImage: null,
             viewerDialog: false,
-            fileCount: 0,
-            repositories_owned: []
+            fileCount: 0
         }
     },
     computed: {
         ...mapGetters({
-            id: 'request/id',
-            data: 'request/data',
-            isComplete: 'request/isComplete',
-            isPending: 'request/isPending',
-            isPickedUp: 'request/isPickedUp',
-            isArchived: 'request/isArchived',
-            prettyStatus: 'request/prettyStatus'
+            request: 'supabaseRequest/request',
+            isComplete: 'supabaseRequest/isComplete',
+            isPickedUp: 'supabaseRequest/isPickedUp',
+            isArchived: 'supabaseRequest/isArchived',
+            isSubmitted: 'supabaseRequest/isSubmitted',
+            prettyStatus: 'supabaseRequest/prettyStatus',
+            userRepositories: 'supabaseAuth/userRepositories'
         }),
         // ...mapActions({
         //     addAttachment: 'request/addAttachment',
@@ -237,14 +231,11 @@ export default {
          * Returns true if the current user is the vendor for this request
          */
         userIsVendor () {
-            return this.repositories_owned.includes(this.data.repository_id)
-            // return this.$store.state.auth.authUser.uid === this.data.vendor_id
+            return this.userRepositories.includes(this.request.repository_id)
+        },
+        showImagePreview () {
+            return this.viewerDialog && this.currentImage
         }
-    },
-    mounted () {
-        this.retrieveRepositoryIdsOwned().then((data) => {
-            this.repositories_owned = data
-        })
     },
     methods: {
         resetUploadForm () {

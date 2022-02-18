@@ -70,18 +70,14 @@ export default {
         return {
             requests: [],
             jobs: [],
-            organizations: [],
-            selected: []
+            organizations: []
         }
     },
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
             isOrgMember: 'supabaseAuth/ownsAnOrganization'
-        }),
-        isLoggedIn () {
-            return this.user && this.user.uid
-        }
+        })
     }
 }
 </script>

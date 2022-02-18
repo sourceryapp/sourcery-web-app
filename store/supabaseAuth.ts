@@ -2,29 +2,24 @@ import type { User } from "@supabase/supabase-js"
 import { PaymentAssociation } from '~/models/PaymentAssociation'
 import { User as SourceryUser } from '~/models/User'
 import { Organization } from '~/models/Organization'
-import { Commit } from 'vuex'
+import { Commit, GetterTree, MutationTree, ActionTree } from 'vuex'
 
-// Establish an interface for our Supabase state.
-interface SupabaseState {
-    authUser: User | null,
-    authUserMeta: SourceryUser | null,
-    authUserPaymentAssociation: PaymentAssociation | null,
-    authUserOrganizations: Organization[]
-}
 
 // Initialize state.
-const initialState = () : SupabaseState => {
+const initialState = () => {
     return {
-        authUser: null,
-        authUserMeta: null,
-        authUserPaymentAssociation: null,
-        authUserOrganizations: []
+        authUser: null as User | null,
+        authUserMeta: null as SourceryUser | null,
+        authUserPaymentAssociation: null as PaymentAssociation | null,
+        authUserOrganizations: [] as Organization[]
     }
 }
 
+export type SupabaseState = ReturnType<typeof initialState>
+
 export const state = initialState
 
-export const getters = {
+export const getters: GetterTree<SupabaseState, SupabaseState> = {
     authUser(state : SupabaseState) {
         return state.authUser
     },
@@ -48,7 +43,7 @@ export const getters = {
     }
 }
 
-export const mutations = {
+export const mutations : MutationTree<SupabaseState> = {
     setAuthUser(state : SupabaseState, value: User) {
         state.authUser = value
     },
@@ -66,7 +61,7 @@ export const mutations = {
     }
 }
 
-export const actions = {
+export const actions : ActionTree<SupabaseState, SupabaseState> = {
     async saveAuthUserPaymentAssociation({ commit }: { commit: Commit }, paymentAssociation : PaymentAssociation) {
         const pa = new PaymentAssociation(paymentAssociation)
         const success = await pa.save()

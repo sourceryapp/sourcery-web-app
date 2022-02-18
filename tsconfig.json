@@ -24,7 +24,9 @@
         },
         "types": [
             "@types/node",
-            "vuetify"
+            "vuetify",
+            "@nuxt/types",
+            "@nuxtjs/firebase"
         ],
         "typeRoots": [
             "./node_modules/@types",
