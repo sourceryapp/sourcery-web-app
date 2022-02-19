@@ -52,12 +52,12 @@ export default {
         let jobs = []
         if (logged_in) {
             const uid = store.getters['supabaseAuth/authUser'].id
-            requests = await Request.getForCreator(uid)
+            requests = await Request.getForCreator(uid, ['Picked Up', 'Submitted', 'Complete'])
         }
 
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
             const user_repositories = store.getters['supabaseAuth/userRepositories']
-            jobs = await Request.getForRepositories(user_repositories)
+            jobs = await Request.getForRepositories(user_repositories, ['Picked Up', 'Submitted', 'Complete'])
         }
 
         return {

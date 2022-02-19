@@ -146,7 +146,7 @@
         </v-card>
       </v-dialog>
 
-      <v-btn v-if="(isPickedUp || isSubmitted) && request.attachments && request.attachments.length" color="primary" @click="completeJob">
+      <v-btn v-if="(isPickedUp || isSubmitted) && request.attachments && request.attachments.length && userIsVendor" color="primary" @click="completeJob">
         All Done?
       </v-btn>
     </v-layout>
@@ -229,7 +229,6 @@ export default {
         },
         save () {
             // upload data to the server
-
             const files = this.$refs.upload.files
             console.log(files)
 
@@ -246,7 +245,6 @@ export default {
             })
         },
         viewUpload (image) {
-            console.log(image)
             this.currentImage = image
             this.viewerDialog = true
         },

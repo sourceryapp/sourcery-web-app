@@ -37,7 +37,7 @@
             <v-btn v-if="isSubmitted" color="primary" @click="cancel">
               Cancel
             </v-btn>
-            <v-btn v-if="isComplete && !isArchived" color="primary" @click="archive">
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
@@ -70,6 +70,7 @@ export default {
             isPickedUp: 'supabaseRequest/isPickedUp',
             isArchived: 'supabaseRequest/isArchived',
             isSubmitted: 'supabaseRequest/isSubmitted',
+            isCancelled: 'supabaseRequest/isCancelled',
             prettyStatus: 'supabaseRequest/prettyStatus',
             user: 'supabaseAuth/authUser'
         }),

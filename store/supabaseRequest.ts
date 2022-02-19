@@ -36,6 +36,9 @@ export const getters = {
     isArchived(state: SupabaseRequestState) {
         return state.request?.status?.name === 'Archived'
     },
+    isCancelled(state: SupabaseRequestState) {
+        return state.request?.status?.name === 'Cancelled'
+    },
     prettyStatus(state: SupabaseRequestState) {
         return (state.request?.status?.name) ? state.request.status.name : 'Unknown'
     }
@@ -59,7 +62,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
     },
     async cancel({ state, commit }: { state: SupabaseRequestState, commit: Commit }) {
         if ( state.request ) {
-            const deleted = await state.request.delete()
+            const deleted = await state.request.cancel()
             if ( deleted ) {
                 commit('clear')
                 return true

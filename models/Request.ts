@@ -75,8 +75,13 @@ export class Request {
      * @param includeArchived 
      * @returns Request[]
      */
-    public static async getForCreator(user_id : string, includeArchived = false) {
-        const query = supabase.from('requests')
+    public static async getForCreator(user_id : string, status = []) {
+
+        if ( status.length < 1 ) {
+            return []
+        }
+
+        const query = supabase.from(TABLE_NAME)
             .select(`
                 *,
                 status!requests_status_id_fkey (*),
@@ -85,10 +90,7 @@ export class Request {
             `)
             .order('created_at', { ascending: false })
             .eq('user_id', user_id)
-
-        if ( !includeArchived ) {
-            query.neq('status.name', 'Archived')
-        }
+            .in('status.name', status)
 
         let { data: requests, error } = await query
 
@@ -108,9 +110,14 @@ export class Request {
      * @param includeArchived 
      * @returns Request[]
      */
-    public static async getForRepositories(repositories : Repository[], includeArchived = false) {
+    public static async getForRepositories(repositories : Repository[], status = []) {
+
+        if ( status.length < 1 ) {
+            return []
+        }
+
         const repository_ids = repositories.map(x => x.id)
-        const query = supabase.from('requests')
+        const query = supabase.from(TABLE_NAME)
             .select(`
                 *,
                 status!requests_status_id_fkey (*),
@@ -119,10 +126,7 @@ export class Request {
             `)
             .order('created_at', { ascending: false })
             .in('repository_id', repository_ids)
-        
-        if ( !includeArchived ) {
-            query.neq('status.name', 'Archived')
-        }
+            .in('status.name', status)
 
         let { data: requests, error } = await query
 
@@ -142,7 +146,7 @@ export class Request {
      * @returns Request | null
      */
     public static async getById(id: string) {
-        let { data: request, error } = await supabase.from('requests')
+        let { data: request, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
                 status!requests_status_id_fkey (*),
@@ -166,7 +170,7 @@ export class Request {
      * @returns Request | null
      */
     async delete() {
-        const { data: request, error } = await supabase.from('requests')
+        const { data: request, error } = await supabase.from(TABLE_NAME)
             .delete()
             .eq('id', this.id)
 
@@ -184,7 +188,7 @@ export class Request {
     async archive() {
         const archive_status = await Status.getByName('Archived')
         if ( archive_status ) {
-            const { data: replaced, error } = await supabase.from('requests')
+            const { data: replaced, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: archive_status.id })
                 .eq('id', this.id)
 
@@ -197,10 +201,27 @@ export class Request {
         return false
     }
 
+    async cancel() {
+        const cancel_status = await Status.getByName('Cancelled')
+        if ( cancel_status ) {
+            const { data: replaced, error } = await supabase.from(TABLE_NAME)
+                .update({ status_id: cancel_status.id })
+                .eq('id', this.id)
+
+            if ( error ) {
+                console.log(error)
+            }
+
+            this.status_id = cancel_status.id
+            return true
+        }
+        return false
+    }
+
     async complete() {
         const complete_status = await Status.getByName('Complete')
         if ( complete_status ) {
-            const { data: replaced, error } = await supabase.from('requests')
+            const { data: replaced, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: complete_status.id })
                 .eq('id', this.id)
 
