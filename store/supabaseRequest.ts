@@ -141,6 +141,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
                             label: ''
                         })
                         const status = await newAttachment.insert()
+                        await dispatch('getById', state.request.id)
                     }
 
 
