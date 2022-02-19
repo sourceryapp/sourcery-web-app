@@ -75,4 +75,16 @@ export class Attachment implements SourceryAttachment {
 
         return false
     }
+
+    async delete() {
+        const { data: attachment, error } = await supabase.from(TABLE_NAME)
+            .delete()
+            .eq('id', this.id)
+
+        if ( error ) {
+            console.log(error)
+        }
+
+        return attachment
+    }
 }

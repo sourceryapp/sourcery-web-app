@@ -210,7 +210,8 @@ export default {
     },
     methods: {
         ...mapActions({
-            addAttachment: 'supabaseRequest/addAttachment'
+            addAttachment: 'supabaseRequest/addAttachment',
+            deleteAttachment: 'supabaseRequest/deleteAttachment'
         }),
         resetUploadForm () {
             // reset form to initial state
@@ -250,7 +251,7 @@ export default {
         },
         deleteUpload (attachment) {
             if (confirm('Are you sure you want to delete this attachment?')) {
-                this.$store.dispatch('request/deleteAttachment', attachment).catch((error) => {
+                this.deleteAttachment(attachment).catch((error) => {
                     console.log(error)
                 })
             }
@@ -265,11 +266,6 @@ export default {
                     this.$router.push({ name: 'dashboard' })
                 })
             }
-        },
-
-        async retrieveRepositoryIdsOwned () {
-            const ids = await this.$store.dispatch('meta/getRepositoryIdsOwned')
-            return ids
         }
     }
 }

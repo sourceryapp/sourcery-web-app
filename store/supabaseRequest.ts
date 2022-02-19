@@ -174,6 +174,39 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
             )
         })
     },
+    async deleteAttachment ({ state, commit, dispatch }, attachment) {
+        // Get the filename from the Google Storage URL
+        const url = new URL(attachment.url)
+        const path = decodeURIComponent(url.pathname)
+        const filename = path.replace(/.*\//, '')
+
+        // Run the tasks
+        return new Promise((resolve, reject) => {
+            if ( !state.request || !state.request.id ) {
+                reject('No current request.')
+                return
+            }
+            const storageRef = this.$fire.storage.ref(
+                `jobs/supa-${state.request.id}/images/`
+            )
+            const fileRef = storageRef.child(filename)
+
+            const tasks = [
+                // Delete the file
+                fileRef.delete(),
+
+                // Delete the db reference
+                attachment.delete()
+            ]
+
+            Promise.all(tasks).then((values) => {
+                if ( state.request ) {
+                    dispatch('getById', state.request.id)
+                }
+                resolve(values)
+            })
+        })
+    },
 }
 
 /**
