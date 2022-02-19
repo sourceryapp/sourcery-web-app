@@ -211,7 +211,8 @@ export default {
     methods: {
         ...mapActions({
             addAttachment: 'supabaseRequest/addAttachment',
-            deleteAttachment: 'supabaseRequest/deleteAttachment'
+            deleteAttachment: 'supabaseRequest/deleteAttachment',
+            complete: 'supabaseRequest/complete'
         }),
         resetUploadForm () {
             // reset form to initial state
@@ -262,7 +263,7 @@ export default {
          */
         completeJob () {
             if (confirm('Mark this job complete and send document(s) to the client?')) {
-                this.$store.dispatch('request/markComplete').then(() => {
+                this.complete().then(() => {
                     this.$router.push({ name: 'dashboard' })
                 })
             }

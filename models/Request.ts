@@ -196,4 +196,20 @@ export class Request {
         }
         return false
     }
+
+    async complete() {
+        const complete_status = await Status.getByName('Complete')
+        if ( complete_status ) {
+            const { data: replaced, error } = await supabase.from('requests')
+                .update({ status_id: complete_status.id })
+                .eq('id', this.id)
+
+            if ( error ) {
+                console.log(error)
+            }
+            this.status_id = complete_status.id
+            return true
+        }
+        return false
+    }
 }

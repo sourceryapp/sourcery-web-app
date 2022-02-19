@@ -76,6 +76,15 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         }
         return false
     },
+    async complete({ state }: { state: SupabaseRequestState }) {
+        if ( state.request ) {
+            const completed = await state.request.complete()
+            if ( completed ) {
+                return true
+            }
+        }
+        return false
+    },
     async addAttachment ({ state, commit, dispatch, rootGetters } : { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch, rootGetters : any}, file : File) {
         // Default number of pages for an attachment
         let pages = 1
