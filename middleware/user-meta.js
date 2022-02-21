@@ -48,5 +48,4 @@ export default async function ({ store, $axios, redirect, route, error, app }) {
     } else {
         console.info('No need to fetch new user meta')
     }
-    console.groupEnd()
 }

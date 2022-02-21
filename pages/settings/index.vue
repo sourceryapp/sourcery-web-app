@@ -11,7 +11,7 @@
           color="transparent"
         >
           <toggle-theme />
-          <toggle-notifications />
+          <!-- <toggle-notifications /> -->
         </v-list>
       </sourcery-card>
       <sourcery-card title="Profile" icon="mdi-account-details">
@@ -22,9 +22,9 @@
             title="Name"
             icon="mdi-account"
             label="Your Name"
-            property-name="displayName"
-            vuex-root="auth/activeUser"
-            vuex-action="auth/setUpdatedProfileProperty"
+            property-name="name"
+            vuex-root="supabaseAuth/authUserMeta"
+            vuex-action="supabaseAuth/updateMeta"
             toast-success="Saved name successfully."
             :rules="[$sourceryForms.rules.required]"
           />
@@ -36,7 +36,7 @@
             icon="mdi-email"
             label="Email"
             propertyName="email"
-            vuexRoot="auth/activeUser"
+            vuexRoot="supabaseAuth/authUserMeta"
           />
 
           <dialog-edit-setting
@@ -44,8 +44,8 @@
             icon="mdi-phone"
             label="Display Phone Number"
             property-name="phone"
-            vuex-root="meta/editMeta"
-            vuex-action="meta/updateAndSave"
+            vuex-root="supabaseAuth/authUserMeta"
+            vuex-action="supabaseAuth/updateMeta"
             toast-success="Saved phone successfully."
             :rules="[$sourceryForms.rules.required]"
           />
@@ -53,8 +53,12 @@
       </sourcery-card>
       <sourcery-card title="Payment Information" icon="mdi-credit-card-outline">
         <manage-credit-cards
+          v-if="false"
           :initial-cards="cards"
         />
+        <p class="pt-3 pl-3">
+          Coming back soon!
+        </p>
       </sourcery-card>
     </v-flex>
   </v-layout>
@@ -63,7 +67,7 @@
 <script>
 import SourceryCard from '@/components/card-with-header.vue'
 import ToggleTheme from '@/components/toggle-theme.vue'
-import ToggleNotifications from '@/components/toggle-notifications.vue'
+// import ToggleNotifications from '@/components/toggle-notifications.vue'
 import DialogEditSetting from '@/components/dialog-edit-setting.vue'
 import DialogReadonlySetting from '@/components/dialog-readonly-setting.vue'
 import DialogEditPassword from '@/components/dialog-edit-password.vue'
@@ -74,7 +78,7 @@ export default {
     components: {
         SourceryCard,
         ToggleTheme,
-        ToggleNotifications,
+        // ToggleNotifications,
         DialogEditSetting,
         DialogReadonlySetting,
         DialogEditPassword,
@@ -83,6 +87,11 @@ export default {
     async asyncData ({ params, store, app }) {
         const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
         const customer_id = store.state.meta.stripeCustomerId
+
+        // Not gonna lie, slight hack here.  Sometimes, eat least in local development, there was a chance we haven't populated all the auth data by the time these components attempt to reach vuex-root.  Could quite literally be a $tick problem, so this just guarantees one more.
+        await store.dispatch('supabaseAuth/fetchUserMeta')
+        await store.dispatch('supabaseAuth/fetchUserHasPassword')
+
         return {
             cards: (store.state.meta.stripeCustomerId)
                 ? (await stripeGetPaymentMethods({ customer: customer_id, type: 'card' })).data

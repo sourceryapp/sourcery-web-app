@@ -13,6 +13,7 @@ export default function setStore ({ store, app: { router } }) {
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     store.dispatch('supabaseAuth/fetchUserMeta')
     store.dispatch('supabaseAuth/fetchUserOrganizations')
+    store.dispatch('supabaseAuth/fetchUserHasPassword')
 
     supabase.auth.onAuthStateChange((_, session) => {
         console.log(_, session)
@@ -24,6 +25,9 @@ export default function setStore ({ store, app: { router } }) {
 
         if (session && session.user) {
             store.commit('supabaseAuth/setAuthUser', session.user)
+            store.dispatch('supabaseAuth/fetchUserMeta')
+            store.dispatch('supabaseAuth/fetchUserOrganizations')
+            store.dispatch('supabaseAuth/fetchUserHasPassword')
         }
     })
 }

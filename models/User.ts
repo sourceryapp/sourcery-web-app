@@ -8,12 +8,14 @@ export class User {
     name: string
     email: string
     created_at: string
+    phone: string
 
-    constructor({ id, name, email, created_at }: User) {
+    constructor({ id, name, email, created_at, phone }: User) {
         this.id = id
         this.name = name
         this.email = email
         this.created_at = created_at
+        this.phone = phone
     }
 
     public toJSON() {
@@ -21,14 +23,15 @@ export class User {
             id: this.id,
             name: this.name,
             email: this.email,
-            created_at: this.created_at
+            created_at: this.created_at,
+            phone: this.phone
         }
     }
 
     public toUpdateJSON() {
         return {
             name: this.name,
-            email: this.email
+            phone: this.phone
         }
     }
 
