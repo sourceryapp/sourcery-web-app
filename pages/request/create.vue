@@ -83,7 +83,7 @@
               <v-item
                 v-for="repo in repositories"
                 v-slot="{ active, toggle }"
-                :key="repo.id"
+                :key="`repolisting-${repo.id}`"
               >
                 <v-card
                   outlined
@@ -102,8 +102,8 @@
                       <v-row>
                         <v-col class="d-flex justify-end">
                           <img
-                            v-if="repo.data().show_org_photo"
-                            :src="`/img/institution/${repo.data().organization}.png`"
+                            v-if="repo.featured_image"
+                            :src="`/img/institution/${repo.id}.png`"
                             alt="alt"
                             height="48px"
                           >
@@ -116,13 +116,13 @@
                           >
                             <v-list-item-content>
                               <v-list-item-title class="text-h5 white--text">
-                                {{ repo.data().name }}
+                                {{ repo.name }}
                               </v-list-item-title>
-                              <v-list-item-subtitle v-if="repo.data().name != repo.data().institution" class="text-subtitle-1 white--text">
-                                {{ repo.data().institution }}
+                              <v-list-item-subtitle v-if="repo.organization && repo.name != repo.organization.name" class="text-subtitle-1 white--text">
+                                {{ repo.organization.name }}
                               </v-list-item-subtitle>
                               <v-list-item-subtitle class="text-subtitle-2 white--text">
-                                {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
+                                {{ repo.address1 + ', ' + repo.city + ', ' + repo.state }}
                               </v-list-item-subtitle>
                               <!-- <v-list-item-subtitle class="white--text">
                                 {{ repo.id }}
@@ -295,6 +295,7 @@
 import { mapGetters } from 'vuex'
 import algoliasearch from 'algoliasearch/lite'
 import 'instantsearch.css/themes/algolia-min.css'
+import { Repository } from '~/models/Repository'
 
 // Components
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
@@ -312,21 +313,10 @@ export default {
         ReachedRequestLimitDialog,
         'sourcery-card': SourceryCard
     },
-    async asyncData ({ params, store, app }) {
-        let repositories = { docs: [] }
-        try {
-            repositories = await app.$fire.firestore
-                .collection('repositories')
-                // .where('organization', '!=', '') // This is the correct way, but for demo purposes, only show our partners.  Cannot combine != queries.
-                .where('institution', 'in', ['Folger Shakespeare Library', 'UConn', 'Northeastern University', 'Hartford Public Library'])
-                .orderBy('organization')
-                .orderBy('name', 'asc')
-                .get()
-        } catch (error) {
-            console.log(error)
-        }
+    async asyncData ({ app }) {
+        const repositories = await Repository.getActive()
         return {
-            repositories: repositories.docs
+            repositories
         }
     },
     data () {

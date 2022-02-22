@@ -47,4 +47,25 @@ export class Repository {
         this.featured_image_id = featured_image_id
         this.created_at = created_at
     }
+
+    public static async getActive() {
+        const { data: repositories, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                organizations (*)
+            `)
+            .order('name')
+            .eq('active', true)
+
+        if ( error ) {
+            console.log(error)
+            return []
+        }
+
+        if ( Array.isArray(repositories) ) {
+            const reps = repositories.map(x => new Repository(x))
+            return reps
+        }
+        return []
+    }
 }
