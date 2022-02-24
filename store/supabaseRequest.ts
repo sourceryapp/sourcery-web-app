@@ -3,7 +3,6 @@ import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vue
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
-import { SupabaseState } from '~/store/supabaseAuth'
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
 
