@@ -353,12 +353,9 @@ export default {
             return this.$store.state.create
         },
         ...mapGetters({
-            user: 'auth/activeUser',
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
+            user: 'supabaseAuth/authUser',
             balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments',
-            isMemberRepo: 'create/isMemberRepo'
+            canMakePayments: 'meta/canMakePayments'
         }),
 
         /**
