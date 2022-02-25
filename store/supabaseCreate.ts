@@ -25,6 +25,9 @@ export const state = initialState
 export const getters = {
     citation(state: SupabaseCreateState) {
         return state.citation
+    },
+    pages(state: SupabaseCreateState) {
+        return state.pages
     }
 }
 
