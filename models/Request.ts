@@ -7,6 +7,24 @@ import { Attachment } from '~/models/Attachment'
 
 const TABLE_NAME = 'requests'
 
+export type CreateRequest = {
+    id: number | null
+    repository_id: number
+    citation: string
+    pages: number
+    status_id: number
+    user_id: string
+    created_at: string | null
+    updated_at: string | null
+    status?: Status
+    repository?: Repository
+    request_clients?: RequestClient[]
+    request_client?: RequestClient
+    request_vendors?: RequestVendor[]
+    request_vendor?: RequestVendor
+    attachments?: Attachment[]
+}
+
 export class Request {
     id: number | null
     repository_id: number
@@ -38,7 +56,7 @@ export class Request {
         request_clients = undefined,
         request_vendors = undefined,
         attachments = undefined
-    }: Request) {
+    }: CreateRequest) {
         this.id = id,
         this.repository_id = repository_id
         this.citation = citation
@@ -66,6 +84,16 @@ export class Request {
 
         if ( attachments ) {
             this.attachments = attachments.map(x => new Attachment(x))
+        }
+    }
+
+    toInsertJSON() {
+        return {
+            repository_id: this.repository_id,
+            citation: this.citation,
+            pages: this.pages,
+            status_id: this.status_id,
+            user_id: this.user_id
         }
     }
 
@@ -232,5 +260,19 @@ export class Request {
             return true
         }
         return false
+    }
+
+    async insert() {
+        const { data: request, error } = await supabase.from(TABLE_NAME)
+            .insert([
+                this.toInsertJSON()
+            ])
+        
+        if ( error ) {
+            console.log(error)
+            return null
+        }
+
+        return request
     }
 }
