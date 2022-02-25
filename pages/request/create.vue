@@ -292,7 +292,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import algoliasearch from 'algoliasearch/lite'
 import 'instantsearch.css/themes/algolia-min.css'
 import { Repository } from '~/models/Repository'
@@ -353,9 +353,7 @@ export default {
             return this.$store.state.create
         },
         ...mapGetters({
-            user: 'supabaseAuth/authUser',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments'
+            user: 'supabaseAuth/authUser'
         }),
 
         /**
@@ -364,19 +362,19 @@ export default {
              */
         citation: {
             get () {
-                return this.$store.state.create.citation
+                return this.$store.getters['supabaseCreate/citation']
             },
             set (value) {
-                this.$store.commit('create/setCitation', value)
+                this.$store.commit('supabaseCreate/setCitation', value)
             }
         },
         pages: {
             get () {
-                return this.$store.state.create.pages
+                return this.$store.getters['supabaseCreate/pages']
             },
             set (value) {
                 this.getCost()
-                this.$store.commit('create/setPages', value)
+                this.$store.commit('supabaseCreate/setPages', value)
             }
         },
         repository_id: {
@@ -405,7 +403,7 @@ export default {
     },
     mounted () {
         if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
-            this.selectRepositoryFromStateOutsideComponent(this.$store.state.create.repository)
+            this.selectRepository(this.$store.state.create.repository)
         }
         if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
             console.log('This is a sign in with email link!')
@@ -437,20 +435,11 @@ export default {
         }
     },
     methods: {
-        selectRepositoryFromStateOutsideComponent (repo) {
-            this.request.repository_id = repo.id
-            this.request.repository = repo
-            this.$store.commit('create/setRepository', repo)
-            this.formState++
-        },
+        ...mapMutations({
+            setRepository: 'supabaseCreate/setRepository'
+        }),
         selectRepositoryObj (repo) {
-            this.request.repository_id = repo.id
-            const repo_clone = {
-                id: repo.id,
-                ...repo.data()
-            }
-            this.request.repository = repo_clone
-            this.$store.commit('create/setRepository', repo_clone)
+            this.setRepository(repo)
             this.formState++
         },
         submitRequest () {
