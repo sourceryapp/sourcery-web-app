@@ -1,5 +1,6 @@
 import { supabase } from '~/plugins/supabase'
 import type { definitions } from '~/types/supabase'
+import { Organization } from '~/models/Organization'
 
 const TABLE_NAME = 'repositories'
 
@@ -17,6 +18,7 @@ export class Repository {
     organization_id: number
     featured_image_id: number | null
     created_at: string | null
+    organization?: Organization
 
     constructor({
         id = null,
@@ -31,7 +33,8 @@ export class Repository {
         active,
         organization_id,
         featured_image_id = null,
-        created_at = null
+        created_at = null,
+        organization = undefined
     }: Repository) {
         this.id = id,
         this.name = name
@@ -46,13 +49,17 @@ export class Repository {
         this.organization_id = organization_id
         this.featured_image_id = featured_image_id
         this.created_at = created_at
+
+        if ( organization ) {
+            this.organization = organization
+        }
     }
 
     public static async getActive() {
         const { data: repositories, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
-                organizations (*)
+                organization:organizations (*)
             `)
             .order('name')
             .eq('active', true)
@@ -63,6 +70,7 @@ export class Repository {
         }
 
         if ( Array.isArray(repositories) ) {
+            console.log(repositories)
             const reps = repositories.map(x => new Repository(x))
             return reps
         }

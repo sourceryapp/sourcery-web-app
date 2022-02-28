@@ -4,6 +4,8 @@ import { User as SourceryUser } from '~/models/User'
 import { Repository } from '~/models/Repository'
 import { Status } from '~/models/Status'
 import { Request } from '~/models/Request'
+import { IntegrationData } from '~/models/IntegrationData'
+import { PricingSummary } from '~/models/PricingSummary'
 
 export const initialState = () => {
     return {
@@ -14,7 +16,8 @@ export const initialState = () => {
         pages: 0,
         label: '',
         status: null as Status | null,
-        integrationOrganizationId: null as number | null,
+        integrationData: null as IntegrationData | null,
+        pricing: null as PricingSummary | null
     }
 }
 
@@ -28,6 +31,22 @@ export const getters = {
     },
     pages(state: SupabaseCreateState) {
         return state.pages
+    },
+    repositoryName(state: SupabaseCreateState) {
+        if ( state.repository ) {
+            let name = state.repository.name
+            if ( state.repository.organization ) {
+                name += ` - ${state.repository.organization.name}`
+            }
+            return name
+        }
+        return ''
+    },
+    pricing(state: SupabaseCreateState) {
+        return state.pricing
+    },
+    integrationData(state: SupabaseCreateState) {
+        return state.integrationData
     }
 }
 
@@ -53,8 +72,11 @@ export const mutations : MutationTree<SupabaseCreateState> = {
     setStatus(state: SupabaseCreateState, value: Status) {
         state.status = value
     },
-    setIntegrationOrganizationId(state: SupabaseCreateState, id: number) {
-        state.integrationOrganizationId = id
+    setIntegrationData(state: SupabaseCreateState, value: IntegrationData) {
+        state.integrationData = value
+    },
+    setPricing(state: SupabaseCreateState, value: PricingSummary) {
+        state.pricing = value
     },
     reset(state: SupabaseCreateState) {
         state = initialState()

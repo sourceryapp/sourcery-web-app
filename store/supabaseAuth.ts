@@ -45,6 +45,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     },
     hasPassword(state: SupabaseState) {
         return state.authUserHasPassword
+    },
+    isLoggedIn(state: SupabaseState) {
+        return !!state.authUser
     }
 }
 
