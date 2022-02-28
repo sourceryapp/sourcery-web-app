@@ -52,4 +52,36 @@ export class Organization {
         }
         return []
     }
+
+    public static async getById(id: string) {
+        let { data: org, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                repositories (*)
+            `)
+            .eq('id', id)
+            .limit(1)
+            .single()
+
+        if ( org ) {
+            return new Organization(org)
+        }
+        return null
+    }
+
+    public static async getBySlug(slug: string) {
+        let { data: org, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                repositories (*)
+            `)
+            .eq('slug', slug)
+            .limit(1)
+            .single()
+
+        if ( org ) {
+            return new Organization(org)
+        }
+        return null
+    }
 }

@@ -343,6 +343,7 @@ export default {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
             repositoryName: 'supabaseCreate/repositoryName',
+            hasRepository: 'supabaseCreate/hasRepository',
             pricing: 'supabaseCreate/pricing',
             integrationData: 'supabaseCreate/integrationData'
         }),
@@ -374,8 +375,8 @@ export default {
         }
     },
     mounted () {
-        if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
-            this.selectRepository(this.$store.state.create.repository)
+        if (this.hasRepository) {
+            this.formState = 2
         }
         if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
             console.log('This is a sign in with email link!')

@@ -42,6 +42,9 @@ export const getters = {
         }
         return ''
     },
+    hasRepository(state: SupabaseCreateState) {
+        return !!state.repository
+    },
     pricing(state: SupabaseCreateState) {
         return state.pricing
     },

@@ -187,9 +187,6 @@ export default {
     router: {
         middleware: [
             'auth-guard',
-            'user-meta',
-            // 'account-type',
-            'onboarding-complete',
             'archiveSpace'
         ]
     },

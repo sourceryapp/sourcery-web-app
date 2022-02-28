@@ -2,17 +2,17 @@
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <organization-app-bar
-        :repositories="repositories"
+        :repositories="organization.repositories"
         :organization="organization"
       />
       <sourcery-card title="Repositories" class="mt-4">
         <v-list
-          v-if="repositories"
+          v-if="organization.repositories"
           color="transparent"
           class="mt-2 mx-2"
         >
           <template
-            v-for="(repo, index) in repositories"
+            v-for="(repo, index) in organization.repositories"
           >
             <v-list-item
               :key="repo.id"
@@ -36,7 +36,7 @@
               </v-list-item-action>
             </v-list-item>
 
-            <v-divider v-if="index !== repositories.length - 1" :key="repo.id" class="my-2" />
+            <v-divider v-if="index !== organization.repositories.length - 1" :key="repo.id" class="my-2" />
           </template>
         </v-list>
         <v-list v-else>
@@ -52,9 +52,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+// import { mapGetters, mapActions } from 'vuex'
 import SourceryCard from '@/components/card-with-header.vue'
 import OrganizationAppBar from '@/components/organization-app-bar.vue'
+import { Organization } from '~/models/Organization'
 
 export default {
     name: 'Organization',
@@ -62,25 +63,15 @@ export default {
         SourceryCard,
         OrganizationAppBar
     },
-    async fetch () {
-        try {
-            await this.getOrganization(this.$route.params.id)
-        } catch (error) {
-            console.error(error)
-            this.$router.replace('/dashboard')
+    async asyncData ({ params, store }) {
+        const organization = await Organization.getBySlug(params.id)
+        console.log(organization)
+
+        return {
+            organization
         }
     },
-    computed: {
-        ...mapGetters({
-            organization: 'organizations/getOrganization',
-            repositories: 'organizations/getOrganizationRepositories',
-            user: 'auth/activeUser'
-        })
-    },
     methods: {
-        ...mapActions({
-            getOrganization: 'organizations/getOrganization'
-        }),
         repoAddress (repo) {
             let addr = repo.address1
             if (repo.address2) {
@@ -101,7 +92,7 @@ export default {
             return addr
         },
         makeRequestAtRepository (repo) {
-            this.$store.commit('create/setRepository', repo)
+            this.$store.commit('supabaseCreate/setRepository', repo)
             this.$router.push({ name: 'request-create' })
         }
     }
