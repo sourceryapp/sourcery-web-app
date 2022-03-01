@@ -13,13 +13,14 @@ const initialState = () => {
         authUserMeta: null as SourceryUser | null,
         authUserHasPassword: false,
         authUserPaymentAssociation: null as PaymentAssociation | null,
-        authUserOrganizations: [] as Organization[]
+        authUserOrganizations: [] as Organization[],
+        resetAccessToken: ''
     }
 }
 
 export type SupabaseState = ReturnType<typeof initialState>
 
-export const state = initialState
+export const state = initialState()
 
 export const getters: GetterTree<SupabaseState, SupabaseState> = {
     authUser(state : SupabaseState) {
@@ -48,6 +49,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     },
     isLoggedIn(state: SupabaseState) {
         return !!state.authUser
+    },
+    resetAccessToken(state: SupabaseState) {
+        return state.resetAccessToken
     }
 }
 
@@ -67,8 +71,17 @@ export const mutations : MutationTree<SupabaseState> = {
     setAuthUserHasPassword(state: SupabaseState, value: boolean) {
         state.authUserHasPassword = value
     },
+    setResetAccessToken(state: SupabaseState, value: string) {
+        state.resetAccessToken = value
+    },
     clear(state: SupabaseState) {
-        state = initialState()
+        const initial = initialState()
+        state.authUser = initial.authUser
+        state.authUserMeta = initial.authUserMeta
+        state.authUserHasPassword = initial.authUserHasPassword
+        state.authUserPaymentAssociation = initial.authUserPaymentAssociation
+        state.authUserOrganizations = initial.authUserOrganizations
+        state.resetAccessToken = initial.resetAccessToken
     }
 }
 

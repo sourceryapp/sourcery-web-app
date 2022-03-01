@@ -13,8 +13,6 @@ export default function ({ store, redirect, route, $config }) {
         !$config.publicPaths.includes(route.path) &&
         !isOrganizationPage
     ) {
-        console.warn('User not logged in. Redirecting')
-        console.groupEnd()
         return redirect('/login')
     }
 }

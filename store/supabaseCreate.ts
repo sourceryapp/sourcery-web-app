@@ -9,7 +9,6 @@ import { PricingSummary } from '~/models/PricingSummary'
 
 export const initialState = () => {
     return {
-        attachments: [] as Attachment[],
         client: null as SourceryUser | null,
         citation: '',
         repository: null as Repository | null,
@@ -82,7 +81,15 @@ export const mutations : MutationTree<SupabaseCreateState> = {
         state.pricing = value
     },
     reset(state: SupabaseCreateState) {
-        state = initialState()
+        const initial = initialState()
+        state.client = initial.client
+        state.citation = initial.citation
+        state.repository = initial.repository
+        state.pages = initial.pages
+        state.label = initial.label
+        state.status = initial.status
+        state.integrationData = initial.integrationData
+        state.pricing = initial.pricing
     }
 }
 

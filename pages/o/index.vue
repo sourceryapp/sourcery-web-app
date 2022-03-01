@@ -24,29 +24,20 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import OrganizationListItem from '@/components/organization-list-item.vue'
+import { Organization } from '~/models/Organization'
 
 export default {
     name: 'Organizations',
     components: {
         OrganizationListItem
     },
-    data: () => ({
+    async asyncData () {
+        const organizations = await Organization.getAll()
 
-    }),
-    async fetch () {
-        await this.getOrganizations()
-    },
-    computed: {
-        ...mapGetters({
-            organizations: 'organizations/getOrganizations'
-        })
-    },
-    methods: {
-        ...mapActions({
-            getOrganizations: 'organizations/getOrganizations'
-        })
+        return {
+            organizations
+        }
     }
 }
 </script>

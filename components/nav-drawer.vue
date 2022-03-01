@@ -267,13 +267,13 @@ export default {
         }),
         async logout () {
             try {
-                const { error } = await supabase.auth.signOut()
                 this.clearAuth()
+                const { error } = await supabase.auth.signOut()
                 this.dialog = false
                 if (error) {
                     throw error
                 }
-                this.$router.replace('/login')
+                // this.$router.replace('/login')
             } catch (error) {
                 console.log(error)
             }

@@ -65,7 +65,6 @@ export default {
     },
     async asyncData ({ params, store }) {
         const organization = await Organization.getBySlug(params.id)
-        console.log(organization)
 
         return {
             organization

@@ -84,4 +84,19 @@ export class Organization {
         }
         return null
     }
+
+    public static async getAll() {
+        let { data: organizations, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                repositories(*)
+            `)
+
+        if ( Array.isArray(organizations) && organizations.length > 1 ) {
+            const orgs = organizations.map(x => new Organization(x))
+            return orgs
+        }
+
+        return []
+    }
 }

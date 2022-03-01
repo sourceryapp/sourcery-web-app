@@ -186,6 +186,7 @@ export default {
      */
     router: {
         middleware: [
+            'reset-password',
             'auth-guard',
             'archiveSpace'
         ]

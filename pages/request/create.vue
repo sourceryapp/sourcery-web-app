@@ -324,8 +324,6 @@ export default {
     data () {
         return {
             repositories: [],
-            repository: null,
-            areas: null,
             loading: false,
             loadingCost: false,
             errors: {
@@ -335,7 +333,6 @@ export default {
             },
             formState: 1,
             isSaving: false,
-            newUserEmailAddress: '',
             nulledRequestPricing: true
         }
     },
@@ -376,7 +373,10 @@ export default {
     },
     mounted () {
         if (this.hasRepository) {
-            this.formState = 2
+            const repo = this.repositories.find(x => x.name === this.repositoryName)
+            if (repo) {
+                this.selectRepositoryObj(repo)
+            }
         }
         if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
             console.log('This is a sign in with email link!')

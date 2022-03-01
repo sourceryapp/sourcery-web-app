@@ -49,7 +49,8 @@ export const mutations : MutationTree<SupabaseRequestState> = {
         state.request = value
     },
     clear(state: SupabaseRequestState) {
-        state = initialState()
+        const initial = initialState()
+        state.request = initial.request
     }
 }
 
