@@ -378,6 +378,30 @@ export default {
                 this.selectRepositoryObj(repo)
             }
         }
+
+        const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
+
+        if (inProgressRequest && inProgressRequest.request) {
+            // We have an in progress request, lets restore.
+            const repo = this.repositories.find(x => x.id === inProgressRequest.request.repository_id)
+
+            if (repo) {
+                this.selectRepositoryObj(repo)
+
+                if (inProgressRequest.request.citation) {
+                    this.citation = inProgressRequest.request.citation
+                    this.formState++
+                }
+
+                if (inProgressRequest.request.pages) {
+                    this.pages = inProgressRequest.request.pages
+                }
+
+                localStorage.removeItem('sourceryInProgressRequest')
+            } else {
+                localStorage.removeItem('sourceryInProgressRequest')
+            }
+        }
     },
     methods: {
         ...mapMutations({
@@ -389,6 +413,10 @@ export default {
             this.formState++
         },
         submitRequest () {
+            // else if (!this.user.hasPassword && this.user.hasRequests) {
+            //     // no password, so we need to limit the request to 1.
+            //     this.$refs.reached_request_limit_dialog.openDialog()
+            // }
             if (!this.user) {
                 // Right now we are nulling prices, in beta.  But this is ready for when we need to add pricing models back in.
                 if (!this.nulledRequestPricing && this.request.pricing.total > 0) {
@@ -396,9 +424,6 @@ export default {
                 } else {
                     this.$refs.register_to_submit_request_dialog.openWithRegisterIntent()
                 }
-            } else if (!this.user.hasPassword && this.user.hasRequests) {
-                // no password, so we need to limit the request to 1.
-                this.$refs.reached_request_limit_dialog.openDialog()
             } else {
                 this.isSaving = true
                 this.$store.dispatch('supabaseCreate/insert').then((doc) => {

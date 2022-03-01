@@ -126,25 +126,18 @@ export default {
     },
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser',
-            hasPassword: 'supabaseAuth/hasPassword'
+            user: 'supabaseAuth/authUser'
         }),
         changePasswordLabel () {
-            if (!this.hasPassword) {
-                return 'Set Password'
-            }
-            return 'Change Password'
+            return 'Set / Change Password'
         },
         changePasswordShortLabel () {
-            if (!this.hasPassword) {
-                return 'Set'
-            }
-            return 'Change'
+            return 'Set / Change'
         },
         passwordActionButtonType () {
-            if (!this.hasPassword) {
-                return 'warning'
-            }
+            // if (!this.hasPassword) {
+            //     return 'warning'
+            // }
             return 'primary'
         },
         // rewriting this to not require confirm field

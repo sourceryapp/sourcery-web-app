@@ -85,17 +85,17 @@ export default {
         ManageCreditCards
     },
     async asyncData ({ params, store, app }) {
-        const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
-        const customer_id = store.state.meta.stripeCustomerId
+        // const stripeGetPaymentMethods = app.$fire.functions.httpsCallable('stripeGetPaymentMethods')
+        // const customer_id = store.state.meta.stripeCustomerId
 
         // Not gonna lie, slight hack here.  Sometimes, eat least in local development, there was a chance we haven't populated all the auth data by the time these components attempt to reach vuex-root.  Could quite literally be a $tick problem, so this just guarantees one more.
         await store.dispatch('supabaseAuth/fetchUserMeta')
         await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
         return {
-            cards: (store.state.meta.stripeCustomerId)
+            cards: /* (store.state.meta.stripeCustomerId)
                 ? (await stripeGetPaymentMethods({ customer: customer_id, type: 'card' })).data
-                : { data: [] }
+                : */ { data: [] }
         }
     },
     data () {

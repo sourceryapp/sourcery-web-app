@@ -36,11 +36,6 @@ export default {
             '/archiveSpace',
             '/archiveSpace/',
             '/join-us'
-        ],
-        supabasePrivatePaths: [
-            '/supabase',
-            '/supabase/payment',
-            '/supabase/settings'
         ]
     },
 
@@ -145,9 +140,6 @@ export default {
     plugins: [
         '~/plugins/vue-instantsearch',
 
-        // Send emails to a specific address
-        '~/plugins/feedback',
-
         // Custom utilities for Sourcery
         '~/plugins/utils',
 
@@ -198,7 +190,7 @@ export default {
         '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
-        '@nuxtjs/firebase',
+        // '@nuxtjs/firebase',
         '@nuxtjs/sentry'
     ],
 
@@ -206,30 +198,30 @@ export default {
      * Firebase configuration
      * @url https://firebase.nuxtjs.org/guide/getting-started#example-configuration
      */
-    firebase: {
-        config: env.FIREBASE_CONFIG,
-        services: {
-            auth: {
-                persistence: 'local', // default
-                initialize: {
-                    onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
-                    onAuthStateChangedAction: 'auth/onAuthStateChanged',
-                    subscribeManually: false
-                },
-                ssr: false, // default
+    // firebase: {
+    //     config: env.FIREBASE_CONFIG,
+    //     services: {
+    //         auth: {
+    //             persistence: 'local', // default
+    //             initialize: {
+    //                 onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
+    //                 onAuthStateChangedAction: 'auth/onAuthStateChanged',
+    //                 subscribeManually: false
+    //             },
+    //             ssr: false, // default
 
-                // if EMULATOR===local, use the Firestore Emulators
-                emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
-            },
-            firestore: {
-                // if EMULATOR===local, use the Firestore Emulators
-                emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
-            },
-            functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
-            storage: true,
-            remoteConfig: true
-        }
-    },
+    //             // if EMULATOR===local, use the Firestore Emulators
+    //             emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
+    //         },
+    //         firestore: {
+    //             // if EMULATOR===local, use the Firestore Emulators
+    //             emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
+    //         },
+    //         functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
+    //         storage: true,
+    //         remoteConfig: true
+    //     }
+    // },
 
     /**
      * Sentry Error Logging

@@ -21,7 +21,7 @@ const initialState = () => {
 
 export type SupabaseState = ReturnType<typeof initialState>
 
-export const state = initialState()
+export const state = initialState
 
 export const getters: GetterTree<SupabaseState, SupabaseState> = {
     authUser(state : SupabaseState) {

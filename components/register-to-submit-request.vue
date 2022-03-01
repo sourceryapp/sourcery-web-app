@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { supabase } from '~/plugins/supabase'
 
 export default {
@@ -77,6 +78,11 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            citation: 'supabaseCreate/citation',
+            pages: 'supabaseCreate/pages',
+            repository_id: 'supabaseCreate/repositoryId'
+        }),
         bodyText () {
             if (this.allowRegister) {
                 return 'In order to submit a request, you must be registered with Sourcery.  Please log in, or submit your email address to register with us.'
@@ -151,20 +157,17 @@ export default {
                     }
                     this.submitResultAlert.type = 'success'
                     this.submitResultAlert.show = true
+
                     const localStateData = {
-                        email: this.newUserEmailAddress,
                         request: {
-                            citation: this.$store.state.create.citation,
-                            pages: this.$store.state.create.pages,
-                            repository_id: this.$store.state.create.repository_id
-                        },
-                        loginIntent: false
+                            citation: this.citation,
+                            pages: this.pages,
+                            repository_id: this.repository_id
+                        }
                     }
 
-                    if (this.loggingIn) {
-                        localStateData.loginIntent = true
-                    }
-                    localStorage.setItem('sourceryEmailSignInWith', JSON.stringify(localStateData))
+                    localStorage.setItem('sourceryInProgressRequest', JSON.stringify(localStateData))
+
                     this.hasSubmitted = true
                 } catch (e) {
                     this.submitResultAlert.body = e.error_description || e.message

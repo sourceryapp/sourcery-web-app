@@ -30,13 +30,13 @@
       <v-container fill-height>
         <v-row>
           <v-col>
-            <call-to-action-alert
-              v-if="user && user.hasPassword !== undefined && !user.hasPassword"
+            <!-- <call-to-action-alert
+              v-if="user && !hasPassword"
               message="In order to gain access to the full features of Sourcery, you must set a password."
               to="/settings"
               type="warning"
               action-text="Set Password."
-            />
+            /> -->
           </v-col>
         </v-row>
         <v-layout
@@ -63,7 +63,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser'
+            user: 'supabaseAuth/authUser'
+            // hasPassword: 'supabaseAuth/hasPassword'
         })
     },
     mounted () {

@@ -41,6 +41,12 @@ export const getters = {
         }
         return ''
     },
+    repositoryId(state: SupabaseCreateState) {
+        if ( state.repository ) {
+            return state.repository.id
+        }
+        return null
+    },
     hasRepository(state: SupabaseCreateState) {
         return !!state.repository
     },
