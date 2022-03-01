@@ -378,27 +378,6 @@ export default {
                 this.selectRepositoryObj(repo)
             }
         }
-        if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
-            console.log('This is a sign in with email link!')
-            const saved_info = JSON.parse(localStorage.getItem('sourceryEmailSignInWith'))
-            console.log(saved_info)
-            if (saved_info) {
-                if (saved_info.request && saved_info.request.repository_id) {
-                    const repo = this.repositories.find(e => e.id === saved_info.request.repository_id)
-                    if (!repo) {
-                        return false
-                    }
-                    this.selectRepositoryObj(repo)
-                    this.citation = saved_info.request.citation
-                    this.pages = saved_info.request.pages
-                    this.formState = 3
-                }
-                if (saved_info.email) {
-                    const intent = saved_info.loginIntent ? 'login' : ''
-                    this.$refs.finish_email_link_registration_dialog.openDialog(intent)
-                }
-            }
-        }
     },
     methods: {
         ...mapMutations({
