@@ -49,6 +49,9 @@ export const getters = {
     },
     integrationData(state: SupabaseCreateState) {
         return state.integrationData
+    },
+    hasIntegrationData(state: SupabaseCreateState) {
+        return !!state.integrationData
     }
 }
 

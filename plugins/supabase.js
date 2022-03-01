@@ -24,13 +24,16 @@ export default async function setStore ({ store, app: { router } }) {
             return
         }
 
+        // Currently handling registration in the page, so this is excluded.
         if (session && session.user) {
             console.log('registered sign in')
             store.commit('supabaseAuth/setAuthUser', session.user)
-            await store.dispatch('supabaseAuth/fetchUserMeta')
-            await store.dispatch('supabaseAuth/fetchUserOrganizations')
-            await store.dispatch('supabaseAuth/fetchUserHasPassword')
-            router.push('/dashboard')
+            if (!store.getters['supabaseAuth/justRegistered']) {
+                await store.dispatch('supabaseAuth/fetchUserMeta')
+                await store.dispatch('supabaseAuth/fetchUserOrganizations')
+                await store.dispatch('supabaseAuth/fetchUserHasPassword')
+                router.push('/dashboard')
+            }
         }
     })
 }

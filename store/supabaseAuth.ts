@@ -14,7 +14,8 @@ const initialState = () => {
         authUserHasPassword: false,
         authUserPaymentAssociation: null as PaymentAssociation | null,
         authUserOrganizations: [] as Organization[],
-        resetAccessToken: ''
+        resetAccessToken: '',
+        justRegistered: false
     }
 }
 
@@ -52,6 +53,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     },
     resetAccessToken(state: SupabaseState) {
         return state.resetAccessToken
+    },
+    justRegistered(state: SupabaseState) {
+        return state.justRegistered
     }
 }
 
@@ -74,6 +78,9 @@ export const mutations : MutationTree<SupabaseState> = {
     setResetAccessToken(state: SupabaseState, value: string) {
         state.resetAccessToken = value
     },
+    setJustRegistered(state: SupabaseState, value: boolean) {
+        state.justRegistered = value
+    },
     clear(state: SupabaseState) {
         const initial = initialState()
         state.authUser = initial.authUser
@@ -82,6 +89,7 @@ export const mutations : MutationTree<SupabaseState> = {
         state.authUserPaymentAssociation = initial.authUserPaymentAssociation
         state.authUserOrganizations = initial.authUserOrganizations
         state.resetAccessToken = initial.resetAccessToken
+        state.justRegistered = initial.justRegistered
     }
 }
 
