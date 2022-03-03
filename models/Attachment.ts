@@ -83,6 +83,7 @@ export class Attachment implements SourceryAttachment {
 
         if ( error ) {
             console.log(error)
+            return false
         }
 
         return attachment

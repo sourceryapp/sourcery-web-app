@@ -3,6 +3,7 @@ import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vue
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
+import { supabase } from '~/plugins/supabase'
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
 
@@ -88,7 +89,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         }
         return false
     },
-    async addAttachment ({ state, commit, dispatch, rootGetters } : { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch, rootGetters : any}, file : File) {
+    async addAttachment ({ state, dispatch, rootGetters } : { state: SupabaseRequestState, dispatch: Dispatch, rootGetters : any}, file : File) {
         // Default number of pages for an attachment
         let pages = 1
 
@@ -100,91 +101,47 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
             pages = await countPages(file)
         }
 
-        return new Promise((resolve, reject) => {
+        if ( !state.request || !state.request.id ) {
+            return false
+        }
 
-            if ( !state.request || !state.request.id ) {
-                reject('No current request.')
-                return
+        try {
+            const filePath = `jobs/${state.request.id}/${storedFileName}`
+
+            const { data, error } = await supabase.storage
+                .from('attachments')
+                .upload(filePath, file)
+
+            if ( error ) {
+                throw error
             }
 
-            const storageRef = this.$fire.storage.ref(
-                `jobs/supa-${state.request.id}/images/`
-            )
-            const imageRef = storageRef.child(storedFileName)
-            const uploadTask = imageRef.put(file)
+            const { publicURL, error: publicError } = supabase.storage
+                .from('attachments')
+                .getPublicUrl(filePath)
 
-            uploadTask.on(
-                'state_changed',
-                function (snapshot) {
-                    // Update progress here... if you want
-                },
-                function (error) {
-                    // @todo Handle upload error messages
-                    // A full list of error codes is available at
-                    // https://firebase.google.com/docs/storage/web/handle-errors
-                    switch (error.code) {
-                    case 'storage/unauthorized':
-                        // User doesn't have permission to access the object
-                        break
+            if ( publicError || !publicURL ) {
+                throw publicError
+            }
 
-                    case 'storage/canceled':
-                        // User canceled the upload
-                        break
-                    case 'storage/unknown':
-                        // Unknown error occurred, inspect error.serverResponse
-                        break
-                    }
-                },
-                async () => {
-                    const downloadURL = await uploadTask.snapshot.ref
-                    .getDownloadURL()
-                    // Upload completed successfully, now we can get the download URL
-                    let url = ''
-                    const pagesString = pages.toString()
+            if ( state.request && state.request.id ) {
+                const newAttachment = new Attachment({
+                    request_id: state.request.id,
+                    user_id: rootGetters['supabaseAuth/authUser'].id,
+                    url: publicURL,
+                    mime: null,
+                    pages: pages,
+                    label: ''
+                })
+                const status = await newAttachment.insert()
+                await dispatch('getById', state.request.id)
+            }
 
-                    if ( state.request && state.request.id ) {
-                        url = downloadURL
-                        const newAttachment = new Attachment({
-                            request_id: state.request.id,
-                            user_id: rootGetters['supabaseAuth/authUser'].id,
-                            url: downloadURL,
-                            mime: null,
-                            pages: pages,
-                            label: ''
-                        })
-                        const status = await newAttachment.insert()
-                        await dispatch('getById', state.request.id)
-                    }
-
-
-                    // @url https://firebase.google.com/docs/storage/web/file-metadata#custom_metadata
-                    const meta = {
-                        contentDisposition: 'attachment',
-                        customMetadata: {
-                            pages: pagesString,
-                            url
-                        }
-                    }
-
-                    // Add the number of pages to the metadata
-                    await imageRef
-                        .updateMetadata(meta)
-                        .then((metadata) => {
-                            // Updated metadata for 'images/forest.jpg' is returned in the Promise
-                            console.info('Added custom metadata to attachment')
-                        })
-                        .catch((error) => {
-                            if (error) {
-                                console.log('Request.js', error)
-                            }
-                        })
-
-                    // Resolve this promise
-                    resolve(url)
-                    console.log(url)
-                }
-            )
-        })
+            return true
+        } catch(error) {
+            console.log(error)
+            return false
+        }
     },
     async deleteAttachment ({ state, commit, dispatch }, attachment) {
         // Get the filename from the Google Storage URL
@@ -192,32 +149,34 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         const path = decodeURIComponent(url.pathname)
         const filename = path.replace(/.*\//, '')
 
-        // Run the tasks
-        return new Promise((resolve, reject) => {
-            if ( !state.request || !state.request.id ) {
-                reject('No current request.')
-                return
+        if ( !state.request || !state.request.id ) {
+            return false
+        }
+
+        const filePath = `jobs/${state.request.id}/${filename}`
+
+        try {
+
+            const { data, error } = await supabase.storage
+                .from('attachments')
+                .remove([filePath])
+
+            if ( error ) {
+                throw error
             }
-            const storageRef = this.$fire.storage.ref(
-                `jobs/supa-${state.request.id}/images/`
-            )
-            const fileRef = storageRef.child(filename)
 
-            const tasks = [
-                // Delete the file
-                fileRef.delete(),
+            const result = await attachment.delete()
 
-                // Delete the db reference
-                attachment.delete()
-            ]
+            if ( result === false ) {
+                throw 'attachment was deleted but record was not.'
+            }
 
-            Promise.all(tasks).then((values) => {
-                if ( state.request ) {
-                    dispatch('getById', state.request.id)
-                }
-                resolve(values)
-            })
-        })
+            await dispatch('getById', state.request.id)
+            return true
+        } catch (error) {
+            console.log(error)
+            return false
+        }
     },
 }
 
