@@ -186,9 +186,6 @@ export default {
         return {
         }
     },
-    mounted () {},
-    methods: {
-    },
     head () {
         return {
             script: [
@@ -201,6 +198,9 @@ export default {
                 }
             ]
         }
+    },
+    mounted () {},
+    methods: {
     }
 }
 </script>
