@@ -35,7 +35,8 @@ export default {
             '/request/create',
             '/archiveSpace',
             '/archiveSpace/',
-            '/join-us'
+            '/join-us',
+            '/roadmap'
         ]
     },
 

@@ -19,6 +19,16 @@
           color="white"
           class="ml-6"
           large
+          to="/roadmap"
+          min-width="96px"
+        >
+          Roadmap
+        </v-btn>
+        <v-btn
+          text
+          color="white"
+          class="ml-6"
+          large
           min-width="96px"
           to="/team"
         >
@@ -77,6 +87,15 @@
               <v-icon>mdi-information</v-icon>
             </v-list-item-icon>
             <v-list-item-title>About</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="/roadmap"
+            color="primary"
+          >
+            <v-list-item-icon>
+              <v-icon>mdi-chart-timeline-variant</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Roadmap</v-list-item-title>
           </v-list-item>
           <v-list-item
             to="/team"
