@@ -51,6 +51,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     isLoggedIn(state: SupabaseState) {
         return !!state.authUser
     },
+    isAdmin(state: SupabaseState) {
+        return state.authUserMeta?.admin
+    },
     resetAccessToken(state: SupabaseState) {
         return state.resetAccessToken
     },

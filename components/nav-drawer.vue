@@ -85,15 +85,15 @@
       </v-list-item-group>
 
       <v-divider
-        v-if="user && user.admin"
+        v-if="user && isAdmin"
         class="my-2"
       />
-      <v-subheader v-if="user && user.admin">
+      <v-subheader v-if="user && isAdmin">
         DEV ONLY
       </v-subheader>
 
       <v-list-item-group
-        v-if="user && user.admin"
+        v-if="user && isAdmin"
         color="primary"
       >
         <v-list-item
@@ -224,7 +224,7 @@ export default {
                 { title: 'History', icon: 'mdi-history', link: '/request/history' },
                 { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
                 { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
-                { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
+                { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             ],
             bottomItems: [
                 { title: 'Privacy Policy', link: '/privacy' },
@@ -241,20 +241,13 @@ export default {
             isOrgMember: 'supabaseAuth/ownsAnOrganization',
             user: 'supabaseAuth/authUser',
             userMeta: 'supabaseAuth/authUserMeta',
-            supabaseIsAuthenticated: 'supabaseAuth/isAuthenticated'
+            supabaseIsAuthenticated: 'supabaseAuth/isAuthenticated',
+            isAdmin: 'supabaseAuth/isAdmin'
         }),
         devItems () {
             const items = [
                 { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
             ]
-            const supa = { title: 'Supabase', icon: 'mdi-relation-many-to-many', link: '/supabase' }
-
-            if (!this.supabaseIsAuthenticated) {
-                supa.title = 'Supabase Login'
-                supa.link = '/login/supabase'
-            }
-
-            items.push(supa)
             return items
         }
     },

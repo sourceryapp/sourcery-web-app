@@ -1,6 +1,7 @@
 import { supabase } from '~/plugins/supabase'
 import type { definitions } from '~/types/supabase'
 import { Repository } from '~/models/Repository'
+import { FeaturedImage } from '~/models/FeaturedImage'
 
 const TABLE_NAME = 'organizations'
 
@@ -13,6 +14,7 @@ export class Organization {
     featured_image_id: number | null
     created_at: string | null
     repositories?: Repository[]
+    featured_images?: FeaturedImage[]
 
     constructor({
         id = null,
@@ -22,7 +24,8 @@ export class Organization {
         owner_id,
         featured_image_id = null,
         created_at = null,
-        repositories = undefined
+        repositories = undefined,
+        featured_images = undefined
     }: Organization) {
         this.id = id,
         this.address = address
@@ -34,6 +37,11 @@ export class Organization {
 
         if ( repositories ) {
             this.repositories = repositories
+        }
+
+        this.featured_images = []
+        if ( featured_images ) {
+            this.featured_images = featured_images
         }
 
     }
@@ -73,15 +81,22 @@ export class Organization {
         let { data: org, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
-                repositories (*)
+                repositories (*),
+                featured_images!organizations_featured_image_id_fkey (*)
             `)
             .eq('slug', slug)
             .limit(1)
             .single()
 
         if ( org ) {
+            console.log(org)
             return new Organization(org)
         }
+
+        if ( error ) {
+            console.log(error)
+        }
+
         return null
     }
 

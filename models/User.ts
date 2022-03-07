@@ -9,13 +9,15 @@ export class User {
     email: string
     created_at: string
     phone: string
+    admin: boolean
 
-    constructor({ id, name, email, created_at, phone }: User) {
+    constructor({ id, name, email, created_at, phone, admin = false }: User) {
         this.id = id
         this.name = name
         this.email = email
         this.created_at = created_at
         this.phone = phone
+        this.admin = admin
     }
 
     public toJSON() {
@@ -24,7 +26,8 @@ export class User {
             name: this.name,
             email: this.email,
             created_at: this.created_at,
-            phone: this.phone
+            phone: this.phone,
+            admin: this.admin
         }
     }
 
