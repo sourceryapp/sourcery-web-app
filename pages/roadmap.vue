@@ -33,10 +33,13 @@
                     Transition language and layouts to have a focus on Institutional usage.
                   </p>
                   <p>
-                    Add a chat box feature to the request process.
+                    Design a chat box feature for the request process.
                   </p>
                   <p>
                     Meet with our testing partners to discuss feedback, progress, and site usage.
+                  </p>
+                  <p>
+                    Integrate Supabase to our back end code.
                   </p>
                 </div>
               </v-col>
@@ -63,10 +66,10 @@
                     Create scan request workflow documentation.
                   </p>
                   <p>
-                    Explore/Build “import” and “export” protocols/APIs.
+                    Design “import” and “export” protocols/APIs.
                   </p>
                   <p>
-                    Design Charrette held with our Advisory Board and Testing Partners.
+                    Host design charrette held with our Advisory Board and Testing Partners.
                   </p>
                 </div>
               </v-col>
@@ -87,16 +90,16 @@
                     Summer 2022
                   </h2>
                   <p>
-                    First rollout of major updates!
+                    Rollout major UI updates.
                   </p>
                   <p>
                     Begin working on integration features for Tropy, Omeka, and Fedora.
                   </p>
                   <p>
-                    Explore and build “import” and “export” protocols/APIs.
+                    Build “import” and “export” protocols/APIs.
                   </p>
                   <p>
-                    Implement new  institutional dashboard.
+                    Implement new institutional dashboard.
                   </p>
                 </div>
               </v-col>
@@ -117,13 +120,13 @@
                     Fall 2022
                   </h2>
                   <p>
-                    Implement data analytics tools to the institutional dashboard.
+                    Implement new analytics tools.
                   </p>
                   <p>
                     Launch integration features for Tropy, Omeka, and Fedora.
                   </p>
                   <p>
-                    End of Year rollout of major updates.
+                    Rollout additional major updates.
                   </p>
                 </div>
               </v-col>
@@ -144,16 +147,16 @@
                     2023
                   </h2>
                   <p>
-                    Pilot relaunch and integration of third-party, peer-to-peer scanning services.
-                  </p>
-                  <p>
                     Implement “Hire a Researcher” feature.
                   </p>
                   <p>
                     Launch native iOS and Android apps.
                   </p>
                   <p>
-                    Launch low computing read-only version of app.
+                    Launch minimal computing version of the app for users in low-bandwidth areas.
+                  </p>
+                  <p>
+                    Pilot relaunch and integration of third-party, peer-to-peer scanning services.
                   </p>
                 </div>
               </v-col>
