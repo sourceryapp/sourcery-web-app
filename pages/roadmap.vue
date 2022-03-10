@@ -69,7 +69,7 @@
                     Design “import” and “export” protocols/APIs.
                   </p>
                   <p>
-                    Host design charrette held with our Advisory Board and Testing Partners.
+                    Host design charrette with our Advisory Board and Testing Partners.
                   </p>
                 </div>
               </v-col>
@@ -93,7 +93,7 @@
                     Rollout major UI updates.
                   </p>
                   <p>
-                    Begin working on integration features for Tropy, Omeka, and Fedora.
+                    Begin working on Tropy, Omeka, and Fedora integrations.
                   </p>
                   <p>
                     Build “import” and “export” protocols/APIs.
@@ -123,7 +123,7 @@
                     Implement new analytics tools.
                   </p>
                   <p>
-                    Launch integration features for Tropy, Omeka, and Fedora.
+                    Launch Tropy, Omeka, and Fedora integrations.
                   </p>
                   <p>
                     Rollout additional major updates.
