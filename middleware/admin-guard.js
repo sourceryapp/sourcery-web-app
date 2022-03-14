@@ -1,5 +1,7 @@
 export default function ({ store, error }) {
-    if (!store.state.auth.authUser.admin) {
+    const isAdmin = store.getters['supabaseAuth/isAdmin']
+
+    if (!isAdmin) {
         error('Forbidden')
     }
 }

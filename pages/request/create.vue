@@ -94,7 +94,7 @@
                   @click="toggle"
                 >
                   <v-img
-                    :src="`/img/repo/${repo.id}.jpg`"
+                    :src="repo.featured_image ? repo.featured_image.url : ''"
                     class="align-stretch"
                     :gradient="active && $vuetify.breakpoint.xs ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
                     width="100%"
@@ -105,7 +105,7 @@
                       <v-row>
                         <v-col class="d-flex justify-end">
                           <img
-                            v-if="repo.featured_image"
+                            v-if="false"
                             :src="`/img/institution/${repo.id}.png`"
                             alt="alt"
                             height="48px"

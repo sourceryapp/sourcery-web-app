@@ -1,16 +1,16 @@
 <template>
   <v-app-bar
-    :src="repositories[0] ? `/img/repo/${repositories[0].id}.jpg` : ''"
+    :src="organization.featured_image ? organization.featured_image.url : ''"
     app
     dark
     elevate-on-scroll
-    :height="repositories[0] ? '360px' : '240px'"
+    :height="organization.featured_image ? '360px' : '240px'"
     class="pa-0"
   >
     <template #img="{ props }">
       <v-img
         v-bind="props"
-        :gradient="repositories[0] ? '0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%' : '0deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%'"
+        :gradient="organization.featured_image ? '0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%' : '0deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%'"
       />
     </template>
 
@@ -61,10 +61,6 @@ import { mapGetters } from 'vuex'
 
 export default {
     props: {
-        repositories: {
-            type: Array,
-            required: true
-        },
         organization: {
             type: Object,
             required: true

@@ -2,9 +2,17 @@
   <v-layout>
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <organization-app-bar
-        :repositories="organization.repositories"
         :organization="organization"
       />
+
+      <v-btn
+        v-if="isAdmin"
+        color="primary"
+        large
+        :to="`/o/${organization.slug}/manage`"
+      >
+        Manage
+      </v-btn>
       <sourcery-card title="Repositories" class="mt-4">
         <v-list
           v-if="organization.repositories"
@@ -52,7 +60,7 @@
 </template>
 
 <script>
-// import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import SourceryCard from '@/components/card-with-header.vue'
 import OrganizationAppBar from '@/components/organization-app-bar.vue'
 import { Organization } from '~/models/Organization'
@@ -69,6 +77,11 @@ export default {
         return {
             organization
         }
+    },
+    computed: {
+        ...mapGetters({
+            isAdmin: 'supabaseAuth/isAdmin'
+        })
     },
     methods: {
         repoAddress (repo) {

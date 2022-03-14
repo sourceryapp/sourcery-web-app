@@ -24,6 +24,10 @@ export default async function setStore ({ store, app: { router } }) {
             return
         }
 
+        if (_ === 'TOKEN_REFRESHED') {
+            return
+        }
+
         // Currently handling registration in the page, so this is excluded.
         if (session && session.user) {
             console.log('registered sign in')

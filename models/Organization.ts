@@ -14,7 +14,7 @@ export class Organization {
     featured_image_id: number | null
     created_at: string | null
     repositories?: Repository[]
-    featured_images?: FeaturedImage[]
+    featured_image?: FeaturedImage
 
     constructor({
         id = null,
@@ -25,7 +25,7 @@ export class Organization {
         featured_image_id = null,
         created_at = null,
         repositories = undefined,
-        featured_images = undefined
+        featured_image = undefined
     }: Organization) {
         this.id = id,
         this.address = address
@@ -36,12 +36,11 @@ export class Organization {
         this.created_at = created_at
 
         if ( repositories ) {
-            this.repositories = repositories
+            this.repositories = repositories.map(x => new Repository(x))
         }
 
-        this.featured_images = []
-        if ( featured_images ) {
-            this.featured_images = featured_images
+        if ( featured_image ) {
+            this.featured_image = featured_image
         }
 
     }
@@ -81,8 +80,11 @@ export class Organization {
         let { data: org, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
-                repositories (*),
-                featured_images!organizations_featured_image_id_fkey (*)
+                repositories (
+                    *,
+                    featured_image:featured_images!repositories_featured_image_id_fkey (*)
+                ),
+                featured_image:featured_images!organizations_featured_image_id_fkey (*)
             `)
             .eq('slug', slug)
             .limit(1)
@@ -113,5 +115,17 @@ export class Organization {
         }
 
         return []
+    }
+
+    async saveImage(featured_image : FeaturedImage) {
+        const { data: replaced, error } = await supabase.from(TABLE_NAME)
+            .update({ featured_image_id: featured_image.id })
+            .eq('id', this.id)
+
+        if ( error ) {
+            console.log(error)
+            return false
+        }
+        return true
     }
 }

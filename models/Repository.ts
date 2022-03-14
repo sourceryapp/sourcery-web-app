@@ -1,6 +1,7 @@
 import { supabase } from '~/plugins/supabase'
 import type { definitions } from '~/types/supabase'
 import { Organization } from '~/models/Organization'
+import { FeaturedImage } from './FeaturedImage'
 
 const TABLE_NAME = 'repositories'
 
@@ -19,6 +20,7 @@ export class Repository {
     featured_image_id: number | null
     created_at: string | null
     organization?: Organization
+    featured_image?: FeaturedImage | null
 
     constructor({
         id = null,
@@ -34,7 +36,8 @@ export class Repository {
         organization_id,
         featured_image_id = null,
         created_at = null,
-        organization = undefined
+        organization = undefined,
+        featured_image = undefined
     }: Repository) {
         this.id = id,
         this.name = name
@@ -53,16 +56,25 @@ export class Repository {
         if ( organization ) {
             this.organization = organization
         }
+
+        if ( featured_image ) {
+            this.featured_image = featured_image
+        } else {
+            this.featured_image = null
+        }
     }
 
     public static async getActive() {
         const { data: repositories, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
-                organization:organizations (*)
+                organization:organizations (*),
+                featured_image:featured_images (*)
             `)
             .order('name')
             .eq('active', true)
+
+        console.log(repositories)
 
         if ( error ) {
             console.log(error)
@@ -75,5 +87,18 @@ export class Repository {
             return reps
         }
         return []
+    }
+
+    async saveImage(image : FeaturedImage) {
+        const { data: replaced, error } = await supabase.from(TABLE_NAME)
+            .update({ featured_image_id : image.id })
+            .eq('id', this.id)
+
+        if ( error ) {
+            console.log(error)
+            return false
+        }
+
+        return true
     }
 }
