@@ -1,6 +1,6 @@
 <template>
-  <div class="org-stat-bar">
-    <v-card class="pt-1 pb-1 pr-4 pl-4">
+  <div class="org-stat-bar mb-6">
+    <v-card class="pt-1 pb-1 pr-3 pl-2">
       <v-card-text>
         <v-row>
           <v-col v-for="label in labels" :key="`l-${label.key}`" class="split-border mt-1 mb-2 pl-6">
@@ -17,14 +17,26 @@
 
 <script>
 export default {
+    props: {
+        newCount: {
+            type: Number,
+            default: 0
+        },
+        progressCount: {
+            type: Number,
+            default: 0
+        },
+        completedCount: {
+            type: Number,
+            default: 0
+        },
+        turnaroundDays: {
+            type: Number,
+            default: 0
+        }
+    },
     data () {
         return {
-            stats: {
-                new: 0,
-                progress: 57,
-                completed: 243,
-                revenue: '$0'
-            },
             labels: [
                 {
                     name: 'New',
@@ -39,10 +51,20 @@ export default {
                     key: 'completed'
                 },
                 {
-                    name: 'Revenue',
-                    key: 'revenue'
+                    name: 'Avg Turnaround',
+                    key: 'avg_turnaround'
                 }
             ]
+        }
+    },
+    computed: {
+        stats () {
+            return {
+                new: this.newCount,
+                progress: this.progressCount,
+                completed: this.completedCount,
+                avg_turnaround: `${this.turnaroundDays} days`
+            }
         }
     }
 }
@@ -50,7 +72,7 @@ export default {
 
 <style scoped>
 .stat-large {
-    font-size: 4em;
+    font-size: 3.5em;
     font-weight: bold;
 }
 

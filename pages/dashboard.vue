@@ -1,16 +1,35 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+    <v-flex xs12 sm10 xl6 offset-sm1 offset-xl3>
       <h1 class="mb-4">
-        Dashboard
+        {{ pageTitle }}
       </h1>
       <logged-out-card />
-      <org-stat-bar v-if="false" />
-      <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
+      <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedJobs.length" />
+
+      <v-row>
+        <v-col cols="12" md="6">
+          <card-with-action title="New Requests" :number-requests="newJobs.length">
+            <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
+            <span v-if="newJobs.length === 0">No New Requests</span>
+          </card-with-action>
+          <card-with-action title="Recently Completed">
+            <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
+            <span v-if="completedJobs.length === 0">No Recently Completed Requests</span>
+          </card-with-action>
+        </v-col>
+        <v-col cols="12" md="6">
+          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length">
+            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
+            <span v-if="inProgressJobs.length === 0">No In Progress Requests.</span>
+          </card-with-action>
+        </v-col>
+      </v-row>
+      <!-- <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
         <none-found-card v-if="jobs.length == 0" text="This organization has no outstanding requests that need service." />
 
         <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
-      </sourcery-card>
+      </sourcery-card> -->
       <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-12">
         <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
@@ -30,6 +49,7 @@
 import { mapGetters } from 'vuex'
 import NoneFoundCard from '@/components/none-found-card.vue'
 import SourceryCard from '@/components/card-with-header.vue'
+import CardWithAction from '@/components/card-with-action.vue'
 import LoggedOutCard from '@/components/logged-out-card.vue'
 import ViewHistoryButton from '@/components/view-history-button.vue'
 import RequestListing from '@/components/request-listing.vue'
@@ -44,7 +64,8 @@ export default {
         LoggedOutCard,
         ViewHistoryButton,
         RequestListing,
-        OrgStatBar
+        OrgStatBar,
+        CardWithAction
     },
     async asyncData ({ params, store, app }) {
         const logged_in = store.getters['supabaseAuth/authUser'] && store.getters['supabaseAuth/authUser'].id
@@ -70,14 +91,39 @@ export default {
         return {
             requests: [],
             jobs: [],
-            organizations: []
+            organizations: [],
+            limit: 4
         }
     },
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
             isOrgMember: 'supabaseAuth/ownsAnOrganization'
-        })
+        }),
+        pageTitle () {
+            if (this.isOrgMember) {
+                return 'Institutional Dashboard'
+            }
+            return 'Dashboard'
+        },
+        newJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Submitted')
+        },
+        inProgressJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Picked Up')
+        },
+        completedJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Complete')
+        },
+        newJobsLimited () {
+            return this.newJobs.slice(0, this.limit)
+        },
+        inProgressJobsLimited () {
+            return this.inProgressJobs.slice(0, this.limit)
+        },
+        completedJobsLimited () {
+            return this.completedJobs.slice(0, this.limit)
+        }
     }
 }
 </script>
