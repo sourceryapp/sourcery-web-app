@@ -7,7 +7,11 @@
     <v-card-title>
       <span class="text-uppercase text-h5">{{ titleText }}</span>
       <v-spacer />
-      <span class="text-subtitle-1">More -></span>
+      <nuxt-link :to="action" class="nounderline text-subtitle-1">
+        More <v-icon small>
+          mdi-arrow-right
+        </v-icon>
+      </nuxt-link>
     </v-card-title>
     <v-card-text>
       <slot />
@@ -26,6 +30,10 @@ export default {
         numberRequests: {
             type: Number,
             default: 0
+        },
+        action: {
+            type: String,
+            default: '/dashboard'
         }
     },
     computed: {
@@ -39,3 +47,9 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.nounderline {
+  text-decoration: none;
+}
+</style>

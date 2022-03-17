@@ -38,7 +38,7 @@
           </v-icon>
         </none-found-card>
 
-        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" />
+        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" :client="true" />
       </sourcery-card>
       <view-history-button v-if="user" />
     </v-flex>
