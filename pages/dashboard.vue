@@ -1,6 +1,13 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm10 xl6 offset-sm1 offset-xl3>
+    <v-flex
+      xs12
+      sm10
+      md12
+      xl10
+      offset-sm-1
+      offset-xl1
+    >
       <h1 class="mb-4">
         {{ pageTitle }}
       </h1>
@@ -8,21 +15,22 @@
       <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
 
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" lg="6">
           <card-with-action title="New Requests" :number-requests="newJobs.length" action="/requests?status=1">
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
-            <span v-if="newJobs.length === 0">No New Requests</span>
+            <span v-if="newJobs.length === 0">Out looking for toadstools.<br>No new requests.</span>
           </card-with-action>
           <card-with-action title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
-            <span v-if="completedJobs.length === 0">No Recently Completed Requests</span>
+            <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
         </v-col>
-        <v-col cols="12" md="6">
+        <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
             <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
-            <span v-if="inProgressJobs.length === 0">No In Progress Requests.</span>
+            <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
           </card-with-action>
+          <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
         </v-col>
       </v-row>
       <!-- <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
@@ -54,6 +62,7 @@ import LoggedOutCard from '@/components/logged-out-card.vue'
 import ViewHistoryButton from '@/components/view-history-button.vue'
 import RequestListing from '@/components/request-listing.vue'
 import OrgStatBar from '@/components/org-stat-bar.vue'
+import ButtonLarge from '@/components/button-large.vue'
 import { Request } from '~/models/Request'
 
 export default {
@@ -65,7 +74,8 @@ export default {
         ViewHistoryButton,
         RequestListing,
         OrgStatBar,
-        CardWithAction
+        CardWithAction,
+        ButtonLarge
     },
     async asyncData ({ params, store, app }) {
         const logged_in = store.getters['supabaseAuth/authUser'] && store.getters['supabaseAuth/authUser'].id

@@ -31,6 +31,36 @@
               />
             </v-fade-transition>
           </v-col>
+          <v-col v-if="showLabelEdit" cols="2" align-self="center">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="#707070"
+              style="z-index:1"
+              @click.prevent="editLabel"
+            >
+              <v-icon dark>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </v-col>
+          <v-col v-if="showChatInit" cols="2" align-self="center">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="#707070"
+              style="z-index:1"
+              @click.prevent="editLabel"
+            >
+              <v-icon dark>
+                mdi-message-text
+              </v-icon>
+            </v-btn>
+          </v-col>
           <v-col
             cols="auto"
             :class="labelClass"
@@ -80,6 +110,17 @@ export default {
             }
 
             return classes
+        },
+        showLabelEdit () {
+            return !this.client && this.request.status.name === 'Submitted'
+        },
+        showChatInit () {
+            return this.request.status.name === 'Picked Up'
+        }
+    },
+    methods: {
+        editLabel () {
+            console.log('edit label')
         }
     }
 }
