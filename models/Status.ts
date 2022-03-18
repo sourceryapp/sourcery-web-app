@@ -44,4 +44,14 @@ export class Status {
 
         return null
     }
+
+    public static async getAll() {
+        let { data: statuses, error } = await supabase.from<Status>('status')
+            .select('*')
+
+        if ( statuses ) {
+            return statuses.map(x => new Status(x))
+        }
+        return []
+    }
 }

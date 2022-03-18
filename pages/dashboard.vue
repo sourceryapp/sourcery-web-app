@@ -9,7 +9,7 @@
 
       <v-row>
         <v-col cols="12" md="6">
-          <card-with-action title="New Requests" :number-requests="newJobs.length">
+          <card-with-action title="New Requests" :number-requests="newJobs.length" action="/requests?status=1">
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
             <span v-if="newJobs.length === 0">No New Requests</span>
           </card-with-action>
