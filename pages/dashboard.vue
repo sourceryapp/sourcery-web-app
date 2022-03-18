@@ -5,7 +5,7 @@
         {{ pageTitle }}
       </h1>
       <logged-out-card />
-      <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedJobs.length" />
+      <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
 
       <v-row>
         <v-col cols="12" md="6">
@@ -13,13 +13,13 @@
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
             <span v-if="newJobs.length === 0">No New Requests</span>
           </card-with-action>
-          <card-with-action title="Recently Completed">
+          <card-with-action title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No Recently Completed Requests</span>
           </card-with-action>
         </v-col>
         <v-col cols="12" md="6">
-          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length">
+          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
             <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
             <span v-if="inProgressJobs.length === 0">No In Progress Requests.</span>
           </card-with-action>
@@ -78,7 +78,7 @@ export default {
 
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
             const user_repositories = store.getters['supabaseAuth/userRepositories']
-            jobs = await Request.getForRepositories(user_repositories, ['Picked Up', 'Submitted', 'Complete'])
+            jobs = await Request.getForRepositories(user_repositories, ['Picked Up', 'Submitted', 'Complete', 'Archived'])
         }
 
         return {
@@ -114,6 +114,9 @@ export default {
         },
         completedJobs () {
             return this.jobs.filter(x => x.status?.name === 'Complete')
+        },
+        completedAndArchivedJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Complete' || x.status?.name === 'Archived')
         },
         newJobsLimited () {
             return this.newJobs.slice(0, this.limit)

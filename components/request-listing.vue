@@ -75,7 +75,7 @@ export default {
                 classes += ' bg-teal'
             } else if (status_name === 'Picked Up') {
                 classes += ' bg-blue'
-            } else if (status_name === 'Complete') {
+            } else if (status_name === 'Complete' || status_name === 'Archived') {
                 classes += ' bg-purple'
             }
 

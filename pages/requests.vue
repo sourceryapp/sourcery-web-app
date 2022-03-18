@@ -27,6 +27,18 @@
             {{ item.status.name }}
           </v-chip>
         </template>
+
+        <template
+          #item.actions="{ item }"
+        >
+          <v-icon
+            small
+            class="mr-2"
+            @click="viewRequest(item)"
+          >
+            mdi-eye
+          </v-icon>
+        </template>
       </v-data-table>
     </v-flex>
   </v-layout>
@@ -77,6 +89,10 @@ export default {
                         }
                         return this.filter.status.includes(value.id)
                     }
+                },
+                {
+                    text: 'Actions',
+                    value: 'actions'
                 }
             ]
         }
@@ -86,6 +102,9 @@ export default {
             this.filter = {
                 status: []
             }
+        },
+        viewRequest (request) {
+            this.$router.push(`/request/${request.id}`)
         }
     }
 }
