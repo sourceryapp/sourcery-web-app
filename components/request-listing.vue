@@ -105,7 +105,7 @@ export default {
                 classes += ' bg-teal'
             } else if (status_name === 'In Progress') {
                 classes += ' bg-blue'
-            } else if (status_name === 'Complete' || status_name === 'Archived') {
+            } else if (status_name === 'Complete' || status_name === 'Archived' || status_name === 'Cancelled') {
                 classes += ' bg-purple'
             }
 

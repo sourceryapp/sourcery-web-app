@@ -16,7 +16,7 @@
         :rounded="false"
       />
 
-      <v-row justify="end" class="mb-4">
+      <v-row justify="end">
         <v-col class="text-right">
           <v-menu
             v-model="filterOpen"
@@ -55,35 +55,24 @@
       </v-row>
 
       <v-row>
-        <v-col v-for="request in filteredRequests" :key="request.id" xs="12" md="6">
-          {{ request.citation }}
+        <v-col>
+          <v-chip v-for="(s, index) in filter.status" :key="s" class="ma-2" close @click:close="removeStatusFromFilter(index)">
+            {{ statuses.find(x => x.id === s).name }}
+          </v-chip>
         </v-col>
       </v-row>
 
-      <v-data-table
-        :headers="headers"
-        :items="jobs"
-      >
-        <template
-          #item.status="{ item }"
-        >
-          <v-chip color="purple">
-            {{ item.status.name }}
-          </v-chip>
-        </template>
+      <v-row v-if="filteredRequests.length > 0">
+        <v-col v-for="request in filteredRequests" :key="request.id" cols="12" md="6">
+          <request-listing :request="request" :client="false" />
+        </v-col>
+      </v-row>
 
-        <template
-          #item.actions="{ item }"
-        >
-          <v-icon
-            small
-            class="mr-2"
-            @click="viewRequest(item)"
-          >
-            mdi-eye
-          </v-icon>
-        </template>
-      </v-data-table>
+      <v-row v-else>
+        <v-col>
+          <p>No requests for the current filter.</p>
+        </v-col>
+      </v-row>
     </v-flex>
   </v-layout>
 </template>
@@ -91,8 +80,12 @@
 <script>
 import { Request } from '~/models/Request'
 import { Status } from '~/models/Status'
+import RequestListing from '~/components/request-listing.vue'
 
 export default {
+    components: {
+        RequestListing
+    },
     async asyncData ({ route, store }) {
         const filter = {
             status: []
@@ -120,27 +113,7 @@ export default {
             filter: {
                 status: [],
                 text: ''
-            },
-            headers: [
-                {
-                    text: 'Citation',
-                    value: 'citation'
-                },
-                {
-                    text: 'Status',
-                    value: 'status',
-                    filter: (value) => {
-                        if (this.filter.status.length < 1) {
-                            return true
-                        }
-                        return this.filter.status.includes(value.id)
-                    }
-                },
-                {
-                    text: 'Actions',
-                    value: 'actions'
-                }
-            ]
+            }
         }
     },
     computed: {
@@ -170,6 +143,9 @@ export default {
         },
         viewRequest (request) {
             this.$router.push(`/request/${request.id}`)
+        },
+        removeStatusFromFilter (index) {
+            this.filter.status.splice(index, 1)
         }
     }
 }

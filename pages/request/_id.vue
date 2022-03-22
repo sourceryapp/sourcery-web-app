@@ -41,6 +41,14 @@
               Archive
             </v-btn>
           </v-card-actions>
+          <v-card-actions v-if="canManage">
+            <v-btn v-if="isSubmitted" color="primary" @click="pickUp">
+              Pick Up / Claim
+            </v-btn>
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
+              Archive
+            </v-btn>
+          </v-card-actions>
         </v-card>
 
         <Attachments />
@@ -72,7 +80,8 @@ export default {
             isSubmitted: 'supabaseRequest/isSubmitted',
             isCancelled: 'supabaseRequest/isCancelled',
             prettyStatus: 'supabaseRequest/prettyStatus',
-            user: 'supabaseAuth/authUser'
+            user: 'supabaseAuth/authUser',
+            userRepositories: 'supabaseAuth/userRepositories'
         }),
         dateCreated () {
             if (this.request && this.request.created_at) {
@@ -102,12 +111,16 @@ export default {
         },
         isOwner () {
             return this.user.id === this.request.user_id
+        },
+        canManage () {
+            return this.userRepositories.map(x => x.id).includes(this.request.repository_id)
         }
     },
     methods: {
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
-            requestArchive: 'supabaseRequest/archive'
+            requestArchive: 'supabaseRequest/archive',
+            requestPickUp: 'supabaseRequest/pickUp'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -126,6 +139,16 @@ export default {
                     this.$router.push({ name: 'dashboard' })
                 } else {
                     console.log('Error deleting request.')
+                }
+            }
+        },
+        async pickUp () {
+            if (confirm('Are you sure you want to claim this request, and move it to in-progress?')) {
+                const in_progress = await this.requestPickUp()
+                if (in_progress) {
+                    console.log('Success picking up request.')
+                } else {
+                    console.log('Error picking up request.')
                 }
             }
         }

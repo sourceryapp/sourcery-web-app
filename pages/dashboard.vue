@@ -3,10 +3,7 @@
     <v-flex
       xs12
       sm10
-      md12
-      xl10
       offset-sm-1
-      offset-xl1
     >
       <h1 class="mb-4">
         {{ pageTitle }}

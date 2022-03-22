@@ -193,6 +193,22 @@ export class Request {
         return null
     }
 
+    async pickUp() {
+        const in_progress_status = await Status.getByName('In Progress')
+        if ( in_progress_status ) {
+            const { data: request, error } = await supabase.from(TABLE_NAME)
+                .update({ status_id: in_progress_status.id })
+                .eq('id', this.id)
+
+            if ( error ) {
+                console.log(error)
+            }
+            // this.status_id = in_progress_status.id
+            return true
+        }
+        return false
+    }
+
     /**
      * Deletes the current request from persistant storage.
      * @returns Request | null

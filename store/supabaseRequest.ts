@@ -61,6 +61,16 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         commit('set', r)
         return true
     },
+    async pickUp({ state, commit, dispatch }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch }) {
+        if ( state.request ) {
+            const in_progress = await state.request.pickUp()
+            if ( in_progress ) {
+                await dispatch('getById', state.request.id)
+                return true
+            }
+        }
+        return false
+    },
     async cancel({ state, commit }: { state: SupabaseRequestState, commit: Commit }) {
         if ( state.request ) {
             const deleted = await state.request.cancel()
