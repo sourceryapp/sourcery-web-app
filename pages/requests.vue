@@ -4,17 +4,61 @@
       <h1 class="mb-4">
         Requests
       </h1>
-      <div class="mb-4">
-        <v-checkbox
-          v-for="status in statuses"
-          :key="`statuscheck-${status.id}`"
-          v-model="filter.status"
-          :label="status.name"
-          color="#644ea2"
-          :value="status.id"
-          hide-details
-        />
-      </div>
+
+      <v-text-field
+        v-model="filter.text"
+        class="request-search-input"
+        outlined
+        clearable
+        prepend-inner-icon="mdi-magnify"
+        placeholder="Search Requests"
+        hide-details
+        :rounded="false"
+      />
+
+      <v-row justify="end" class="mb-4">
+        <v-col class="text-right">
+          <v-menu
+            v-model="filterOpen"
+            :close-on-content-click="false"
+            offset-y
+            left
+            bottom
+          >
+            <template #activator="{ on, attrs }">
+              <v-btn
+                text
+                v-bind="attrs"
+                v-on="on"
+              >
+                Filter/Sort By
+                <v-icon>mdi-arrow-down</v-icon>
+              </v-btn>
+            </template>
+
+            <v-card>
+              <v-card-text>
+                <span class="text-uppercase">Status</span>
+                <v-checkbox
+                  v-for="status in statuses"
+                  :key="`statuscheck-${status.id}`"
+                  v-model="filter.status"
+                  :label="status.name"
+                  color="#644ea2"
+                  :value="status.id"
+                  hide-details
+                />
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col v-for="request in filteredRequests" :key="request.id" xs="12" md="6">
+          {{ request.citation }}
+        </v-col>
+      </v-row>
 
       <v-data-table
         :headers="headers"
@@ -58,7 +102,7 @@ export default {
         }
 
         const user_repositories = store.getters['supabaseAuth/userRepositories']
-        const jobs = await Request.getForRepositories(user_repositories, ['Submitted', 'Picked Up', 'Complete', 'Archived', 'Cancelled'])
+        const jobs = await Request.getForRepositories(user_repositories, ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled'])
 
         const statuses = await Status.getAll()
 
@@ -70,10 +114,12 @@ export default {
     },
     data () {
         return {
+            filterOpen: false,
             jobs: [],
             statuses: [],
             filter: {
-                status: []
+                status: [],
+                text: ''
             },
             headers: [
                 {
@@ -97,6 +143,25 @@ export default {
             ]
         }
     },
+    computed: {
+        filteredRequests () {
+            let requests = Array.from(this.jobs)
+
+            if (this.filter.text) {
+                requests = requests.filter((x) => {
+                    return x.citation.toLowerCase().includes(this.filter.text.toLowerCase()) || x.request_vendor?.label.toLowerCase().includes(this.filter.text.toLowerCase())
+                })
+            }
+
+            if (this.filter.status.length > 0) {
+                requests = requests.filter((x) => {
+                    return this.filter.status.includes(x.status_id)
+                })
+            }
+
+            return requests
+        }
+    },
     methods: {
         clearFilter () {
             this.filter = {
@@ -109,3 +174,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.request-search-input {
+  font-size: 24px;
+}
+</style>
+
+<style>
+.request-search-input input {
+  padding-left: 20px;
+}
+</style>

@@ -103,7 +103,7 @@ export default {
             const status_name = this.request?.status?.name
             if (status_name === 'Submitted') {
                 classes += ' bg-teal'
-            } else if (status_name === 'Picked Up') {
+            } else if (status_name === 'In Progress') {
                 classes += ' bg-blue'
             } else if (status_name === 'Complete' || status_name === 'Archived') {
                 classes += ' bg-purple'
@@ -115,7 +115,7 @@ export default {
             return !this.client && this.request.status.name === 'Submitted'
         },
         showChatInit () {
-            return this.request.status.name === 'Picked Up'
+            return this.request.status.name === 'In Progress'
         }
     },
     methods: {

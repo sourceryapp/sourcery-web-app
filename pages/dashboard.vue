@@ -83,12 +83,12 @@ export default {
         let jobs = []
         if (logged_in) {
             const uid = store.getters['supabaseAuth/authUser'].id
-            requests = await Request.getForCreator(uid, ['Picked Up', 'Submitted', 'Complete'])
+            requests = await Request.getForCreator(uid, ['In Progress', 'Submitted', 'Complete'])
         }
 
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
             const user_repositories = store.getters['supabaseAuth/userRepositories']
-            jobs = await Request.getForRepositories(user_repositories, ['Picked Up', 'Submitted', 'Complete', 'Archived'])
+            jobs = await Request.getForRepositories(user_repositories, ['In Progress', 'Submitted', 'Complete', 'Archived'])
         }
 
         return {
@@ -120,7 +120,7 @@ export default {
             return this.jobs.filter(x => x.status?.name === 'Submitted')
         },
         inProgressJobs () {
-            return this.jobs.filter(x => x.status?.name === 'Picked Up')
+            return this.jobs.filter(x => x.status?.name === 'In Progress')
         },
         completedJobs () {
             return this.jobs.filter(x => x.status?.name === 'Complete')

@@ -28,7 +28,7 @@ export const getters = {
         return state.request?.status?.name === 'Complete'
     },
     isPickedUp(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Picked Up'
+        return state.request?.status?.name === 'In Progress'
     },
     isSubmitted(state: SupabaseRequestState) {
         return state.request?.status?.name === 'Submitted'
