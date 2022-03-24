@@ -38,7 +38,7 @@
             {{ changePasswordLabel }}
           </v-card-title>
           <v-divider />
-          <v-form @submit.prevent="resetPass">
+          <v-form @submit.prevent="updateSupabasePass">
             <v-card-text>
               <v-alert
                 :value="passSuccess"
@@ -59,8 +59,8 @@
               >
                 <span color="white">An Error Has Occurred. Please Try Again Later.</span>
               </v-alert>
-              <v-text-field
-                v-if="user.hasPassword"
+              <!-- <v-text-field
+                v-if="hasPassword"
                 id="oldpassword"
                 v-model="oldpassword"
                 type="password"
@@ -68,7 +68,7 @@
                 name="oldpassword"
                 :rules="[$sourceryForms.rules.required]"
                 outlined
-              />
+              /> -->
               <v-text-field
                 id="newpassword"
                 v-model="newpassword"
@@ -110,7 +110,7 @@
   </v-list-item>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data () {
@@ -126,24 +126,18 @@ export default {
     },
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser'
+            user: 'supabaseAuth/authUser'
         }),
         changePasswordLabel () {
-            if (!this.user.hasPassword) {
-                return 'Set Password'
-            }
-            return 'Change Password'
+            return 'Set / Change Password'
         },
         changePasswordShortLabel () {
-            if (!this.user.hasPassword) {
-                return 'Set'
-            }
-            return 'Change'
+            return 'Set / Change'
         },
         passwordActionButtonType () {
-            if (!this.user.hasPassword) {
-                return 'warning'
-            }
+            // if (!this.hasPassword) {
+            //     return 'warning'
+            // }
             return 'primary'
         },
         // rewriting this to not require confirm field
@@ -153,41 +147,18 @@ export default {
         }
     },
     methods: {
-        resetPass () {
-            this.passError = false
-            this.passFail = false
-            this.passSuccess = false
-            if (!this.user.hasPassword) {
-                this.updatePass()
-            } else {
-                this.$fire.auth.currentUser.reauthenticateWithCredential(
-                    this.$fireModule.auth.EmailAuthProvider.credential(
-                        this.$fire.auth.currentUser.email,
-                        this.oldpassword
-                    )
-                ).then((success) => {
-                    this.updatePass()
-                }).catch((error) => {
-                    console.log('error', error)
-                    this.passFail = true
-                })
-            }
-        },
-        updatePass () {
-            const user = this.$fire.auth.currentUser
+        ...mapActions({
+            changePassword: 'supabaseAuth/changePassword'
+        }),
+        async updateSupabasePass () {
             const newPassword = this.newpassword
-
-            user.updatePassword(newPassword).then((success) => {
-                this.$toast.success('New password successfully saved.')
-                this.newpassword = ''
-                this.oldpassword = ''
-                this.$store.commit('auth/SET_AUTH_USER_HAS_PASSWORD')
-                // Close the dialog if already had a password, since the modal will now represent a different action (Change Password) from Set Password.
+            const changeStatus = await this.changePassword(newPassword)
+            if (changeStatus) {
+                this.$toast.success('Changed password successfully.')
                 this.close()
-            }).catch((error) => {
-                console.log('unknown error', error)
+            } else {
                 this.passError = true
-            })
+            }
         },
         close () {
             this.oldpassword = ''

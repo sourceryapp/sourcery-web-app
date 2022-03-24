@@ -25,7 +25,7 @@
           v-model="name"
           type="text"
           name="name"
-          :rules="rules.required"
+          :rules="[$sourceryForms.rules.required]"
           label="Full Name"
           required
           clearable
@@ -40,7 +40,7 @@
           type="email"
           name="email"
           label="Email"
-          :rules="emailRules"
+          :rules="[$sourceryForms.rules.email]"
           required
           clearable
           validate-on-blur
@@ -55,7 +55,7 @@
             label="Password"
             autocomplete="false"
             messages="At least 8 characters and 1 special character."
-            :rules="passRules"
+            :rules="$sourceryForms.rules.password"
             :type="showPass ? 'text' : 'password'"
             :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
             required
@@ -97,7 +97,7 @@
           type="phone"
           name="phone"
           label="Phone Number"
-          :rules="rules.required"
+          :rules="[$sourceryForms.rules.required]"
           required
           validate-on-blur
           prepend-icon="mdi-phone"
@@ -157,6 +157,9 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex'
+import { supabase } from '~/plugins/supabase'
+import { User as SourceryUser } from '~/models/User'
 
 export default {
     name: 'Register',
@@ -168,29 +171,14 @@ export default {
         return {
             name: '',
             email: '',
-            emailRules: [
-                v => !!v || 'E-mail is required',
-                v => /.+@.+/.test(v) || 'E-mail must be valid'
-            ],
-            rules: {
-                required: [v => !!v || 'This field is required']
-            },
             password: '',
             showPass: false,
             special_characters: ['~', '!', '@', '#', '$', '%', '^', '&', '*', '_', '-', '+', '=', '`', '|', '(', ')', '{', '}', '[', ']', ':', ';', "'", '<', '>', ',', '.', '?', '/'],
-            passRules: [
-                v => v.length >= 8 || 'Password must be at least 8 characters',
-                v => this.special_characters.some(substring => v.includes(substring)) || 'Password must contain 1 special character'
-            ],
             goodPass: [
                 'At least 8 characters',
                 'At least 1 special character'
             ],
             confirm_password: '',
-            showPass2: false,
-            confirmPassRules: [
-                v => v === this.password || 'Passwords must match'
-            ],
             phone: '',
             message: null,
             execute: true,
@@ -212,6 +200,9 @@ export default {
         }
     },
     computed: {
+        // ...mapGetters({
+        //   hasIntegrationData: 'supabaseCreate/hasIntegrationData'
+        // }),
         progress () {
             return ((Math.min(this.password.length, 8) / 8) + (this.special_characters.some(substring => this.password.includes(substring)))) * 50
         },
@@ -220,38 +211,44 @@ export default {
         }
     },
     methods: {
-        registerSubmit () {
-            this.$fire.auth.createUserWithEmailAndPassword(
-                this.email,
-                this.password
-            ).then(({ user }) => {
-                user.updateProfile({
-                    displayName: this.name,
-                    photoURL: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAQAAABIkb+zAAACOklEQVR4Ae3ZA2ydURwF8P9s2+bjPSdGo0aN08V+URtbL+a8BbO9xfZs2zaCuW7vbDx8uLfp/3dinw+XopRSSimllFJhYm9TjV08wwdoYB0f8ix2mDkTe0p7YIZxDeto/5I6rjHDxGtdkcc72n8H75CXruKn1CAcpi0cHE4NEv9kp+EubXHB3ew08QuH4hFt8cGj5Ajxx9hePE1bYi6k+4gvMJ+29GCe+CEzhvW0ZaQ+PVZ8wDW0ZWatuJfozrqyC9Qluotr2Sra8pOtEtewMkgBrBLXsC9QgX3iGm4EKnBDXOP7QAXeiWt4G6jAW3ENNwMVuCmu4UCgAgc6/DCqE1miO9+7X0oEgtVlF1gjPkiOKHs5Pbx9b2jme7SlxPmSC5we20v8kRjJh6Vt6jlU/JKZztsBj1XcH2zxGG3h4ERqkPgp0R35AhvMOuQT3cVnyRH/O9wt4zjLzaj00/F6/dfj9WrPj9eVUkqpRPeMMTnMxxbu4fWf5uP3uME93IZ5JpcxHi4lzGjWYgPPsom2cNDIs9jAWjNaXJvaw1RyES/SlpmLXGQqHb0Rgsv5hjaEvOJyIt6lWg4nacMNTppcHMu9LqYGL2ijCZ6bGuki0TEVuEIbbXDFVEgU2JsbaWPKRvYOf6C8SBtjLoY6yKbH4h5tvMHd5DgJR6Ivb9E6yK1EX6c3AMGDlRIcZtG6i5ktQWGpywJYKkHxgtMC5yUo1tM6TL0ERes2WkALaAEtEEm0gFJKKaWUUkp9ABvn3SEbw3cFAAAAAElFTkSuQmCC'
-                }).then(() => {
-                    const userRef = this.$fire.firestore.collection('user-meta').doc(user.uid)
-
-                    userRef.set({
-                        phone: this.phone,
-                        email: this.email,
-                        displayName: this.name
-                    }, { merge: true })
-
-                    if (this.archiveSpace) {
-                        this.$router.push('/request/create')
-                    } else {
-                        this.$router.push({ name: '/dashboard' })
-                    }
+        ...mapMutations({
+            setJustRegistered: 'supabaseAuth/setJustRegistered'
+        }),
+        ...mapActions({
+            fetchUserMeta: 'supabaseAuth/fetchUserMeta',
+            fetchUserOrganizations: 'supabaseAuth/fetchUserOrganizations',
+            fetchUserHasPassword: 'supabaseAuth/fetchUserHasPassword'
+        }),
+        async registerSubmit () {
+            try {
+                this.setJustRegistered(true)
+                const { user, error } = await supabase.auth.signUp({
+                    email: this.email,
+                    password: this.password
                 })
-            }).catch((error) => {
-                const messages = {
-                    'auth/email-already-in-use': 'An account exists with this email address.',
-                    'auth/invalid-email': 'Please enter a valid email address.',
-                    'auth/operation-not-allowed': 'Uh oh.',
-                    'auth/weak-password': 'Please enter a stronger password.'
+
+                console.log(user)
+
+                if (error) {
+                    throw error
                 }
-                this.message = messages[error.code]
-            })
+
+                // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
+                const u = await SourceryUser.getById(user.id)
+                u.name = this.name
+                u.phone = this.phone
+                await u.save()
+
+                // NORMALLY we handle this in supabase.js plugin, however we wanted to edit meta before navigating so we handle the fetching here.
+                await this.fetchUserMeta()
+                await this.fetchUserOrganizations()
+                await this.fetchUserHasPassword()
+
+                this.$router.push('/dashboard')
+            } catch (error) {
+                this.message = error.message
+                console.log(error)
+            }
         },
         registerValid () {
             this.loading = true

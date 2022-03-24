@@ -4,7 +4,7 @@
     :key="request.id"
   >
     <v-card
-      v-if="request && !request.request().isArchived()"
+      v-if="request"
       :to="'/request/' + request.id"
       class="my-4 rounded-lg"
       outlined
@@ -13,13 +13,12 @@
         <v-row>
           <v-col class="pa-0">
             <v-card-title>
-              {{ request.data().label }}
+              {{ label }}
             </v-card-title>
             <v-card-subtitle>
-              {{ request.data().citation }}
+              {{ request.citation }}
               <br>
-              {{ request.data().repository.name }}
-              <!-- {{ request.data().repository.name + ' - ' + request.data().repository.city + ', ' + request.data().repository.state }} -->
+              {{ request.repository.name }}
             </v-card-subtitle>
             <v-fade-transition>
               <v-overlay
@@ -32,18 +31,46 @@
               />
             </v-fade-transition>
           </v-col>
+          <v-col v-if="showLabelEdit" cols="2" align-self="center">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="#707070"
+              style="z-index:1"
+              @click.prevent="editLabel"
+            >
+              <v-icon dark>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </v-col>
+          <v-col v-if="showChatInit" cols="2" align-self="center">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              small
+              color="#707070"
+              style="z-index:1"
+              @click.prevent="editLabel"
+            >
+              <v-icon dark>
+                mdi-message-text
+              </v-icon>
+            </v-btn>
+          </v-col>
           <v-col
             cols="auto"
-            class="d-flex align-center justify-center rounded-r-lg px-4"
+            :class="labelClass"
             z-index="2"
-            :style="
-              'background: var(--sourcery-' + (request.request().prettyStatus() == 'Complete' ? '700' : '500') + ')'"
           >
             <p
               class="font-weight-bold text-button ma-0"
               :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
             >
-              {{ request.request().prettyStatus() }}
+              {{ request.status.name }}
             </p>
           </v-col>
         </v-row>
@@ -58,7 +85,57 @@ export default {
         request: {
             type: Object,
             required: true
+        },
+        client: {
+            type: Boolean,
+            default: true
+        }
+    },
+    computed: {
+        label () {
+            if (!this.client) {
+                return this.request.request_vendor.label
+            }
+            return this.request.request_client.label
+        },
+        labelClass () {
+            let classes = 'd-flex align-center justify-center rounded-r-lg px-4'
+            const status_name = this.request?.status?.name
+            if (status_name === 'Submitted') {
+                classes += ' bg-teal'
+            } else if (status_name === 'In Progress') {
+                classes += ' bg-blue'
+            } else if (status_name === 'Complete' || status_name === 'Archived' || status_name === 'Cancelled') {
+                classes += ' bg-purple'
+            }
+
+            return classes
+        },
+        showLabelEdit () {
+            return !this.client && this.request.status.name === 'Submitted'
+        },
+        showChatInit () {
+            return this.request.status.name === 'In Progress'
+        }
+    },
+    methods: {
+        editLabel () {
+            console.log('edit label')
         }
     }
 }
 </script>
+
+<style>
+.bg-teal {
+  background-color: #69ced5;
+}
+
+.bg-blue {
+  background-color: #3686d4;
+}
+
+.bg-purple {
+  background-color: #6b49a9;
+}
+</style>

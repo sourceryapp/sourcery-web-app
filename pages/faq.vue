@@ -46,7 +46,7 @@ import SourceryCard from '@/components/card-with-header.vue'
 export default {
     name: 'FAQ',
     components: {
-        'sourcery-card': SourceryCard
+        SourceryCard
     },
     data () {
         return {
@@ -85,11 +85,6 @@ export default {
                     answer5: 'Mobile technology provides means of connecting people with local needs to people with local capacity. “Sharing economy” applications like Uber, AirBnB, and Instacart have demonstrated the promise of mobile technology to connect people who need a ride to people with local capacity (i.e. a car) or people who need groceries with people with local capacity (i.e. time to do the shopping). The connection in these applications is made based on geo-location data from mobile phones. The cost per transaction is determined according to an algorithm tuned to local conditions. In Uber’s case, for example, the pricing algorithm determines the rider’s cost based on variables such as the distance the rider needs to travel, the time of day, traffic conditions on the proposed route, and the proximity and number of available drivers. The growing popularity of these sharing economy applications demonstrates that individuals are sometimes better equipped or better incentivized than large organizations to meet the needs of other individuals. Recognizing the important questions these “gig economy” apps raise for issues of labor equity and responsible regulation, Sourcery nevertheless looks to apply the lessons (positive and negative) and technologies employed by these companies to address needs among library users and libraries themselves.'
                 }
             ]
-        }
-    },
-    computed: {
-        user () {
-            return this.store.getters['auth/activeUser']
         }
     }
 }

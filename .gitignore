@@ -52,3 +52,6 @@ sw.*
 
 # DB Migrations Temp
 db
+
+# Personal notes
+notes

@@ -78,12 +78,15 @@
               <v-card-subtitle class="pa-4 mt-0">
                 During the pandemic, documents can only be requested from our institutional partners.
               </v-card-subtitle>
+              <v-card-subtitle v-if="repositories.length != filteredRepositories.length" class="pa-4 mt-0">
+                This list is currently filtered. Please clear your filters if you wish to show additional repositories.
+              </v-card-subtitle>
             </sourcery-card>
             <v-item-group mandatory>
               <v-item
-                v-for="repo in repositories"
+                v-for="repo in filteredRepositories"
                 v-slot="{ active, toggle }"
-                :key="repo.id"
+                :key="`repolisting-${repo.id}`"
               >
                 <v-card
                   outlined
@@ -91,7 +94,7 @@
                   @click="toggle"
                 >
                   <v-img
-                    :src="`/img/repo/${repo.id}.jpg`"
+                    :src="repo.featured_image ? repo.featured_image.url : ''"
                     class="align-stretch"
                     :gradient="active && $vuetify.breakpoint.xs ? '135deg, rgba(48, 32, 111,0.4) 20%, rgba(48, 32, 111,0.7) 100%' : '135deg, rgba(0,0,0,0.4) 20%, rgba(0,0,0,0.7) 100%'"
                     width="100%"
@@ -102,8 +105,8 @@
                       <v-row>
                         <v-col class="d-flex justify-end">
                           <img
-                            v-if="repo.data().show_org_photo"
-                            :src="`/img/institution/${repo.data().organization}.png`"
+                            v-if="false"
+                            :src="`/img/institution/${repo.id}.png`"
                             alt="alt"
                             height="48px"
                           >
@@ -116,13 +119,13 @@
                           >
                             <v-list-item-content>
                               <v-list-item-title class="text-h5 white--text">
-                                {{ repo.data().name }}
+                                {{ repo.name }}
                               </v-list-item-title>
-                              <v-list-item-subtitle v-if="repo.data().name != repo.data().institution" class="text-subtitle-1 white--text">
-                                {{ repo.data().institution }}
+                              <v-list-item-subtitle v-if="repo.organization && repo.name != repo.organization.name" class="text-subtitle-1 white--text">
+                                {{ repo.organization.name }}
                               </v-list-item-subtitle>
                               <v-list-item-subtitle class="text-subtitle-2 white--text">
-                                {{ repo.data().address1 + ', ' + repo.data().city + ', ' + repo.data().state }}
+                                {{ repo.address1 + ', ' + repo.city + ', ' + repo.state }}
                               </v-list-item-subtitle>
                               <!-- <v-list-item-subtitle class="white--text">
                                 {{ repo.id }}
@@ -185,7 +188,7 @@
                   auto-grow
                   outlined
                   rows="3"
-                  :hint="'Currently requesting from: ' + repository_name"
+                  :hint="'Currently requesting from: ' + repositoryName"
                   persistent-hint
                   class="my-2"
                 />
@@ -274,7 +277,7 @@
                 <v-spacer />
                 <v-btn
                   id="submit-request"
-                  :disabled="!request.pricing.total || isSaving"
+                  :disabled="!(pricing) || isSaving"
                   :loading="loadingCost || isSaving"
                   class="primary"
                   depressed
@@ -292,15 +295,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import algoliasearch from 'algoliasearch/lite'
-import 'instantsearch.css/themes/algolia-min.css'
+import { mapGetters, mapMutations } from 'vuex'
+import { Repository } from '~/models/Repository'
 
 // Components
 import RegisterToSubmitRequestDialog from '@/components/register-to-submit-request.vue'
 import FinishEmailLinkRegistrationDialog from '@/components/finish-email-link-registration.vue'
 import ReachedRequestLimitDialog from '@/components/reached-request-limit-dialog.vue'
 import SourceryCard from '@/components/card-with-header.vue'
+import { PricingSummary } from '~/models/PricingSummary'
 // import CallToActionAlert from '@/components/call-to-action-alert.vue'
 
 export default {
@@ -310,30 +313,17 @@ export default {
         RegisterToSubmitRequestDialog,
         FinishEmailLinkRegistrationDialog,
         ReachedRequestLimitDialog,
-        'sourcery-card': SourceryCard
+        SourceryCard
     },
-    async asyncData ({ params, store, app }) {
-        let repositories = { docs: [] }
-        try {
-            repositories = await app.$fire.firestore
-                .collection('repositories')
-                // .where('organization', '!=', '') // This is the correct way, but for demo purposes, only show our partners.  Cannot combine != queries.
-                .where('institution', 'in', ['Folger Shakespeare Library', 'UConn', 'Northeastern University', 'Hartford Public Library'])
-                .orderBy('organization')
-                .orderBy('name', 'asc')
-                .get()
-        } catch (error) {
-            console.log(error)
-        }
+    async asyncData () {
+        const repositories = await Repository.getActive()
         return {
-            repositories: repositories.docs
+            repositories
         }
     },
     data () {
         return {
             repositories: [],
-            repository: null,
-            areas: null,
             loading: false,
             loadingCost: false,
             errors: {
@@ -343,130 +333,90 @@ export default {
             },
             formState: 1,
             isSaving: false,
-            newUserEmailAddress: '',
-            nulledRequestPricing: true,
-
-            // Algolia
-            searchClient: algoliasearch(
-                process.env.ALGOLIA.appId,
-                process.env.ALGOLIA.apiKey
-            ),
-            searchIndex: process.env.ALGOLIA.indexName,
-            repoSearchText: ''
+            nulledRequestPricing: true
         }
     },
     computed: {
-        usermeta () {
-            return this.$store.state.meta
-        },
-        request () {
-            return this.$store.state.create
-        },
         ...mapGetters({
-            user: 'auth/activeUser',
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            balance: 'meta/balance',
-            canMakePayments: 'meta/canMakePayments',
-            isMemberRepo: 'create/isMemberRepo'
+            user: 'supabaseAuth/authUser',
+            repositoryName: 'supabaseCreate/repositoryName',
+            hasRepository: 'supabaseCreate/hasRepository',
+            pricing: 'supabaseCreate/pricing',
+            integrationData: 'supabaseCreate/integrationData'
         }),
-
-        /**
-             * Mapping items to the Vuex Store
-             * @url https://vuex.vuejs.org/guide/forms.html#two-way-computed-property
-             */
         citation: {
             get () {
-                return this.$store.state.create.citation
+                return this.$store.getters['supabaseCreate/citation']
             },
             set (value) {
-                this.$store.commit('create/setCitation', value)
+                this.$store.commit('supabaseCreate/setCitation', value)
             }
         },
         pages: {
             get () {
-                return this.$store.state.create.pages
+                return this.$store.getters['supabaseCreate/pages']
             },
             set (value) {
                 this.getCost()
-                this.$store.commit('create/setPages', value)
+                this.$store.commit('supabaseCreate/setPages', value)
             }
         },
-        repository_id: {
-            get () {
-                return this.$store.state.create.repository_id
-            },
-            set (value) {
-                this.$store.commit('create/setRepositoryId', value)
+        filteredRepositories () {
+            if (this.integrationData && this.integrationData.organization_id) {
+                const repositories = this.repositories.filter((x) => {
+                    return x.organization_id && x.organization_id === this.integrationData.organization_id
+                })
+                return repositories
             }
-        },
-        repository_name () {
-            if (this.request.repository.name === this.request.repository.institution) {
-                return this.request.repository.name
-            }
-            return `${this.request.repository.name} - ${this.request.repository.institution}`
-        }
-    },
-    watch: {
-        repoSearchText (newVal, oldVal) {
-            /**
-                 * The search text has changed, so we need to
-                 * reset the repository_id
-                 */
-            this.repository_id = null
+            return this.repositories
         }
     },
     mounted () {
-        if (this.$store.state.create.repository && this.$store.state.create.repository.id) {
-            this.selectRepositoryFromStateOutsideComponent(this.$store.state.create.repository)
-        }
-        if (this.$fire.auth.isSignInWithEmailLink(window.location.href)) {
-            console.log('This is a sign in with email link!')
-            const saved_info = JSON.parse(localStorage.getItem('sourceryEmailSignInWith'))
-            console.log(saved_info)
-            if (saved_info) {
-                if (saved_info.request && saved_info.request.repository_id) {
-                    const repo = this.repositories.find(e => e.id === saved_info.request.repository_id)
-                    if (!repo) {
-                        return false
-                    }
-                    this.selectRepositoryObj(repo)
-                    this.citation = saved_info.request.citation
-                    this.pages = saved_info.request.pages
-                    this.formState = 3
-                }
-                if (saved_info.email) {
-                    const intent = saved_info.loginIntent ? 'login' : ''
-                    this.$refs.finish_email_link_registration_dialog.openDialog(intent)
-                }
+        if (this.hasRepository) {
+            const repo = this.repositories.find(x => x.name === this.repositoryName)
+            if (repo) {
+                this.selectRepositoryObj(repo)
             }
         }
-        // Handle request coming from archiveSpace, otherwise ensure no data is left over.
-        if (this.$store.state.archive.archiveOrigin) {
-            console.log('Recieving from archive space')
-            this.processArchiveSpace()
-        } else {
-            this.$store.commit('create/cleanArchive')
+
+        const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
+
+        if (inProgressRequest && inProgressRequest.request) {
+            // We have an in progress request, lets restore.
+            const repo = this.repositories.find(x => x.id === inProgressRequest.request.repository_id)
+
+            if (repo) {
+                this.selectRepositoryObj(repo)
+
+                if (inProgressRequest.request.citation) {
+                    this.citation = inProgressRequest.request.citation
+                    this.formState++
+                }
+
+                if (inProgressRequest.request.pages) {
+                    this.pages = inProgressRequest.request.pages
+                }
+
+                localStorage.removeItem('sourceryInProgressRequest')
+            } else {
+                localStorage.removeItem('sourceryInProgressRequest')
+            }
         }
     },
     methods: {
-        selectRepositoryFromStateOutsideComponent (repo) {
-            this.request.repository_id = repo.id
-            this.request.repository = repo
-            this.$store.commit('create/setRepository', repo)
-            this.formState++
-        },
+        ...mapMutations({
+            setRepository: 'supabaseCreate/setRepository',
+            setPricing: 'supabaseCreate/setPricing'
+        }),
         selectRepositoryObj (repo) {
-            this.request.repository_id = repo.id
-            const repo_clone = {
-                id: repo.id,
-                ...repo.data()
-            }
-            this.request.repository = repo_clone
-            this.$store.commit('create/setRepository', repo_clone)
+            this.setRepository(repo)
             this.formState++
         },
         submitRequest () {
+            // else if (!this.user.hasPassword && this.user.hasRequests) {
+            //     // no password, so we need to limit the request to 1.
+            //     this.$refs.reached_request_limit_dialog.openDialog()
+            // }
             if (!this.user) {
                 // Right now we are nulling prices, in beta.  But this is ready for when we need to add pricing models back in.
                 if (!this.nulledRequestPricing && this.request.pricing.total > 0) {
@@ -474,17 +424,14 @@ export default {
                 } else {
                     this.$refs.register_to_submit_request_dialog.openWithRegisterIntent()
                 }
-            } else if (!this.user.hasPassword && this.user.hasRequests) {
-                // no password, so we need to limit the request to 1.
-                this.$refs.reached_request_limit_dialog.openDialog()
             } else {
                 this.isSaving = true
-                this.$store.dispatch('create/insert').then((doc) => {
-                    this.$toast.success('Your request has been submitted!')
+                this.$store.dispatch('supabaseCreate/insert').then((doc) => {
                     this.isSaving = false
-                    console.log('Inserted:', doc.id)
-                    this.$store.commit('create/reset')
-                    this.$store.commit('auth/SET_AUTH_USER_HAS_REQUESTS')
+                    if (doc) {
+                        this.$toast.success('Your request has been submitted!')
+                        console.log('Inserted:', doc.id)
+                    }
                     this.$router.push({ name: 'dashboard' })
                 }).catch((error) => {
                     console.log(error)
@@ -496,69 +443,27 @@ export default {
             }
         },
 
-        async getCost () {
+        getCost () {
             this.loadingCost = true
-            const cost = this.$fire.functions.httpsCallable('cost')
-            const costObj = await cost({
-                repository: this.repositoryName,
-                pages: this.request.pages
-            })
-            this.request.pricing = costObj.data
+            // const cost = this.$fire.functions.httpsCallable('cost')
+            // const costObj = await cost({
+            //     repository: this.repositoryName,
+            //     pages: this.pages
+            // })
+            // this.request.pricing = costObj.data
+
+            // Currently nulled.
+            this.setPricing(PricingSummary.createNull())
             this.loadingCost = false
         },
         toDollars (cents) {
             return this.$utils.currencyFormat(cents)
-        },
-        testSelect (id) {
-            console.log(id)
-        },
-        repoSelection (repo) {
-            // console.log(repo.objectID, repo);
-            this.repository_id = repo.objectID
-        },
-        // TODO needs to be better.
-        processArchiveSpace () {
-            const archiveSpaceInfo = this.$store.state.archive.archiveInfo
-            // set archivespace info
-            this.$store.commit('create/setArchiveOrigin')
-            this.$store.commit('create/setArchiveOrg', archiveSpaceInfo.organization_id)
-            // set repo
-            console.log('Processing archive space, these are repositories on load:', this.repositories)
-            let found = false
-            const alt_repos = []
-            for (const repo in this.repositories) {
-                if (this.repositories[repo].data().organization === archiveSpaceInfo.organization_id) {
-                    alt_repos.push(this.repositories[repo])
-                }
-                if (this.repositories[repo].data().name === archiveSpaceInfo.record_repo) {
-                    found = true
-                    this.selectRepositoryObj(this.repositories[repo])
-                    // this.$store.commit('create/setRepositoryId', this.repositories[repo].id)
-                }
-            }
-
-            console.log(alt_repos)
-            if (!found && alt_repos.length > 0) {
-                console.log('there are some repos in this org, but none were originally declared')
-                this.selectRepositoryObj(alt_repos[0])
-            }
-            // set citation
-            this.$store.commit('create/setCitation', archiveSpaceInfo.record_cite)
-            // update formState
-            this.formState = 2
-            // reset all instances of archivespace from the store (does not remove info from create, handled above)
-            this.$store.commit('archive/reset')
         }
     }
 }
 </script>
 
 <style scoped>
-    #repo-search {
-        height: 200px;
-        overflow-y: scroll;
-    }
-
     .v-stepper__content {
       padding: 0;
     }

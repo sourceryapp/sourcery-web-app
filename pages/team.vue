@@ -2,30 +2,11 @@
   <div class="page-container">
     <div id="content-wrap" class="px-4">
       <sourcery-header class="mx-n4" />
-      <!-- <v-app-bar
-        :color="$vuetify.theme.dark ? '#121212' : 'white'"
-        height="84px"
-        elevate-on-scroll
-        app
-      >
-        <v-layout>
-          <v-spacer />
-          <v-app-bar-title>
-            <NuxtLink id="wordmark-link" to="/">
-              <img id="logo" :src="$vuetify.theme.dark ? '/img/sourcery-wordmark-dark.svg' : '/img/sourcery-wordmark.svg'" alt="Sourcery Logo">
-            </NuxtLink>
-          </v-app-bar-title>
-          <v-spacer />
-        </v-layout>
-      </v-app-bar> -->
       <v-layout>
         <v-flex xs12 sm6 xl4 offset-sm3 offset-xl4>
           <h1 class="text-center my-24 text-h2 font-weight-medium">
             Meet the Team
           </h1>
-          <!-- <h1 class="my-12">
-            Current Members
-          </h1> -->
           <div
             v-for="member in members_sorted"
             :key="member.name"
@@ -94,29 +75,6 @@
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
-            <!-- <v-row no-gutters>
-              <v-col :order="index % 2" class="pa-3 flex-grow-0">
-                <v-img
-                  :src="'/img/team/' + member.name.split(' ').pop() + '.jpg'"
-                  lazy-src="/img/team/g_icon-placeholder.jpg"
-                  height="188"
-                  width="152"
-                  class="rounded-sm"
-                />
-              </v-col>
-              <v-col class="flex-grow-1">
-                <v-list-item two-line :class="index % 2 == 0 ? 'pl-0' : ''">
-                  <v-list-item-content>
-                    <v-list-item-title class="text-h5">
-                      {{ member.name }}
-                    </v-list-item-title>
-                    <v-list-item-subtitle>
-                      {{ member.title }}
-                    </v-list-item-subtitle>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-col>
-            </v-row> -->
             </v-card>
           </div>
         </v-flex>

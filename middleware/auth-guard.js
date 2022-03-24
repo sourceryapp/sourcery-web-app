@@ -1,29 +1,18 @@
 export default function ({ store, redirect, route, $config }) {
-    // Is the user logged in?
-    const isLoggedIn = store.getters['auth/isLoggedIn']
+    const isOrganizationPage = route.path.startsWith('/o/')
 
-    // Begin logging for auth-guard
-    console.group('/middleware/auth-guard.js')
-    console.info('User is authenticated?:', isLoggedIn)
+    const isSupabaseAuthenticated = store.getters['supabaseAuth/isAuthenticated']
 
-    // Redirect a logged in user to dashboard.  This is so we can link directly to login page since dashboard is public.
-    if (isLoggedIn && route.path === '/login') {
+    if (isSupabaseAuthenticated && route.path === '/login') {
         return redirect('/dashboard')
     }
 
-    const isOrganizationPage = route.path.startsWith('/o/')
-
     // If the user isn't logged in
     if (
-        !isLoggedIn &&
+        !isSupabaseAuthenticated &&
         !$config.publicPaths.includes(route.path) &&
         !isOrganizationPage
     ) {
-        console.warn('User not logged in. Redirecting')
-        console.groupEnd()
         return redirect('/login')
-    } else {
-        console.info('User is logged in or visiting a public page')
-        console.groupEnd()
     }
 }

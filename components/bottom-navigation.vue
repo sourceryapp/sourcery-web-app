@@ -40,7 +40,7 @@ import { mapGetters } from 'vuex'
 export default {
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser'
+            user: 'supabaseAuth/authUser'
         })
     }
 }

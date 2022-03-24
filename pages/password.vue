@@ -30,7 +30,7 @@
           </v-flex>
         </v-layout>
         <v-layout align-center justify-center>
-          <v-btn @click="$router.go(-1)">
+          <v-btn class="mr-2" @click="$router.go(-1)">
             Back
           </v-btn>
           <v-btn
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { supabase } from '~/plugins/supabase'
 
 export default {
     name: 'Password',
@@ -57,29 +58,21 @@ export default {
             error: false
         }
     },
-    computed: {
-        user () {
-            return this.$store.getters['auth/activeUser']
-        }
-    },
     methods: {
-        resetPassEmail () {
+        async resetPassEmail () {
             this.success = false
             this.error = false
-            this.$fire.auth.sendPasswordResetEmail(this.email).then(() => {
+            try {
+                const { data, error } = await supabase.auth.api.resetPasswordForEmail(this.email)
+                console.log(data, error)
+                if (error) {
+                    throw error
+                }
                 this.success = true
                 this.email = ''
-            }).catch((error) => {
-                this.error = error
-            })
-        },
-        returnAndLog () {
-            this.$fire.auth.signOut().then(() => {
-                console.log('logout complete')
-                this.$router.replace('/login')
-            }).catch((error) => {
-                console.log(error)
-            })
+            } catch (error) {
+                this.error = error.error_description || error.message
+            }
         }
     }
 

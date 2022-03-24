@@ -58,6 +58,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { supabase } from '~/plugins/supabase'
+
 export default {
     data () {
         return {
@@ -75,6 +78,11 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            citation: 'supabaseCreate/citation',
+            pages: 'supabaseCreate/pages',
+            repository_id: 'supabaseCreate/repositoryId'
+        }),
         bodyText () {
             if (this.allowRegister) {
                 return 'In order to submit a request, you must be registered with Sourcery.  Please log in, or submit your email address to register with us.'
@@ -128,58 +136,44 @@ export default {
             this.loggingIn = true
             this.openDialog()
         },
-        register () {
+        async register () {
             this.validateRegisterNewEmailForm()
             if (this.form_valid) {
-                const url = window.location
-                const emailRedirectUrl = `${url.origin}/request/create`
+                try {
+                    const url = window.location
+                    const redirection = `${url.origin}/dashboard`
+                    // const redirection = process.env.BASE_URL === 'http://localhost:3000' ? 'http://localhost:3002/dashboard' : process.env.BASE_URL + '/dashboard'
+                    console.log('redirect to:', redirection)
+                    const { error } = await supabase.auth.signIn({ email: this.newUserEmailAddress }, {
+                        redirectTo: redirection
+                    })
+                    if (error) {
+                        throw error
+                    }
+                    if (this.loggingIn) {
+                        this.submitResultAlert.body = 'Please check your email for a link to login.'
+                    } else {
+                        this.submitResultAlert.body = 'Please check your email for a link to register.'
+                    }
+                    this.submitResultAlert.type = 'success'
+                    this.submitResultAlert.show = true
 
-                // Valid
-                const emailSignUpConfig = {
-                    // URL to return to.  Must be an authorized domain in Firebase Authentication.
-                    url: emailRedirectUrl,
-                    handleCodeInApp: true
+                    const localStateData = {
+                        request: {
+                            citation: this.citation,
+                            pages: this.pages,
+                            repository_id: this.repository_id
+                        }
+                    }
+
+                    localStorage.setItem('sourceryInProgressRequest', JSON.stringify(localStateData))
+
+                    this.hasSubmitted = true
+                } catch (e) {
+                    this.submitResultAlert.body = e.error_description || e.message
+                    this.submitResultAlert.type = 'error'
+                    this.submitResultAlert.show = true
                 }
-
-                this.$fire.auth.sendSignInLinkToEmail(this.newUserEmailAddress, emailSignUpConfig)
-                    .then(() => {
-                        if (this.loggingIn) {
-                            this.submitResultAlert.body = 'Please check your email for a link to login.'
-                        } else {
-                            this.submitResultAlert.body = 'Please check your email for a link to register.'
-                        }
-                        this.submitResultAlert.type = 'success'
-                        this.submitResultAlert.show = true
-                        const localStateData = {
-                            email: this.newUserEmailAddress,
-                            request: {
-                                citation: this.$store.state.create.citation,
-                                pages: this.$store.state.create.pages,
-                                repository_id: this.$store.state.create.repository_id
-                            },
-                            loginIntent: false
-                        }
-
-                        if (this.loggingIn) {
-                            localStateData.loginIntent = true
-                        }
-                        localStorage.setItem('sourceryEmailSignInWith', JSON.stringify(localStateData))
-                        this.hasSubmitted = true
-                    })
-                    .catch((error) => {
-                        const general_error_message = 'Something went wrong.'
-                        const messages = {
-                            'auth/unauthorized-continue-uri': 'This domain is not authorized to send emails.',
-                            'auth/argument-error': general_error_message,
-                            'auth/invalid-email': 'Email provided was not valid.',
-                            'auth/missing-android-pkg-name': general_error_message,
-                            'auth/missing-continue-uri': 'Redirect link is not valid.',
-                            'auth/invalid-continue-uri': 'Redirect link is not valid.'
-                        }
-                        this.submitResultAlert.body = messages[error.code]
-                        this.submitResultAlert.type = 'error'
-                        this.submitResultAlert.show = true
-                    })
             }
         },
         validateRegisterNewEmailForm () {

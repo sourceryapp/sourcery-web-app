@@ -4,20 +4,12 @@
       <register-to-submit-request
         ref="login_with_link_dialog"
       />
-      <v-form @submit.prevent="login">
-        <h1 class="text-center">
+      <v-form @submit.prevent="handleEmailPassLogin">
+        <h1 class="text-center mb-2">
           Log In
         </h1>
-        <v-alert
-          :value="loginError"
-          type="error"
-          transition="slide-y-transition"
-          text
-        >
-          Username or password is incorrect.
-        </v-alert>
         <v-text-field
-          v-model="email"
+          v-model="passEmail"
           type="email"
           name="email"
           label="Email"
@@ -28,9 +20,8 @@
           autofocus
           outlined
         />
-        <span v-for="(err, index) in errors.email" :key="index" class="text-red">{{ err }}</span>
         <v-text-field
-          v-model="password"
+          v-model="passPass"
           name="password"
           label="Password"
           required
@@ -42,15 +33,16 @@
           outlined
           @click:append="showPass = !showPass"
         />
-        <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span>
+        <!-- <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span> -->
+        <span v-if="messagePass" class="text-red">{{ messagePass }}</span>
         <v-btn
           block
           depressed
           x-large
           type="submit"
           color="primary"
-          :loading="loading"
-          :disabled="loading"
+          :loading="loadingPass"
+          :disabled="loadingPass"
           style="font-weight: 800"
           class="mb-1"
         >
@@ -97,58 +89,45 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import registerToSubmitRequest from '@/components/register-to-submit-request.vue'
+import { supabase } from '~/plugins/supabase'
+import RegisterToSubmitRequest from '~/components/register-to-submit-request.vue'
 
 export default {
-    name: 'Login',
-    components: { registerToSubmitRequest },
-    layout: 'default',
+    components: { RegisterToSubmitRequest },
     data () {
         return {
-            valid: true,
             email: '',
-            password: '',
+            message: '',
+            messagePass: '',
+            passPass: '',
+            passEmail: '',
             showPass: false,
-            loginError: false,
             loading: false,
-            errors: {
-                password: [],
-                email: []
-            },
-            errorMessage: '',
-            archiveSpace: this.$store.state.archive.archiveOrigin
+            loadingPass: false
         }
     },
-    computed: {
-        ...mapGetters({
-            user: 'auth/activeUser'
-        })
-    },
     methods: {
-
-        async login () {
-            this.loading = true
-            this.loginError = false
+        async handleEmailPassLogin () {
+            this.loadingPass = true
             try {
-                await this.$fire.auth.signInWithEmailAndPassword(this.email, this.password)
-                console.log('Logged in!')
-            } catch (error) {
-                console.log('Error code:', error.code, 'Error message', error.message)
-                this.loginError = true
-                this.loading = false
+                const { error } = await supabase.auth.signIn({
+                    email: this.passEmail,
+                    password: this.passPass
+                })
+                if (error) {
+                    throw error
+                }
+                this.$toast.success('Logged in Successfully!')
+            } catch (e) {
+                console.log(e)
+                this.messagePass = e.message
+            } finally {
+                this.loadingPass = false
             }
         },
-
         loginWithOneTimeLink () {
             this.$refs.login_with_link_dialog.openWithLoginIntent(this.email)
         }
     }
 }
 </script>
-
-<style scoped>
-h1 {
-    margin-bottom: 12px;
-  }
-</style>

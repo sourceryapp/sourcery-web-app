@@ -17,8 +17,8 @@
       </v-list-item>
       <v-list-item two-line>
         <v-list-item-content>
-          <v-list-item-title v-if="user" class="text-h6">
-            {{ user.displayName }}
+          <v-list-item-title v-if="userMeta" class="text-h6">
+            {{ userMeta.name }}
           </v-list-item-title>
           <v-list-item-title v-else class="text-h6">
             Logged Out
@@ -85,15 +85,15 @@
       </v-list-item-group>
 
       <v-divider
-        v-if="user && user.admin"
+        v-if="user && isAdmin"
         class="my-2"
       />
-      <v-subheader v-if="user && user.admin">
+      <v-subheader v-if="user && isAdmin">
         DEV ONLY
       </v-subheader>
 
       <v-list-item-group
-        v-if="user && user.admin"
+        v-if="user && isAdmin"
         color="primary"
       >
         <v-list-item
@@ -207,8 +207,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import md5 from 'md5'
+import { supabase } from '~/plugins/supabase'
 
 export default {
     name: 'NavigationDrawer',
@@ -223,10 +224,7 @@ export default {
                 { title: 'History', icon: 'mdi-history', link: '/request/history' },
                 { title: 'Settings', icon: 'mdi-cog', link: '/settings' },
                 { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
-                { title: 'Feedback', icon: 'mdi-comment-quote', link: '/settings/feedback' }
-            ],
-            devItems: [
-                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+                { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             ],
             bottomItems: [
                 { title: 'Privacy Policy', link: '/privacy' },
@@ -240,19 +238,35 @@ export default {
             return `https://www.gravatar.com/avatar/${md5(this.user.email || '')}?d=mp`
         },
         ...mapGetters({
-            isOrgMember: 'meta/isOrgMember',
-            user: 'auth/activeUser'
-        })
+            isOrgMember: 'supabaseAuth/ownsAnOrganization',
+            user: 'supabaseAuth/authUser',
+            userMeta: 'supabaseAuth/authUserMeta',
+            supabaseIsAuthenticated: 'supabaseAuth/isAuthenticated',
+            isAdmin: 'supabaseAuth/isAdmin'
+        }),
+        devItems () {
+            const items = [
+                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+            ]
+            return items
+        }
     },
     created () {
         this.$nuxt.$on('toggle-nav-drawer', this.toggle)
     },
     methods: {
+        ...mapMutations({
+            clearAuth: 'supabaseAuth/clear'
+        }),
         async logout () {
             try {
-                await this.$fire.auth.signOut()
+                this.clearAuth()
+                const { error } = await supabase.auth.signOut()
                 this.dialog = false
-                this.$router.replace('/login')
+                if (error) {
+                    throw error
+                }
+                // this.$router.replace('/login')
             } catch (error) {
                 console.log(error)
             }

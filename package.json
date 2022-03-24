@@ -15,12 +15,16 @@
     "init": "npx husky install && .husky/post-checkout"
   },
   "dependencies": {
+    "@nuxt/types": "^2.15.8",
     "@nuxtjs/axios": "^5.12.5",
     "@nuxtjs/firebase": "^7.3.0",
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/pwa": "^3.3.4",
     "@nuxtjs/sentry": "^5.0.0",
     "@nuxtjs/toast": "^3.3.1",
+    "@supabase/supabase-js": "^1.29.1",
+    "@types/mime-types": "^2.1.1",
+    "@types/uuid": "^8.3.4",
     "accounting-js": "^1.1.1",
     "algoliasearch": "^4.8.3",
     "core-js": "^3.9.1",
@@ -53,13 +57,14 @@
     "eslint": "^7.25.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-nuxt": "^2.0.0",
-    "eslint-plugin-vue": "^7.7.0",
+    "eslint-plugin-vue": "^7.13.0",
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
     "faker": "^4.1.0",
     "firebase-tools": "^9.10.2",
     "husky": "^6.0.0",
     "prettier-eslint": "^12.0.0",
-    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.4"
+    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.5",
+    "ts-loader": "8"
   },
   "description": "Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them.",
   "author": "Greenhouse Studios <greenhousestudios@uconn.edu>",

@@ -11,7 +11,7 @@
     </v-list-item-avatar>
     <v-list-item-content>
       <v-list-item-title v-text="title" />
-      <v-list-item-subtitle v-text="editValue" />
+      <v-list-item-subtitle v-text="initialValue" />
     </v-list-item-content>
     <v-list-item-action>
       <v-dialog
@@ -118,6 +118,7 @@ export default {
     data () {
         return {
             open: false,
+            initialValue: this.$store.getters[this.vuexRoot][this.propertyName] || null,
             editValue: this.$store.getters[this.vuexRoot][this.propertyName] || null
         }
     },
@@ -131,6 +132,7 @@ export default {
             }
         },
         updateEditValue () {
+            this.initialValue = this.$store.getters[this.vuexRoot][this.propertyName] || null
             this.editValue = this.$store.getters[this.vuexRoot][this.propertyName] || null
         },
         cancel () {

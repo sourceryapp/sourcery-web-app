@@ -84,7 +84,9 @@ export default {
     /*
      ** Env File
      */
-    env,
+    env: {
+        ...env
+    },
 
     /**
      * PWA Icons
@@ -139,22 +141,15 @@ export default {
     plugins: [
         '~/plugins/vue-instantsearch',
 
-        // Send emails to a specific address
-        '~/plugins/feedback',
-
         // Custom utilities for Sourcery
         '~/plugins/utils',
-
-        // Extensions for the request object
-        '~/plugins/request-extensions',
 
         // Sourcery Form Rules
         '~/plugins/sourcery-forms',
 
-        // Sourcery API
-        '~/plugins/sourcery',
-        { src: '~/plugins/vuetify.ts', ssr: false }
+        { src: '~/plugins/vuetify.ts', ssr: false },
 
+        '~/plugins/supabase'
     ],
 
     /** pwa: {
@@ -179,10 +174,8 @@ export default {
      */
     router: {
         middleware: [
+            'reset-password',
             'auth-guard',
-            'user-meta',
-            // 'account-type',
-            'onboarding-complete',
             'archiveSpace'
         ]
     },
@@ -209,23 +202,23 @@ export default {
     firebase: {
         config: env.FIREBASE_CONFIG,
         services: {
-            auth: {
-                persistence: 'local', // default
-                initialize: {
-                    onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
-                    onAuthStateChangedAction: 'auth/onAuthStateChanged',
-                    subscribeManually: false
-                },
-                ssr: false, // default
+            // auth: {
+            //     persistence: 'local', // default
+            //     initialize: {
+            //         onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
+            //         onAuthStateChangedAction: 'auth/onAuthStateChanged',
+            //         subscribeManually: false
+            //     },
+            //     ssr: false, // default
 
-                // if EMULATOR===local, use the Firestore Emulators
-                emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
-            },
-            firestore: {
-                // if EMULATOR===local, use the Firestore Emulators
-                emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
-            },
-            functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
+            //     // if EMULATOR===local, use the Firestore Emulators
+            //     emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
+            // },
+            // firestore: {
+            //     // if EMULATOR===local, use the Firestore Emulators
+            //     emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
+            // },
+            // functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
             storage: true,
             remoteConfig: true
         }
@@ -318,6 +311,9 @@ export default {
         '@nuxtjs/vuetify'
     ],
 
+    // Required to read .ts files in other nuxt files.
+    extensions: ['ts', 'tsx'],
+
     // Build Configuration (https://go.nuxtjs.dev/config-build)
     build: {
         // Fix for this bug: https://github.com/babel/babel/issues/11622
@@ -326,6 +322,7 @@ export default {
                 ['@babel/plugin-proposal-private-methods', { loose: true }]
             ]
         },
+        additionalExtensions: ['ts', 'tsx'],
         extend (config, { isDev }) {
             // Extend only webpack config for client-bundle
             if (isDev) {
@@ -343,6 +340,14 @@ export default {
                 options: {
                     fix: true
                 }
+            })
+
+            // Support for typescript imports from js files
+            config.resolve.extensions.push('.ts', '.tsx')
+            config.module.rules.push({
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                loader: 'ts-loader'
             })
         },
 

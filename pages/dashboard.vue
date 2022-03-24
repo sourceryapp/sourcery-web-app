@@ -1,16 +1,40 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+    <v-flex
+      xs12
+      sm10
+      offset-sm-1
+    >
       <h1 class="mb-4">
-        Dashboard
+        {{ pageTitle }}
       </h1>
       <logged-out-card />
-      <org-stat-bar v-if="false" />
-      <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
+      <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
+
+      <v-row>
+        <v-col cols="12" lg="6">
+          <card-with-action title="New Requests" :number-requests="newJobs.length" action="/requests?status=1">
+            <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
+            <span v-if="newJobs.length === 0">Out looking for toadstools.<br>No new requests.</span>
+          </card-with-action>
+          <card-with-action title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
+            <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
+            <span v-if="completedJobs.length === 0">No recently completed requests.</span>
+          </card-with-action>
+        </v-col>
+        <v-col cols="12" lg="6">
+          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
+            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
+            <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
+          </card-with-action>
+          <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
+        </v-col>
+      </v-row>
+      <!-- <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
         <none-found-card v-if="jobs.length == 0" text="This organization has no outstanding requests that need service." />
 
-        <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" />
-      </sourcery-card>
+        <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
+      </sourcery-card> -->
       <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-12">
         <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
@@ -19,7 +43,7 @@
           </v-icon>
         </none-found-card>
 
-        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" />
+        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" :client="true" />
       </sourcery-card>
       <view-history-button v-if="user" />
     </v-flex>
@@ -30,10 +54,13 @@
 import { mapGetters } from 'vuex'
 import NoneFoundCard from '@/components/none-found-card.vue'
 import SourceryCard from '@/components/card-with-header.vue'
+import CardWithAction from '@/components/card-with-action.vue'
 import LoggedOutCard from '@/components/logged-out-card.vue'
 import ViewHistoryButton from '@/components/view-history-button.vue'
 import RequestListing from '@/components/request-listing.vue'
 import OrgStatBar from '@/components/org-stat-bar.vue'
+import ButtonLarge from '@/components/button-large.vue'
+import { Request } from '~/models/Request'
 
 export default {
     name: 'Dashboard',
@@ -43,128 +70,69 @@ export default {
         LoggedOutCard,
         ViewHistoryButton,
         RequestListing,
-        OrgStatBar
+        OrgStatBar,
+        CardWithAction,
+        ButtonLarge
     },
     async asyncData ({ params, store, app }) {
-        if (store.getters['auth/activeUser'] && store.getters['auth/activeUser'].uid) {
-            const organizations = null
-            // const reserve_queries = [];
-            const reserved_requests = null
-            // Temporarily disabled. Org requests are going straight to org owners
-            // if (store.getters['meta/isOrgMember']) {
-            //     // Get the organizations for the current user
-            //     organizations = await store.dispatch('meta/getOrganizations')
+        const logged_in = store.getters['supabaseAuth/authUser'] && store.getters['supabaseAuth/authUser'].id
+        let requests = []
+        let jobs = []
+        if (logged_in) {
+            const uid = store.getters['supabaseAuth/authUser'].id
+            requests = await Request.getForCreator(uid, ['In Progress', 'Submitted', 'Complete'])
+        }
 
-            //     organizations.forEach((organization) => {
-            //         reserve_queries.push(
-            //             app.$fire.firestore.collection('requests')
-            //                 .where('status', '==', 'reserved')
-            //                 .where('repository.organization', '==', organization.id)
-            //                 .orderBy('created_at', 'desc')
-            //                 .get()
-            //         )
-            //     })
+        if (store.getters['supabaseAuth/ownsAnOrganization']) {
+            const user_repositories = store.getters['supabaseAuth/userRepositories']
+            jobs = await Request.getForRepositories(user_repositories, ['In Progress', 'Submitted', 'Complete', 'Archived'])
+        }
 
-            //     reserved_requests = await Promise.all(reserve_queries)
-            //     console.log('Reserved requests', reserved_requests)
-            // }
-
-            const requests = await app.$fire.firestore
-                .collection('requests')
-                .where('client_id', '==', store.getters['auth/activeUser'].uid)
-                .orderBy('status', 'desc')
-                .orderBy('created_at', 'desc')
-                .get()
-
-            let jobs = []
-
-            const repo_ids = await store.dispatch('meta/getRepositoryIdsOwned')
-
-            // Don't proceed unless we have repos.
-            if (repo_ids.length > 0) {
-                const jobs_collection = await app.$fire.firestore
-                    .collection('requests')
-                    .where('repository_id', 'in', repo_ids)
-                    .where('status', '==', 'picked_up')
-                    .orderBy('created_at', 'desc')
-                    .get()
-                jobs = jobs_collection.docs
-            }
-
-            /**
-             * Filter out archived records
-             */
-            return {
-                requests: requests.docs.filter(doc => !doc.request().isArchived()),
-                jobs,
-                organizations,
-                reserved_requests
-            }
+        return {
+            requests,
+            jobs,
+            organizations: []
         }
     },
     data () {
         return {
             requests: [],
-            reserved_requests: [],
             jobs: [],
             organizations: [],
-            selected: []
+            limit: 4
         }
     },
     computed: {
         ...mapGetters({
-            user: 'auth/activeUser',
-            isResearcher: 'meta/isResearcher',
-            isSourcerer: 'meta/isSourcerer',
-            isOrgMember: 'meta/isOrgMember'
+            user: 'supabaseAuth/authUser',
+            isOrgMember: 'supabaseAuth/ownsAnOrganization'
         }),
-        isLoggedIn () {
-            return this.user && this.user.uid
-        }
-    },
-    methods: {
-        getOrganizationFromRequest (request) {
-            const orgId = request.data().repository.organization
-            let found = {}
-            this.organizations.forEach((organization) => {
-                if (organization.id === orgId) {
-                    console.log('Found: ', organization.data())
-                    found = organization.data()
-                }
-            })
-            return found
+        pageTitle () {
+            if (this.isOrgMember) {
+                return 'Institutional Dashboard'
+            }
+            return 'Dashboard'
         },
-        claim () {
-            console.log(this.reserved_requests)
-            const updates = []
-            this.selected.forEach((item) => {
-                updates.push(
-                    this.$fire.firestore.collection('requests').doc(item).update({
-                        status: 'picked_up',
-                        vendor_id: this.user.uid
-                    })
-                )
-            })
-
-            Promise.all(updates).then((values) => {
-                // Not elegant. Need to change this
-                window.location.reload()
-            })
+        newJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Submitted')
         },
-        release () {
-            const updates = []
-            this.selected.forEach((item) => {
-                updates.push(
-                    this.$fire.firestore.collection('requests').doc(item).update({
-                        status: 'pending'
-                    })
-                )
-            })
-
-            Promise.all(updates).then((values) => {
-                // Not elegant. Need to change this
-                window.location.reload()
-            })
+        inProgressJobs () {
+            return this.jobs.filter(x => x.status?.name === 'In Progress')
+        },
+        completedJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Complete')
+        },
+        completedAndArchivedJobs () {
+            return this.jobs.filter(x => x.status?.name === 'Complete' || x.status?.name === 'Archived')
+        },
+        newJobsLimited () {
+            return this.newJobs.slice(0, this.limit)
+        },
+        inProgressJobsLimited () {
+            return this.inProgressJobs.slice(0, this.limit)
+        },
+        completedJobsLimited () {
+            return this.completedJobs.slice(0, this.limit)
         }
     }
 }
