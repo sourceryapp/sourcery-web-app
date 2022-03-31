@@ -2,7 +2,7 @@
   <v-card
     flat
     tile
-    class="mb-4 rounded-lg pt-4 pb-3 pl-2 pr-2"
+    class="mb-4 rounded-lg pt-4 pb-3 pl-2 pr-2 card-with-action"
   >
     <v-card-title>
       <span class="text-uppercase text-h5">{{ titleText }}</span>
@@ -51,5 +51,11 @@ export default {
 <style scoped>
 .nounderline {
   text-decoration: none;
+}
+</style>
+
+<style>
+.theme--light.card-with-action {
+    background-color: #F5F5F5;
 }
 </style>

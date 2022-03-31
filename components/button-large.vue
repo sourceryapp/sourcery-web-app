@@ -24,3 +24,9 @@ export default {
     background: linear-gradient(45deg, #654EA3, #431A5A);
 }
 </style>
+
+<style>
+.theme--light.gradient-button {
+    color: white;
+}
+</style>
