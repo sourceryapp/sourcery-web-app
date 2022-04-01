@@ -66,9 +66,22 @@ export default {
     components: {
         Attachments
     },
-    async asyncData ({ params, store }) {
-    // Populate the Vuex Store
+    async middleware ({ store, params, redirect }) {
+        // Populate vuex store here, since we depend on it for access rights
         await store.dispatch('supabaseRequest/getById', params.id)
+        /**
+         * This block is specifically for blocking users who are not able to fulfill a request, or not the original requester, from seeing details about other requests.
+        */
+        const request = store.getters['supabaseRequest/request']
+        const user = store.getters['supabaseAuth/authUser']
+        const userRepositories = store.getters['supabaseAuth/userRepositories']
+
+        const canManage = userRepositories.map(x => x.id).includes(request.repository_id)
+        const isRequester = user.id === request.user_id
+
+        if (!canManage && !isRequester) {
+            return redirect('/dashboard')
+        }
     },
     computed: {
         ...mapGetters({

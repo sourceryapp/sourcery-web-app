@@ -4,7 +4,7 @@
       <v-card-text>
         <v-row>
           <v-col v-for="label in labels" :key="`l-${label.key}`" class="split-border mt-1 mb-2 pl-6">
-            <p class="mb-6">
+            <p class="mb-6 stat-label">
               {{ label.name }}
             </p>
             <span class="stat-large">{{ stats[label.key] }}</span>
@@ -84,5 +84,9 @@ export default {
 <style>
 .theme--light.v-card .split-border {
     border-color: black;
+}
+
+.theme--light .stat-large, .theme--light .stat-label {
+    color: var(--sourcery-500);
 }
 </style>

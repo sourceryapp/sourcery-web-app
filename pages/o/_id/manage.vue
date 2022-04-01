@@ -6,7 +6,7 @@
       </h1>
 
       <sourcery-card title="Change Organization Image" icon="mdi-file-image">
-        <figure v-if="orgHasFeaturedImage">
+        <figure v-if="orgHasFeaturedImage" class="mb-3">
           <v-img
             :src="orgFeaturedImageUrl"
             height="300"
@@ -32,7 +32,7 @@
       </sourcery-card>
 
       <sourcery-card v-for="repo in organization.repositories" :key="`org-repo-${repo.id}`" :title="`Change ${repo.name} Image`" icon="mdi-image-multiple">
-        <figure v-if="repoHasImage(repo)">
+        <figure v-if="repoHasImage(repo)" class="mb-3">
           <v-img
             :src="repoImageUrl(repo)"
             height="300"
