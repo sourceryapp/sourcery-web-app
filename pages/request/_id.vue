@@ -14,7 +14,7 @@
           <v-card-title>
             <div>
               <div class="text-h5">
-                {{ request.request_client.label }}
+                {{ requestLabel }}
               </div>
 
               <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
@@ -127,6 +127,12 @@ export default {
         },
         canManage () {
             return this.userRepositories.map(x => x.id).includes(this.request.repository_id)
+        },
+        requestLabel () {
+            if (this.isOwner) {
+                return this.request.request_client.label
+            }
+            return this.request.request_vendor.label
         }
     },
     methods: {
