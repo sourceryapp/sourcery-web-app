@@ -37,7 +37,7 @@
               fab
               dark
               small
-              color="#707070"
+              :color="actionButtonColor"
               style="z-index:1"
               @click.prevent="editLabel"
             >
@@ -52,7 +52,7 @@
               fab
               dark
               small
-              color="#707070"
+              :color="actionButtonColor"
               style="z-index:1"
               @click.prevent="editLabel"
             >
@@ -116,6 +116,9 @@ export default {
         },
         showChatInit () {
             return this.request.status.name === 'In Progress'
+        },
+        actionButtonColor () {
+            return this.$vuetify.theme.dark ? '#707070' : '#C3C3C3'
         }
     },
     methods: {
