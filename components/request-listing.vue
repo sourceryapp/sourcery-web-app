@@ -5,15 +5,18 @@
   >
     <v-card
       v-if="request"
-      :to="'/request/' + request.id"
+      :to="cardClickAction"
       class="my-4 rounded-lg"
       outlined
     >
       <v-container>
         <v-row>
           <v-col class="pa-0">
-            <v-card-title>
+            <v-card-title v-if="!editing">
               {{ label }}
+            </v-card-title>
+            <v-card-title v-else>
+              <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
             </v-card-title>
             <v-card-subtitle>
               {{ request.citation }}
@@ -91,6 +94,12 @@ export default {
             default: true
         }
     },
+    data () {
+        return {
+            editing: false,
+            editingLabelValue: ''
+        }
+    },
     computed: {
         label () {
             if (!this.client) {
@@ -119,10 +128,20 @@ export default {
         },
         actionButtonColor () {
             return this.$vuetify.theme.dark ? '#707070' : '#C3C3C3'
+        },
+        cardClickAction () {
+            if (this.editing) {
+                return undefined
+            }
+            return '/request/' + this.request.id
         }
+    },
+    created () {
+        this.editingLabelValue = this.label
     },
     methods: {
         editLabel () {
+            this.editing = !this.editing
             console.log('edit label')
         }
     }
@@ -140,5 +159,9 @@ export default {
 
 .bg-purple {
   background-color: #6b49a9;
+}
+
+.edit-label {
+  z-index: 999;
 }
 </style>
