@@ -83,6 +83,12 @@
         >
           Register
         </v-btn>
+
+        <p class="mt-2">
+          Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
+            Let us know.
+          </nuxt-link>
+        </p>
       </v-form>
     </v-flex>
   </v-layout>
