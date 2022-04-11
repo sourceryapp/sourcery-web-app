@@ -194,9 +194,7 @@ export default {
                 email: [],
                 password: [],
                 confirm_password: []
-            },
-            archiveSpace: this.$store.state.archive.archiveOrigin
-
+            }
         }
     },
     computed: {
