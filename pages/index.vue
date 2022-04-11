@@ -22,7 +22,7 @@
           alt=""
         >
         <div class="header__buttons">
-          <!-- <v-btn
+          <v-btn
             to="/register"
             x-large
             block
@@ -32,8 +32,8 @@
             depressed
           >
             Sign Up
-          </v-btn> -->
-          <v-btn
+          </v-btn>
+          <!-- <v-btn
             to="/join-us"
             x-large
             block
@@ -42,9 +42,8 @@
             height="76px"
           >
             Sign Up
-          </v-btn>
+          </v-btn> -->
           <v-btn
-            v-if="!isProd"
             to="/login"
             x-large
             block
@@ -60,6 +59,11 @@
           <h1>Your sources, like magic</h1>
           <p>Delivering archival documents straight to your device</p>
         </div>
+        <p>
+          Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
+            Let us know.
+          </nuxt-link>
+        </p>
       </div>
     </header>
     <v-flex
