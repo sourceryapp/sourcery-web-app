@@ -36,7 +36,6 @@ export default {
             return (this.usermeta && this.usermeta.stripe && this.usermeta.stripe.stripe_user_id)
         },
         stripeURL () {
-            // console.log("Current Route", location.protocol + '//' + location.host + this.$router.currentRoute.path);
             if (this.$store.getters['auth/activeUser']) {
                 const baseURL = 'https://connect.stripe.com/express/oauth/authorize?'
 

@@ -42,7 +42,8 @@
             Add Card
           </v-btn>
           <v-dialog v-model="addCardDialogOpen" width="450" max-width="100%">
-            <add-card @done="done" />
+            <!-- <add-card @done="done" /> -->
+            Coming soon.
           </v-dialog>
         </v-list-item-action>
       </v-list-item>
@@ -51,12 +52,12 @@
 </template>
 
 <script>
-import AddCard from '@/components/add-card.vue'
+// import AddCard from '@/components/add-card.vue'
 import CreditCardListItem from '@/components/credit-card-list-item.vue'
 
 export default {
     components: {
-        AddCard,
+        // AddCard,
         CreditCardListItem
     },
     props: {

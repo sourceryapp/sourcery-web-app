@@ -13,7 +13,7 @@ export default async function setStore ({ store, app: { router } }) {
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     await store.dispatch('supabaseAuth/fetchUserMeta')
     await store.dispatch('supabaseAuth/fetchUserOrganizations')
-    await store.dispatch('supabaseAuth/fetchUserHasPassword')
+    // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
     supabase.auth.onAuthStateChange(async (_, session) => {
         console.log(_, session)
@@ -35,7 +35,7 @@ export default async function setStore ({ store, app: { router } }) {
             if (!store.getters['supabaseAuth/justRegistered']) {
                 await store.dispatch('supabaseAuth/fetchUserMeta')
                 await store.dispatch('supabaseAuth/fetchUserOrganizations')
-                await store.dispatch('supabaseAuth/fetchUserHasPassword')
+                // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
                 const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
                 console.log('inProgressRequest', inProgressRequest)
