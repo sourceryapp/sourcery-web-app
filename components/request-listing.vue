@@ -34,35 +34,34 @@
               />
             </v-fade-transition>
           </v-col>
-          <v-col v-if="showLabelEdit" cols="2" align-self="center">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              :color="actionButtonColor"
-              style="z-index:1"
-              @click.prevent="editLabel"
-            >
-              <v-icon dark>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </v-col>
-          <v-col v-if="showChatInit" cols="2" align-self="center">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              small
-              :color="actionButtonColor"
-              style="z-index:1"
-              @click.prevent="editLabel"
-            >
-              <v-icon dark>
-                mdi-message-text
-              </v-icon>
-            </v-btn>
+          <v-col cols="2" align-self="center">
+            <v-menu offset-y>
+              <template #activator="{ on: { click }, attrs }">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  :color="actionButtonColor"
+                  style="z-index:1"
+                  v-bind="attrs"
+                  @click.stop.prevent="click"
+                >
+                  <v-icon dark>
+                    mdi-dots-horizontal
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in requestActionsList"
+                  :key="index"
+                  @click.prevent="item.action"
+                >
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
           </v-col>
           <v-col
             cols="auto"
@@ -83,6 +82,8 @@
 </template>
 
 <script>
+import { Request } from '~/models/Request'
+
 export default {
     props: {
         request: {
@@ -121,10 +122,12 @@ export default {
             return classes
         },
         showLabelEdit () {
-            return !this.client && this.request.status.name === 'Submitted'
+            const statuses = ['Submitted', 'In Progress']
+            return statuses.includes(this.request.status.name)
         },
         showChatInit () {
-            return this.request.status.name === 'In Progress'
+            const statuses = ['In Progress', 'Complete']
+            return statuses.includes(this.request.status.name)
         },
         actionButtonColor () {
             return this.$vuetify.theme.dark ? '#707070' : '#C3C3C3'
@@ -134,6 +137,29 @@ export default {
                 return undefined
             }
             return '/request/' + this.request.id
+        },
+        requestActionsList () {
+            const list = []
+            if (this.showLabelEdit) {
+                if (this.editing) {
+                    list.push({
+                        name: 'Save Label',
+                        action: this.saveLabel
+                    })
+                }
+                list.push({
+                    name: this.editing ? 'Cancel Editing' : 'Edit Label',
+                    action: this.editLabel
+                })
+            }
+            if (this.showChatInit) {
+                list.push({
+                    name: 'Open Chat',
+                    action: this.openChat
+                })
+            }
+
+            return list
         }
     },
     created () {
@@ -143,6 +169,20 @@ export default {
         editLabel () {
             this.editing = !this.editing
             console.log('edit label')
+        },
+        openChat () {
+            this.$toast.success('Chat coming soon.')
+        },
+        async saveLabel () {
+            this.editing = false
+            if (this.request instanceof Request) {
+                const result = await this.request.saveLabel(this.client, this.editingLabelValue)
+                if (result) {
+                    this.$toast.success('Label saved successfully.')
+                    return
+                }
+            }
+            this.$toast.error('Issue saving label.')
         }
     }
 }
