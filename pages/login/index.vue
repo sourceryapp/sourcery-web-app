@@ -11,6 +11,14 @@
         <h1 class="text-center mb-2">
           Log In
         </h1>
+        <v-alert
+          :value="loginError"
+          type="error"
+          transition="slide-y-transition"
+          text
+        >
+          {{ messagePass || 'Username or password is incorrect' }}
+        </v-alert>
         <v-text-field
           v-model="passEmail"
           type="email"
@@ -36,8 +44,6 @@
           outlined
           @click:append="showPass = !showPass"
         />
-        <!-- <span v-for="(err, index) in errors.password" :key="index" class="text-red">{{ err }}</span> -->
-        <span v-if="messagePass" class="text-red">{{ messagePass }}</span>
         <v-btn
           block
           depressed
@@ -106,29 +112,32 @@ export default {
     data () {
         return {
             email: '',
-            message: '',
             messagePass: '',
             passPass: '',
             passEmail: '',
             showPass: false,
             loading: false,
-            loadingPass: false
+            loadingPass: false,
+            loginError: false
         }
     },
     methods: {
         async handleEmailPassLogin () {
             this.loadingPass = true
+            this.loginError = false
             try {
                 const { error } = await supabase.auth.signIn({
                     email: this.passEmail,
                     password: this.passPass
                 })
                 if (error) {
+                    this.loginError = true
                     throw error
                 }
                 this.$toast.success('Logged in Successfully!')
             } catch (e) {
                 console.log(e)
+                this.loginError = true
                 this.messagePass = e.message
             } finally {
                 this.loadingPass = false
