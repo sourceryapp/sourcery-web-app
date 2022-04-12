@@ -6,7 +6,6 @@ export default function ({ store, redirect, route, $config }) {
     })
 
     if (vars.type && vars.type === 'recovery' && vars.access_token) {
-        console.log('Password Recovery Attempt')
         store.commit('supabaseAuth/setResetAccessToken', vars.access_token)
         return redirect('/resetpassword')
     }

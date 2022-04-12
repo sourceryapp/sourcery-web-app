@@ -22,7 +22,7 @@
           alt=""
         >
         <div class="header__buttons">
-          <!-- <v-btn
+          <v-btn
             to="/register"
             x-large
             block
@@ -32,8 +32,8 @@
             depressed
           >
             Sign Up
-          </v-btn> -->
-          <v-btn
+          </v-btn>
+          <!-- <v-btn
             to="/join-us"
             x-large
             block
@@ -42,9 +42,8 @@
             height="76px"
           >
             Sign Up
-          </v-btn>
+          </v-btn> -->
           <v-btn
-            v-if="!isProd"
             to="/login"
             x-large
             block
@@ -55,6 +54,11 @@
           >
             Log In
           </v-btn>
+          <p class="mt-2">
+            Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
+              Let us know.
+            </nuxt-link>
+          </p>
         </div>
         <div class="header__slogan">
           <h1>Your sources, like magic</h1>
@@ -282,7 +286,6 @@
         </v-container>
         <div class="cta-buttons">
           <v-btn
-            v-if="!isProd"
             to="/login"
             x-large
             block
@@ -293,7 +296,7 @@
           >
             Log In
           </v-btn>
-          <!-- <v-btn
+          <v-btn
             to="/register"
             x-large
             block
@@ -303,8 +306,8 @@
             depressed
           >
             Sign Up
-          </v-btn> -->
-          <v-btn
+          </v-btn>
+          <!-- <v-btn
             to="/join-us"
             x-large
             block
@@ -313,7 +316,12 @@
             height="76px"
           >
             Sign Up
-          </v-btn>
+          </v-btn> -->
+          <p>
+            Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
+              Let us know.
+            </nuxt-link>
+          </p>
         </div>
       </div>
     </section>

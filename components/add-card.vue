@@ -53,11 +53,11 @@
 </template>
 
 <script>
-/* global Stripe */
+// /* global Stripe */
 import { mapGetters } from 'vuex'
 
-const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY)
-const elements = stripe.elements()
+// const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY)
+// const elements = stripe.elements()
 
 export default {
     name: 'AddCard',
@@ -83,71 +83,71 @@ export default {
             canMakePayments: 'meta/canMakePayments'
         })
     },
-    async mounted () {
-        // Get the client secret and store it
-        const { data: { client_secret } } = await this.setupIntents()
-        this.client_secret = client_secret
+    // async mounted () {
+    //     // Get the client secret and store it
+    //     const { data: { client_secret } } = await this.setupIntents()
+    //     this.client_secret = client_secret
 
-        // Setup the card element for stripe
-        // Get a previously generated card, if it exists.
-        this.cardElement = elements.getElement('card') || elements.create('card', {
-            style: {
-                base: {
-                    color: '#32325d',
-                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                    fontSmoothing: 'antialiased',
-                    fontSize: '16px',
-                    '::placeholder': {
-                        color: '#aab7c4'
-                    }
-                },
-                invalid: {
-                    color: '#fa755a',
-                    iconColor: '#fa755a'
-                }
-            }
-        })
-        if (typeof this.$refs.card !== 'undefined') {
-            this.cardElement.mount(this.$refs.card)
-        } else {
-            console.warn('this.$refs.card is not defined', this.$refs)
-        }
-    },
+    //     // Setup the card element for stripe
+    //     // Get a previously generated card, if it exists.
+    //     this.cardElement = elements.getElement('card') || elements.create('card', {
+    //         style: {
+    //             base: {
+    //                 color: '#32325d',
+    //                 fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+    //                 fontSmoothing: 'antialiased',
+    //                 fontSize: '16px',
+    //                 '::placeholder': {
+    //                     color: '#aab7c4'
+    //                 }
+    //             },
+    //             invalid: {
+    //                 color: '#fa755a',
+    //                 iconColor: '#fa755a'
+    //             }
+    //         }
+    //     })
+    //     if (typeof this.$refs.card !== 'undefined') {
+    //         this.cardElement.mount(this.$refs.card)
+    //     } else {
+    //         console.warn('this.$refs.card is not defined', this.$refs)
+    //     }
+    // },
     methods: {
-        addCard () {
-            this.loading = true
-            stripe.confirmCardSetup(
-                this.client_secret,
-                {
-                    payment_method: {
-                        card: this.cardElement,
-                        billing_details: {
-                            name: this.nameOnCard
-                        }
-                    }
-                }
-            ).then((result) => {
-                if (result.error) {
-                    this.error = result.error
-                    this.loading = false
-                } else {
-                    // The setup has succeeded. Display a success message and send
-                    // result.setupIntent.payment_method to your server to save the
-                    // card to a Customer
-                    console.log('Success', result)
-                    this.saveCard({
-                        customer: this.$store.state.meta.stripeCustomerId,
-                        payment_method: result.setupIntent.payment_method
-                    }).then(async (result) => {
-                        if (result.data.object === 'customer') {
-                            this.$store.commit('meta/setStripeCustomerId', result.data.id)
-                            await this.$store.dispatch('meta/save', 'stripeCustomerId')
-                        }
-                        this.cardAdded()
-                    })
-                }
-            })
-        },
+        // addCard () {
+        //     this.loading = true
+        //     stripe.confirmCardSetup(
+        //         this.client_secret,
+        //         {
+        //             payment_method: {
+        //                 card: this.cardElement,
+        //                 billing_details: {
+        //                     name: this.nameOnCard
+        //                 }
+        //             }
+        //         }
+        //     ).then((result) => {
+        //         if (result.error) {
+        //             this.error = result.error
+        //             this.loading = false
+        //         } else {
+        //             // The setup has succeeded. Display a success message and send
+        //             // result.setupIntent.payment_method to your server to save the
+        //             // card to a Customer
+        //             console.log('Success', result)
+        //             this.saveCard({
+        //                 customer: this.$store.state.meta.stripeCustomerId,
+        //                 payment_method: result.setupIntent.payment_method
+        //             }).then(async (result) => {
+        //                 if (result.data.object === 'customer') {
+        //                     this.$store.commit('meta/setStripeCustomerId', result.data.id)
+        //                     await this.$store.dispatch('meta/save', 'stripeCustomerId')
+        //                 }
+        //                 this.cardAdded()
+        //             })
+        //         }
+        //     })
+        // },
         /** Runs when a card is successfully added */
         cardAdded () {
             this.$emit('done')

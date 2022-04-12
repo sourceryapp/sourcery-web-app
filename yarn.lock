@@ -12177,9 +12177,9 @@ source-map@^0.7.3, source-map@~0.7.2:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
-"sourcery-env@git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#v1.1.5":
+"sourcery-env@git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#master":
   version "1.1.4"
-  resolved "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#4f16ee18a985eeb91bab278050197495c33d245c"
+  resolved "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#1d05609e2ef2dee896e9dbe84a26102b67b385aa"
 
 spawn-command@^0.0.2-1:
   version "0.0.2-1"

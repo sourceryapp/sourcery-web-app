@@ -194,9 +194,7 @@ export default {
                 email: [],
                 password: [],
                 confirm_password: []
-            },
-            archiveSpace: this.$store.state.archive.archiveOrigin
-
+            }
         }
     },
     computed: {
@@ -227,8 +225,6 @@ export default {
                     password: this.password
                 })
 
-                console.log(user)
-
                 if (error) {
                     throw error
                 }
@@ -242,7 +238,7 @@ export default {
                 // NORMALLY we handle this in supabase.js plugin, however we wanted to edit meta before navigating so we handle the fetching here.
                 await this.fetchUserMeta()
                 await this.fetchUserOrganizations()
-                await this.fetchUserHasPassword()
+                // await this.fetchUserHasPassword()
 
                 this.$router.push('/dashboard')
             } catch (error) {

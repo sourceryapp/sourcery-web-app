@@ -35,18 +35,6 @@
           Team
         </v-btn>
         <v-btn
-          v-if="isProd"
-          outlined
-          color="white"
-          class="ml-6"
-          min-width="96px"
-          large
-          to="/join-us"
-        >
-          Sign Up
-        </v-btn>
-        <v-btn
-          v-if="!isProd"
           outlined
           color="white"
           class="ml-6"
@@ -107,7 +95,7 @@
             <v-list-item-title>Team</v-list-item-title>
           </v-list-item>
           <v-list-item
-            v-if="user && !isProd"
+            v-if="user"
             to="/dashboard"
             color="primary"
           >
@@ -117,7 +105,7 @@
             <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item>
           <v-list-item
-            v-if="!user && !isProd"
+            v-if="!user"
             to="/login"
             color="primary"
           >
@@ -125,16 +113,6 @@
               <v-icon>mdi-login</v-icon>
             </v-list-item-icon>
             <v-list-item-title>Login</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="isProd"
-            to="/join-us"
-            color="white"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-clipboard-account</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Sign Up</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>

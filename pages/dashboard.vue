@@ -9,9 +9,9 @@
         {{ pageTitle }}
       </h1>
       <logged-out-card />
-      <org-stat-bar :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
+      <org-stat-bar v-if="isOrgMember" :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
 
-      <v-row>
+      <v-row v-if="isOrgMember">
         <v-col cols="12" lg="6">
           <card-with-action title="New Requests" :number-requests="newJobs.length" action="/requests?status=1">
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />

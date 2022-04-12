@@ -220,9 +220,7 @@ export default {
             this.uploadedFiles = []
             this.uploadError = null
             this.fileCount = 0
-            console.log(this, this.$refs)
             if (this.$refs && this.$refs.uploadForm) {
-                console.log('resetting form')
                 this.$refs.upload.value = ''
                 this.$refs.uploadForm.reset()
             }
@@ -230,7 +228,6 @@ export default {
         save () {
             // upload data to the server
             const files = this.$refs.upload.files
-            console.log(files)
 
             const promises = []
             Array.from(files).forEach((file) => {
