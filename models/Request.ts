@@ -291,4 +291,14 @@ export class Request {
 
         return request
     }
+
+    async saveLabel(client = true, label : string) {
+        let status = false
+        if ( client ) {
+            status = await this.request_client?.update(label) || false
+        } else {
+            status = await this.request_vendor?.update(label) || false
+        }
+        return status
+    }
 }
