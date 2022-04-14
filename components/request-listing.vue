@@ -34,7 +34,7 @@
               />
             </v-fade-transition>
           </v-col>
-          <v-col cols="2" align-self="center">
+          <v-col v-if="requestActionsList.length > 0" cols="2" align-self="center">
             <v-menu offset-y>
               <template #activator="{ on: { click }, attrs }">
                 <v-btn
