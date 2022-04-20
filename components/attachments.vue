@@ -103,7 +103,7 @@
         </v-card-title>
         <v-layout wrap>
           <v-flex v-for="(attachment, index) in request.attachments" :key="index" xs3 class="pa-2">
-            <a :href="attachment.url + '&response-content-disposition=attachment; filename=something.jpg'" target="_blank" download>
+            <a @click="downloadAttachment(attachment)">
               <v-img :src="!attachment.isPDF() ? attachment.url : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
             </a>
           </v-flex>
@@ -155,6 +155,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { supabase } from '~/plugins/supabase'
 
 const STATUS_INITIAL = 0; const STATUS_SAVING = 1; const STATUS_SUCCESS = 2; const STATUS_FAILED = 3
 
@@ -261,6 +262,40 @@ export default {
                 this.complete().then(() => {
                     this.$router.push({ name: 'dashboard' })
                 })
+            }
+        },
+
+        /**
+         * TODO adjust the attachment model to be able to specify foler/file name outside of the public URL.
+         */
+        async downloadAttachment (attachment) {
+            if (attachment && attachment.url) {
+                const a = document.createElement('a')
+                const filename = `${this.request.id}-attachment-${attachment.id}.${attachment.url.split('.').pop()}`
+                if (attachment.url.includes('supabase')) {
+                    const { data, error } = await supabase
+                        .storage
+                        .from('attachments')
+                        .download(attachment.url.replace(`${process.env.SUPABASE_URL}/storage/v1/object/public/attachments/`, ''))
+
+                    if (error) {
+                        this.$toast.error('There has been an issue downloading this file. Please contact our support.')
+                        return
+                    }
+
+                    // Have to convert the blob to a URL on this domain, since you cannot use the download attribute without it.
+                    a.href = URL.createObjectURL(
+                        data
+                    )
+                    a.setAttribute('download', filename)
+                } else {
+                    // This assumes an old firebase file
+                    a.href = attachment.url + '&request-content-disposition:attachment&filename=' + filename
+                    a.setAttribute('download', filename)
+                }
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
             }
         }
     }
