@@ -4,7 +4,7 @@ import { serve } from "https://deno.land/std@0.131.0/http/server.ts"
 import { supabaseClient, testJwtDecoder } from "../_utils/supabase.ts"
 import { logMailer } from '../_utils/mailer.ts'
 
-console.log("Hello from Functions!")
+console.log("Serving the Notify functions.")
 const url = Deno.env.get('API_URL')
 console.log(`Serving from ${url}.`)
 // logMailer()
