@@ -315,8 +315,12 @@ export default {
         ReachedRequestLimitDialog,
         SourceryCard
     },
-    async asyncData () {
-        const repositories = await Repository.getActive()
+    async asyncData ({ store }) {
+        let repositories = await Repository.getActive()
+        if (store.getters['supabaseAuth/isAdmin']) {
+            const ghosts = await Repository.getGhost()
+            repositories = repositories.concat(ghosts)
+        }
         return {
             repositories
         }

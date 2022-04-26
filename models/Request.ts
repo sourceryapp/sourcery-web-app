@@ -123,7 +123,6 @@ export class Request {
         let { data: requests, error } = await query
 
         if ( Array.isArray(requests) ) {
-            console.log(requests[0])
             const rs = requests.map(x => new Request(x))
                 .filter(x => x.status)
             return rs
@@ -159,7 +158,6 @@ export class Request {
         let { data: requests, error } = await query
 
         if ( Array.isArray(requests) ) {
-            console.log(requests[0])
             const rs = requests.map(x => new Request(x))
                 .filter(x => x.status)
             return rs

@@ -74,7 +74,27 @@ export class Repository {
             .order('name')
             .eq('active', true)
 
-        console.log(repositories)
+        if ( error ) {
+            console.log(error)
+            return []
+        }
+
+        if ( Array.isArray(repositories) ) {
+            const reps = repositories.map(x => new Repository(x))
+            return reps
+        }
+        return []
+    }
+
+    public static async getGhost() {
+        const { data: repositories, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                organization:organizations (*),
+                featured_image:featured_images (*)
+            `)
+            .order('name')
+            .eq('organization.slug', 'sourcery')
 
         if ( error ) {
             console.log(error)
@@ -82,9 +102,9 @@ export class Repository {
         }
 
         if ( Array.isArray(repositories) ) {
-            console.log(repositories)
-            const reps = repositories.map(x => new Repository(x))
-            return reps
+            const reps = repositories.filter(x => x.organization?.slug === 'sourcery')
+            const reps_objs = reps.map(x => new Repository(x))
+            return reps_objs
         }
         return []
     }
