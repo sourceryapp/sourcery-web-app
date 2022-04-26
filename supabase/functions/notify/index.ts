@@ -2,11 +2,12 @@
 
 import { serve } from "https://deno.land/std@0.131.0/http/server.ts"
 import { supabaseClient, testJwtDecoder } from "../_utils/supabase.ts"
+import { logMailer } from '../_utils/mailer.ts'
 
 console.log("Hello from Functions!")
 const url = Deno.env.get('API_URL')
 console.log(`Serving from ${url}.`)
-const userData = supabaseClient.auth.user()
+// logMailer()
 
 serve(async (req) => {
   const { name } = await req.json()
@@ -17,8 +18,7 @@ serve(async (req) => {
     message: `Hello ${name}!`,
     header: authHeader,
     decoded: testJwtDecoder(authHeader),
-    supabaseUrl: Deno.env.get('SUPABASE_URL'),
-    user: userData
+    supabaseUrl: Deno.env.get('SUPABASE_URL')
   }
 
   return new Response(
