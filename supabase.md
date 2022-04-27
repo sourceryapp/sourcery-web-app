@@ -83,3 +83,32 @@ This will place a new function in `supabase/functions/<name>/index.ts`.
     "role": "authenticated"
 }
 ```
+
+## Deploy Functions
+
+```bash
+supabase functions deploy <name>
+```
+
+Example:
+
+```bash
+supabase functions deploy notify
+```
+
+## Update Env Vars
+
+```bash
+supabase secrets set --env-file ./supabase/.env
+
+- OR -
+
+supabase secrets set YOUR_ENV_VAR=value
+```
+
+List Secrets
+
+```
+supabase secrets list
+```
+
