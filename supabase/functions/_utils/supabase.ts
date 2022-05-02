@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@^1.33.1"
-import type { Message, MessageInsert } from "./types.ts"
+import type { Message, MessageInsert, Organization, Request } from "./types.ts"
 
 export const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
@@ -55,6 +55,26 @@ export const getLastMessageForUser = async (user_id : string) => {
     return null
 }
 
+export const getLastMessageByTypeForUser = async (user_id : string, template_name : string) => {
+    const { data, error } = await supabaseAdmin
+        .from<Message>("messages")
+        .select("*")
+        .order("created_at")
+        .limit(1)
+        .eq("to_user_id", user_id)
+        .eq("template_name", template_name)
+
+    if ( error ) {
+        throw error
+    }
+
+    if ( data.length > 0 ) {
+        return data[0]
+    }
+
+    return null
+}
+
 export const createMessage = async (insertObj : MessageInsert) => {
     const { data, error } = await supabaseClient
         .from("messages")
@@ -72,7 +92,7 @@ export const createMessage = async (insertObj : MessageInsert) => {
 export const getRequest = async (authToken : string, request_id : string) => {
     supabaseClient.auth.setAuth(authToken)
     const { data, error } = await supabaseClient
-        .from("requests")
+        .from<Request>("requests")
         .select(`
             *,
             status!requests_status_id_fkey (*),
@@ -96,8 +116,11 @@ export const getRequest = async (authToken : string, request_id : string) => {
 export const getOrganization = async (authToken : string, organization_id : string) => {
     supabaseClient.auth.setAuth(authToken)
     const { data, error } = await supabaseClient
-        .from("organizations")
-        .select(`*`)
+        .from<Organization>("organizations")
+        .select(`
+            *,
+            user:owner_id (*)
+        `)
         .limit(1)
         .eq("id", organization_id)
         .single()

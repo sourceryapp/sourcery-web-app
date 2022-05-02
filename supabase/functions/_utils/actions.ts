@@ -6,16 +6,35 @@ import {
     getRequest,
     getOrganization
 } from './supabase.ts'
+import { buildEmailData, saveAndSend } from './mailer.ts'
 
 export const request_submitted_to_your_org = async (authToken : string, request_id : string) => {
-    const request = getRequest(authToken, request_id)
+    const request = await getRequest(authToken, request_id)
 
-    console.log('request')
-    console.log(request)
+    if ( request && request?.repository?.organization_id ) {
+        const organization = await getOrganization(authToken, request.repository.organization_id)
 
-    if ( request && request.repository && request.repository.organization_id ) {
-        const organization = getOrganization(authToken, request.repository.organization_id)
-        console.log('organization')
-        console.log(organization)
+        const email_to_send = organization?.user?.email
+        const id_to_send = organization?.owner_id
+        
+        if ( email_to_send && id_to_send ) {
+            const email_data = buildEmailData(
+                email_to_send,
+                'Request Submitted to your Organization',
+                'request_submitted_to_your_org',
+                {
+                    button_url: 'https://sourceryapp.org/request/' + request_id,
+                    citation: request.citation
+                }
+            )
+
+            return await saveAndSend(
+                'request_submitted_to_your_org',
+                id_to_send,
+                email_data
+            )
+        }
     }
+
+    return false
 }

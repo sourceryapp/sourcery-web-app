@@ -4,10 +4,10 @@ import { serve } from "https://deno.land/std@0.131.0/http/server.ts"
 import { supabaseClient, jwtDecoder, getLastMessageForUser } from "../_utils/supabase.ts"
 import { sendTest } from '../_utils/mailer.ts'
 import { actionTypes } from '../_utils/global_constants.ts'
-import type { TemplateLookup } from '../_utils/types.ts'
+import type { TemplateLookup, Response } from '../_utils/types.ts'
 import { 
     request_submitted_to_your_org
-} from '../utils/actions.ts'
+} from '../_utils/actions.ts'
 
 console.log("Serving the Notify functions.")
 const url = Deno.env.get('API_URL')
@@ -15,14 +15,19 @@ console.log(`Serving from ${url}.`)
 
 serve(async (req) => {
     const { action, request_id } = await req.json()
+    const responseInit = {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+    }
 
     if ( !actionTypes.includes(action) ) {
+        responseInit.status = 400
         return new Response(
             JSON.stringify({
                 status: 'error',
                 message: 'Action provided is not within the scope of this function.  Please provide a valid action parameter.'
             }),
-            { headers: { "Content-Type": "application/json" } }
+            responseInit
         )
     }
 
@@ -31,21 +36,19 @@ serve(async (req) => {
     const decoded = jwtDecoder(authToken)
 
     if (decoded.role !== 'authenticated') {
+        responseInit.status = 403
         return new Response(
             JSON.stringify({
                 status: 'error',
                 message: 'Could not find a user associated with the passed authentication.'
             }),
-            { headers: { "Content-Type": "application/json" } }
+            responseInit
         )
     }
 
     try {
         const message = await getLastMessageForUser(decoded.sub)
         if (message) {
-            console.log('message')
-            console.log(message)
-
             const message_date = new Date(message.created_at)
             const current_date = new Date()
 
@@ -53,42 +56,50 @@ serve(async (req) => {
             const diff_seconds = diff_milli / 1000
 
             if ( diff_seconds < 30 ) {
+                responseInit.status = 200
                 return new Response(
                     JSON.stringify({
-                        status: 'error',
+                        status: 'warning',
                         message: 'User has already received an email of this type recently.  Saving a record but not sending an email.'
-                    })
+                    }),
+                    responseInit
                 )
             }
         }
     } catch (e) {
+        responseInit.status = 400
         return new Response(
             JSON.stringify({
                 status: 'error',
                 message: e.message
             }),
-            { headers: { "Content-Type": "application/json" } }
+            responseInit
         )
     }
 
     // const sendTestResponse = await sendTest()
+    let notify_data : Response = {
+        status: 'success',
+        message: 'Success.'
+    }
+
     switch (action) {
         case 'request_submitted_to_your_org':
-            await request_submitted_to_your_org(authToken, request_id)
+            if ( !request_id ) {
+                notify_data.status = 'error',
+                notify_data.message = 'Missing a request_id parameter.  Exiting.'
+                responseInit.status = 400
+            } else {
+                await request_submitted_to_your_org(authToken, request_id)
+            }
             break;
     
         default:
             break;
     }
 
-
-    const data = {
-        decoded: decoded,
-        supabaseUrl: Deno.env.get('SUPABASE_URL')
-    }
-
     return new Response(
-        JSON.stringify(data),
-        { headers: { "Content-Type": "application/json" } },
+        JSON.stringify(notify_data),
+        responseInit
     )
 })

@@ -21,6 +21,8 @@ Next, `supabase functions serve <name>`.  This will serve a single function at a
 
 You can run like this to include these variables: `supabase functions serve <name> --env-file ./supabase/.env.local`
 
+Ex. `supabase functions serve notify --env-file ./supabase/.env.local`
+
 ## Testing Functions
 
 Supabase has good docs on this, but essentially an HTTP POST request to your local instance, with a bearer token, is all you need to test the function once it is being served locally.

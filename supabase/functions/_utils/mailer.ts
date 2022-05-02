@@ -1,4 +1,5 @@
-import type { TemplateLookup, MessageInsert } from './types.ts'
+import type { TemplateLookup, MessageInsert, EmailData } from './types.ts'
+import { createMessage, getLastMessageByTypeForUser } from './supabase.ts'
 
 const SENDGRID_API_KEY = Deno.env.get('SENDGRID_API_KEY') ?? ""
 const SENDGRID_FROM_EMAIL = Deno.env.get("SENDGRID_APP_EMAIL") ?? "research.tube@gmail.com"
@@ -27,10 +28,10 @@ const SENDGRID_TEMPLATES : TemplateLookup = {
 
 export const buildEmailData = (client_email : string, subject : string, template_name : keyof TemplateLookup, dynamic_data = {}) => {
     if ( !SENDGRID_TEMPLATES[template_name] ) {
-        return false
+        return null
     }
 
-    const msg = {
+    return {
         personalizations: [
             {
                 to: [
@@ -46,27 +47,16 @@ export const buildEmailData = (client_email : string, subject : string, template
         template_id: SENDGRID_TEMPLATES[template_name],
         subject: subject
     }
-
-    return msg
 }
 
-export const sendTest = async () => {
+const send = async (emailData : EmailData | null) => {
     const postRequest = await fetch(SENDGRID_REST_BASE + '/mail/send', {
         method: "POST",
         headers: {
             'Authorization': 'Bearer ' + SENDGRID_API_KEY,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(buildEmailData(
-            'brian.kelleher@uconn.edu',
-            'Test Email',
-            'general',
-            {
-                message: "This is a test.",
-                button_text: "Test Button",
-                button_url: "https://sourceryapp.org"
-            }
-        ))
+        body: JSON.stringify(emailData)
     })
 
     if ( postRequest.status == 202 && postRequest.ok ) {
@@ -74,4 +64,63 @@ export const sendTest = async () => {
     }
 
     return false
+}
+
+export const saveAndSend = async (type : keyof TemplateLookup, user_id : string, emailData : EmailData | null) => {
+    let sent = false
+    try {
+        if ( emailData ) {
+            const noDupes = await noDuplicateMessageInLastMinutes(user_id, type, 2000)
+            if ( noDupes ) {
+                sent = await send(emailData)
+                const messages = await createMessage({
+                    to_user_id: user_id,
+                    subject: emailData.subject,
+                    template_name: type,
+                    dynamic_data: emailData.personalizations[0].dynamic_template_data,
+                    sent: sent
+                })
+            }
+        }
+    } catch(e) {
+        console.log('error in saveAndSend')
+        console.log(e)
+        return false
+    }
+
+    return sent
+}
+
+export const noDuplicateMessageInLastMinutes = async (to_user_id : string, template_name : string, minutes : number) => {
+    const message = await getLastMessageByTypeForUser(to_user_id, template_name)
+    if ( message ) {
+        const message_date = new Date(message.created_at)
+        const current_date = new Date()
+
+        const diff_milli = current_date.getTime() - message_date.getTime()
+        const diff_seconds = diff_milli / 1000
+        const diff_minutes = diff_seconds / 60
+
+        if ( minutes < diff_minutes ) {
+            throw Error('Too many messages sent in set time period to this user.')
+        }
+    }
+
+    return true
+}
+
+
+export const sendTest = async () => {
+    const success = await send(buildEmailData(
+        'brian.kelleher@uconn.edu',
+        'Test Email',
+        'general',
+        {
+            message: "This is a test.",
+            button_text: "Test Button",
+            button_url: "https://sourceryapp.org"
+        }
+    ))
+
+    return success
 }
