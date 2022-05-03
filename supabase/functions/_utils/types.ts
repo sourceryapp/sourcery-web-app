@@ -70,7 +70,8 @@ export type Request = {
     citation: string,
     pages: number,
     status_id: string,
-    user_id: string
+    user_id: string,
+    user?: User
 }
 
 export type Response = {

@@ -40,9 +40,10 @@ export const getLastMessageForUser = async (user_id : string) => {
     const { data, error } = await supabaseAdmin
         .from<Message>("messages")
         .select("*")
-        .order("created_at")
+        .order("created_at", { ascending: false })
         .limit(1)
         .eq("to_user_id", user_id)
+        .eq("sent", true)
 
     if ( error ) {
         throw error
@@ -59,10 +60,11 @@ export const getLastMessageByTypeForUser = async (user_id : string, template_nam
     const { data, error } = await supabaseAdmin
         .from<Message>("messages")
         .select("*")
-        .order("created_at")
+        .order("created_at", { ascending: false })
         .limit(1)
         .eq("to_user_id", user_id)
         .eq("template_name", template_name)
+        .eq("sent", true)
 
     if ( error ) {
         throw error
@@ -96,7 +98,8 @@ export const getRequest = async (authToken : string, request_id : string) => {
         .select(`
             *,
             status!requests_status_id_fkey (*),
-            repository:repositories (*)
+            repository:repositories (*),
+            user!requests_user_id_fkey (*)
         `)
         .limit(1)
         .eq("id", request_id)

@@ -6,7 +6,8 @@ import { sendTest } from '../_utils/mailer.ts'
 import { actionTypes } from '../_utils/global_constants.ts'
 import type { TemplateLookup, Response } from '../_utils/types.ts'
 import { 
-    request_submitted_to_your_org
+    request_submitted_to_your_org,
+    request_you_submitted_picked_up
 } from '../_utils/actions.ts'
 
 console.log("Serving the Notify functions.")
@@ -46,27 +47,38 @@ serve(async (req) => {
         )
     }
 
+    // const sendTestResponse = await sendTest()
+    let notify_data : Response = {
+        status: 'success',
+        message: 'Success.'
+    }
+
     try {
-        const message = await getLastMessageForUser(decoded.sub)
-        if (message) {
-            const message_date = new Date(message.created_at)
-            const current_date = new Date()
+        switch (action) {
+            case 'request_submitted_to_your_org':
+                if ( !request_id ) {
+                    notify_data.status = 'error',
+                    notify_data.message = 'Missing a request_id parameter.  Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await request_submitted_to_your_org(authToken, request_id)
+                }
+                break;
 
-            const diff_milli = current_date.getTime() - message_date.getTime()
-            const diff_seconds = diff_milli / 1000
-
-            if ( diff_seconds < 30 ) {
-                responseInit.status = 200
-                return new Response(
-                    JSON.stringify({
-                        status: 'warning',
-                        message: 'User has already received an email of this type recently.  Saving a record but not sending an email.'
-                    }),
-                    responseInit
-                )
-            }
+            case 'request_you_submitted_picked_up':
+                if ( !request_id ) {
+                    notify_data.status = 'error'
+                    notify_data.message = 'Missing a request_id parameter.  Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await request_you_submitted_picked_up(authToken, request_id)
+                }
+                break;
+        
+            default:
+                break;
         }
-    } catch (e) {
+    } catch(e) {
         responseInit.status = 400
         return new Response(
             JSON.stringify({
@@ -75,27 +87,6 @@ serve(async (req) => {
             }),
             responseInit
         )
-    }
-
-    // const sendTestResponse = await sendTest()
-    let notify_data : Response = {
-        status: 'success',
-        message: 'Success.'
-    }
-
-    switch (action) {
-        case 'request_submitted_to_your_org':
-            if ( !request_id ) {
-                notify_data.status = 'error',
-                notify_data.message = 'Missing a request_id parameter.  Exiting.'
-                responseInit.status = 400
-            } else {
-                await request_submitted_to_your_org(authToken, request_id)
-            }
-            break;
-    
-        default:
-            break;
     }
 
     return new Response(

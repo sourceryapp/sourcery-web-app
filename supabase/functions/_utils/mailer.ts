@@ -70,7 +70,7 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
     let sent = false
     try {
         if ( emailData ) {
-            const noDupes = await noDuplicateMessageInLastMinutes(user_id, type, 2000)
+            const noDupes = await noDuplicateMessageInLastMinutes(user_id, type, 10)
             if ( noDupes ) {
                 sent = await send(emailData)
                 const messages = await createMessage({
@@ -83,8 +83,7 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
             }
         }
     } catch(e) {
-        console.log('error in saveAndSend')
-        console.log(e)
+        throw e
         return false
     }
 
@@ -101,7 +100,7 @@ export const noDuplicateMessageInLastMinutes = async (to_user_id : string, templ
         const diff_seconds = diff_milli / 1000
         const diff_minutes = diff_seconds / 60
 
-        if ( minutes < diff_minutes ) {
+        if ( minutes > diff_minutes ) {
             throw Error('Too many messages sent in set time period to this user.')
         }
     }
