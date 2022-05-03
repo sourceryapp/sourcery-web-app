@@ -74,7 +74,7 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
             if ( type === 'signed_up' ) {
                 can_continue = await neverDuplicate(user_id, type)
             } else {
-                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 10)
+                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 5)
             }
             if ( can_continue ) {
                 sent = await send(emailData)
