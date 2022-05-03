@@ -16,15 +16,28 @@ export default async function setStore ({ store, app: { router } }) {
     // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
     supabase.auth.onAuthStateChange(async (_, session) => {
+        const hasPasswordResetToken = store.getters['supabaseAuth/resetAccessToken']
+
         console.log(_, session)
         if (_ === 'SIGNED_OUT') {
-            console.log('registered signed out')
             store.commit('supabaseAuth/clear')
             router.push('/login')
             return
         }
 
         if (_ === 'TOKEN_REFRESHED') {
+            return
+        }
+
+        if (_ === 'PASSWORD_RECOVERY') {
+            console.log('password recovery detected!')
+            return router.push('/resetpassword')
+        }
+
+        if (_ === 'SIGNED_IN' && hasPasswordResetToken) {
+            store.commit('supabaseAuth/setAuthUser', session.user)
+            store.dispatch('supabaseAuth/fetchUserMeta')
+            store.dispatch('supabaseAuth/fetchUserOrganizations')
             return
         }
 
