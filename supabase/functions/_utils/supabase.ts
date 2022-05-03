@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@^1.33.1"
-import type { Message, MessageInsert, Organization, Request } from "./types.ts"
+import type { Message, MessageInsert, Organization, Request, User } from "./types.ts"
 
 export const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
@@ -126,6 +126,28 @@ export const getOrganization = async (authToken : string, organization_id : stri
         `)
         .limit(1)
         .eq("id", organization_id)
+        .single()
+
+    if ( error ) {
+        throw error
+    }
+
+    if ( data ) {
+        return data
+    }
+
+    return null
+}
+
+export const getUser = async (authToken : string, user_id : string) => {
+    supabaseClient.auth.setAuth(authToken)
+    const { data, error } = await supabaseClient
+        .from<User>("user")
+        .select(`
+            *
+        `)
+        .limit(1)
+        .eq("id", user_id)
         .single()
 
     if ( error ) {

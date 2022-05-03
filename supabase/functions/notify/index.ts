@@ -7,7 +7,9 @@ import { actionTypes } from '../_utils/global_constants.ts'
 import type { TemplateLookup, Response } from '../_utils/types.ts'
 import { 
     request_submitted_to_your_org,
-    request_you_submitted_picked_up
+    request_you_submitted_picked_up,
+    request_you_submitted_complete,
+    signed_up
 } from '../_utils/actions.ts'
 
 console.log("Serving the Notify functions.")
@@ -15,7 +17,7 @@ const url = Deno.env.get('API_URL')
 console.log(`Serving from ${url}.`)
 
 serve(async (req) => {
-    const { action, request_id } = await req.json()
+    const { action, request_id, user_id } = await req.json()
     const responseInit = {
         status: 200,
         headers: { "Content-Type": "application/json" }
@@ -74,7 +76,26 @@ serve(async (req) => {
                     const status = await request_you_submitted_picked_up(authToken, request_id)
                 }
                 break;
-        
+
+            case 'request_you_submitted_complete':
+                if ( !request_id ) {
+                    notify_data.status = 'error'
+                    notify_data.message = 'Missing a request_id parameter.  Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await request_you_submitted_complete(authToken, request_id)
+                }
+                break;
+
+            case 'signed_up':
+                if ( !user_id ) {
+                    notify_data.status = 'error'
+                    notify_data.message = 'Missing a user_id parameter.  Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await signed_up(authToken, user_id)
+                }
+
             default:
                 break;
         }

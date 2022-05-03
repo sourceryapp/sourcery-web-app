@@ -70,8 +70,13 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
     let sent = false
     try {
         if ( emailData ) {
-            const noDupes = await noDuplicateMessageInLastMinutes(user_id, type, 10)
-            if ( noDupes ) {
+            let can_continue = false
+            if ( type === 'signed_up' ) {
+                can_continue = await neverDuplicate(user_id, type)
+            } else {
+                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 10)
+            }
+            if ( can_continue ) {
                 sent = await send(emailData)
                 const messages = await createMessage({
                     to_user_id: user_id,
@@ -103,6 +108,16 @@ export const noDuplicateMessageInLastMinutes = async (to_user_id : string, templ
         if ( minutes > diff_minutes ) {
             throw Error('Too many messages sent in set time period to this user.')
         }
+    }
+
+    return true
+}
+
+export const neverDuplicate = async (to_user_id : string, template_name : string) => {
+    const message = await getLastMessageByTypeForUser(to_user_id, template_name)
+
+    if ( message ) {
+        throw Error('Already sent this user this type of email.')
     }
 
     return true
