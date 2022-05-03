@@ -4,5 +4,6 @@ export const actionTypes = [
     'request_you_submitted_complete',
     'submitted_feedback',
     'signed_up',
-    'general'
+    'general',
+    'test'
 ]

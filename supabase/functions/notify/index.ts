@@ -96,6 +96,11 @@ serve(async (req) => {
                     const status = await signed_up(authToken, user_id)
                 }
 
+            case 'test':
+                notify_data.status = 'test'
+                notify_data.message = Deno.env.get('SUPABASE_URL') ?? ""
+                break;
+
             default:
                 break;
         }

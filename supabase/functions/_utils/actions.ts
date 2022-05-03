@@ -9,6 +9,8 @@ import {
 } from './supabase.ts'
 import { buildEmailData, saveAndSend } from './mailer.ts'
 
+const application_url = Deno.env.get('APPLICATION_URL') ?? "https://sourceryapp.org"
+
 export const request_submitted_to_your_org = async (authToken : string, request_id : string) => {
     const request = await getRequest(authToken, request_id)
 
@@ -24,7 +26,7 @@ export const request_submitted_to_your_org = async (authToken : string, request_
                 'Request Submitted to your Organization',
                 'request_submitted_to_your_org',
                 {
-                    button_url: 'https://sourceryapp.org/request/' + request_id,
+                    button_url: `${application_url}/request/${request_id}`,
                     citation: request.citation
                 }
             )
@@ -54,7 +56,7 @@ export const request_you_submitted_picked_up = async (authToken : string, reques
                 'Request Picked Up',
                 'request_you_submitted_picked_up',
                 {
-                    button_url: 'https://sourceryapp.org/request/' + request_id,
+                    button_url: `${application_url}/request/${request_id}`,
                     citation: request.citation
                 }
             )
@@ -83,7 +85,7 @@ export const request_you_submitted_complete = async (authToken : string, request
                 'Request Complete',
                 'request_you_submitted_complete',
                 {
-                    button_url: 'https://sourceryapp.org/request/' + request_id,
+                    button_url: `${application_url}/request/${request_id}`,
                     citation: request.citation
                 }
             )
@@ -112,7 +114,7 @@ export const signed_up = async (authToken : string, user_id : string) => {
                 'Welcome to Sourcery',
                 'signed_up',
                 {
-                    button_url: 'https://sourceryapp.org/'
+                    button_url: `${application_url}`
                 }
             )
 
