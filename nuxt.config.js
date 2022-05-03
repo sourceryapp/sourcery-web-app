@@ -36,7 +36,8 @@ export default {
             '/archiveSpace',
             '/archiveSpace/',
             '/join-us',
-            '/roadmap'
+            '/roadmap',
+            '/email/reset'
         ]
     },
 

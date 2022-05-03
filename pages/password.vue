@@ -2,11 +2,11 @@
   <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <v-alert
-        :value="error"
+        :value="error !== ''"
         class="my-3"
         type="error"
       >
-        <span color="white">{{ error.message }}</span>
+        <span color="white">{{ error }}</span>
       </v-alert>
       <v-alert
         :value="success"
@@ -55,13 +55,13 @@ export default {
         return {
             email: '',
             success: false,
-            error: false
+            error: ''
         }
     },
     methods: {
         async resetPassEmail () {
             this.success = false
-            this.error = false
+            this.error = ''
             try {
                 const { data, error } = await supabase.auth.api.resetPasswordForEmail(this.email)
                 console.log(data, error)
