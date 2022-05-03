@@ -150,7 +150,9 @@ export default {
 
         { src: '~/plugins/vuetify.ts', ssr: false },
 
-        '~/plugins/supabase'
+        '~/plugins/supabase',
+
+        '~/plugins/sourcery-functions'
     ],
 
     /** pwa: {

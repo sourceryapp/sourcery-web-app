@@ -48,12 +48,13 @@ export default async function setStore ({ store, app: { router } }) {
             if (!store.getters['supabaseAuth/justRegistered']) {
                 await store.dispatch('supabaseAuth/fetchUserMeta')
                 await store.dispatch('supabaseAuth/fetchUserOrganizations')
-                // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
                 const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
                 console.log('inProgressRequest', inProgressRequest)
 
                 const hasInProgressRequest = inProgressRequest && inProgressRequest.request
+
+                await store.dispatch('supabaseAuth/checkHasSignUpEmail')
 
                 if (hasInProgressRequest) {
                     router.push('/request/create')

@@ -11,16 +11,21 @@ import {
     request_you_submitted_complete,
     signed_up
 } from '../_utils/actions.ts'
+import { corsHeaders } from '../_utils/cors.ts'
 
 console.log("Serving the Notify functions.")
 const url = Deno.env.get('API_URL')
 console.log(`Serving from ${url}.`)
 
 serve(async (req) => {
+    if ( req.method === 'OPTIONS' ) {
+        return new Response('ok', { headers: corsHeaders })
+    }
+
     const { action, request_id, user_id } = await req.json()
     const responseInit = {
         status: 200,
-        headers: { "Content-Type": "application/json" }
+        headers: { ...corsHeaders, "Content-Type": "application/json" }
     }
 
     if ( !actionTypes.includes(action) ) {
@@ -95,6 +100,7 @@ serve(async (req) => {
                 } else {
                     const status = await signed_up(authToken, user_id)
                 }
+                break;
 
             case 'test':
                 notify_data.status = 'test'

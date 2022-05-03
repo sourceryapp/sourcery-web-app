@@ -2,8 +2,10 @@ import type { User } from "@supabase/supabase-js"
 import { PaymentAssociation } from '~/models/PaymentAssociation'
 import { User as SourceryUser } from '~/models/User'
 import { Organization } from '~/models/Organization'
+import { Message } from '~/models/Message'
 import { Commit, GetterTree, MutationTree, ActionTree, Dispatch } from 'vuex'
 import { supabase } from "~/plugins/supabase"
+import { notify } from "~/plugins/sourcery-functions"
 
 
 // Initialize state.
@@ -183,5 +185,28 @@ export const actions : ActionTree<SupabaseState, SupabaseState> = {
             return true
         }
         return false
+    },
+    async getToken() {
+        return await supabase.auth.session()?.access_token
+    },
+    async checkHasSignUpEmail({ state, dispatch } : { state: SupabaseState, dispatch: Dispatch }) {
+        if ( state.authUser ) {
+            const creation_date = new Date(state.authUser.created_at)
+            const cutoff = new Date('2022-05-05T00:00:45.973116Z')
+            if ( creation_date < cutoff ) {
+                return
+            }
+            const message = await Message.getLastForUser(state.authUser.id, 'signed_up')
+            if ( message ) {
+                return
+            }
+            const token = await dispatch('getToken')
+            const result = await notify({ 
+                user_id: state.authUser.id,
+                action: 'signed_up',
+                token: token,
+                request_id: null
+            })
+        }
     }
 }

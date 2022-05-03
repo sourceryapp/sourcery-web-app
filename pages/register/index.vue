@@ -230,15 +230,29 @@ export default {
                 }
 
                 // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
+                // JK this was not reliable.
                 const u = await SourceryUser.getById(user.id)
-                u.name = this.name
-                u.phone = this.phone
-                await u.save()
+                if (u) {
+                    u.name = this.name
+                    u.phone = this.phone
+                    await u.save()
+                }
 
                 // NORMALLY we handle this in supabase.js plugin, however we wanted to edit meta before navigating so we handle the fetching here.
                 await this.fetchUserMeta()
                 await this.fetchUserOrganizations()
                 // await this.fetchUserHasPassword()
+
+                try {
+                    const notifystatus = await this.$sourceryFunctions.notify({
+                        user_id: user.id,
+                        action: 'signed_up'
+                    })
+                    console.log('notifystatus', notifystatus)
+                } catch (error) {
+                    this.$toast.error(error.message)
+                    console.log(error)
+                }
 
                 this.$router.push('/dashboard')
             } catch (error) {
