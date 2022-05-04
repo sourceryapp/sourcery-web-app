@@ -5,5 +5,7 @@ export const actionTypes = [
     'submitted_feedback',
     'signed_up',
     'general',
-    'test'
+    'test',
+    'chat_sent_from_client',
+    'chat_sent_from_vendor'
 ]

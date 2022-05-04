@@ -10,7 +10,9 @@ const SENDGRID_TEMPLATES : TemplateLookup = {
     'request_you_submitted_complete': 'd-5c92e530ab8b46958c1291b4af0fb125',
     'submitted_feedback': 'd-f4dcdc60e10f4739ab65f6963a24f1d8',
     'signed_up': 'd-6c1fc919d9c64fb497c6ccd47fd356ff',
-    'general': 'd-56461c46fe4a4a1490d77f50e6b7a891'
+    'general': 'd-56461c46fe4a4a1490d77f50e6b7a891',
+    'chat_sent_from_client': 'd-56461c46fe4a4a1490d77f50e6b7a891',
+    'chat_sent_from_vendor': 'd-56461c46fe4a4a1490d77f50e6b7a891'
 }
 
 /**
@@ -73,6 +75,8 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
             let can_continue = false
             if ( type === 'signed_up' ) {
                 can_continue = await neverDuplicate(user_id, type)
+            } else if ( type === 'chat_sent_from_client' || type === 'chat_sent_from_vendor' ) {
+                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 2)
             } else {
                 can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 5)
             }

@@ -4,7 +4,9 @@ export type TemplateLookup = {
     'request_you_submitted_complete': string,
     'submitted_feedback': string,
     'signed_up': string,
-    'general': string
+    'general': string,
+    'chat_sent_from_client' : string,
+    'chat_sent_from_vendor' : string
 }
 
 export type Message = {

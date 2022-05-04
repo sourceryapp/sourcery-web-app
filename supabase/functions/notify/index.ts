@@ -9,7 +9,8 @@ import {
     request_submitted_to_your_org,
     request_you_submitted_picked_up,
     request_you_submitted_complete,
-    signed_up
+    signed_up,
+    chat
 } from '../_utils/actions.ts'
 import { corsHeaders } from '../_utils/cors.ts'
 
@@ -22,7 +23,7 @@ serve(async (req) => {
         return new Response('ok', { headers: corsHeaders })
     }
 
-    const { action, request_id, user_id } = await req.json()
+    const { action, request_id, user_id, message_text } = await req.json()
     const responseInit = {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" }
@@ -105,6 +106,26 @@ serve(async (req) => {
             case 'test':
                 notify_data.status = 'test'
                 notify_data.message = Deno.env.get('SUPABASE_URL') ?? ""
+                break;
+
+            case 'chat_sent_from_client':
+                if ( !request_id || !message_text ) {
+                    notify_data.status = 'error'
+                    notify_data.message = 'Missing a request_id or message_text parameter.  Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await chat(authToken, false, request_id, message_text)
+                }
+                break;
+
+            case 'chat_sent_from_vendor':
+                if ( !request_id || !message_text ) {
+                    notify_data.status = 'error'
+                    notify_data.message = 'Missing a request_id or message_text parameter. Exiting.'
+                    responseInit.status = 400
+                } else {
+                    const status = await chat(authToken, true, request_id, message_text)
+                }
                 break;
 
             default:
