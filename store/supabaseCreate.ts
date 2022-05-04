@@ -6,6 +6,8 @@ import { Status } from '~/models/Status'
 import { Request } from '~/models/Request'
 import { IntegrationData } from '~/models/IntegrationData'
 import { PricingSummary } from '~/models/PricingSummary'
+import { notify } from '~/plugins/sourcery-functions'
+import { getToken } from '~/plugins/supabase'
 
 export const initialState = () => {
     return {
@@ -32,9 +34,9 @@ export const getters = {
         return state.pages
     },
     repositoryName(state: SupabaseCreateState) {
-        if ( state.repository ) {
+        if (state.repository) {
             let name = state.repository.name
-            if ( state.repository.organization ) {
+            if (state.repository.organization) {
                 name += ` - ${state.repository.organization.name}`
             }
             return name
@@ -42,7 +44,7 @@ export const getters = {
         return ''
     },
     repositoryId(state: SupabaseCreateState) {
-        if ( state.repository ) {
+        if (state.repository) {
             return state.repository.id
         }
         return null
@@ -61,7 +63,7 @@ export const getters = {
     }
 }
 
-export const mutations : MutationTree<SupabaseCreateState> = {
+export const mutations: MutationTree<SupabaseCreateState> = {
     setCitation(state: SupabaseCreateState, value: string) {
         state.citation = value
     },
@@ -73,7 +75,7 @@ export const mutations : MutationTree<SupabaseCreateState> = {
     },
     setLabel(state: SupabaseCreateState) {
         const match = state.citation.match(/^(\w(\s|\.|\(|\))*)+/)
-        if ( match && match.length > 0 ) {
+        if (match && match.length > 0) {
             state.label = match[0].trim()
         }
     },
@@ -102,22 +104,22 @@ export const mutations : MutationTree<SupabaseCreateState> = {
     }
 }
 
-export const actions : ActionTree<SupabaseCreateState, SupabaseCreateState> = {
-    async insert({ state, commit, rootGetters } : { state: SupabaseCreateState, commit: Commit, rootGetters: any }) {
+export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
+    async insert({ state, commit, rootGetters }: { state: SupabaseCreateState, commit: Commit, rootGetters: any }) {
         commit('setLabel')
 
         commit('setClient', rootGetters['supabaseAuth/authUser'])
 
         const submittedStatus = await Status.getByName('Submitted')
 
-        if ( !submittedStatus ) {
+        if (!submittedStatus) {
             console.log('Was not able to receive a status.')
             return null
         }
 
         commit('setStatus', submittedStatus)
 
-        if ( !state.status || !state.status.id || !state.repository || !state.repository.id || !state.client || !state.client.id ) {
+        if (!state.status || !state.status.id || !state.repository || !state.repository.id || !state.client || !state.client.id) {
             console.log('Was missing essential information to create a request.', state)
             return null
         }
@@ -135,9 +137,18 @@ export const actions : ActionTree<SupabaseCreateState, SupabaseCreateState> = {
 
         const r = await request.insert()
 
-        if ( r ) {
+        if (r) {
             // Successful insert.
             commit('reset')
+            if (Array.isArray(r) && r.length > 0) {
+                const id = r[0].id
+                await notify({
+                    user_id: rootGetters['supabaseAuth/authUser'].id,
+                    request_id: id,
+                    action: 'request_submitted_to_your_org',
+                    token: await getToken()
+                })
+            }
         }
 
         return r
