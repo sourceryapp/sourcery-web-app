@@ -54,8 +54,8 @@
           >
             Log In
           </v-btn>
-          <p class="mt-2">
-            Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
+          <p class="mt-2 text-white">
+            Interested in working with Sourcery as an institution? <nuxt-link class="link-white" to="/join-us">
               Let us know.
             </nuxt-link>
           </p>
@@ -499,6 +499,12 @@ h1 {
 .header__slogan p {
     color: white;
     font-size: 24px;
+}
+.text-white {
+  color: white;
+}
+.text-white .link-white {
+  color: white;
 }
 .section-container {
     max-width: var(--max-width);
