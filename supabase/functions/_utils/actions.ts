@@ -134,13 +134,14 @@ export const chat = async (authToken : string, by_vendor : boolean, request_id :
     if ( request && request?.repository?.organization_id ) {
         const organization = await getOrganization(authToken, request.repository.organization_id)
 
-        const email_to_send = by_vendor ? request.user?.email : organization.user?.email
-        const id_to_send = by_vendor ? request.user_id : organization.owner_id
+        const email_to_send = by_vendor ? request.user?.email : organization?.user?.email
+        const id_to_send = by_vendor ? request.user_id : organization?.owner_id
 
         /** Create Chat Record Here. request_comments? */
 
         if ( email_to_send && id_to_send ) {
             const template_name = by_vendor ? 'chat_sent_from_vendor' : 'chat_sent_from_client'
+            const start_text = by_vendor ? 'You have a new chat message for one of your requests!' : 'A client has messaged you about a request.'
             const email_data = buildEmailData(
                 email_to_send,
                 'New Message in Sourcery',
@@ -148,7 +149,8 @@ export const chat = async (authToken : string, by_vendor : boolean, request_id :
                 {
                     button_url: `${application_url}/request/${request_id}`,
                     button_text: 'View Request',
-                    message: chat_text
+                    message: `${start_text}:
+                    ${chat_text}`
                 }
             )
 

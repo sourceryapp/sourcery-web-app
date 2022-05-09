@@ -71,7 +71,8 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
                     action: 'request_you_submitted_picked_up',
-                    token: await getToken()
+                    token: await getToken(),
+                    message_text: null
                 })
                 return true
             }
@@ -105,7 +106,8 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
                     action: 'request_you_submitted_complete',
-                    token: await getToken()
+                    token: await getToken(),
+                    message_text: null
                 })
                 return true
             }

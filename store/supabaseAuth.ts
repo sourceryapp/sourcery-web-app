@@ -202,7 +202,8 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
                 user_id: state.authUser.id,
                 action: 'signed_up',
                 token: token,
-                request_id: null
+                request_id: null,
+                message_text: null
             })
         }
     }

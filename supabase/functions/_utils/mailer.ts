@@ -76,7 +76,7 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
             if ( type === 'signed_up' ) {
                 can_continue = await neverDuplicate(user_id, type)
             } else if ( type === 'chat_sent_from_client' || type === 'chat_sent_from_vendor' ) {
-                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 2)
+                can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 5)
             } else {
                 can_continue = await noDuplicateMessageInLastMinutes(user_id, type, 5)
             }

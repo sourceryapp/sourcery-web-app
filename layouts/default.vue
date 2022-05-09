@@ -67,7 +67,6 @@ export default {
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser'
-            // hasPassword: 'supabaseAuth/hasPassword'
         })
     },
     mounted () {

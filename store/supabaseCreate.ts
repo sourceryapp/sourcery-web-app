@@ -146,7 +146,8 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: id,
                     action: 'request_submitted_to_your_org',
-                    token: await getToken()
+                    token: await getToken(),
+                    message_text: null
                 })
             }
         }
