@@ -24,6 +24,7 @@ export default async function setStore ({ store, app: { router } }) {
 
         console.log(_, session)
         if (_ === 'SIGNED_OUT') {
+            store.commit('supabaseChat/clear')
             store.commit('supabaseAuth/clear')
             router.push('/login')
             return

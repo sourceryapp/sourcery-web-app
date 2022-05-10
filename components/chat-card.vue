@@ -127,14 +127,14 @@ export default {
         },
         chatMessageClass (message) {
             let class_string = 'chat-card-message'
-            if (message.user_id !== 1) {
+            if (message.user_id === this.user.id) {
                 class_string += ' alt-right'
             }
             return class_string
         },
         chatMessageTextClass (message) {
             let class_string = 'chat-card-message-text'
-            if (message.user_id !== 1) {
+            if (message.user_id === this.user.id) {
                 class_string += ' alt-purple'
             }
             return class_string

@@ -55,7 +55,7 @@ export class RequestComment {
             .select(`
                 *
             `)
-            .order('created_at', { ascending: false })
+            .order('created_at', { ascending: true })
             .eq('request_id', request.id)
 
         let { data, error } = await query

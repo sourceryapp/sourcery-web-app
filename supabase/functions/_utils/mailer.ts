@@ -71,6 +71,7 @@ const send = async (emailData : EmailData | null) => {
 export const saveAndSend = async (type : keyof TemplateLookup, user_id : string, emailData : EmailData | null) => {
     let sent = false
     try {
+        console.log('Trying saveAndSend:', type, user_id)
         if ( emailData ) {
             let can_continue = false
             if ( type === 'signed_up' ) {
@@ -92,6 +93,7 @@ export const saveAndSend = async (type : keyof TemplateLookup, user_id : string,
             }
         }
     } catch(e) {
+        console.log(e)
         throw e
         return false
     }

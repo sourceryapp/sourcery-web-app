@@ -92,8 +92,8 @@ export const createMessage = async (insertObj : MessageInsert) => {
 }
 
 export const getRequest = async (authToken : string, request_id : string) => {
-    supabaseClient.auth.setAuth(authToken)
-    const { data, error } = await supabaseClient
+    // supabaseClient.auth.setAuth(authToken)
+    const { data, error } = await supabaseAdmin
         .from<Request>("requests")
         .select(`
             *,
