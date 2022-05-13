@@ -15,6 +15,15 @@
           {{ message }}
         </v-alert>
         <v-alert
+          v-if="successMessage"
+          :value="true"
+          text
+          type="success"
+          class="mt-2 mb-2"
+        >
+          {{ successMessage }}
+        </v-alert>
+        <v-alert
           :value="errorEmpty"
           type="error"
           text
@@ -112,6 +121,7 @@
             value="Register"
             color="primary"
             :loading="loading"
+            :disabled="!!successMessage"
             class="mb-4"
           >
             Next
@@ -159,7 +169,6 @@
 <script>
 import { mapMutations, mapActions } from 'vuex'
 import { supabase } from '~/plugins/supabase'
-import { User as SourceryUser } from '~/models/User'
 
 export default {
     name: 'Register',
@@ -181,6 +190,7 @@ export default {
             confirm_password: '',
             phone: '',
             message: null,
+            successMessage: null,
             execute: true,
 
             loading: false,
@@ -223,24 +233,21 @@ export default {
                 const { user, error } = await supabase.auth.signUp({
                     email: this.email,
                     password: this.password
+                }, {
+                    data: {
+                        phone: this.phone,
+                        name: this.name
+                    }
                 })
 
                 if (error) {
                     throw error
                 }
 
-                // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
-                // JK this was not reliable.
-                const u = await SourceryUser.getById(user.id)
-                if (u) {
-                    u.name = this.name
-                    u.phone = this.phone
-                    await u.save()
-                }
+                console.log(user)
 
                 // NORMALLY we handle this in supabase.js plugin, however we wanted to edit meta before navigating so we handle the fetching here.
-                await this.fetchUserMeta()
-                await this.fetchUserOrganizations()
+                // await this.fetchUserOrganizations()
                 // await this.fetchUserHasPassword()
 
                 try {
@@ -254,7 +261,8 @@ export default {
                     console.log(error)
                 }
 
-                this.$router.push('/dashboard')
+                // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
+                this.successMessage = 'Successful signup! Please check your email to confirm and continue.'
             } catch (error) {
                 this.message = error.message
                 console.log(error)
