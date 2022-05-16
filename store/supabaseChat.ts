@@ -66,22 +66,31 @@ export const mutations: MutationTree<SupabaseChatState> = {
 }
 
 export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
-    async getMessagesForRequest({ state, commit } : { state: SupabaseChatState, commit : Commit }) {
+    async getMessagesForRequest({ state, commit }: { state: SupabaseChatState, commit: Commit }) {
         const messages = await RequestComment.getForRequest(state.request)
         commit('setMessages', messages)
         return true
     },
-    async openForRequest({ dispatch, commit } : { dispatch: Dispatch, commit: Commit }, request : Request) {
+    async openForRequest({ getters, dispatch, commit }: { getters: any, dispatch: Dispatch, commit: Commit }, request: Request) {
         commit('clear')
         commit('setRequest', request)
         const organizationRetrieved = await dispatch('getOrganizationForRequest')
         const messagesRetrieved = await dispatch('getMessagesForRequest')
         commit('setOpen', true)
         commit('setMinimized', false)
+
+        let requestIntervalId = setInterval(async () => {
+            if (getters.isOpen) {
+                await dispatch('getMessagesForRequest')
+            } else {
+                clearInterval(requestIntervalId)
+            }
+        }, 1000 * 30)
+
         return true
     },
-    async getOrganizationForRequest({ state, commit } : { state: SupabaseChatState, commit: Commit }) {
-        if ( state.request && state.request.repository ) {
+    async getOrganizationForRequest({ state, commit }: { state: SupabaseChatState, commit: Commit }) {
+        if (state.request && state.request.repository) {
             const organization = await Organization.getById(state.request.repository.organization_id)
             commit('setOrganization', organization)
             return true
@@ -89,8 +98,8 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
         commit('setOrganization', null)
         return false
     },
-    async sendMessage({ state, commit, rootGetters } : { state: SupabaseChatState, commit: Commit, rootGetters: any }, { messageText, vendor } : { messageText: string, vendor: boolean }) {
-        if ( !messageText || typeof(vendor) == "undefined" || !state.request || !state.request.id ) {
+    async sendMessage({ state, commit, rootGetters }: { state: SupabaseChatState, commit: Commit, rootGetters: any }, { messageText, vendor }: { messageText: string, vendor: boolean }) {
+        if (!messageText || typeof (vendor) == "undefined" || !state.request || !state.request.id) {
             return false
         }
 
@@ -106,7 +115,7 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
         })
         const insert = await requestComment.insert()
 
-        if ( insert ) {
+        if (insert) {
             commit('addMessage', insert)
             try {
                 const token = await getToken()
@@ -117,10 +126,10 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
                     request_id: state.request.id,
                     message_text: messageText
                 })
-            } catch(e) {
+            } catch (e) {
                 console.log('Error sending chat notification, might be rate limited.  This is normal.', e)
             }
-            
+
             return true
         }
 

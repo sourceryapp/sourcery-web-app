@@ -18,7 +18,7 @@
             </v-btn>
           </v-list-item-action>
         </v-list-item>
-        <v-card-text v-if="!minimized" class="overflow-y-scroll cap-height">
+        <v-card-text v-show="!minimized" id="chatScroller" class="overflow-y-scroll cap-height">
           <div class="chat-card-messages">
             <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
               <div :class="chatMessageTextClass(message)">
@@ -110,6 +110,16 @@ export default {
             return this.newMessage === '' || this.sending
         }
     },
+    watch: {
+        open: {
+            handler (newVal, oldVal) {
+                if (newVal) {
+                    setTimeout(this.scrollToBottom, 100)
+                }
+            },
+            flush: 'post'
+        }
+    },
     methods: {
         ...mapMutations({
             clear: 'supabaseChat/clear',
@@ -149,9 +159,17 @@ export default {
 
             this.newMessage = ''
             this.sending = false
+
+            this.scrollToBottom()
         },
         close () {
             this.clear()
+        },
+        scrollToBottom () {
+            const scrollerElement = document.getElementById('chatScroller')
+            if (scrollerElement) {
+                scrollerElement.scrollTop = 9999999999
+            }
         }
     }
 }
