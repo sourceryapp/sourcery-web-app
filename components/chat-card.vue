@@ -17,8 +17,12 @@
               <v-icon>{{ closeIcon }}</v-icon>
             </v-btn>
           </v-list-item-action>
+          <div v-if="gotNewMessages" class="badge">
+            <v-icon>mdi-shimmer</v-icon>
+          </div>
         </v-list-item>
         <v-card-text v-show="!minimized" id="chatScroller" class="overflow-y-scroll cap-height">
+          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when folks become available.</p>
           <div class="chat-card-messages">
             <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
               <div :class="chatMessageTextClass(message)">
@@ -69,7 +73,8 @@ export default {
             minimized: 'supabaseChat/isMinimized',
             request: 'supabaseChat/request',
             messages: 'supabaseChat/messages',
-            organization: 'supabaseChat/organization'
+            organization: 'supabaseChat/organization',
+            gotNewMessages: 'supabaseChat/gotNewMessages'
         }),
         isVendor () {
             if (this.organization) {
@@ -124,15 +129,18 @@ export default {
         ...mapMutations({
             clear: 'supabaseChat/clear',
             setOpen: 'supabaseChat/setOpen',
-            setMinimized: 'supabaseChat/setMinimized'
+            setMinimized: 'supabaseChat/setMinimized',
+            setJustGotNewMessages: 'supabaseChat/setJustGotNewMessages'
         }),
         ...mapActions({
             sendChatMessage: 'supabaseChat/sendMessage'
         }),
         toggleOpen () {
+            this.setJustGotNewMessages(false)
             this.setOpen(!this.open)
         },
         toggleMinimize () {
+            this.setJustGotNewMessages(false)
             this.setMinimized(!this.minimized)
         },
         chatMessageClass (message) {
@@ -244,6 +252,26 @@ export default {
 
 hr {
   border-color: rgba(112, 112, 112, .62)
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: red;
+  width: 20px;
+  height: 20px;
+  border-radius: 24px;
+
+  i.v-icon {
+    display: flex;
+    width: 12px;
+    height: 12px;
+    font-size: 14px;
+    margin: 4px;
+    align-self: center;
+    justify-self: center;
+  }
 }
 
 </style>

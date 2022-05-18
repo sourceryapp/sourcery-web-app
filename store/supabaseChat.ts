@@ -11,7 +11,8 @@ const initialState = () => {
         minimized: false,
         request: null as Request | null,
         messages: [] as RequestComment[],
-        organization: null as Organization | null
+        organization: null as Organization | null,
+        gotNewMessages: false
     }
 }
 
@@ -34,6 +35,9 @@ export const getters: GetterTree<SupabaseChatState, SupabaseChatState> = {
     },
     organization(state: SupabaseChatState) {
         return state.organization
+    },
+    gotNewMessages(state: SupabaseChatState) {
+        return state.gotNewMessages
     }
 }
 
@@ -62,13 +66,21 @@ export const mutations: MutationTree<SupabaseChatState> = {
         state.minimized = initial.minimized
         state.request = initial.request
         state.messages = initial.messages
+        state.gotNewMessages = initial.gotNewMessages
+    },
+    setJustGotNewMessages(state: SupabaseChatState, value = true) {
+        state.gotNewMessages = value
     }
 }
 
 export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
     async getMessagesForRequest({ state, commit }: { state: SupabaseChatState, commit: Commit }) {
+        const current_message_count = state.messages.length
         const messages = await RequestComment.getForRequest(state.request)
         commit('setMessages', messages)
+        if (messages && current_message_count > 0 && messages.length > current_message_count) {
+            commit('setJustGotNewMessages', true)
+        }
         return true
     },
     async openForRequest({ getters, dispatch, commit }: { getters: any, dispatch: Dispatch, commit: Commit }, request: Request) {
