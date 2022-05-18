@@ -61,7 +61,6 @@
           </p>
         </div>
         <div class="header__slogan">
-          <h1>Your sources, like magic</h1>
           <p>Delivering archival documents straight to your device</p>
         </div>
       </div>
