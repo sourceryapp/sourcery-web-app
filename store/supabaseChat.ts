@@ -93,7 +93,12 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
 
         let requestIntervalId = setInterval(async () => {
             if (getters.isOpen) {
-                await dispatch('getMessagesForRequest')
+                try {
+                    await dispatch('getMessagesForRequest')
+                } catch (e) {
+                    console.log(e)
+                    clearInterval(requestIntervalId)
+                }
             } else {
                 clearInterval(requestIntervalId)
             }

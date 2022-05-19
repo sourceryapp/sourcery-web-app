@@ -22,7 +22,7 @@
           </div>
         </v-list-item>
         <v-card-text v-show="!minimized" id="chatScroller" class="overflow-y-scroll cap-height">
-          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when folks become available.</p>
+          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
           <div class="chat-card-messages">
             <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
               <div :class="chatMessageTextClass(message)">
@@ -63,7 +63,8 @@ export default {
         return {
             newMessage: '',
             closeIcon: 'mdi-close',
-            sending: false
+            sending: false,
+            newMessageWhileSending: ''
         }
     },
     computed: {
@@ -155,19 +156,23 @@ export default {
             if (message.user_id === this.user.id) {
                 class_string += ' alt-purple'
             }
+            if (this.sending) {
+                class_string += ' might-be-faded'
+            }
             return class_string
         },
         async sendMessage () {
+            this.newMessageWhileSending = this.newMessage
+            this.newMessage = ''
             this.sending = true
+            this.scrollToBottom()
             console.log('New Message:', this.newMessage)
             await this.sendChatMessage({
                 vendor: this.isVendor,
-                messageText: this.newMessage
+                messageText: this.newMessageWhileSending
             })
-
-            this.newMessage = ''
             this.sending = false
-
+            this.newMessageWhileSending = ''
             this.scrollToBottom()
         },
         close () {
@@ -238,6 +243,9 @@ export default {
                 &.alt-purple {
                   background-color: #654EA3;
                   text-align: right;
+                }
+                &.might-be-faded:last-child {
+                  opacity: 0.8;
                 }
               }
             }
