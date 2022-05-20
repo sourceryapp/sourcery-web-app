@@ -21,7 +21,13 @@
             <v-icon>mdi-shimmer</v-icon>
           </div>
         </v-list-item>
-        <v-card-text v-show="!minimized" id="chatScroller" class="overflow-y-scroll cap-height">
+        <v-card-text v-if="!hasAgreedToTerms" class="cap-height">
+          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.  By chatting with experts, you understand that you will not get an immediate response, and agree to treat experts with respect or subject your account to ban.</p>
+          <v-btn @click="handleAgreeToTerms()">
+            I agree.
+          </v-btn>
+        </v-card-text>
+        <v-card-text v-show="!minimized && hasAgreedToTerms" id="chatScroller" class="overflow-y-scroll cap-height">
           <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
           <div class="chat-card-messages">
             <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
@@ -56,6 +62,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -75,7 +82,8 @@ export default {
             request: 'supabaseChat/request',
             messages: 'supabaseChat/messages',
             organization: 'supabaseChat/organization',
-            gotNewMessages: 'supabaseChat/gotNewMessages'
+            gotNewMessages: 'supabaseChat/gotNewMessages',
+            hasAgreedToTerms: 'supabaseChat/hasAgreedToTerms'
         }),
         isVendor () {
             if (this.organization) {
@@ -131,7 +139,8 @@ export default {
             clear: 'supabaseChat/clear',
             setOpen: 'supabaseChat/setOpen',
             setMinimized: 'supabaseChat/setMinimized',
-            setJustGotNewMessages: 'supabaseChat/setJustGotNewMessages'
+            setJustGotNewMessages: 'supabaseChat/setJustGotNewMessages',
+            agreeToTerms: 'supabaseChat/agreeToTerms'
         }),
         ...mapActions({
             sendChatMessage: 'supabaseChat/sendMessage'
@@ -183,6 +192,10 @@ export default {
             if (scrollerElement) {
                 scrollerElement.scrollTop = 9999999999
             }
+        },
+        handleAgreeToTerms () {
+            this.agreeToTerms()
+            Vue.nextTick(this.scrollToBottom)
         }
     }
 }

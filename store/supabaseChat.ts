@@ -12,7 +12,8 @@ const initialState = () => {
         request: null as Request | null,
         messages: [] as RequestComment[],
         organization: null as Organization | null,
-        gotNewMessages: false
+        gotNewMessages: false,
+        hasAgreedToTerms: false
     }
 }
 
@@ -38,6 +39,9 @@ export const getters: GetterTree<SupabaseChatState, SupabaseChatState> = {
     },
     gotNewMessages(state: SupabaseChatState) {
         return state.gotNewMessages
+    },
+    hasAgreedToTerms(state: SupabaseChatState) {
+        return state.hasAgreedToTerms
     }
 }
 
@@ -60,6 +64,9 @@ export const mutations: MutationTree<SupabaseChatState> = {
     addMessage(state: SupabaseChatState, value: RequestComment) {
         state.messages.push(value)
     },
+    agreeToTerms(state: SupabaseChatState) {
+        state.hasAgreedToTerms = true
+    },
     clear(state: SupabaseChatState) {
         const initial = initialState()
         state.open = initial.open
@@ -67,6 +74,7 @@ export const mutations: MutationTree<SupabaseChatState> = {
         state.request = initial.request
         state.messages = initial.messages
         state.gotNewMessages = initial.gotNewMessages
+        state.hasAgreedToTerms = initial.hasAgreedToTerms
     },
     setJustGotNewMessages(state: SupabaseChatState, value = true) {
         state.gotNewMessages = value
