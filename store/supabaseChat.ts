@@ -1,8 +1,9 @@
 import { Request } from '~/models/Request'
 import { RequestComment } from '~/models/RequestComment'
 import { Organization } from '~/models/Organization'
+import { Report } from '~/models/Report'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
-import { supabase, getToken } from '~/plugins/supabase'
+import { getToken } from '~/plugins/supabase'
 import { notify } from '~/plugins/sourcery-functions'
 
 const initialState = () => {
@@ -13,7 +14,8 @@ const initialState = () => {
         messages: [] as RequestComment[],
         organization: null as Organization | null,
         gotNewMessages: false,
-        hasAgreedToTerms: false
+        hasAgreedToTerms: false,
+        reports: [] as Report[]
     }
 }
 
@@ -42,6 +44,9 @@ export const getters: GetterTree<SupabaseChatState, SupabaseChatState> = {
     },
     hasAgreedToTerms(state: SupabaseChatState) {
         return state.hasAgreedToTerms
+    },
+    reports(state: SupabaseChatState) {
+        return state.reports
     }
 }
 
@@ -78,6 +83,9 @@ export const mutations: MutationTree<SupabaseChatState> = {
     },
     setJustGotNewMessages(state: SupabaseChatState, value = true) {
         state.gotNewMessages = value
+    },
+    setReports(state: SupabaseChatState, value: Report[]) {
+        state.reports = value
     }
 }
 
@@ -96,6 +104,7 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
         commit('setRequest', request)
         const organizationRetrieved = await dispatch('getOrganizationForRequest')
         const messagesRetrieved = await dispatch('getMessagesForRequest')
+        const reportsRetrieved = await dispatch('getReports')
         commit('setOpen', true)
         commit('setMinimized', false)
 
@@ -158,6 +167,18 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
             return true
         }
 
+        return false
+    },
+    async getReports({ state, commit, rootGetters } : { state: SupabaseChatState, commit: Commit, rootGetters: any }) {
+        const user_id = rootGetters['supabaseAuth/authUser'].id
+        if ( user_id && state.request?.id ) {
+            const reports = await Report.getReports(user_id, state.request.id)
+            if ( reports ) {
+                commit('setReports', reports)
+                return true
+            }
+        }
+        commit('setReports', null)
         return false
     }
 }
