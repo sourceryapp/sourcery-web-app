@@ -47,6 +47,10 @@ export const getters: GetterTree<SupabaseChatState, SupabaseChatState> = {
     },
     reports(state: SupabaseChatState) {
         return state.reports
+    },
+    userHasReported(state: SupabaseChatState, getters, rootState, rootGetters) {
+        const matchingReport = state.reports.find(x => x.user_id === rootGetters['supabaseAuth/authUser'].id)
+        return !!matchingReport
     }
 }
 
@@ -179,6 +183,26 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
             }
         }
         commit('setReports', null)
+        return false
+    },
+    async reportChat({ state, commit, rootGetters, dispatch } : { state: SupabaseChatState, commit: Commit, rootGetters: any, dispatch: Dispatch }) {
+        const user_id = rootGetters['supabaseAuth/authUser'].id
+        const current_reports = state.reports
+        if ( user_id && state.request?.id ) {
+            const report_exists = current_reports.find(x => x.user_id = user_id)
+            if ( !report_exists ) {
+                const report = new Report({
+                    id: null,
+                    request_id: state.request.id,
+                    user_id
+                })
+                const result = await report.insert()
+                if ( result ) {
+                    await dispatch('getReports')
+                }
+                return result
+            }
+        }
         return false
     }
 }

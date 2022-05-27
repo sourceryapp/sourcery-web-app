@@ -1,62 +1,109 @@
 <template>
-  <div class="chat-card-viewport">
-    <div v-if="open" class="chat-card-container">
-      <v-card max-width="500" class="chat-card">
-        <v-list-item two-line class="chat-card-title-bar">
-          <v-list-item-content>
-            <v-list-item-title class="text-h6">
-              {{ chatTitle }}
-            </v-list-item-title>
-            <v-list-item-subtitle>{{ chatSubtitle }}</v-list-item-subtitle>
-          </v-list-item-content>
-          <v-list-item-action class="nostack">
-            <v-btn icon @click="toggleMinimize">
-              <v-icon>{{ minimizeIcon }}</v-icon>
+  <div class="chat">
+    <div class="text-center">
+      <v-dialog v-model="reportingShowConfirm" max-width="500">
+        <v-card max-width="500">
+          <v-card-title>Are you sure?</v-card-title>
+          <v-card-text>This action will put the request and account under review, and potentially lead to removal.</v-card-text>
+          <v-card-actions>
+            <v-spacer />
+            <v-btn text color="error" @click="cancelReport">
+              Cancel
             </v-btn>
-            <v-btn icon @click="close">
-              <v-icon>{{ closeIcon }}</v-icon>
+            <v-btn text color="primary" @click="confirmReport">
+              I understand, report
             </v-btn>
-          </v-list-item-action>
-          <div v-if="gotNewMessages" class="badge">
-            <v-icon>mdi-shimmer</v-icon>
-          </div>
-        </v-list-item>
-        <v-card-text v-if="!hasAgreedToTerms" class="cap-height">
-          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.  By chatting with experts, you understand that you will not get an immediate response, and agree to treat experts with respect or subject your account to ban.</p>
-          <v-btn @click="handleAgreeToTerms()">
-            I agree.
-          </v-btn>
-        </v-card-text>
-        <v-card-text v-show="!minimized && hasAgreedToTerms" id="chatScroller" class="overflow-y-scroll cap-height">
-          <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
-          <div class="chat-card-messages">
-            <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
-              <div :class="chatMessageTextClass(message)">
-                {{ message.content }}
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+
+    <div class="chat-card-viewport">
+      <div v-if="open" class="chat-card-container">
+        <v-card max-width="500" class="chat-card">
+          <v-list-item two-line class="chat-card-title-bar">
+            <v-list-item-content>
+              <v-list-item-title class="text-h6">
+                {{ chatTitle }}
+              </v-list-item-title>
+              <v-list-item-subtitle>{{ chatSubtitle }}</v-list-item-subtitle>
+            </v-list-item-content>
+            <v-list-item-action class="nostack">
+              <v-menu offset-y>
+                <template #activator="{ on, attrs }">
+                  <v-btn
+                    class="mx-2"
+                    fab
+                    dark
+                    small
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <v-icon dark>
+                      mdi-dots-vertical
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item v-if="!userHasReported" @click="report">
+                    <v-list-item-title>{{ reportActionText }}</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item v-if="userHasReported">
+                    <v-list-item-title>{{ reportActionText }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+              <v-btn icon @click="toggleMinimize">
+                <v-icon>{{ minimizeIcon }}</v-icon>
+              </v-btn>
+              <v-btn icon @click="close">
+                <v-icon>{{ closeIcon }}</v-icon>
+              </v-btn>
+            </v-list-item-action>
+            <div v-if="gotNewMessages" class="badge">
+              <v-icon>mdi-shimmer</v-icon>
+            </div>
+          </v-list-item>
+          <v-card-text v-if="!hasAgreedToTerms" class="cap-height">
+            <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.  By chatting with experts, you understand that you will not get an immediate response, and agree to treat experts with respect or subject your account to ban.</p>
+            <v-btn @click="handleAgreeToTerms()">
+              I agree.
+            </v-btn>
+          </v-card-text>
+          <v-card-text v-show="!minimized && hasAgreedToTerms" id="chatScroller" class="overflow-y-scroll cap-height">
+            <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
+            <div class="chat-card-messages">
+              <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
+                <div :class="chatMessageTextClass(message)">
+                  {{ message.content }}
+                </div>
               </div>
             </div>
-          </div>
-          <div v-if="messages.length === 0 && !vendorIsClient" class="no-messages">
-            <p>There are currently no messages in this chat.  Send the first one below!  The recipient will receive an email when sent.</p>
-          </div>
-          <div v-if="vendorIsClient">
-            <p>Client is the same user as the vendor, thus no need for chat.</p>
-          </div>
-        </v-card-text>
-        <hr>
-        <v-card-actions v-if="!minimized && !vendorIsClient" class="pt-5 px-4">
-          <v-row>
-            <v-col cols="10">
-              <v-text-field v-model="newMessage" placeholder="Type a message here." dense filled rounded />
-            </v-col>
-            <v-col>
-              <v-btn fab small :disabled="sendButtonDisabled" @click="sendMessage">
-                <v-icon>mdi-arrow-right</v-icon>
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-card-actions>
-      </v-card>
+            <v-alert v-if="userHasReported" type="warning">
+              You have reported this chat.
+            </v-alert>
+            <div v-if="messages.length === 0 && !vendorIsClient" class="no-messages">
+              <p>There are currently no messages in this chat.  Send the first one below!  The recipient will receive an email when sent.</p>
+            </div>
+            <div v-if="vendorIsClient">
+              <p>Client is the same user as the vendor, thus no need for chat.</p>
+            </div>
+          </v-card-text>
+          <hr>
+          <v-card-actions v-if="!minimized && !vendorIsClient" class="pt-5 px-4">
+            <v-row>
+              <v-col cols="10">
+                <v-text-field v-model="newMessage" placeholder="Type a message here." dense filled rounded />
+              </v-col>
+              <v-col>
+                <v-btn fab small :disabled="sendButtonDisabled" @click="sendMessage">
+                  <v-icon>mdi-arrow-right</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+      </div>
     </div>
   </div>
 </template>
@@ -71,7 +118,8 @@ export default {
             newMessage: '',
             closeIcon: 'mdi-close',
             sending: false,
-            newMessageWhileSending: ''
+            newMessageWhileSending: '',
+            reportingShowConfirm: false
         }
     },
     computed: {
@@ -83,7 +131,9 @@ export default {
             messages: 'supabaseChat/messages',
             organization: 'supabaseChat/organization',
             gotNewMessages: 'supabaseChat/gotNewMessages',
-            hasAgreedToTerms: 'supabaseChat/hasAgreedToTerms'
+            hasAgreedToTerms: 'supabaseChat/hasAgreedToTerms',
+            reports: 'supabaseChat/reports',
+            userHasReported: 'supabaseChat/userHasReported'
         }),
         isVendor () {
             if (this.organization) {
@@ -122,6 +172,12 @@ export default {
         },
         sendButtonDisabled () {
             return this.newMessage === '' || this.sending
+        },
+        reportActionText () {
+            if (this.userHasReported) {
+                return 'Chat Reported'
+            }
+            return 'Report'
         }
     },
     watch: {
@@ -143,7 +199,8 @@ export default {
             agreeToTerms: 'supabaseChat/agreeToTerms'
         }),
         ...mapActions({
-            sendChatMessage: 'supabaseChat/sendMessage'
+            sendChatMessage: 'supabaseChat/sendMessage',
+            reportChat: 'supabaseChat/reportChat'
         }),
         toggleOpen () {
             this.setJustGotNewMessages(false)
@@ -196,6 +253,18 @@ export default {
         handleAgreeToTerms () {
             this.agreeToTerms()
             Vue.nextTick(this.scrollToBottom)
+        },
+        report () {
+            this.reportingShowConfirm = true
+        },
+        async confirmReport () {
+            const result = await this.reportChat()
+            console.log(result)
+            this.scrollToBottom()
+            this.reportingShowConfirm = false
+        },
+        cancelReport () {
+            this.reportingShowConfirm = false
         }
     }
 }
@@ -206,7 +275,7 @@ export default {
     position: fixed;
     height: 100vh;
     width: 100vw;
-    z-index: 99999;
+    z-index: 99;
     top: 0;
     left: 0;
     right: 0;

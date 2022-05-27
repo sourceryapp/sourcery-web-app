@@ -180,7 +180,6 @@ export default {
         },
         openChat () {
             this.startChat(this.request)
-            this.$toast.success('Loading...')
         },
         async saveLabel () {
             this.editing = false
