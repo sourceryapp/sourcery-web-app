@@ -19,7 +19,7 @@
               <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
             </v-card-title>
             <v-card-subtitle>
-              {{ request.citation }}
+              {{ citation }}
               <br>
               {{ request.repository.name }}
             </v-card-subtitle>
@@ -161,6 +161,9 @@ export default {
             }
 
             return list
+        },
+        citation () {
+            return (this.request.citation.length > 100) ? this.request.citation.substr(0, 99) + '&hellip;' : this.request.citation
         }
     },
     created () {
