@@ -8,6 +8,7 @@
       <h1 class="mb-4">
         {{ pageTitle }}
       </h1>
+
       <logged-out-card />
       <org-stat-bar v-if="isOrgMember" :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
 

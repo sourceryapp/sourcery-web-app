@@ -26,6 +26,7 @@ sw.*
 
 # Environment variables
 .env
+.env.local
 
 #  debug logs
 /firestore-debug.log
@@ -55,3 +56,6 @@ db
 
 # Personal notes
 notes
+# Supabase
+**/supabase/.branches
+**/supabase/.temp

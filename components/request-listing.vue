@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { Request } from '~/models/Request'
 
 export default {
@@ -168,13 +169,17 @@ export default {
     created () {
         this.editingLabelValue = this.label
     },
+
     methods: {
+        ...mapActions({
+            startChat: 'supabaseChat/openForRequest'
+        }),
         editLabel () {
             this.editing = !this.editing
             console.log('edit label')
         },
         openChat () {
-            this.$toast.success('Chat coming soon.')
+            this.startChat(this.request)
         },
         async saveLabel () {
             this.editing = false

@@ -45,6 +45,7 @@
           <nuxt />
         </v-layout>
       </v-container>
+      <chat-card />
     </v-main>
 
     <bottom-navigation />
@@ -55,16 +56,17 @@
 import { mapGetters } from 'vuex'
 import NavigationDrawer from '@/components/nav-drawer.vue'
 import BottomNavigation from '@/components/bottom-navigation.vue'
+import ChatCard from '@/components/chat-card.vue'
 
 export default {
     components: {
         'sourcery-nav-drawer': NavigationDrawer,
-        BottomNavigation
+        BottomNavigation,
+        ChatCard
     },
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser'
-            // hasPassword: 'supabaseAuth/hasPassword'
         })
     },
     mounted () {

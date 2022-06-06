@@ -2,8 +2,10 @@ import type { User } from "@supabase/supabase-js"
 import { PaymentAssociation } from '~/models/PaymentAssociation'
 import { User as SourceryUser } from '~/models/User'
 import { Organization } from '~/models/Organization'
+import { Message } from '~/models/Message'
 import { Commit, GetterTree, MutationTree, ActionTree, Dispatch } from 'vuex'
-import { supabase } from "~/plugins/supabase"
+import { supabase, getToken } from "~/plugins/supabase"
+import { notify } from "~/plugins/sourcery-functions"
 
 
 // Initialize state.
@@ -24,13 +26,13 @@ export type SupabaseState = ReturnType<typeof initialState>
 export const state = initialState
 
 export const getters: GetterTree<SupabaseState, SupabaseState> = {
-    authUser(state : SupabaseState) {
+    authUser(state: SupabaseState) {
         return state.authUser
     },
     authUserMeta(state: SupabaseState) {
         return state.authUserMeta
     },
-    isAuthenticated(state : SupabaseState) {
+    isAuthenticated(state: SupabaseState) {
         return state.authUser && state.authUser.aud === "authenticated"
     },
     authUserPaymentAssociation(state: SupabaseState) {
@@ -62,8 +64,8 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     }
 }
 
-export const mutations : MutationTree<SupabaseState> = {
-    setAuthUser(state : SupabaseState, value: User) {
+export const mutations: MutationTree<SupabaseState> = {
+    setAuthUser(state: SupabaseState, value: User) {
         state.authUser = value
     },
     setAuthUserPaymentAssociation(state: SupabaseState, value: PaymentAssociation) {
@@ -72,7 +74,7 @@ export const mutations : MutationTree<SupabaseState> = {
     setAuthUserMeta(state: SupabaseState, value: SourceryUser) {
         state.authUserMeta = value
     },
-    setAuthUserOrganizations(state: SupabaseState, value: Organization[] ) {
+    setAuthUserOrganizations(state: SupabaseState, value: Organization[]) {
         state.authUserOrganizations = value
     },
     setAuthUserHasPassword(state: SupabaseState, value: boolean) {
@@ -96,51 +98,51 @@ export const mutations : MutationTree<SupabaseState> = {
     }
 }
 
-export const actions : ActionTree<SupabaseState, SupabaseState> = {
-    async saveAuthUserPaymentAssociation({ commit }: { commit: Commit }, paymentAssociation : PaymentAssociation) {
+export const actions: ActionTree<SupabaseState, SupabaseState> = {
+    async saveAuthUserPaymentAssociation({ commit }: { commit: Commit }, paymentAssociation: PaymentAssociation) {
         const pa = new PaymentAssociation(paymentAssociation)
         const success = await pa.save()
-        if ( success ) {
+        if (success) {
             commit('setAuthUserPaymentAssociation', pa.toJSON())
         }
         return success
     },
-    async fetchAuthUserPaymentAssociation({ state, commit }: { state: SupabaseState, commit: Commit}) {
-        if ( state.authUser ) {
+    async fetchAuthUserPaymentAssociation({ state, commit }: { state: SupabaseState, commit: Commit }) {
+        if (state.authUser) {
             const pa = await PaymentAssociation.getFromUser(state.authUser)
-            if ( pa && pa.id ) {
+            if (pa && pa.id) {
                 commit('setAuthUserPaymentAssociation', pa.toJSON())
                 return true
             }
         }
         return false
     },
-    async fetchUserMeta({ state, commit }: { state: SupabaseState, commit: Commit}) {
-        if ( state.authUser ) {
+    async fetchUserMeta({ state, commit }: { state: SupabaseState, commit: Commit }) {
+        if (state.authUser) {
             const meta = await SourceryUser.getById(state.authUser.id)
-            if ( meta ) {
+            if (meta) {
                 commit('setAuthUserMeta', meta.toJSON())
                 return true
             }
         }
         return false
     },
-    async fetchUserOrganizations({ state, commit }: { state: SupabaseState, commit: Commit}) {
-        if ( state.authUser ) {
+    async fetchUserOrganizations({ state, commit }: { state: SupabaseState, commit: Commit }) {
+        if (state.authUser) {
             const orgs = await Organization.getByOwner(state.authUser.id)
-            if ( orgs ) {
+            if (orgs) {
                 commit('setAuthUserOrganizations', orgs)
                 return true
             }
         }
         return false
     },
-    async fetchUserHasPassword({ state, commit }: { state: SupabaseState, commit: Commit}) {
-        if ( state.authUser ) {
+    async fetchUserHasPassword({ state, commit }: { state: SupabaseState, commit: Commit }) {
+        if (state.authUser) {
             let { data, error } = await supabase.rpc('is_password_exist', {
                 user_id: state.authUser.id
             })
-            if ( error ) {
+            if (error) {
                 console.error(error)
                 commit('setAuthUserHasPassword', false)
                 return false
@@ -149,10 +151,10 @@ export const actions : ActionTree<SupabaseState, SupabaseState> = {
             }
         }
     },
-    async updateMeta({ state, commit } : { state: SupabaseState, commit: Commit }, { keyName, keyValue }: { keyName: string, keyValue: string }) {
-        if ( state.authUserMeta ) {
+    async updateMeta({ state, commit }: { state: SupabaseState, commit: Commit }, { keyName, keyValue }: { keyName: string, keyValue: string }) {
+        if (state.authUserMeta) {
             const meta = new SourceryUser(state.authUserMeta)
-            switch(keyName) {
+            switch (keyName) {
                 case 'name':
                     meta.name = keyValue
                     break
@@ -169,19 +171,40 @@ export const actions : ActionTree<SupabaseState, SupabaseState> = {
 
         return false
     },
-    async changePassword({ state, dispatch } : { state: SupabaseState, dispatch: Dispatch }, newPass : string) {
-        if ( state.authUser ) {
+    async changePassword({ state, dispatch }: { state: SupabaseState, dispatch: Dispatch }, newPass: string) {
+        if (state.authUser) {
             const { user, error } = await supabase.auth.update({
                 password: newPass
             })
             console.log(user)
             console.log(error)
-            if ( error ) {
+            if (error) {
                 return false
             }
             dispatch('fetchUserHasPassword')
             return true
         }
         return false
+    },
+    async checkHasSignUpEmail({ state }: { state: SupabaseState }) {
+        if (state.authUser) {
+            const creation_date = new Date(state.authUser.created_at)
+            const cutoff = new Date('2022-05-05T00:00:45.973116Z')
+            if (creation_date < cutoff) {
+                return
+            }
+            const message = await Message.getLastForUser(state.authUser.id, 'signed_up')
+            if (message) {
+                return
+            }
+            const token = await getToken()
+            const result = await notify({
+                user_id: state.authUser.id,
+                action: 'signed_up',
+                token: token,
+                request_id: null,
+                message_text: null
+            })
+        }
     }
 }

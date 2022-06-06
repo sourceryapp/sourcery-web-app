@@ -250,12 +250,19 @@ export default {
                 // await this.fetchUserOrganizations()
                 // await this.fetchUserHasPassword()
 
+                try {
+                    const notifystatus = await this.$sourceryFunctions.notify({
+                        user_id: user.id,
+                        action: 'signed_up'
+                    })
+                    console.log('notifystatus', notifystatus)
+                } catch (error) {
+                    this.$toast.error(error.message)
+                    console.log(error)
+                }
+
                 // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
                 this.successMessage = 'Successful signup! Please check your email to confirm and continue.'
-
-                // await this.fetchUserMeta()
-
-                // this.$router.push('/dashboard')
             } catch (error) {
                 this.message = error.message
                 console.log(error)

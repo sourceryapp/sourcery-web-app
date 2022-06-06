@@ -3,7 +3,8 @@ import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vue
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
-import { supabase } from '~/plugins/supabase'
+import { supabase, getToken } from '~/plugins/supabase'
+import { notify } from "~/plugins/sourcery-functions"
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
 
@@ -21,7 +22,7 @@ export const getters = {
     request(state: SupabaseRequestState) {
         return state.request
     },
-    id(state : SupabaseRequestState) {
+    id(state: SupabaseRequestState) {
         return (state.request) ? state.request.id : null
     },
     isComplete(state: SupabaseRequestState) {
@@ -45,7 +46,7 @@ export const getters = {
 }
 
 
-export const mutations : MutationTree<SupabaseRequestState> = {
+export const mutations: MutationTree<SupabaseRequestState> = {
     set(state: SupabaseRequestState, value: Request) {
         state.request = value
     },
@@ -55,26 +56,33 @@ export const mutations : MutationTree<SupabaseRequestState> = {
     }
 }
 
-export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = {
-    async getById({ commit }: { commit: Commit }, id : string) {
+export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
+    async getById({ commit }: { commit: Commit }, id: string) {
         const r = await Request.getById(id)
         commit('set', r)
         return true
     },
-    async pickUp({ state, commit, dispatch }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch }) {
-        if ( state.request ) {
+    async pickUp({ state, commit, dispatch, rootGetters }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch, rootGetters: any }) {
+        if (state.request) {
             const in_progress = await state.request.pickUp()
-            if ( in_progress ) {
+            if (in_progress) {
                 await dispatch('getById', state.request.id)
+                await notify({
+                    user_id: rootGetters['supabaseAuth/authUser'].id,
+                    request_id: state.request.id,
+                    action: 'request_you_submitted_picked_up',
+                    token: await getToken(),
+                    message_text: null
+                })
                 return true
             }
         }
         return false
     },
     async cancel({ state, commit }: { state: SupabaseRequestState, commit: Commit }) {
-        if ( state.request ) {
+        if (state.request) {
             const deleted = await state.request.cancel()
-            if ( deleted ) {
+            if (deleted) {
                 commit('clear')
                 return true
             }
@@ -82,24 +90,31 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         return false
     },
     async archive({ state }: { state: SupabaseRequestState }) {
-        if ( state.request ) {
+        if (state.request) {
             const archived = await state.request.archive()
-            if ( archived ) {
+            if (archived) {
                 return true
             }
         }
         return false
     },
-    async complete({ state }: { state: SupabaseRequestState }) {
-        if ( state.request ) {
+    async complete({ state, rootGetters }: { state: SupabaseRequestState, rootGetters: any }) {
+        if (state.request) {
             const completed = await state.request.complete()
-            if ( completed ) {
+            if (completed) {
+                await notify({
+                    user_id: rootGetters['supabaseAuth/authUser'].id,
+                    request_id: state.request.id,
+                    action: 'request_you_submitted_complete',
+                    token: await getToken(),
+                    message_text: null
+                })
                 return true
             }
         }
         return false
     },
-    async addAttachment ({ state, dispatch, rootGetters } : { state: SupabaseRequestState, dispatch: Dispatch, rootGetters : any}, file : File) {
+    async addAttachment({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }, file: File) {
         // Default number of pages for an attachment
         let pages = 1
 
@@ -111,7 +126,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
             pages = await countPages(file)
         }
 
-        if ( !state.request || !state.request.id ) {
+        if (!state.request || !state.request.id) {
             return false
         }
 
@@ -122,7 +137,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
                 .from('attachments')
                 .upload(filePath, file)
 
-            if ( error ) {
+            if (error) {
                 throw error
             }
 
@@ -130,11 +145,11 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
                 .from('attachments')
                 .getPublicUrl(filePath)
 
-            if ( publicError || !publicURL ) {
+            if (publicError || !publicURL) {
                 throw publicError
             }
 
-            if ( state.request && state.request.id ) {
+            if (state.request && state.request.id) {
                 const newAttachment = new Attachment({
                     request_id: state.request.id,
                     user_id: rootGetters['supabaseAuth/authUser'].id,
@@ -148,18 +163,18 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
             }
 
             return true
-        } catch(error) {
+        } catch (error) {
             console.log(error)
             return false
         }
     },
-    async deleteAttachment ({ state, commit, dispatch }, attachment) {
+    async deleteAttachment({ state, commit, dispatch }, attachment) {
         // Get the filename from the Google Storage URL
         const url = new URL(attachment.url)
         const path = decodeURIComponent(url.pathname)
         const filename = path.replace(/.*\//, '')
 
-        if ( !state.request || !state.request.id ) {
+        if (!state.request || !state.request.id) {
             return false
         }
 
@@ -171,13 +186,13 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
                 .from('attachments')
                 .remove([filePath])
 
-            if ( error ) {
+            if (error) {
                 throw error
             }
 
             const result = await attachment.delete()
 
-            if ( result === false ) {
+            if (result === false) {
                 throw 'attachment was deleted but record was not.'
             }
 
@@ -193,7 +208,7 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
 /**
  * Counts the pages of a PDF file
  */
- const countPages = (pdf : File) : Promise<number> => {
+const countPages = (pdf: File): Promise<number> => {
     const reader = new FileReader()
 
     return new Promise((resolve, reject) => {
@@ -203,15 +218,15 @@ export const actions : ActionTree<SupabaseRequestState, SupabaseRequestState> = 
         }
 
         reader.onloadend = () => {
-            if ( reader && reader.result && reader.result !instanceof ArrayBuffer ) {
+            if (reader && reader.result && reader.result! instanceof ArrayBuffer) {
                 let result = new String(reader.result)
                 const matches = result.match(/\/Type[\s]*\/Page[^s]/g)
-                if ( matches !== null ) {
+                if (matches !== null) {
                     resolve(matches.length)
                 }
             }
             resolve(1)
-            
+
         }
         reader.readAsText(pdf)
     })

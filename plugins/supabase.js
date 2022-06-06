@@ -8,6 +8,10 @@ export const supabase = createClient(
 
 export const postgrest = new PostgrestClient(process.env.SUPABASE_URL)
 
+export const getToken = async () => {
+    return await supabase.auth.session()?.access_token
+}
+
 export default async function setStore ({ store, app: { router } }) {
     console.log('setting supabase store from plugin')
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
@@ -20,6 +24,7 @@ export default async function setStore ({ store, app: { router } }) {
 
         console.log(_, session)
         if (_ === 'SIGNED_OUT') {
+            store.commit('supabaseChat/clear')
             store.commit('supabaseAuth/clear')
             router.push('/login')
             return
@@ -48,12 +53,13 @@ export default async function setStore ({ store, app: { router } }) {
             if (!store.getters['supabaseAuth/justRegistered']) {
                 await store.dispatch('supabaseAuth/fetchUserMeta')
                 await store.dispatch('supabaseAuth/fetchUserOrganizations')
-                // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
                 const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
                 console.log('inProgressRequest', inProgressRequest)
 
                 const hasInProgressRequest = inProgressRequest && inProgressRequest.request
+
+                await store.dispatch('supabaseAuth/checkHasSignUpEmail')
 
                 if (hasInProgressRequest) {
                     router.push('/request/create')

@@ -60,7 +60,7 @@ export class Organization {
         return []
     }
 
-    public static async getById(id: string) {
+    public static async getById(id: string | number) {
         let { data: org, error } = await supabase.from(TABLE_NAME)
             .select(`
                 *,
