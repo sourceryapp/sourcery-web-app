@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const functions_base = 'https://csfzqcahdlzghhzgbvtq.functions.supabase.co'
+const supabase_url_base = process.env.SUPABASE_URL.replace('.supabase.co', '')
+const functions_base = supabase_url_base + '.functions.supabase.co'
 
 export const notify = async ({ action, user_id, request_id, message_text, token }) => {
     const fname = 'notify'
