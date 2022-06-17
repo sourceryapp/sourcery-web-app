@@ -95,6 +95,9 @@
             </v-row>
           </v-card-text>
           <v-card-actions v-if="isOwner" class="mr-2">
+            <v-btn color="primary" class="px-4" @click="startChat(request)">
+              Open Chat
+            </v-btn>
             <v-spacer />
             <v-btn v-if="isSubmitted" color="primary" class="px-4" @click="cancel">
               Cancel
@@ -104,6 +107,9 @@
             </v-btn>
           </v-card-actions>
           <v-card-actions v-if="canManage" class="mr-2">
+            <v-btn color="primary" class="px-4" @click="startChat(request)">
+              Open Chat
+            </v-btn>
             <v-spacer />
             <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
               Move to In Progress
@@ -241,7 +247,8 @@ export default {
             requestCancel: 'supabaseRequest/cancel',
             requestArchive: 'supabaseRequest/archive',
             requestPickUp: 'supabaseRequest/pickUp',
-            saveLabel: 'supabaseRequest/setLabel'
+            saveLabel: 'supabaseRequest/setLabel',
+            startChat: 'supabaseChat/openForRequest'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
