@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+    <v-flex xs12 sm10 xl8 offset-sm1 offset-xl2>
       <template v-if="!id">
         <v-alert type="error" :value="true">
           The request does not exist or was deleted.
@@ -10,42 +10,105 @@
         </v-btn>
       </template>
       <template v-if="id">
-        <v-card>
-          <v-card-title>
-            <div>
-              <div class="text-h5">
-                {{ requestLabel }}
-              </div>
+        <h1 class="mb-6">
+          {{ pageTitle }}
+        </h1>
+        <v-card class="pb-2">
+          <v-card-text>
+            <v-row>
+              <v-col v-if="featuredImageSrc" cols="5">
+                <v-img :src="featuredImageSrc" aspect-ratio="1.65" />
+              </v-col>
+              <v-col>
+                <div class="text-h5 mb-2">
+                  <v-row>
+                    <v-col cols="9">
+                      <span v-if="!editing">{{ requestLabel }}</span>
+                      <v-text-field v-else v-model="editingLabelValue" label="Edit Label" class="edit-label" />
+                    </v-col>
+                    <v-col cols="3" class="d-flex">
+                      <v-tooltip top>
+                        <template #activator="{ attrs, on }">
+                          <v-btn
+                            dark
+                            small
+                            fab
+                            class="mx-2"
+                            v-bind="attrs"
+                            @click="labelButtonAction"
+                            v-on="on"
+                          >
+                            <v-icon>
+                              {{ labelActionButtonIcon }}
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ labelActionButtonTooltipText }}</span>
+                      </v-tooltip>
 
-              <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
+                      <v-tooltip v-if="editing" top>
+                        <template #activator="{ attrs, on }">
+                          <v-btn
+                            dark
+                            small
+                            fab
+                            class="mx-2"
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="cancelLabelEdit"
+                          >
+                            <v-icon>
+                              mdi-close
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Cancel Edit</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                </div>
 
-              <v-divider class="mt-3 mb-3" />
+                <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
 
-              <div>
-                <strong>Created</strong>: {{ dateCreated }}
-              </div>
+                <v-divider class="mt-3 mb-3" />
 
-              <div class="" style="text-transform:capitalize">
-                <strong>Status</strong>: {{ prettyStatus }}
-              </div>
-              <div class="">
-                <strong>Repository</strong>: {{ request.repository.name }}
-              </div>
-            </div>
-          </v-card-title>
-          <v-card-actions v-if="isOwner">
-            <v-btn v-if="isSubmitted" color="primary" @click="cancel">
+                <div>
+                  Created {{ dateCreated }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Status</strong>: {{ prettyStatus }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Repository</strong>: {{ request.repository.name }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Institution</strong>: {{ request.repository.organization.name }}
+                </div>
+
+                <div v-if="requestEmail" class="text-h6">
+                  <strong>Request Email</strong>: {{ requestEmail }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions v-if="isOwner" class="mr-2">
+            <v-spacer />
+            <v-btn v-if="isSubmitted" color="primary" class="px-4" @click="cancel">
               Cancel
             </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
-          <v-card-actions v-if="canManage">
-            <v-btn v-if="isSubmitted" color="primary" @click="pickUp">
-              Pick Up / Claim
+          <v-card-actions v-if="canManage" class="mr-2">
+            <v-spacer />
+            <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
+              Move to In Progress
             </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
@@ -81,6 +144,12 @@ export default {
 
         if (!canManage && !isRequester) {
             return redirect('/dashboard')
+        }
+    },
+    data () {
+        return {
+            editing: false,
+            editingLabelValue: ''
         }
     },
     computed: {
@@ -133,13 +202,46 @@ export default {
                 return this.request.request_client.label
             }
             return this.request.request_vendor.label
+        },
+        pageTitle () {
+            if (this.isComplete || this.isArchived) {
+                return 'Request Receipt'
+            }
+
+            if (this.canManage) {
+                return 'Fulfill Request'
+            }
+
+            return 'Request Summary'
+        },
+        featuredImageSrc () {
+            return this.request.repository.featured_image?.url
+        },
+        labelActionButtonIcon () {
+            if (this.editing) {
+                return 'mdi-content-save'
+            }
+            return 'mdi-pencil'
+        },
+        labelActionButtonTooltipText () {
+            if (this.editing) {
+                return 'Save Label'
+            }
+            return 'Edit Label'
+        },
+        requestEmail () {
+            return this.request.user?.email ? this.request.user.email : false
         }
+    },
+    mounted () {
+        this.editingLabelValue = this.requestLabel
     },
     methods: {
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
             requestArchive: 'supabaseRequest/archive',
-            requestPickUp: 'supabaseRequest/pickUp'
+            requestPickUp: 'supabaseRequest/pickUp',
+            saveLabel: 'supabaseRequest/setLabel'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -170,6 +272,27 @@ export default {
                     console.log('Error picking up request.')
                 }
             }
+        },
+        async labelButtonAction () {
+            if (this.editing) {
+                this.editing = false
+                const payload = {
+                    client: this.isOwner,
+                    label: this.editingLabelValue
+                }
+                const result = await this.saveLabel(payload)
+                if (result) {
+                    this.$toast.success('Label saved successfully.')
+                    return
+                }
+                this.$toast.error('Issue saving label.')
+            } else {
+                this.editing = true
+            }
+        },
+        cancelLabelEdit () {
+            this.editing = false
+            this.editingLabelValue = this.requestLabel
         }
     }
 }
@@ -178,5 +301,6 @@ export default {
 <style scoped>
 .citation {
     font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
 }
 </style>
