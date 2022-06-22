@@ -33,9 +33,7 @@
                 <template #activator="{ on, attrs }">
                   <v-btn
                     class="mx-2"
-                    fab
-                    dark
-                    small
+                    icon
                     v-bind="attrs"
                     v-on="on"
                   >

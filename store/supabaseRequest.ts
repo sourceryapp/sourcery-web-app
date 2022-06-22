@@ -50,6 +50,16 @@ export const mutations: MutationTree<SupabaseRequestState> = {
     set(state: SupabaseRequestState, value: Request) {
         state.request = value
     },
+    setClientLabel(state: SupabaseRequestState, value: string) {
+        if ( state.request?.request_client ) {
+            state.request.request_client.label = value
+        }
+    },
+    setVendorLabel(state: SupabaseRequestState, value: string) {
+        if ( state.request?.request_vendor ) {
+            state.request.request_vendor.label = value
+        }
+    },
     clear(state: SupabaseRequestState) {
         const initial = initialState()
         state.request = initial.request
@@ -110,6 +120,24 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     message_text: null
                 })
                 return true
+            }
+        }
+        return false
+    },
+    async setLabel({ state, commit }: { state: SupabaseRequestState, commit: Commit }, {
+        client, label
+    } : { client: boolean, label: string }) {
+        if ( state.request ) {
+            const r = new Request(state.request)
+            const result = await r.saveLabel(client, label)
+
+            if ( result ) {
+                if ( client ) {
+                    commit('setClientLabel', label)
+                } else {
+                    commit('setVendorLabel', label)
+                }
+                return result
             }
         }
         return false
