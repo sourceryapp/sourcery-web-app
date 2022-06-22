@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex xs12 sm10 offset-sm-1>
-      <file-manager :id="26" />
+      <file-manager :id="26" title="Attachments" title-class="text-h6" />
     </v-flex>
   </v-layout>
 </template>

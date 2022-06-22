@@ -1,16 +1,47 @@
 <template>
-  <v-layout>
+  <v-container>
     <v-row>
-      <v-col class="d-flex child-flex" cols="4">
-        <file-input />
+      <v-col class="d-flex child-flex" cols="12" md="9">
+        <span :class="titleClass">{{ title }}</span>
       </v-col>
+      <v-col class="d-flex child-flex" cols="12" md="3">
+        <!-- File Upload -->
+        <file-input
+          multiple
+          accept="image/*,.pdf"
+          text="Upload File"
+          icon="mdi-cloud-upload"
+          @change="updateFileList"
+        />
+      </v-col>
+      <!-- Camera Upload/Control WIP -->
+
+      <!-- <v-col class="d-flex child-flex" cols="12" md="3">
+        <file-input
+          multiple
+          accept="image/*,.pdf"
+          text="Take Photo"
+          icon="mdi-camera"
+          capture="environment"
+          @change="updateFileList"
+        />
+      </v-col> -->
+    </v-row>
+    <!-- Active Uploads -->
+    <v-row v-if="fileList.length !== 0">
+      <v-col cols="12">
+        <file-queue :id="id" :items="fileList" />
+      </v-col>
+    </v-row>
+    <v-row>
+      <!-- Existing Files -->
       <template v-if="request && request.attachments">
-        <v-col v-for="record in request.attachments" :key="record.id" class="d-flex child-flex" cols="4">
-          <file :file="record" />
+        <v-col v-for="record in request.attachments" :key="record.id" :class="colClasses" :cols="colCount">
+          <file :src="record.url" />
         </v-col>
       </template>
     </v-row>
-  </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -22,11 +53,24 @@ export default {
         id: {
             type: Number,
             required: true
+        },
+        title: {
+            type: String,
+            required: false,
+            default: 'Uploads'
+        },
+        titleClass: {
+            type: String,
+            require: false,
+            default: 'text-h6'
         }
     },
     data () {
         return {
-            request: null
+            colCount: 4,
+            colClasses: 'd-flex child-flex',
+            request: null,
+            fileList: []
         }
     },
     async fetch () {
@@ -39,6 +83,14 @@ export default {
         // console.log(this.request)
     },
     methods: {
+        updateFileList (fileList) {
+            console.log(fileList)
+            this.fileList = fileList
+        },
+        getLocalUrl (file) {
+            return URL.createObjectURL(file)
+        }
+
     }
 }
 </script>

@@ -1,10 +1,12 @@
 <template>
   <div>
     <v-img
-      v-if="file"
-      :src="file.url"
+      v-if="src"
+      :src="src"
+      :lazy-src="lazySrc"
       aspect-ratio="1"
       class="grey lighten-2"
+      max-width="100%"
     >
       <template #placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
@@ -20,9 +22,14 @@
 export default {
     name: 'File',
     props: {
-        file: {
-            type: Object,
-            required: true
+        src: {
+            type: String,
+            required: true,
+            default: '#'
+        },
+        'lazy-src': {
+            type: String,
+            default: undefined
         }
     },
     data () {
@@ -32,7 +39,7 @@ export default {
     computed: {
     },
     mounted () {
-        console.log(this.file)
+        console.log(this.src)
     }
 }
 </script>
