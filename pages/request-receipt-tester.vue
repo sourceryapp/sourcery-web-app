@@ -14,7 +14,7 @@
         <v-col cols="12" md="6">
           <card-with-header :title="cardTitle">
             <v-card-text class="py-4">
-              <button-download text="Download Files" />
+              <button-download text="Download Files" :request="request" />
             </v-card-text>
             <v-card-text>
               <div class="mb-4">
