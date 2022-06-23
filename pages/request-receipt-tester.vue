@@ -37,9 +37,9 @@
           </card-with-header>
         </v-col>
         <v-col cols="12" md="6">
-          <card-with-header title="Message History (43)">
+          <card-with-header :title="messagesCardTitle">
             <v-card-text>
-              <p>Messages here.</p>
+              <chat-list :request="request" />
             </v-card-text>
           </card-with-header>
 
@@ -59,12 +59,16 @@
 <script>
 import { mapGetters } from 'vuex'
 import { Request } from '~/models/Request'
+import { RequestComment } from '~/models/RequestComment'
 
 export default {
     async asyncData () {
-        const request = await Request.getById(20)
+        // const request = await Request.getById(20)
+        const request = await Request.getById(22)
+        const messageCount = await RequestComment.countForRequest(request)
         return {
-            request
+            request,
+            messageCount
         }
     },
     computed: {
@@ -83,6 +87,9 @@ export default {
                 return this.request.request_client.label
             }
             return this.request.request_vendor.label
+        },
+        messagesCardTitle () {
+            return `Message History (${this.messageCount})`
         }
     }
 }
