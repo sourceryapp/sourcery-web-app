@@ -1,53 +1,52 @@
 <template>
   <!-- Active Uploads -->
 
-  <v-list three-line>
+  <v-list v-if="items.length !== 0" three-line>
     <div v-for="(item, index) in items" :key="index">
       <v-divider />
-
-      <v-list-item>
-        <v-list-item-avatar>
-          <v-img :src="getImagePreview(item)" />
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title v-html="item.name" />
-          <!-- <v-list-item-subtitle v-html="item.lastModifiedDate" /> -->
-          <v-progress-linear color="primary" height="10" value="10" striped />
-        </v-list-item-content>
-      </v-list-item>
+      <file-uploader :file="item" @success="uploadCompleted(index)" @failure="uploadFailed" />
     </div>
   </v-list>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
     name: 'FileQueue',
     props: {
         id: {
             type: Number,
             required: true
-        },
-        items: {
-            type: FileList,
-            required: true
         }
     },
     data () {
         return {
+            uploaded: false
         }
     },
     async fetch () {
     },
     computed: {
-    },
-    mounted () {
-    },
-    methods: {
-        getImagePreview (file) {
-            return URL.createObjectURL(file)
+        items () {
+            return this.$store.state.fileList.files
         }
 
+    },
+    mounted () {
+        console.warn('Items', this.items)
+    },
+    methods: {
+        ...mapMutations({
+            removeFileFromQueue: 'fileList/remove'
+        }),
+        uploadCompleted (i) {
+            console.log('upload complete!', i)
+            this.removeFileFromQueue(i)
+        },
+        uploadFailed (error) {
+            console.log(error)
+        }
     }
 }
 </script>

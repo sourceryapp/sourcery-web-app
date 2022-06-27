@@ -28,9 +28,9 @@
       </v-col> -->
     </v-row>
     <!-- Active Uploads -->
-    <v-row v-if="fileList.length !== 0">
+    <v-row>
       <v-col cols="12">
-        <file-queue :id="id" :items="fileList" />
+        <file-queue :id="id" />
       </v-col>
     </v-row>
     <v-row>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { Request } from '~/models/Request'
+import { mapActions } from 'vuex'
 
 export default {
     name: 'FileManager',
@@ -69,23 +69,35 @@ export default {
         return {
             colCount: 4,
             colClasses: 'd-flex child-flex',
-            request: null,
             fileList: []
         }
     },
     async fetch () {
-        // Getting request directly to bypass store for now
-        this.request = await Request.getById(this.id)
+        // Populate the store and local var request
+        await this.getById(this.id)
     },
     computed: {
+        request () {
+            return this.$store.state.supabaseRequest.request
+        },
+        items () {
+            return this.$store.state.fileList.files
+        }
     },
     mounted () {
         // console.log(this.request)
     },
     methods: {
+        ...mapActions({
+            getById: 'supabaseRequest/getById',
+            addAttachment: 'supabaseRequest/addAttachment',
+            deleteAttachment: 'supabaseRequest/deleteAttachment',
+            complete: 'supabaseRequest/complete',
+            addAll: 'fileList/addAll'
+        }),
         updateFileList (fileList) {
-            console.log(fileList)
-            this.fileList = fileList
+            console.info('file list updated')
+            this.addAll(fileList)
         },
         getLocalUrl (file) {
             return URL.createObjectURL(file)

@@ -3,7 +3,6 @@
     <v-img
       v-if="src"
       :src="src"
-      :lazy-src="lazySrc"
       aspect-ratio="1"
       class="grey lighten-2"
       max-width="100%"
@@ -26,10 +25,6 @@ export default {
             type: String,
             required: true,
             default: '#'
-        },
-        'lazy-src': {
-            type: String,
-            default: undefined
         }
     },
     data () {
@@ -39,7 +34,6 @@ export default {
     computed: {
     },
     mounted () {
-        console.log(this.src)
     }
 }
 </script>
