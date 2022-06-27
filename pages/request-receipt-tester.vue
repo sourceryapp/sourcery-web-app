@@ -44,8 +44,8 @@
           </card-with-header>
 
           <card-with-header title="Archive's Citation(s)">
-            <v-card-text>
-              <p>Citation Here.</p>
+            <v-card-text class="py-3">
+              <copy-text-box :text="request.archive_citation" />
             </v-card-text>
           </card-with-header>
 

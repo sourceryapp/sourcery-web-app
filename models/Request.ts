@@ -17,6 +17,7 @@ export type CreateRequest = {
     user_id: string
     created_at: string | null
     updated_at: string | null
+    archive_citation: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -36,6 +37,7 @@ export class Request {
     user_id: string
     created_at: string | null
     updated_at: string | null
+    archive_citation: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -55,6 +57,7 @@ export class Request {
         user = undefined,
         created_at = null,
         updated_at = null,
+        archive_citation = null,
         status = undefined,
         repository = undefined,
         request_clients = undefined,
@@ -99,6 +102,8 @@ export class Request {
         if ( user ) {
             this.user = new User(user)
         }
+
+        this.archive_citation = archive_citation
     }
 
     toInsertJSON() {
