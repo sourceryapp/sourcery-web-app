@@ -3,7 +3,7 @@
     v-model="open"
     app
     bottom
-    :class="$vuetify.breakpoint.mobile ? 'rounded-t-xl' : ''"
+    :class="$vuetify.breakpoint.mobile ? 'sourcery-nav-drawer rounded-t-xl' : 'sourcery-nav-drawer'"
   >
     <v-list
       style="background: rgb(146, 79, 190); background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);"
@@ -288,5 +288,13 @@ export default {
 }
 .v-list-item--dense .v-list-item__content, .v-list--dense .v-list-item .v-list-item__content {
   padding: 4px 0;
+}
+</style>
+
+<style>
+@media print {
+    nav {
+      display: none!important;
+    }
 }
 </style>

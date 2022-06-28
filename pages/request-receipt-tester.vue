@@ -6,7 +6,7 @@
           <button-transparent to="/dashboard" text="Return to Dashboard" icon="mdi-arrow-left-thin" />
         </v-col>
       </v-row>
-      <h1 class="mb-4">
+      <h1 class="mb-4 receipt-page-title">
         Receipt Tester
       </h1>
 
@@ -49,7 +49,7 @@
             </v-card-text>
           </card-with-header>
 
-          <button-large text="Print History and Citations" to="/" />
+          <button-large text="Print History and Citations" :click-action="print" />
         </v-col>
       </v-row>
     </v-flex>
@@ -91,6 +91,19 @@ export default {
         messagesCardTitle () {
             return `Message History (${this.messageCount})`
         }
+    },
+    methods: {
+        print () {
+            window.print()
+        }
     }
 }
 </script>
+
+<style>
+@media print {
+    .receipt-page-title {
+        display: none !important;
+    }
+}
+</style>

@@ -43,5 +43,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+@media print {
+  .text-h5 {
+    color: purple !important;
+    opacity: 1 !important;
+  }
+}
 </style>

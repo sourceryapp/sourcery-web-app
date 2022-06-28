@@ -116,4 +116,10 @@ export default {
         transform: translateY(0px);
     }
 }
+
+@media print {
+    .gradient-button {
+        display: none !important;
+    }
+}
 </style>

@@ -2,6 +2,7 @@
   <v-btn
     text
     :to="to"
+    class="sourcery-btn-transparent"
   >
     <v-icon v-if="icon">
       {{ icon }}
@@ -28,3 +29,11 @@ export default {
     }
 }
 </script>
+
+<style>
+@media print {
+    .sourcery-btn-transparent {
+        display: none !important;
+    }
+}
+</style>

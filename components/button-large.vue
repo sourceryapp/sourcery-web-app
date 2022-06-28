@@ -1,7 +1,13 @@
 <template>
-  <v-btn :to="to" block x-large class="text-uppercase gradient-button">
-    {{ text }}
-  </v-btn>
+  <div>
+    <v-btn v-if="to" :to="to" block x-large class="text-uppercase gradient-button">
+      {{ text }}
+    </v-btn>
+
+    <v-btn v-else block x-large class="text-uppercase gradient-button" @click="clickAction">
+      {{ text }}
+    </v-btn>
+  </div>
 </template>
 
 <script>
@@ -9,11 +15,15 @@ export default {
     props: {
         to: {
             type: String,
-            required: true
+            default: null
         },
         text: {
             type: String,
             required: true
+        },
+        clickAction: {
+            type: Function,
+            default: null
         }
     }
 }
@@ -28,5 +38,11 @@ export default {
 <style>
 .theme--light.gradient-button {
     color: white;
+}
+
+@media print {
+    .gradient-button {
+        display: none !important;
+    }
 }
 </style>

@@ -76,4 +76,10 @@ export default {
         background-color: rgba(255,255,255, 10%);
     }
 }
+
+@media print {
+    .chat-list {
+        overflow: initial !important;
+    }
+}
 </style>
