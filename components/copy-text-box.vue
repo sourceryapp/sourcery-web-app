@@ -4,7 +4,7 @@
       <p class="mr-auto">
         {{ text }}
       </p>
-      <v-btn icon class="copy-text-btn ml-4" @click="copyText">
+      <v-btn icon :class="$vuetify.theme.dark ? 'copy-text-btn copy-text-btn-dark ml-4' : 'copy-text-btn ml-4'" @click="copyText">
         <v-icon>
           {{ copyIcon }}
         </v-icon>
@@ -47,8 +47,10 @@ export default {
 
 <style lang="scss">
 .copy-text-box {
-    background-color: rgba(0, 0, 0, 0.2);
     padding: 10px;
     font-size: 18px;
+    &.copy-text-box-dark {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
 }
 </style>
