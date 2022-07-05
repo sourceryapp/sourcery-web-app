@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="attachments-group">
     <v-card v-if="(isPickedUp || isSubmitted) && userIsVendor" class="mt-3">
       <v-card-title primary-title class="text-h5">
         Attachments
@@ -310,4 +310,11 @@ input[type="file"] {
     color: black;
     background-color: #efefef;
 }
+
+@media print {
+    .attachments-group {
+        display: none !important;
+    }
+}
+
 </style>

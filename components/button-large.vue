@@ -1,11 +1,11 @@
 <template>
   <div>
     <v-btn v-if="to" :to="to" block x-large class="text-uppercase gradient-button">
-      {{ text }}
+      {{ displayText }}
     </v-btn>
 
     <v-btn v-else block x-large class="text-uppercase gradient-button" @click="clickAction">
-      {{ text }}
+      {{ displayText }}
     </v-btn>
   </div>
 </template>
@@ -25,6 +25,14 @@ export default {
             type: Function,
             default: null
         }
+    },
+    computed: {
+        displayText () {
+            if (this.$vuetify?.breakpoint?.mobile) {
+                return this.text.replace('and', '&')
+            }
+            return this.text
+        }
     }
 }
 </script>
@@ -32,6 +40,7 @@ export default {
 <style scoped>
 .gradient-button {
     background: linear-gradient(45deg, #654EA3, #431A5A);
+    max-width: 100%;
 }
 </style>
 
