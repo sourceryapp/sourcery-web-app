@@ -60,9 +60,11 @@ export class Attachment implements SourceryAttachment {
     }
 
     async insert() {
+        // Include the ID in `row` if it exists
+        const row = this.id ? { ...{ id: this.id }, ...this.toInsertJSON() } : this.toInsertJSON()
         const { data: attachment, error } = await supabase.from(TABLE_NAME)
-            .insert([
-                this.toInsertJSON()
+            .upsert([
+                row
             ])
 
         if ( error ) {

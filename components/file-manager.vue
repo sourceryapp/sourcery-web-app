@@ -36,8 +36,8 @@
     <v-row>
       <!-- Existing Files -->
       <template v-if="request && request.attachments">
-        <v-col v-for="record in request.attachments" :key="record.id" :class="colClasses" :cols="colCount">
-          <file :src="record.url" />
+        <v-col v-for="attachment in request.attachments" :key="attachment.id" :class="colClasses" :cols="colCount">
+          <file :attachment="attachment" />
         </v-col>
       </template>
     </v-row>
@@ -85,7 +85,7 @@ export default {
         }
     },
     mounted () {
-        // console.log(this.request)
+        console.log(this.request)
     },
     methods: {
         ...mapActions({
