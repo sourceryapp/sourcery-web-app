@@ -261,7 +261,7 @@ export class Request {
             if ( error ) {
                 console.log(error)
             }
-            this.status_id = archive_status.id
+            // this.status_id = archive_status.id
             return true
         }
         return false
@@ -278,7 +278,7 @@ export class Request {
                 console.log(error)
             }
 
-            this.status_id = cancel_status.id
+            // this.status_id = cancel_status.id
             return true
         }
         return false
@@ -294,7 +294,7 @@ export class Request {
             if ( error ) {
                 console.log(error)
             }
-            this.status_id = complete_status.id
+            // this.status_id = complete_status.id
             return true
         }
         return false

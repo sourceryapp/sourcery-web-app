@@ -260,7 +260,7 @@ export default {
         completeJob () {
             if (confirm('Mark this job complete and send document(s) to the client?')) {
                 this.complete().then(() => {
-                    this.$router.push({ name: 'dashboard' })
+                    // this.$router.push({ name: 'dashboard' })
                 })
             }
         },

@@ -99,19 +99,21 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
         return false
     },
-    async archive({ state }: { state: SupabaseRequestState }) {
+    async archive({ state, dispatch }: { state: SupabaseRequestState, dispatch: Dispatch }) {
         if (state.request) {
             const archived = await state.request.archive()
             if (archived) {
+                await dispatch('getById', state.request.id)
                 return true
             }
         }
         return false
     },
-    async complete({ state, rootGetters }: { state: SupabaseRequestState, rootGetters: any }) {
+    async complete({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
             const completed = await state.request.complete()
             if (completed) {
+                await dispatch('getById', state.request.id)
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
