@@ -19,14 +19,14 @@
       <v-spacer />
       <v-app-bar-title :class="user && $vuetify.breakpoint.smAndDown ? 'mt-2 ma-0 ml-n8' : 'mt-2 ma-0'">
         <nuxt-link id="wordmark-link" to="/dashboard">
-          <img id="logo" :src="$vuetify.theme.dark ? '/img/wordmark-beta-dark.svg' : '/img/wordmark-beta.svg'" alt="Sourcery Logo">
+          <img id="logo" :src="$vuetify.theme.dark ? '/img/wordmark-beta-dark.svg' : '/img/wordmark-beta.svg'" class="sourcery-image-logo" alt="Sourcery Logo">
         </nuxt-link>
       </v-app-bar-title>
       <v-spacer />
     </v-app-bar>
     <sourcery-nav-drawer ref="navdrawer" />
 
-    <v-main pa0>
+    <v-main pa0 class="app-main">
       <v-container fill-height>
         <v-row>
           <v-col>
@@ -103,4 +103,19 @@ export default {
     .v-dialog > .v-card > .v-card__actions {
       padding: 8px
     }
+
+@media print {
+  .app-main {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+  }
+
+  header {
+    position: absolute !important;
+  }
+
+  html,body {
+    background: white !important;
+  }
+}
 </style>

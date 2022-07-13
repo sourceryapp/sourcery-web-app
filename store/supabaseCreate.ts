@@ -132,7 +132,8 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
             user_id: state.client.id,
             id: null,
             created_at: null,
-            updated_at: null
+            updated_at: null, 
+            archive_citation: null
         })
 
         const r = await request.insert()

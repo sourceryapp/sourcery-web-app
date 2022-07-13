@@ -2,6 +2,7 @@ import { supabase } from '~/plugins/supabase'
 import type { definitions } from '~/types/supabase'
 
 const TABLE_NAME = 'attachments'
+const STORAGE_BUCKET_NAME = 'attachments'
 
 interface SourceryAttachment {
     id?: number | null
@@ -87,5 +88,33 @@ export class Attachment implements SourceryAttachment {
         }
 
         return attachment
+    }
+
+    getFileNamePathAndExtension() {
+        return this.url.replace(`${process.env.SUPABASE_URL}/storage/v1/object/public/attachments/`, '')
+    }
+
+    getFileNameAndExtension() {
+        return this.url.substring( this.url.lastIndexOf("/") + 1 )
+    }
+
+    /**
+     * Currently only supported for supabase files.  Firebase blobs are not supported at this time.
+     * @returns 
+     */
+    async getDownloadBlob() {
+        if ( this.url.includes('supabase') ) {
+            const { data, error } = await supabase.storage.from(STORAGE_BUCKET_NAME)
+                .download(this.getFileNamePathAndExtension())
+
+            if ( error ) {
+                console.error('There has been an issue downloading this file.', this)
+                return false
+            }
+
+            return data
+        }
+
+        return false
     }
 }

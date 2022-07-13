@@ -13,7 +13,8 @@
         <h1 class="mb-6">
           {{ pageTitle }}
         </h1>
-        <v-card class="pb-2">
+
+        <v-card v-if="!isComplete && !isArchived" class="pb-2">
           <v-card-text>
             <v-row>
               <v-col v-if="featuredImageSrc" cols="5">
@@ -73,7 +74,7 @@
                 <v-divider class="mt-3 mb-3" />
 
                 <div>
-                  Created {{ dateCreated }}
+                  Created {{ dateAndTimeElapsed }}
                 </div>
 
                 <div class="text-h6">
@@ -120,6 +121,49 @@
           </v-card-actions>
         </v-card>
 
+        <v-row v-else class="mb-4">
+          <v-col cols="12" md="6">
+            <card-with-header :title="requestLabel">
+              <v-card-text class="py-4">
+                <button-download text="Download Files" :request="request" />
+              </v-card-text>
+              <v-card-text>
+                <div class="mb-4">
+                  <h3>Repository:</h3>
+                  <p>{{ request.repository.name }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Date Submitted:</h3>
+                  <p>{{ dateCreated }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Date Completed:</h3>
+                  <p>{{ dateLastUpdated }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Your Citation:</h3>
+                  <p>{{ request.citation }}</p>
+                </div>
+              </v-card-text>
+            </card-with-header>
+          </v-col>
+          <v-col cols="12" md="6">
+            <card-with-header :title="messagesCardTitle">
+              <v-card-text>
+                <chat-list :request="request" />
+              </v-card-text>
+            </card-with-header>
+
+            <card-with-header title="Archive's Citation(s)">
+              <v-card-text class="py-3">
+                <copy-text-box :text="request.archive_citation" />
+              </v-card-text>
+            </card-with-header>
+
+            <button-large text="Print History and Citations" :click-action="print" />
+          </v-col>
+        </v-row>
+
         <Attachments />
       </template>
     </v-flex>
@@ -129,6 +173,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Attachments from '@/components/attachments'
+import { RequestComment } from '~/models/RequestComment'
 
 export default {
     name: 'RequestId',
@@ -152,6 +197,13 @@ export default {
             return redirect('/dashboard')
         }
     },
+
+    async asyncData ({ store }) {
+        const messageCount = await RequestComment.countForRequest(store.getters['supabaseRequest/request'])
+        return {
+            messageCount
+        }
+    },
     data () {
         return {
             editing: false,
@@ -171,7 +223,7 @@ export default {
             user: 'supabaseAuth/authUser',
             userRepositories: 'supabaseAuth/userRepositories'
         }),
-        dateCreated () {
+        dateAndTimeElapsed () {
             if (this.request && this.request.created_at) {
                 const t = new Date(Date.UTC(1970, 0, 1))
                 const c = new Date(this.request.created_at)
@@ -196,6 +248,14 @@ export default {
                 return `${t.toLocaleString('default', { month: 'long' })} ${t.getDate()}, ${t.getFullYear()} (${elapsedString})`
             }
             return null
+        },
+        dateCreated () {
+            const d = new Date(this.request.created_at)
+            return `${d.toLocaleString('default', { month: 'long' })} ${d.getDate()}, ${d.getFullYear()}`
+        },
+        dateLastUpdated () {
+            const d = new Date(this.request.updated_at)
+            return `${d.toLocaleString('default', { month: 'long' })} ${d.getDate()}, ${d.getFullYear()}`
         },
         isOwner () {
             return this.user.id === this.request.user_id
@@ -237,6 +297,9 @@ export default {
         },
         requestEmail () {
             return this.request.user?.email ? this.request.user.email : false
+        },
+        messagesCardTitle () {
+            return `Message History (${this.messageCount})`
         }
     },
     mounted () {
@@ -300,6 +363,9 @@ export default {
         cancelLabelEdit () {
             this.editing = false
             this.editingLabelValue = this.requestLabel
+        },
+        print () {
+            window.print()
         }
     }
 }

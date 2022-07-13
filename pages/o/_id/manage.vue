@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout class="manage-org-page">
     <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
       <h1 class="mb-4">
         Manage Organization
@@ -132,3 +132,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.theme--dark .manage-org-page .input-file::-webkit-file-upload-button {
+  color: black;
+}
+</style>

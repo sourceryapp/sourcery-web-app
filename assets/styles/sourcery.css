@@ -63,3 +63,21 @@ body {
     font-weight: 700;
     line-height: 1.2;
 }
+
+@media print {
+    .v-application .v-application--wrap .v-card .v-card__title,
+    h1,
+    h2 {
+        color: purple !important;
+        caret-color: purple !important;
+    }
+
+    .chat-list,
+    h3,
+    h4,
+    h5,
+    p,
+    strong {
+        color: black !important;
+    }
+}

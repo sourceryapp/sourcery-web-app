@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="attachments-group">
     <v-card v-if="(isPickedUp || isSubmitted) && userIsVendor" class="mt-3">
       <v-card-title primary-title class="text-h5">
         Attachments
@@ -260,7 +260,7 @@ export default {
         completeJob () {
             if (confirm('Mark this job complete and send document(s) to the client?')) {
                 this.complete().then(() => {
-                    this.$router.push({ name: 'dashboard' })
+                    // this.$router.push({ name: 'dashboard' })
                 })
             }
         },
@@ -310,4 +310,11 @@ input[type="file"] {
     color: black;
     background-color: #efefef;
 }
+
+@media print {
+    .attachments-group {
+        display: none !important;
+    }
+}
+
 </style>
