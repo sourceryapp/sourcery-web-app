@@ -143,13 +143,20 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
             commit('reset')
             if (Array.isArray(r) && r.length > 0) {
                 const id = r[0].id
-                await notify({
+                const notify_payload = {
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: id,
                     action: 'request_submitted_to_your_org',
                     token: await getToken(),
                     message_text: null
-                })
+                }
+                try {
+                    await notify(notify_payload)
+                } catch(e) {
+                    // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
+                    console.log(e)
+                }
+                
             }
         }
 
