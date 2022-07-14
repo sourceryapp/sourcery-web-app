@@ -140,7 +140,6 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
 
         if (r) {
             // Successful insert.
-            commit('reset')
             if (Array.isArray(r) && r.length > 0) {
                 const id = r[0].id
                 const notify_payload = {
@@ -158,6 +157,8 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                 }
                 
             }
+
+            commit('reset')
         }
 
         return r
