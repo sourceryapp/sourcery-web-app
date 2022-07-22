@@ -20,12 +20,35 @@
       </template>
 
       <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          <EditableText :text="label" @change="updateLabel" />
+        <v-card-title class="text-h5">
+          <v-row justify="space-between">
+            <v-col cols="9" md="10">
+              <EditableText :text="label" @change="updateLabel" />
+            </v-col>
+            <v-col cols="3" md="2" class="text-right">
+              <v-btn color="primary" :loading="deleting" :disabled="deleting" @click="deleteThisAttachment()">
+                Delete
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card-title>
 
         <v-card-text>
-          <v-img v-if="attachment.url" :src="attachment.url" aspect-ratio="1" class="grey lighten-2" max-width="100%" />
+          <v-row>
+            <v-col cols="12" md="3">
+              <div>File Type: {{ type() }}</div>
+              <div>File Size: {{ humanReadableBytes() }}</div>
+            </v-col>
+            <v-col cols="12" md="9">
+              <v-img
+                v-if="attachment.url"
+                :src="attachment.url"
+                aspect-ratio="1"
+                class="grey lighten-2"
+                max-width="100%"
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
 
         <v-divider />
@@ -42,6 +65,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import filesize from 'filesize'
 import { Attachment } from '~/models/Attachment'
 export default {
     name: 'File',
@@ -54,7 +79,9 @@ export default {
     },
     data () {
         return {
-            showDetails: false
+            showDetails: false,
+            attachmentSize: 0,
+            deleting: false
         }
     },
     computed: {
@@ -68,8 +95,22 @@ export default {
         }
     },
     mounted () {
+        /**
+        * We don't store the filesize, so...
+        */
+        fetch(this.attachment.url, {
+            method: 'HEAD',
+            mode: 'cors',
+            cache: 'force-cache'
+        }).then((response) => {
+            // console.log(response)
+            this.attachmentSize = response.headers.get('Content-Length')
+        })
     },
     methods: {
+        ...mapActions({
+            deleteAttachment: 'supabaseRequest/deleteAttachment'
+        }),
         updateLabel (val) {
             const a = new Attachment(this.attachment)
             a.label = val
@@ -78,7 +119,21 @@ export default {
             } catch (error) {
                 console.error('Couldn\'t Save Label', error)
             }
+        },
+        humanReadableBytes () {
+            return filesize(this.attachmentSize)
+        },
+        type () {
+            return this.attachment.url.substr(this.attachment.url.lastIndexOf('.') + 1).toUpperCase()
+        },
+        async deleteThisAttachment () {
+            this.deleting = true
+            if (await this.deleteAttachment(this.attachment)) {
+                this.deleting = false
+                this.$emit('deleted')
+            }
         }
+
     }
 }
 </script>

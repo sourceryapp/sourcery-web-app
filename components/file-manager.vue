@@ -37,7 +37,7 @@
       <!-- Existing Files -->
       <template v-if="request && request.attachments">
         <v-col v-for="attachment in request.attachments" :key="attachment.id" :class="colClasses" :cols="colCount">
-          <file :attachment="attachment" />
+          <file :attachment="attachment" @deleted="attachmentDeleted" />
         </v-col>
       </template>
     </v-row>
@@ -101,6 +101,10 @@ export default {
         },
         getLocalUrl (file) {
             return URL.createObjectURL(file)
+        },
+        attachmentDeleted () {
+            // Event listener for a deleted file...
+            console.log('File component emitted "deleted" event')
         }
 
     }

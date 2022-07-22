@@ -5,6 +5,7 @@ import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
 import { supabase, getToken } from '~/plugins/supabase'
 import { notify } from "~/plugins/sourcery-functions"
+import filesize from 'filesize'
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
 
@@ -130,6 +131,8 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
 
+        console.log(filesize(file.size), file.size)
+
         try {
             const filePath = `jobs/${state.request.id}/${storedFileName}`
 
@@ -154,9 +157,10 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     request_id: state.request.id,
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     url: publicURL,
-                    mime: null,
+                    mime: file.type,
                     pages: pages,
-                    label: ''
+                    label: storedFileName,
+                    size: file.size
                 })
                 const status = await newAttachment.insert()
                 await dispatch('getById', state.request.id)

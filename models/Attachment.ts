@@ -9,6 +9,7 @@ interface SourceryAttachment {
     user_id: string
     url: string
     mime: string | null
+    size: Number | null
     label: string
     pages: Number
     created_at?: string | null
@@ -20,6 +21,7 @@ export class Attachment implements SourceryAttachment {
     user_id: string
     url: string
     mime: string | null
+    size: Number | null
     label: string
     pages: Number
     created_at?: string | null
@@ -30,6 +32,7 @@ export class Attachment implements SourceryAttachment {
         user_id,
         url,
         mime,
+        size,
         label,
         pages,
         created_at = null
@@ -39,6 +42,7 @@ export class Attachment implements SourceryAttachment {
         this.user_id = user_id
         this.url = url
         this.mime = mime
+        this.size = size
         this.label = label
         this.pages = pages
         this.created_at = created_at
@@ -50,6 +54,7 @@ export class Attachment implements SourceryAttachment {
             user_id: this.user_id,
             url: this.url,
             mime: this.mime,
+            size: this.size,
             label: this.label,
             pages: this.pages
         }

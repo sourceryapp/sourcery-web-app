@@ -29,6 +29,7 @@
     "algoliasearch": "^4.8.3",
     "core-js": "^3.9.1",
     "cross-env": "^5.2.0",
+    "filesize": "^9.0.11",
     "firebase": "^8.5.0",
     "geolib": "^3.0.3",
     "instantsearch.css": "^7.4.2",
