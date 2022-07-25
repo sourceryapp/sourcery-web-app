@@ -164,6 +164,20 @@
           </v-col>
         </v-row>
 
+        <v-card class="my-3 px-4">
+          <v-card-title>General Notes &amp; Links</v-card-title>
+          <v-card-text>
+            <v-textarea
+              outlined
+              rows="3"
+              placeholder="Type any notes, links, and context here..."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              :value="notesAndLinksValue"
+            />
+          </v-card-text>
+        </v-card>
+
         <Attachments />
       </template>
     </v-flex>
@@ -207,7 +221,8 @@ export default {
     data () {
         return {
             editing: false,
-            editingLabelValue: ''
+            editingLabelValue: '',
+            notesAndLinksValue: ''
         }
     },
     computed: {

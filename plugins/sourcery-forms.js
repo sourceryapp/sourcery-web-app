@@ -17,7 +17,8 @@ export default ({ app }, inject) => {
                 password: [
                     v => v.length >= 8 || 'Password must be at least 8 characters',
                     v => special_characters.some(substring => v.includes(substring)) || 'Password must contain 1 special character'
-                ]
+                ],
+                largeTextAreaCounter: value => value.length < 6000 || 'Max 6000 characters'
             },
             special_characters
         }

@@ -12,7 +12,7 @@ export const getToken = async () => {
     return await supabase.auth.session()?.access_token
 }
 
-export default async function setStore ({ store, app: { router } }) {
+export default async function setStore ({ store, route, app: { router } }) {
     console.log('setting supabase store from plugin')
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     await store.dispatch('supabaseAuth/fetchUserMeta')
@@ -61,10 +61,14 @@ export default async function setStore ({ store, app: { router } }) {
 
                 await store.dispatch('supabaseAuth/checkHasSignUpEmail')
 
-                if (hasInProgressRequest) {
-                    router.push('/request/create')
-                } else {
-                    router.push('/dashboard')
+                // Only redirecting if we came from 'login'.
+                // There was inconsistent behavior when first hitting the homepage that could cause users to immediately hit the dashboard, when that might not have been intended.
+                if (route.path === '/login') {
+                    if (hasInProgressRequest) {
+                        router.push('/request/create')
+                    } else {
+                        router.push('/dashboard')
+                    }
                 }
             }
         }
