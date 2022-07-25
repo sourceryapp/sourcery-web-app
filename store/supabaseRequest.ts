@@ -131,7 +131,6 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
 
-        console.log(filesize(file.size), file.size)
 
         try {
             const filePath = `jobs/${state.request.id}/${storedFileName}`

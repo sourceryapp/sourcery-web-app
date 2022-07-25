@@ -2,21 +2,30 @@
   <div>
     <v-dialog v-model="showDetails" width="80%">
       <template #activator="{ on, attrs }">
-        <v-img
-          v-if="attachment.url"
-          :src="attachment.url"
-          aspect-ratio="1"
-          class="grey lighten-2 pointer"
-          max-width="100%"
-          v-bind="attrs"
-          v-on="on"
-        >
-          <template #placeholder>
-            <v-row class="fill-height ma-0" align="center" justify="center">
-              <v-progress-circular indeterminate color="grey lighten-5" />
-            </v-row>
-          </template>
-        </v-img>
+        <v-hover v-slot="{ hover }">
+          <v-img
+            v-if="attachment.url"
+            :src="previewSrc()"
+            aspect-ratio="1"
+            class="grey lighten-4 pointer"
+            max-width="100%"
+            v-bind="attrs"
+            v-on="on"
+          >
+            <template #placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular indeterminate color="white" />
+              </v-row>
+            </template>
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="primary">
+                <v-icon x-large role="button" aria-label="View Image Details">
+                  mdi-magnify
+                </v-icon>
+              </v-overlay>
+            </v-fade-transition>
+          </v-img>
+        </v-hover>
       </template>
 
       <v-card>
@@ -41,12 +50,19 @@
             </v-col>
             <v-col cols="12" md="9">
               <v-img
-                v-if="attachment.url"
+                v-if="attachment.url && type() !== 'PDF'"
                 :src="attachment.url"
                 aspect-ratio="1"
                 class="grey lighten-2"
                 max-width="100%"
               />
+              <embed
+                v-else
+                :src="`${attachment.url}#toolbar=0&navpanes=1&scrollbar=0`"
+                type="application/pdf"
+                width="100%"
+                height="600px"
+              >
             </v-col>
           </v-row>
         </v-card-text>
@@ -131,6 +147,18 @@ export default {
             if (await this.deleteAttachment(this.attachment)) {
                 this.deleting = false
                 this.$emit('deleted')
+            }
+        },
+        previewSrc () {
+            const sources = {
+                PDF: '/img/pdf.svg',
+                TIFF: '/img/tiff.svg',
+                TIF: '/img/tiff.svg'
+            }
+            if (Object.prototype.hasOwnProperty.call(sources, this.type())) {
+                return sources[this.type()]
+            } else {
+                return this.attachment.url
             }
         }
 

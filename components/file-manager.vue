@@ -8,7 +8,7 @@
         <!-- File Upload -->
         <file-input
           multiple
-          accept="image/*,.pdf"
+          accept=".jpeg,.jpg,.png,.pdf"
           text="Upload File"
           icon="mdi-cloud-upload"
           @change="updateFileList"
