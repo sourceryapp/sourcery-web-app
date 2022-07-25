@@ -168,12 +168,12 @@
           <v-card-title>General Notes &amp; Links</v-card-title>
           <v-card-text>
             <v-textarea
+              v-model="requestArchiveNotes"
               outlined
               rows="3"
               placeholder="Type any notes, links, and context here..."
               counter
               :rules="[$sourceryForms.rules.largeTextAreaCounter]"
-              :value="notesAndLinksValue"
             />
           </v-card-text>
         </v-card>
@@ -238,6 +238,14 @@ export default {
             user: 'supabaseAuth/authUser',
             userRepositories: 'supabaseAuth/userRepositories'
         }),
+        requestArchiveNotes: {
+            get () {
+                return this.request.archive_notes ? this.request.archive_notes : ''
+            },
+            set (val) {
+                this.request.archive_notes = val
+            }
+        },
         dateAndTimeElapsed () {
             if (this.request && this.request.created_at) {
                 const t = new Date(Date.UTC(1970, 0, 1))

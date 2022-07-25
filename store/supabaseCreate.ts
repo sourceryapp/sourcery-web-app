@@ -132,8 +132,9 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
             user_id: state.client.id,
             id: null,
             created_at: null,
-            updated_at: null, 
-            archive_citation: null
+            updated_at: null,
+            archive_citation: null,
+            archive_notes: null
         })
 
         const r = await request.insert()
@@ -151,11 +152,11 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                 }
                 try {
                     await notify(notify_payload)
-                } catch(e) {
+                } catch (e) {
                     // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
                     console.log(e)
                 }
-                
+
             }
 
             commit('reset')

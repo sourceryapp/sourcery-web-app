@@ -18,6 +18,7 @@ export type CreateRequest = {
     created_at: string | null
     updated_at: string | null
     archive_citation: string | null
+    archive_notes: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -38,6 +39,7 @@ export class Request {
     created_at: string | null
     updated_at: string | null
     archive_citation: string | null
+    archive_notes: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -58,6 +60,7 @@ export class Request {
         created_at = null,
         updated_at = null,
         archive_citation = null,
+        archive_notes = null,
         status = undefined,
         repository = undefined,
         request_clients = undefined,
@@ -67,7 +70,7 @@ export class Request {
         attachments = undefined
     }: CreateRequest) {
         this.id = id,
-        this.repository_id = repository_id
+            this.repository_id = repository_id
         this.citation = citation
         this.pages = pages
         this.status_id = status_id
@@ -75,35 +78,36 @@ export class Request {
         this.created_at = created_at
         this.updated_at = updated_at
 
-        if ( status ) {
+        if (status) {
             this.status = new Status(status)
         }
 
-        if ( repository ) {
+        if (repository) {
             this.repository = new Repository(repository)
         }
 
-        if ( request_clients && request_clients.length > 0 ) {
+        if (request_clients && request_clients.length > 0) {
             this.request_client = new RequestClient(request_clients[0])
-        } else if ( request_client ) {
+        } else if (request_client) {
             this.request_client = new RequestClient(request_client)
         }
 
-        if ( request_vendors && request_vendors.length > 0 ) {
+        if (request_vendors && request_vendors.length > 0) {
             this.request_vendor = new RequestVendor(request_vendors[0])
-        } else if ( request_vendor ) {
+        } else if (request_vendor) {
             this.request_vendor = new RequestVendor(request_vendor)
-        } 
+        }
 
-        if ( attachments ) {
+        if (attachments) {
             this.attachments = attachments.map(x => new Attachment(x))
         }
 
-        if ( user ) {
+        if (user) {
             this.user = new User(user)
         }
 
         this.archive_citation = archive_citation
+        this.archive_notes = archive_notes
     }
 
     toInsertJSON() {
@@ -122,9 +126,9 @@ export class Request {
      * @param includeArchived 
      * @returns Request[]
      */
-    public static async getForCreator(user_id : string, status = []) {
+    public static async getForCreator(user_id: string, status = []) {
 
-        if ( status.length < 1 ) {
+        if (status.length < 1) {
             return []
         }
 
@@ -141,7 +145,7 @@ export class Request {
 
         let { data: requests, error } = await query
 
-        if ( Array.isArray(requests) ) {
+        if (Array.isArray(requests)) {
             const rs = requests.map(x => new Request(x))
                 .filter(x => x.status)
             return rs
@@ -156,9 +160,9 @@ export class Request {
      * @param includeArchived 
      * @returns Request[]
      */
-    public static async getForRepositories(repositories : Repository[], status = []) {
+    public static async getForRepositories(repositories: Repository[], status = []) {
 
-        if ( status.length < 1 ) {
+        if (status.length < 1) {
             return []
         }
 
@@ -176,7 +180,7 @@ export class Request {
 
         let { data: requests, error } = await query
 
-        if ( Array.isArray(requests) ) {
+        if (Array.isArray(requests)) {
             const rs = requests.map(x => new Request(x))
                 .filter(x => x.status)
             return rs
@@ -209,7 +213,7 @@ export class Request {
             .limit(1)
             .single()
 
-        if ( request ) {
+        if (request) {
             return new Request(request)
         }
         return null
@@ -217,12 +221,12 @@ export class Request {
 
     async pickUp() {
         const in_progress_status = await Status.getByName('In Progress')
-        if ( in_progress_status ) {
+        if (in_progress_status) {
             const { data: request, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: in_progress_status.id })
                 .eq('id', this.id)
 
-            if ( error ) {
+            if (error) {
                 console.log(error)
             }
             // this.status_id = in_progress_status.id
@@ -240,7 +244,7 @@ export class Request {
             .delete()
             .eq('id', this.id)
 
-        if ( error ) {
+        if (error) {
             console.log(error)
         }
 
@@ -253,12 +257,12 @@ export class Request {
      */
     async archive() {
         const archive_status = await Status.getByName('Archived')
-        if ( archive_status ) {
+        if (archive_status) {
             const { data: replaced, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: archive_status.id })
                 .eq('id', this.id)
 
-            if ( error ) {
+            if (error) {
                 console.log(error)
             }
             // this.status_id = archive_status.id
@@ -269,12 +273,12 @@ export class Request {
 
     async cancel() {
         const cancel_status = await Status.getByName('Cancelled')
-        if ( cancel_status ) {
+        if (cancel_status) {
             const { data: replaced, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: cancel_status.id })
                 .eq('id', this.id)
 
-            if ( error ) {
+            if (error) {
                 console.log(error)
             }
 
@@ -286,12 +290,12 @@ export class Request {
 
     async complete() {
         const complete_status = await Status.getByName('Complete')
-        if ( complete_status ) {
+        if (complete_status) {
             const { data: replaced, error } = await supabase.from(TABLE_NAME)
                 .update({ status_id: complete_status.id })
                 .eq('id', this.id)
 
-            if ( error ) {
+            if (error) {
                 console.log(error)
             }
             // this.status_id = complete_status.id
@@ -305,8 +309,8 @@ export class Request {
             .insert([
                 this.toInsertJSON()
             ])
-        
-        if ( error ) {
+
+        if (error) {
             console.log(error)
             return null
         }
@@ -314,9 +318,9 @@ export class Request {
         return request
     }
 
-    async saveLabel(client = true, label : string) {
+    async saveLabel(client = true, label: string) {
         let status = false
-        if ( client ) {
+        if (client) {
             status = await this.request_client?.update(label) || false
         } else {
             status = await this.request_vendor?.update(label) || false
