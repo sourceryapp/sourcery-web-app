@@ -17,7 +17,8 @@ const initialState = () => {
         authUserPaymentAssociation: null as PaymentAssociation | null,
         authUserOrganizations: [] as Organization[],
         resetAccessToken: '',
-        justRegistered: false
+        justRegistered: false,
+        redirectHome: false
     }
 }
 
@@ -61,6 +62,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     },
     justRegistered(state: SupabaseState) {
         return state.justRegistered
+    },
+    shouldRedirectHome(state: SupabaseState) {
+        return state.redirectHome
     }
 }
 
@@ -86,6 +90,9 @@ export const mutations: MutationTree<SupabaseState> = {
     setJustRegistered(state: SupabaseState, value: boolean) {
         state.justRegistered = value
     },
+    setRedirectHome(state: SupabaseState, value: boolean) {
+        state.redirectHome = value
+    },
     clear(state: SupabaseState) {
         const initial = initialState()
         state.authUser = initial.authUser
@@ -95,6 +102,7 @@ export const mutations: MutationTree<SupabaseState> = {
         state.authUserOrganizations = initial.authUserOrganizations
         state.resetAccessToken = initial.resetAccessToken
         state.justRegistered = initial.justRegistered
+        state.redirectHome = initial.redirectHome
     }
 }
 

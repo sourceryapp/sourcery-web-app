@@ -104,6 +104,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { supabase } from '~/plugins/supabase'
 import RegisterToSubmitRequest from '~/components/register-to-submit-request.vue'
 
@@ -122,9 +123,13 @@ export default {
         }
     },
     methods: {
+        ...mapMutations({
+            setRedirectHome: 'supabaseAuth/setRedirectHome'
+        }),
         async handleEmailPassLogin () {
             this.loadingPass = true
             this.loginError = false
+            this.setRedirectHome(true)
             try {
                 const { error } = await supabase.auth.signIn({
                     email: this.passEmail,
