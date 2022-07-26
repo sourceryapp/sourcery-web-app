@@ -288,11 +288,18 @@ export class Request {
         return false
     }
 
-    async complete() {
+    async complete( meta : {
+        archive_notes?: string | null
+    }) {
+        const update_obj = {
+            archive_notes: meta.archive_notes ? meta.archive_notes : this.archive_notes,
+            status_id: this.status_id
+        }
         const complete_status = await Status.getByName('Complete')
         if (complete_status) {
+            update_obj.status_id = complete_status.id
             const { data: replaced, error } = await supabase.from(TABLE_NAME)
-                .update({ status_id: complete_status.id })
+                .update(update_obj)
                 .eq('id', this.id)
 
             if (error) {
