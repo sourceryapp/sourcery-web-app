@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="d-flex child-flex" cols="12" md="9">
-        <span :class="titleClass">{{ title }}</span>
+      <v-col v-if="!$fetchState.pending" class="d-flex child-flex" cols="12" md="9">
+        <span :class="titleClass">{{ title }} ({{ request.attachments.length }})</span>
       </v-col>
       <v-col class="d-flex child-flex" cols="12" md="3">
         <!-- File Upload -->
@@ -36,7 +36,14 @@
     <v-row>
       <!-- Existing Files -->
       <template v-if="request && request.attachments">
-        <v-col v-for="attachment in request.attachments" :key="attachment.id" :class="colClasses" :cols="colCount">
+        <v-col
+          v-for="attachment in request.attachments"
+          :key="attachment.id"
+          :class="colClasses"
+          cols="12"
+          md="6"
+          xl="4"
+        >
           <file :attachment="attachment" @deleted="attachmentDeleted" />
         </v-col>
       </template>
@@ -67,14 +74,12 @@ export default {
     },
     data () {
         return {
-            colCount: 4,
-            colClasses: 'd-flex child-flex',
-            fileList: []
+            colClasses: 'd-flex child-flex'
         }
     },
-    async fetch () {
+    fetch () {
         // Populate the store and local var request
-        await this.getById(this.id)
+        return this.getById(this.id)
     },
     computed: {
         request () {
@@ -82,10 +87,13 @@ export default {
         },
         items () {
             return this.$store.state.fileList.files
+        },
+        count () {
+            return this.$store.state.supabaseRequest.request.length
         }
     },
     mounted () {
-        console.log(this.request)
+        console.log(this.$store.state.supabaseRequest.request)
     },
     methods: {
         ...mapActions({

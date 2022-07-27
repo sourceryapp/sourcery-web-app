@@ -2,30 +2,39 @@
   <div>
     <v-dialog v-model="showDetails" width="80%">
       <template #activator="{ on, attrs }">
-        <v-hover v-slot="{ hover }">
-          <v-img
-            v-if="attachment.url"
-            :src="previewSrc()"
-            aspect-ratio="1"
-            class="grey lighten-4 pointer"
-            max-width="100%"
-            v-bind="attrs"
-            v-on="on"
-          >
-            <template #placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular indeterminate color="white" />
-              </v-row>
-            </template>
-            <v-fade-transition>
-              <v-overlay v-if="hover" absolute color="primary">
-                <v-icon x-large role="button" aria-label="View Image Details">
-                  mdi-magnify
-                </v-icon>
-              </v-overlay>
-            </v-fade-transition>
-          </v-img>
-        </v-hover>
+        <v-row>
+          <v-col cols="6">
+            <v-hover v-slot="{ hover }">
+              <v-img
+                v-if="attachment.url"
+                :src="previewSrc()"
+                aspect-ratio="1"
+                class="grey lighten-4 pointer"
+                max-width="100%"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <template #placeholder>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="white" />
+                  </v-row>
+                </template>
+                <v-fade-transition>
+                  <v-overlay v-if="hover" absolute color="primary">
+                    <v-icon x-large role="button" aria-label="View Image Details">
+                      mdi-magnify
+                    </v-icon>
+                  </v-overlay>
+                </v-fade-transition>
+              </v-img>
+            </v-hover>
+          </v-col>
+
+          <v-col align-self="center">
+            <!-- <EditableText :text="label" @change="updateLabel" /> -->
+            {{ attachment.label }}
+          </v-col>
+        </v-row>
       </template>
 
       <v-card>
@@ -37,6 +46,9 @@
             <v-col cols="3" md="2" class="text-right">
               <v-btn color="primary" :loading="deleting" :disabled="deleting" @click="deleteThisAttachment()">
                 Delete
+                <v-icon right dark>
+                  mdi-delete
+                </v-icon>
               </v-btn>
             </v-col>
           </v-row>
@@ -44,9 +56,23 @@
 
         <v-card-text>
           <v-row>
-            <v-col cols="12" md="3">
-              <div>File Type: {{ type() }}</div>
-              <div>File Size: {{ humanReadableBytes() }}</div>
+            <v-col cols="12" md="3" class="font-weight-medium">
+              <div class="mb-2">
+                File Type: {{ type() }}
+              </div>
+              <div class="mb-2">
+                File Size: {{ humanReadableBytes() }}
+              </div>
+              <div class="mb-2">
+                Corrected Citation:
+              </div>
+              <v-textarea
+                disabled
+                outlined
+                name="input-7-1"
+                value="Citation corrections are coming soon!"
+                hint="Hint text"
+              />
             </v-col>
             <v-col cols="12" md="9">
               <v-img
