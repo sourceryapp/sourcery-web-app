@@ -104,7 +104,7 @@ export default {
             addAll: 'fileList/addAll'
         }),
         updateFileList (fileList) {
-            console.info('file list updated')
+            console.info('file list updated', fileList)
             this.addAll(fileList)
         },
         getLocalUrl (file) {

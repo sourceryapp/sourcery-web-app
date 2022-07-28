@@ -55,7 +55,6 @@ export default {
     },
     methods: {
         getImagePreview (file) {
-            console.log(file)
             const thumbnails = {
                 'image/tiff': '/img/tiff.svg',
                 'application/pdf': '/img/pdf.svg'

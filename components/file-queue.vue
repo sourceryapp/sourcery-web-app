@@ -2,9 +2,11 @@
   <!-- Active Uploads -->
 
   <v-list v-if="items.length !== 0" three-line>
-    <div v-for="(item, index) in items" :key="index">
-      <v-divider />
-      <file-uploader :file="item" @success="uploadCompleted(index)" @failure="uploadFailed" />
+    <div v-for="item in items" :key="item.key">
+      <template v-if="item.active">
+        <v-divider />
+        <file-uploader :file="item.value" @success="uploadCompleted(item.key)" @failure="uploadFailed" />
+      </template>
     </div>
   </v-list>
 </template>
@@ -34,15 +36,14 @@ export default {
 
     },
     mounted () {
-        console.warn('Items', this.items)
     },
     methods: {
         ...mapMutations({
             removeFileFromQueue: 'fileList/remove'
         }),
-        uploadCompleted (i) {
-            console.log('upload complete!', i)
-            this.removeFileFromQueue(i)
+        uploadCompleted (key) {
+            console.log('upload complete!', key)
+            this.removeFileFromQueue(key)
         },
         uploadFailed (error) {
             console.log(error)

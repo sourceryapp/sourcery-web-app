@@ -5,7 +5,6 @@ import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
 import { supabase, getToken } from '~/plugins/supabase'
 import { notify } from "~/plugins/sourcery-functions"
-import filesize from 'filesize'
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
 
