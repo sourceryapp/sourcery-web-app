@@ -68,6 +68,20 @@ export class RequestComment {
         return []
     }
 
+    public static async countForRequest(request: Request | null) {
+        if ( !request || !request.id ) {
+            return 0
+        }
+
+        const query = supabase.from(TABLE_NAME)
+            .select('request_id', { count: 'exact' })
+            .eq('request_id', request.id)
+
+        let { data, error, count } = await query
+
+        return count
+    }
+
     async insert() {
         const { data: requestComment, error } = await supabase.from(TABLE_NAME)
             .insert([

@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-flex xs12 sm8 xl6 offset-sm2 offset-xl3>
+    <v-flex xs12 sm10 xl8 offset-sm1 offset-xl2>
       <template v-if="!id">
         <v-alert type="error" :value="true">
           The request does not exist or was deleted.
@@ -10,46 +10,159 @@
         </v-btn>
       </template>
       <template v-if="id">
-        <v-card>
-          <v-card-title>
-            <div>
-              <div class="text-h5">
-                {{ requestLabel }}
-              </div>
+        <h1 class="mb-6">
+          {{ pageTitle }}
+        </h1>
 
-              <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
+        <v-card v-if="!isComplete && !isArchived" class="pb-2">
+          <v-card-text>
+            <v-row>
+              <v-col v-if="featuredImageSrc" cols="5">
+                <v-img :src="featuredImageSrc" aspect-ratio="1.65" />
+              </v-col>
+              <v-col>
+                <div class="text-h5 mb-2">
+                  <v-row>
+                    <v-col cols="9">
+                      <span v-if="!editing">{{ requestLabel }}</span>
+                      <v-text-field v-else v-model="editingLabelValue" label="Edit Label" class="edit-label" />
+                    </v-col>
+                    <v-col cols="3" class="d-flex">
+                      <v-tooltip top>
+                        <template #activator="{ attrs, on }">
+                          <v-btn
+                            dark
+                            small
+                            fab
+                            class="mx-2"
+                            v-bind="attrs"
+                            @click="labelButtonAction"
+                            v-on="on"
+                          >
+                            <v-icon>
+                              {{ labelActionButtonIcon }}
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>{{ labelActionButtonTooltipText }}</span>
+                      </v-tooltip>
 
-              <v-divider class="mt-3 mb-3" />
+                      <v-tooltip v-if="editing" top>
+                        <template #activator="{ attrs, on }">
+                          <v-btn
+                            dark
+                            small
+                            fab
+                            class="mx-2"
+                            v-bind="attrs"
+                            v-on="on"
+                            @click="cancelLabelEdit"
+                          >
+                            <v-icon>
+                              mdi-close
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Cancel Edit</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                </div>
 
-              <div>
-                <strong>Created</strong>: {{ dateCreated }}
-              </div>
+                <span :class="$vuetify.theme.dark ? 'citation' : 'grey--text text--darken-4 citation'">{{ request.citation }}</span>
 
-              <div class="" style="text-transform:capitalize">
-                <strong>Status</strong>: {{ prettyStatus }}
-              </div>
-              <div class="">
-                <strong>Repository</strong>: {{ request.repository.name }}
-              </div>
-            </div>
-          </v-card-title>
-          <v-card-actions v-if="isOwner">
-            <v-btn v-if="isSubmitted" color="primary" @click="cancel">
+                <v-divider class="mt-3 mb-3" />
+
+                <div>
+                  Created {{ dateAndTimeElapsed }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Status</strong>: {{ prettyStatus }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Repository</strong>: {{ request.repository.name }}
+                </div>
+
+                <div class="text-h6">
+                  <strong>Institution</strong>: {{ request.repository.organization.name }}
+                </div>
+
+                <div v-if="requestEmail" class="text-h6">
+                  <strong>Request Email</strong>: {{ requestEmail }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions v-if="isOwner" class="mr-2">
+            <v-btn color="primary" class="px-4" @click="startChat(request)">
+              Open Chat
+            </v-btn>
+            <v-spacer />
+            <v-btn v-if="isSubmitted" color="primary" class="px-4" @click="cancel">
               Cancel
             </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
-          <v-card-actions v-if="canManage">
-            <v-btn v-if="isSubmitted" color="primary" @click="pickUp">
-              Pick Up / Claim
+          <v-card-actions v-if="canManage" class="mr-2">
+            <v-btn color="primary" class="px-4" @click="startChat(request)">
+              Open Chat
             </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" color="primary" @click="archive">
+            <v-spacer />
+            <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
+              Move to In Progress
+            </v-btn>
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
         </v-card>
+
+        <v-row v-else class="mb-4">
+          <v-col cols="12" md="6">
+            <card-with-header :title="requestLabel">
+              <v-card-text class="py-4">
+                <button-download text="Download Files" :request="request" />
+              </v-card-text>
+              <v-card-text>
+                <div class="mb-4">
+                  <h3>Repository:</h3>
+                  <p>{{ request.repository.name }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Date Submitted:</h3>
+                  <p>{{ dateCreated }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Date Completed:</h3>
+                  <p>{{ dateLastUpdated }}</p>
+                </div>
+                <div class="mb-4">
+                  <h3>Your Citation:</h3>
+                  <p>{{ request.citation }}</p>
+                </div>
+              </v-card-text>
+            </card-with-header>
+          </v-col>
+          <v-col cols="12" md="6">
+            <card-with-header :title="messagesCardTitle">
+              <v-card-text>
+                <chat-list :request="request" />
+              </v-card-text>
+            </card-with-header>
+
+            <card-with-header title="Archive's Citation(s)">
+              <v-card-text class="py-3">
+                <copy-text-box :text="request.archive_citation" />
+              </v-card-text>
+            </card-with-header>
+
+            <button-large text="Print History and Citations" :click-action="print" />
+          </v-col>
+        </v-row>
 
         <Attachments />
       </template>
@@ -60,6 +173,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import Attachments from '@/components/attachments'
+import { RequestComment } from '~/models/RequestComment'
 
 export default {
     name: 'RequestId',
@@ -83,6 +197,19 @@ export default {
             return redirect('/dashboard')
         }
     },
+
+    async asyncData ({ store }) {
+        const messageCount = await RequestComment.countForRequest(store.getters['supabaseRequest/request'])
+        return {
+            messageCount
+        }
+    },
+    data () {
+        return {
+            editing: false,
+            editingLabelValue: ''
+        }
+    },
     computed: {
         ...mapGetters({
             id: 'supabaseRequest/id',
@@ -96,7 +223,7 @@ export default {
             user: 'supabaseAuth/authUser',
             userRepositories: 'supabaseAuth/userRepositories'
         }),
-        dateCreated () {
+        dateAndTimeElapsed () {
             if (this.request && this.request.created_at) {
                 const t = new Date(Date.UTC(1970, 0, 1))
                 const c = new Date(this.request.created_at)
@@ -122,6 +249,14 @@ export default {
             }
             return null
         },
+        dateCreated () {
+            const d = new Date(this.request.created_at)
+            return `${d.toLocaleString('default', { month: 'long' })} ${d.getDate()}, ${d.getFullYear()}`
+        },
+        dateLastUpdated () {
+            const d = new Date(this.request.updated_at)
+            return `${d.toLocaleString('default', { month: 'long' })} ${d.getDate()}, ${d.getFullYear()}`
+        },
         isOwner () {
             return this.user.id === this.request.user_id
         },
@@ -133,13 +268,50 @@ export default {
                 return this.request.request_client.label
             }
             return this.request.request_vendor.label
+        },
+        pageTitle () {
+            if (this.isComplete || this.isArchived) {
+                return 'Request Receipt'
+            }
+
+            if (this.canManage) {
+                return 'Fulfill Request'
+            }
+
+            return 'Request Summary'
+        },
+        featuredImageSrc () {
+            return this.request.repository.featured_image?.url
+        },
+        labelActionButtonIcon () {
+            if (this.editing) {
+                return 'mdi-content-save'
+            }
+            return 'mdi-pencil'
+        },
+        labelActionButtonTooltipText () {
+            if (this.editing) {
+                return 'Save Label'
+            }
+            return 'Edit Label'
+        },
+        requestEmail () {
+            return this.request.user?.email ? this.request.user.email : false
+        },
+        messagesCardTitle () {
+            return `Message History (${this.messageCount})`
         }
+    },
+    mounted () {
+        this.editingLabelValue = this.requestLabel
     },
     methods: {
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
             requestArchive: 'supabaseRequest/archive',
-            requestPickUp: 'supabaseRequest/pickUp'
+            requestPickUp: 'supabaseRequest/pickUp',
+            saveLabel: 'supabaseRequest/setLabel',
+            startChat: 'supabaseChat/openForRequest'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -170,6 +342,30 @@ export default {
                     console.log('Error picking up request.')
                 }
             }
+        },
+        async labelButtonAction () {
+            if (this.editing) {
+                this.editing = false
+                const payload = {
+                    client: this.isOwner,
+                    label: this.editingLabelValue
+                }
+                const result = await this.saveLabel(payload)
+                if (result) {
+                    this.$toast.success('Label saved successfully.')
+                    return
+                }
+                this.$toast.error('Issue saving label.')
+            } else {
+                this.editing = true
+            }
+        },
+        cancelLabelEdit () {
+            this.editing = false
+            this.editingLabelValue = this.requestLabel
+        },
+        print () {
+            window.print()
         }
     }
 }
@@ -178,5 +374,6 @@ export default {
 <style scoped>
 .citation {
     font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
 }
 </style>

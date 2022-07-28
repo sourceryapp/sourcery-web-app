@@ -4,6 +4,7 @@ import { Repository } from '~/models/Repository'
 import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
 import { Attachment } from '~/models/Attachment'
+import { User } from '~/models/User'
 
 const TABLE_NAME = 'requests'
 
@@ -16,6 +17,7 @@ export type CreateRequest = {
     user_id: string
     created_at: string | null
     updated_at: string | null
+    archive_citation: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -23,6 +25,7 @@ export type CreateRequest = {
     request_vendors?: RequestVendor[]
     request_vendor?: RequestVendor
     attachments?: Attachment[]
+    user?: User
 }
 
 export class Request {
@@ -34,6 +37,7 @@ export class Request {
     user_id: string
     created_at: string | null
     updated_at: string | null
+    archive_citation: string | null
     status?: Status
     repository?: Repository
     request_clients?: RequestClient[]
@@ -41,6 +45,7 @@ export class Request {
     request_vendors?: RequestVendor[]
     request_vendor?: RequestVendor
     attachments?: Attachment[]
+    user?: User
 
     constructor({
         id = null,
@@ -49,12 +54,16 @@ export class Request {
         pages,
         status_id,
         user_id,
+        user = undefined,
         created_at = null,
         updated_at = null,
+        archive_citation = null,
         status = undefined,
         repository = undefined,
         request_clients = undefined,
         request_vendors = undefined,
+        request_vendor = undefined,
+        request_client = undefined,
         attachments = undefined
     }: CreateRequest) {
         this.id = id,
@@ -76,15 +85,25 @@ export class Request {
 
         if ( request_clients && request_clients.length > 0 ) {
             this.request_client = new RequestClient(request_clients[0])
+        } else if ( request_client ) {
+            this.request_client = new RequestClient(request_client)
         }
 
         if ( request_vendors && request_vendors.length > 0 ) {
             this.request_vendor = new RequestVendor(request_vendors[0])
-        }
+        } else if ( request_vendor ) {
+            this.request_vendor = new RequestVendor(request_vendor)
+        } 
 
         if ( attachments ) {
             this.attachments = attachments.map(x => new Attachment(x))
         }
+
+        if ( user ) {
+            this.user = new User(user)
+        }
+
+        this.archive_citation = archive_citation
     }
 
     toInsertJSON() {
@@ -176,10 +195,15 @@ export class Request {
             .select(`
                 *,
                 status!requests_status_id_fkey (*),
-                repository:repositories (*),
+                repository:repositories (
+                    *,
+                    featured_image:featured_images (*),
+                    organization:organizations (*)
+                ),
                 request_clients (*),
                 request_vendors (*),
-                attachments (*)
+                attachments (*),
+                user!requests_user_id_fkey (id, email)
             `)
             .eq('id', id)
             .limit(1)
@@ -237,7 +261,7 @@ export class Request {
             if ( error ) {
                 console.log(error)
             }
-            this.status_id = archive_status.id
+            // this.status_id = archive_status.id
             return true
         }
         return false
@@ -254,7 +278,7 @@ export class Request {
                 console.log(error)
             }
 
-            this.status_id = cancel_status.id
+            // this.status_id = cancel_status.id
             return true
         }
         return false
@@ -270,7 +294,7 @@ export class Request {
             if ( error ) {
                 console.log(error)
             }
-            this.status_id = complete_status.id
+            // this.status_id = complete_status.id
             return true
         }
         return false

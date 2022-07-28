@@ -50,6 +50,16 @@ export const mutations: MutationTree<SupabaseRequestState> = {
     set(state: SupabaseRequestState, value: Request) {
         state.request = value
     },
+    setClientLabel(state: SupabaseRequestState, value: string) {
+        if ( state.request?.request_client ) {
+            state.request.request_client.label = value
+        }
+    },
+    setVendorLabel(state: SupabaseRequestState, value: string) {
+        if ( state.request?.request_vendor ) {
+            state.request.request_vendor.label = value
+        }
+    },
     clear(state: SupabaseRequestState) {
         const initial = initialState()
         state.request = initial.request
@@ -89,19 +99,21 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
         return false
     },
-    async archive({ state }: { state: SupabaseRequestState }) {
+    async archive({ state, dispatch }: { state: SupabaseRequestState, dispatch: Dispatch }) {
         if (state.request) {
             const archived = await state.request.archive()
             if (archived) {
+                await dispatch('getById', state.request.id)
                 return true
             }
         }
         return false
     },
-    async complete({ state, rootGetters }: { state: SupabaseRequestState, rootGetters: any }) {
+    async complete({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
             const completed = await state.request.complete()
             if (completed) {
+                await dispatch('getById', state.request.id)
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
@@ -110,6 +122,24 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     message_text: null
                 })
                 return true
+            }
+        }
+        return false
+    },
+    async setLabel({ state, commit }: { state: SupabaseRequestState, commit: Commit }, {
+        client, label
+    } : { client: boolean, label: string }) {
+        if ( state.request ) {
+            const r = new Request(state.request)
+            const result = await r.saveLabel(client, label)
+
+            if ( result ) {
+                if ( client ) {
+                    commit('setClientLabel', label)
+                } else {
+                    commit('setVendorLabel', label)
+                }
+                return result
             }
         }
         return false
