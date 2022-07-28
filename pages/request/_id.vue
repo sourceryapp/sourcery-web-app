@@ -178,10 +178,11 @@
 
         <Attachments />
 
-        <v-card v-if="!isComplete && !isArchived" class="my-4">
+        <v-card v-if="!isComplete && !isArchived" class="transparent-card my-4">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"
+              class="font-size-20"
               label="I've provided information in Notes &amp; Links that satisfies the request."
             />
           </v-card-text>
@@ -480,5 +481,16 @@ export default {
 .citation {
     font-family: 'Courier New', Courier, monospace;
     font-size: 16px;
+}
+
+.transparent-card {
+  background-color: transparent;
+  border: 1px solid #707070;
+}
+</style>
+
+<style lang="scss">
+.font-size-20 .v-label {
+  font-size: 20px;
 }
 </style>
