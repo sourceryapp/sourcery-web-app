@@ -38,7 +38,12 @@ export default {
             '/join-us',
             '/roadmap',
             '/email/reset'
-        ]
+        ],
+
+        /**
+         * Max upload size in bytes
+         */
+        maxUploadBytes: 52428800
     },
 
     /*
@@ -152,7 +157,10 @@ export default {
 
         '~/plugins/supabase',
 
-        '~/plugins/sourcery-functions'
+        '~/plugins/sourcery-functions',
+
+        '~/plugins/filesize',
+
     ],
 
     /** pwa: {

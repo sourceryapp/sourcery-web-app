@@ -4,30 +4,26 @@
       <template #activator="{ on, attrs }">
         <v-row>
           <v-col cols="6">
-            <v-hover v-slot="{ hover }">
-              <v-img
-                v-if="attachment.url"
-                :src="previewSrc()"
-                aspect-ratio="1"
-                class="grey lighten-4 pointer"
-                max-width="100%"
-                v-bind="attrs"
-                v-on="on"
-              >
-                <template #placeholder>
-                  <v-row class="fill-height ma-0" align="center" justify="center">
-                    <v-progress-circular indeterminate color="white" />
-                  </v-row>
-                </template>
-                <v-fade-transition>
-                  <v-overlay v-if="hover" absolute color="primary">
-                    <v-icon x-large role="button" aria-label="View Image Details">
-                      mdi-magnify
-                    </v-icon>
-                  </v-overlay>
-                </v-fade-transition>
-              </v-img>
-            </v-hover>
+            <v-img
+              v-if="attachment.url"
+              :src="previewSrc()"
+              aspect-ratio="1"
+              class="grey lighten-4 pointer"
+              max-width="100%"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <template #placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="white" />
+                </v-row>
+              </template>
+              <v-row class="fill-height ma-0" align="end" justify="end">
+                <v-icon dark large role="button" aria-label="View Image Details">
+                  mdi-pencil
+                </v-icon>
+              </v-row>
+            </v-img>
           </v-col>
 
           <v-col align-self="center">
@@ -61,7 +57,7 @@
                 File Type: {{ type() }}
               </div>
               <div class="mb-2">
-                File Size: {{ humanReadableBytes() }}
+                File Size: {{ $filesize(attachmentSize) }}
               </div>
               <div class="mb-2">
                 Corrected Citation:
@@ -108,7 +104,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import filesize from 'filesize'
 import { Attachment } from '~/models/Attachment'
 export default {
     name: 'File',
@@ -161,9 +156,6 @@ export default {
             } catch (error) {
                 console.error('Couldn\'t Save Label', error)
             }
-        },
-        humanReadableBytes () {
-            return filesize(this.attachmentSize)
         },
         type () {
             return this.attachment.url.substr(this.attachment.url.lastIndexOf('.') + 1).toUpperCase()

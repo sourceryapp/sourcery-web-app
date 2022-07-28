@@ -3,9 +3,10 @@
 
   <v-list v-if="items.length !== 0" three-line>
     <div v-for="item in items" :key="item.key">
+      <!-- Using "active" as a soft-delete of these queued items -->
       <template v-if="item.active">
         <v-divider />
-        <file-uploader :file="item.value" @success="uploadCompleted(item.key)" @failure="uploadFailed" />
+        <file-uploader :file="item.value" @success="remove(item.key)" @clear="remove(item.key)" @failure="uploadFailed" />
       </template>
     </div>
   </v-list>
@@ -41,8 +42,8 @@ export default {
         ...mapMutations({
             removeFileFromQueue: 'fileList/remove'
         }),
-        uploadCompleted (key) {
-            console.log('upload complete!', key)
+        remove (key) {
+            console.log('Queue Item Removed:', key)
             this.removeFileFromQueue(key)
         },
         uploadFailed (error) {
