@@ -28,7 +28,7 @@
 
           <v-col align-self="center">
             <!-- <EditableText :text="label" @change="updateLabel" /> -->
-            {{ attachment.label }}
+            {{ label }}
           </v-col>
         </v-row>
       </template>
@@ -118,13 +118,18 @@ export default {
         return {
             showDetails: false,
             attachmentSize: 0,
-            deleting: false
+            deleting: false,
+            /**
+             * Proxy for the label, since
+             * attachment.label is immutable.
+             */
+            labelProxy: this.attachment.label
         }
     },
     computed: {
         label () {
-            if (this.attachment.label !== '') {
-                return this.attachment.label
+            if (this.labelProxy !== '') {
+                return this.labelProxy
             } else {
                 const url = this.attachment.url
                 return url.substring(url.lastIndexOf('/') + 1)
@@ -151,6 +156,7 @@ export default {
         updateLabel (val) {
             const a = new Attachment(this.attachment)
             a.label = val
+            this.labelProxy = val
             try {
                 a.insert()
             } catch (error) {
