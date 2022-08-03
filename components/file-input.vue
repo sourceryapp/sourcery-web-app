@@ -1,25 +1,23 @@
 <template>
-  <label class="file-container">
-    <input
-      ref="fileInput"
-      class="file-input"
-      type="file"
-      :accept="accept"
-      :capture="capture"
-      :multiple="multiple"
-      @change="changed"
-    >
-    <v-btn
-      class="ma-2 white--text"
-      :color="color"
-      @click="triggerDefaultAction"
-    >
-      {{ text }}
-      <v-icon right dark>
-        {{ icon }}
-      </v-icon>
-    </v-btn>
-  </label>
+  <form ref="form" @submit.prevent>
+    <label class="file-container">
+      <input
+        ref="fileInput"
+        class="file-input"
+        type="file"
+        :accept="accept"
+        :capture="capture"
+        :multiple="multiple"
+        @change="changed"
+      >
+      <v-btn class="ma-2 white--text" :color="color" @click="triggerDefaultAction">
+        {{ text }}
+        <v-icon right dark>
+          {{ icon }}
+        </v-icon>
+      </v-btn>
+    </label>
+  </form>
 </template>
 
 <script>
@@ -82,6 +80,7 @@ export default {
         changed (event) {
             this.fileList = event.target.files
             this.$emit('change', this.fileList)
+            this.$refs.form.reset()
         },
         // Triggers the default action of the input[file] element
         triggerDefaultAction () {
