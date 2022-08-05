@@ -168,6 +168,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
 
+
         try {
             const filePath = `jobs/${state.request.id}/${storedFileName}`
 
@@ -192,9 +193,10 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     request_id: state.request.id,
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     url: publicURL,
-                    mime: null,
+                    mime: file.type,
                     pages: pages,
-                    label: ''
+                    label: storedFileName,
+                    size: file.size
                 })
                 const status = await newAttachment.insert()
                 await dispatch('getById', state.request.id)

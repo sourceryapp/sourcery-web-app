@@ -21,6 +21,7 @@
             user_id?: parameters["rowFilter.attachments.user_id"];
             url?: parameters["rowFilter.attachments.url"];
             mime?: parameters["rowFilter.attachments.mime"];
+            size?: parameters["rowFilter.attachments.size"];
             label?: parameters["rowFilter.attachments.label"];
             pages?: parameters["rowFilter.attachments.pages"];
             created_at?: parameters["rowFilter.attachments.created_at"];
@@ -1508,6 +1509,8 @@
       url?: string;
       /** Format: text */
       mime?: string;
+      /** Format: integer */
+      size?: number;
       /** Format: text */
       label?: string;
       /** Format: integer */
@@ -1885,6 +1888,8 @@
     "rowFilter.attachments.url": string;
     /** Format: text */
     "rowFilter.attachments.mime": string;
+    /** Format: integer */
+    "rowFilter.attachments.size": string;
     /** Format: text */
     "rowFilter.attachments.label": string;
     /** Format: integer */

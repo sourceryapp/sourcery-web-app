@@ -30,6 +30,7 @@
     "bluebird": "^3.7.2",
     "core-js": "^3.9.1",
     "cross-env": "^5.2.0",
+    "filesize": "^9.0.11",
     "file-saver": "^2.0.5",
     "firebase": "^8.5.0",
     "geolib": "^3.0.3",
