@@ -176,7 +176,9 @@
           </v-card-text>
         </v-card>
 
-        <Attachments />
+        <!-- <Attachments /> -->
+
+        <file-manager v-if="canManage" :id="id" title="Attachments" title-class="text-h6" />
 
         <v-card v-if="!isComplete && !isArchived" class="transparent-card my-4">
           <v-card-text>
@@ -231,14 +233,14 @@
 
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
-import Attachments from '@/components/attachments'
+// import Attachments from '@/components/attachments'
 import { RequestComment } from '~/models/RequestComment'
 
 export default {
     name: 'RequestId',
-    components: {
-        Attachments
-    },
+    // components: {
+    //     Attachments
+    // },
     async middleware ({ store, params, redirect }) {
         // Populate vuex store here, since we depend on it for access rights
         await store.dispatch('supabaseRequest/getById', params.id)
