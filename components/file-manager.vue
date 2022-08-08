@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-row>
-      <v-col v-if="!$fetchState.pending" class="d-flex child-flex" cols="12" md="9">
+      <v-col v-if="!$fetchState.pending" cols="12" md="9">
         <span :class="titleClass">{{ title }} ({{ request.attachments.length }})</span>
+        <p v-if="request.attachments.length > 0">
+          Click on any attachment to edit.
+        </p>
       </v-col>
       <v-col class="d-flex child-flex" cols="12" md="3">
         <!-- File Upload -->
@@ -26,14 +29,6 @@
           @change="updateFileList"
         />
       </v-col> -->
-    </v-row>
-
-    <v-row v-if="request.attachments.length > 0">
-      <v-col class="py-1">
-        <p>
-          Click on any attachment to edit.
-        </p>
-      </v-col>
     </v-row>
 
     <!-- Active Uploads -->
