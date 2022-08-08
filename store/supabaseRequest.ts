@@ -60,6 +60,11 @@ export const mutations: MutationTree<SupabaseRequestState> = {
             state.request.request_vendor.label = value
         }
     },
+    setArchiveNotes(state: SupabaseRequestState, value: string) {
+        if ( state.request ) {
+            state.request.archive_notes = value
+        }
+    },
     clear(state: SupabaseRequestState) {
         const initial = initialState()
         state.request = initial.request
@@ -109,9 +114,12 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
         return false
     },
-    async complete({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
+    async complete(
+        { state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
-            const completed = await state.request.complete()
+            const completed = await state.request.complete({
+                archive_notes: state.request.archive_notes
+            })
             if (completed) {
                 await dispatch('getById', state.request.id)
                 await notify({
@@ -160,6 +168,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
 
+
         try {
             const filePath = `jobs/${state.request.id}/${storedFileName}`
 
@@ -184,9 +193,10 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     request_id: state.request.id,
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     url: publicURL,
-                    mime: null,
+                    mime: file.type,
                     pages: pages,
-                    label: ''
+                    label: storedFileName,
+                    size: file.size
                 })
                 const status = await newAttachment.insert()
                 await dispatch('getById', state.request.id)

@@ -12,7 +12,7 @@ export const getToken = async () => {
     return await supabase.auth.session()?.access_token
 }
 
-export default async function setStore ({ store, app: { router } }) {
+export default async function setStore ({ store, route, app: { router } }) {
     console.log('setting supabase store from plugin')
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     await store.dispatch('supabaseAuth/fetchUserMeta')
@@ -23,6 +23,7 @@ export default async function setStore ({ store, app: { router } }) {
         const hasPasswordResetToken = store.getters['supabaseAuth/resetAccessToken']
 
         console.log(_, session)
+
         if (_ === 'SIGNED_OUT') {
             store.commit('supabaseChat/clear')
             store.commit('supabaseAuth/clear')
@@ -30,6 +31,7 @@ export default async function setStore ({ store, app: { router } }) {
             return
         }
 
+        // One issue with token refresh is that it will immediately SIGNED_IN right after
         if (_ === 'TOKEN_REFRESHED') {
             return
         }
@@ -39,32 +41,39 @@ export default async function setStore ({ store, app: { router } }) {
             return router.push('/resetpassword')
         }
 
-        if (_ === 'SIGNED_IN' && hasPasswordResetToken) {
-            store.commit('supabaseAuth/setAuthUser', session.user)
-            store.dispatch('supabaseAuth/fetchUserMeta')
-            store.dispatch('supabaseAuth/fetchUserOrganizations')
-            return
-        }
+        // This is probably more complicated than it needs to be but
+        // There is no excellent way to await all user data being saved to state in a view
+        // so we use store to trigger the redirect.
+        // Essentially any view can just set redirectHome on the auth state and it will once login status changes
+        if (_ === 'SIGNED_IN') {
+            if (hasPasswordResetToken) {
+                store.commit('supabaseAuth/setAuthUser', session.user)
+                store.dispatch('supabaseAuth/fetchUserMeta')
+                store.dispatch('supabaseAuth/fetchUserOrganizations')
+                return
+            }
 
-        // Currently handling registration in the page, so this is excluded.
-        if (session && session.user) {
-            console.log('registered sign in')
-            store.commit('supabaseAuth/setAuthUser', session.user)
-            if (!store.getters['supabaseAuth/justRegistered']) {
-                await store.dispatch('supabaseAuth/fetchUserMeta')
-                await store.dispatch('supabaseAuth/fetchUserOrganizations')
+            if (session && session.user) {
+                store.commit('supabaseAuth/setAuthUser', session.user)
+                if (!store.getters['supabaseAuth/justRegistered']) {
+                    await store.dispatch('supabaseAuth/fetchUserMeta')
+                    await store.dispatch('supabaseAuth/fetchUserOrganizations')
 
-                const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
-                console.log('inProgressRequest', inProgressRequest)
+                    const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
+                    console.log('inProgressRequest', inProgressRequest)
 
-                const hasInProgressRequest = inProgressRequest && inProgressRequest.request
+                    const hasInProgressRequest = inProgressRequest && inProgressRequest.request
 
-                await store.dispatch('supabaseAuth/checkHasSignUpEmail')
+                    await store.dispatch('supabaseAuth/checkHasSignUpEmail')
 
-                if (hasInProgressRequest) {
-                    router.push('/request/create')
-                } else {
-                    router.push('/dashboard')
+                    if (hasInProgressRequest) {
+                        router.push('/request/create')
+                    }
+
+                    if (store.getters['supabaseAuth/shouldRedirectHome']) {
+                        store.commit('supabaseAuth/setRedirectHome', false)
+                        router.push('/dashboard')
+                    }
                 }
             }
         }

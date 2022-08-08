@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import { nextTick } from 'vue'
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
@@ -250,7 +250,7 @@ export default {
         },
         handleAgreeToTerms () {
             this.agreeToTerms()
-            Vue.nextTick(this.scrollToBottom)
+            nextTick(this.scrollToBottom)
         },
         report () {
             this.reportingShowConfirm = true

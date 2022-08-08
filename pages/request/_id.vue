@@ -95,27 +95,15 @@
               </v-col>
             </v-row>
           </v-card-text>
-          <v-card-actions v-if="isOwner" class="mr-2">
+          <v-card-actions class="mr-2">
             <v-btn color="primary" class="px-4" @click="startChat(request)">
               Open Chat
             </v-btn>
             <v-spacer />
-            <v-btn v-if="isSubmitted" color="primary" class="px-4" @click="cancel">
+            <v-btn v-if="isSubmitted && isOwner" color="primary" class="px-4" @click="cancel">
               Cancel
             </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
-              Archive
-            </v-btn>
-          </v-card-actions>
-          <v-card-actions v-if="canManage" class="mr-2">
-            <v-btn color="primary" class="px-4" @click="startChat(request)">
-              Open Chat
-            </v-btn>
-            <v-spacer />
-            <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
-              Move to In Progress
-            </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived && isOwner" class="px-4" color="primary" @click="archive">
               Archive
             </v-btn>
           </v-card-actions>
@@ -164,22 +152,96 @@
           </v-col>
         </v-row>
 
-        <Attachments />
+        <v-row v-if="isComplete || isArchived">
+          <v-col>
+            <card-with-header title="Archive's Notes">
+              <v-card-text class="py-3">
+                {{ requestArchiveNotesRead }}
+              </v-card-text>
+            </card-with-header>
+          </v-col>
+        </v-row>
+
+        <v-card v-if="!isComplete && !isArchived" class="my-3 px-4">
+          <v-card-title>General Notes &amp; Links</v-card-title>
+          <v-card-text>
+            <v-textarea
+              v-model="requestArchiveNotes"
+              outlined
+              rows="3"
+              placeholder="Type any notes, links, and context here..."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+            />
+          </v-card-text>
+        </v-card>
+
+        <!-- <Attachments /> -->
+        <v-card class="px-4 py-2">
+          <file-manager v-if="canManage" :id="id" title="Attachments" title-class="text-h6" />
+        </v-card>
+
+        <v-card v-if="!isComplete && !isArchived" class="my-4">
+          <v-card-text>
+            <v-checkbox
+              v-model="hasSatisfiedRequestInText"
+              class="font-size-20"
+              label="I've provided information in Notes &amp; Links that satisfies the request."
+            />
+          </v-card-text>
+        </v-card>
+
+        <!-- All of the actions for users who can manage the request. -->
+        <div v-if="canManage" class="d-flex justify-space-between my-4">
+          <div>
+            <v-btn to="/dashboard" color="secondary">
+              Back
+            </v-btn>
+          </div>
+          <div>
+            <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
+              Move to In Progress
+            </v-btn>
+            <v-btn v-if="(isComplete || isCancelled) && !isArchived" class="px-4" color="primary" @click="archive">
+              Archive
+            </v-btn>
+            <v-btn v-if="isPickedUp" class="px-4" color="primary" :disabled="!canComplete" @click="openCompleteRequestDialog()">
+              Complete
+            </v-btn>
+          </div>
+        </div>
       </template>
     </v-flex>
+    <dialog-general ref="confirmCompleteDialog">
+      <v-card class="px-10 pt-10 pb-6">
+        <div>
+          <h3>Ready to complete the request?</h3>
+          <p>Doing so will move the request to your "Completed" section, send a notification to the client, and you will not be able to add any more files.</p>
+        </div>
+        <div class="d-flex justify-space-between mt-10">
+          <v-btn @click="cancelCompleteRequest">
+            Not Finished Yet
+          </v-btn>
+          <v-btn color="primary" :disabled="completeLoading" @click="completeRequest">
+            <loading-icon v-if="completeLoading" />
+            Complete
+          </v-btn>
+        </div>
+      </v-card>
+    </dialog-general>
   </v-layout>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import Attachments from '@/components/attachments'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
+// import Attachments from '@/components/attachments'
 import { RequestComment } from '~/models/RequestComment'
 
 export default {
     name: 'RequestId',
-    components: {
-        Attachments
-    },
+    // components: {
+    //     Attachments
+    // },
     async middleware ({ store, params, redirect }) {
         // Populate vuex store here, since we depend on it for access rights
         await store.dispatch('supabaseRequest/getById', params.id)
@@ -207,7 +269,9 @@ export default {
     data () {
         return {
             editing: false,
-            editingLabelValue: ''
+            editingLabelValue: '',
+            hasSatisfiedRequestInText: false,
+            completeLoading: false
         }
     },
     computed: {
@@ -223,6 +287,17 @@ export default {
             user: 'supabaseAuth/authUser',
             userRepositories: 'supabaseAuth/userRepositories'
         }),
+        requestArchiveNotes: {
+            get () {
+                return this.request.archive_notes ? this.request.archive_notes : ''
+            },
+            set (val) {
+                this.setArchiveNotes(val)
+            }
+        },
+        requestArchiveNotesRead () {
+            return this.request.archive_notes ? this.request.archive_notes : 'No notes provided.'
+        },
         dateAndTimeElapsed () {
             if (this.request && this.request.created_at) {
                 const t = new Date(Date.UTC(1970, 0, 1))
@@ -300,18 +375,38 @@ export default {
         },
         messagesCardTitle () {
             return `Message History (${this.messageCount})`
+        },
+        canComplete () {
+            const hasEnoughAttachments = this.request.attachments?.length > 0
+            if (!this.canManage) {
+                return false
+            }
+
+            if (hasEnoughAttachments) {
+                return true
+            }
+
+            if (this.hasSatisfiedRequestInText && this.requestArchiveNotes.length > 0) {
+                return true
+            }
+
+            return false
         }
     },
     mounted () {
         this.editingLabelValue = this.requestLabel
     },
     methods: {
+        ...mapMutations({
+            setArchiveNotes: 'supabaseRequest/setArchiveNotes'
+        }),
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
             requestArchive: 'supabaseRequest/archive',
             requestPickUp: 'supabaseRequest/pickUp',
             saveLabel: 'supabaseRequest/setLabel',
-            startChat: 'supabaseChat/openForRequest'
+            startChat: 'supabaseChat/openForRequest',
+            complete: 'supabaseRequest/complete'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -366,6 +461,20 @@ export default {
         },
         print () {
             window.print()
+        },
+        openCompleteRequestDialog () {
+            this.$refs.confirmCompleteDialog.openDialog()
+            console.log('Probably show a modal here.')
+        },
+        cancelCompleteRequest () {
+            this.$refs.confirmCompleteDialog.closeDialog()
+        },
+        async completeRequest () {
+            this.completeLoading = true
+            await this.complete()
+            this.completeLoading = false
+            this.$toast.success('Request completed!')
+            this.$refs.confirmCompleteDialog.closeDialog()
         }
     }
 }
@@ -375,5 +484,16 @@ export default {
 .citation {
     font-family: 'Courier New', Courier, monospace;
     font-size: 16px;
+}
+
+.transparent-card {
+  background-color: transparent;
+  border: 1px solid #707070;
+}
+</style>
+
+<style lang="scss">
+.font-size-20 .v-label {
+  font-size: 20px;
 }
 </style>
