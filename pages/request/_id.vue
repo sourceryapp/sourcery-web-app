@@ -177,10 +177,11 @@
         </v-card>
 
         <!-- <Attachments /> -->
+        <v-card class="px-4 py-2">
+          <file-manager v-if="canManage" :id="id" title="Attachments" title-class="text-h6" />
+        </v-card>
 
-        <file-manager v-if="canManage" :id="id" title="Attachments" title-class="text-h6" />
-
-        <v-card v-if="!isComplete && !isArchived" class="transparent-card my-4">
+        <v-card v-if="!isComplete && !isArchived" class="my-4">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"

@@ -19,7 +19,7 @@
                 </v-row>
               </template>
               <v-row class="fill-height ma-0" align="end" justify="end">
-                <v-icon dark large role="button" aria-label="View Image Details">
+                <v-icon dark large role="button" class="icon-purple-bg" aria-label="View Image Details">
                   mdi-pencil
                 </v-icon>
               </v-row>
@@ -193,5 +193,12 @@ export default {
 <style scoped>
 .pointer {
   cursor: pointer;
+}
+
+.icon-purple-bg {
+  background-color: #654EA3;
+  padding-top: 3px;
+  padding-left: 2px;
+  border-top-left-radius: 2px;
 }
 </style>

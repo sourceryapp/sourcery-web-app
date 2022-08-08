@@ -1,5 +1,5 @@
 <template>
-  <form ref="form" @submit.prevent>
+  <form ref="form" class="file-form" @submit.prevent>
     <label class="file-container">
       <input
         ref="fileInput"
@@ -10,7 +10,7 @@
         :multiple="multiple"
         @change="changed"
       >
-      <v-btn class="ma-2 white--text" :color="color" @click="triggerDefaultAction">
+      <v-btn :class="buttonClass" :color="color" @click="triggerDefaultAction">
         {{ text }}
         <v-icon right dark>
           {{ icon }}
@@ -65,6 +65,9 @@ export default {
         }
     },
     computed: {
+        buttonClass () {
+            return this.$vuetify.theme.dark ? 'ma-2' : 'ma-2 white--text'
+        }
     },
     mounted () {
         // const fileInput = document.querySelector('.file-input')

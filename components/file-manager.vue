@@ -27,6 +27,15 @@
         />
       </v-col> -->
     </v-row>
+
+    <v-row v-if="request.attachments.length > 0">
+      <v-col class="py-1">
+        <p>
+          Click on any attachment to edit.
+        </p>
+      </v-col>
+    </v-row>
+
     <!-- Active Uploads -->
     <v-row>
       <v-col cols="12">

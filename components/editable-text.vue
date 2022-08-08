@@ -4,6 +4,7 @@
       ref="editableText"
       v-model="input"
       type="text"
+      class="editable-text-input"
       :size="inputLength"
       :readonly="isReadOnly"
       :maxlength="max"
@@ -81,5 +82,11 @@ input {
 }
 input:focus-visible {
     outline: 1px solid gray;
+}
+</style>
+
+<style lang="scss">
+.theme--dark .editable-text-input {
+    color: white;
 }
 </style>
