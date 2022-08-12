@@ -162,7 +162,7 @@
           </v-col>
         </v-row>
 
-        <v-card v-if="!isComplete && !isArchived" class="my-3 px-4">
+        <v-card v-if="!isComplete && !isArchived && canManage" class="my-3 px-4">
           <v-card-title>General Notes &amp; Links</v-card-title>
           <v-card-text>
             <v-textarea
@@ -176,12 +176,13 @@
           </v-card-text>
         </v-card>
 
-        <!-- <Attachments /> -->
-        <v-card class="px-4 py-2">
-          <file-manager v-if="canManage" :id="id" title="Attachments" title-class="text-h6" />
+        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2">
+          <file-manager :id="id" title="Attachments" title-class="text-h6" />
         </v-card>
 
-        <v-card v-if="!isComplete && !isArchived" class="my-4">
+        <Attachments v-if="!canManage || isArchived || isComplete" />
+
+        <v-card v-if="!isComplete && !isArchived && canManage" class="my-4">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"
