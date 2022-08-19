@@ -1,5 +1,5 @@
 <template>
-  <v-list-item two-line @click="selectRepository">
+  <v-list-item class="repository-list-item" two-line :input-value="selected" @click="selectRepository">
     <v-list-item-content>
       <v-list-item-title>
         {{ titleText }}
@@ -20,6 +20,11 @@ export default {
             default: () => {}
         }
     },
+    data () {
+        return {
+            selected: false
+        }
+    },
     computed: {
         titleText () {
             return this.repository?.organization?.name
@@ -28,10 +33,43 @@ export default {
             return this.repository?.name
         }
     },
+    created () {
+        this.$nuxt.$on('repositoryListItemSelected', (id) => {
+            if (id !== this.repository.id) {
+                this.selected = false
+            }
+        })
+    },
     methods: {
         selectRepository () {
+            this.selected = true
             this.$emit('selected', this.repository)
+            this.$nuxt.$emit('repositoryListItemSelected', this.repository.id)
         }
     }
 }
 </script>
+
+<style lang="scss">
+.theme--light {
+    .repository-list-item.v-list-item--active {
+        color: white;
+        background-color: rgba(101, 78, 163, 1);
+        .v-list-item__subtitle {
+            color: white;
+        }
+    }
+}
+
+.repository-list-item.v-list-item {
+    border-radius: 5px;
+}
+
+.repository-list-item.v-list-item--active {
+    background-color: rgba(101, 78, 163, .62);
+}
+
+.repository-list-item.v-list-item::before {
+    opacity: 0;
+}
+</style>

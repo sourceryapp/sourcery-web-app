@@ -6,9 +6,9 @@
       placeholder="Search Repositories..."
     />
 
-    <v-list>
+    <div class="repository-item-list">
       <repository-list-item v-for="repo in visibleRepositories" :key="repo.id" :repository="repo" @selected="selectedRepositoryItem" />
-    </v-list>
+    </div>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
         visibleRepositories () {
             // Currently simple search.
             return this.repositories.filter((x) => {
-                const search_string = `${x.name} ${x.address1} ${x.address2} ${x.city} ${x.state} ${x.postal_code}`
+                const search_string = `${x.name} ${x.organization.name} ${x.address1} ${x.address2} ${x.city} ${x.state} ${x.postal_code}`
                 return search_string.toLowerCase().includes(this.searchTerm.toLowerCase())
             })
         }
@@ -41,3 +41,20 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.theme--dark {
+    .repository-item-list {
+        border-color: rgba(255, 255, 255, 0.24);
+    }
+}
+.repository-item-list {
+    column-count: 2;
+    border: 1px solid rgba(0, 0, 0, 0.38);
+    border-radius: 10px;
+    padding: 20px 40px;
+    * {
+        break-inside: avoid-column;
+    }
+}
+</style>

@@ -17,7 +17,6 @@
       </h2>
       <p>Currently requesting from ...</p>
       <v-text-field label="Your name*" outlined />
-      <v-text-field label="Your email*" outlined />
       <v-text-field label="Request Title*" outlined />
       <p>Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collections, etc.). Citations are appreciated but not necessary!</p>
       <v-textarea label="Request Details" outlined placeholder="Type spells, potions, information, and citations (if you have them) here…" />
