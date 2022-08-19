@@ -8,7 +8,9 @@
         Select Repository
       </h2>
 
-      <repository-search />
+      <repository-preview :repository="selectedRepository" />
+
+      <repository-search @selected="repositorySelected" />
 
       <h2 class="mt-5 mb-3">
         Document Information
@@ -36,7 +38,13 @@ export default {
     },
     data () {
         return {
-            repositories: []
+            repositories: [],
+            selectedRepository: null
+        }
+    },
+    methods: {
+        repositorySelected (repository) {
+            this.selectedRepository = repository
         }
     }
 }

@@ -7,16 +7,7 @@
     />
 
     <v-list>
-      <v-list-item v-for="repo in visibleRepositories" :key="repo.id" two-line>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ repo.name }}
-          </v-list-item-title>
-          <v-list-item-subtitle>
-            {{ repo.address1 }}, {{ repo.address2 }}, {{ repo.city }}, {{ repo.state }}, {{ repo.postal_code }}
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+      <repository-list-item v-for="repo in visibleRepositories" :key="repo.id" :repository="repo" @selected="selectedRepositoryItem" />
     </v-list>
   </div>
 </template>
@@ -41,6 +32,11 @@ export default {
                 const search_string = `${x.name} ${x.address1} ${x.address2} ${x.city} ${x.state} ${x.postal_code}`
                 return search_string.toLowerCase().includes(this.searchTerm.toLowerCase())
             })
+        }
+    },
+    methods: {
+        selectedRepositoryItem (repository) {
+            this.$emit('selected', repository)
         }
     }
 }
