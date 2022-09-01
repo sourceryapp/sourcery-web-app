@@ -100,7 +100,7 @@
               Open Chat
             </v-btn>
             <v-spacer />
-            <v-btn v-if="isSubmitted && isOwner" color="primary" class="px-4" @click="cancel">
+            <v-btn v-if="isSubmitted && (isOwner || canManage)" color="primary" class="px-4" @click="cancel">
               Cancel
             </v-btn>
             <v-btn v-if="(isComplete || isCancelled) && !isArchived && isOwner" class="px-4" color="primary" @click="archive">
