@@ -10,7 +10,7 @@
 
       <repository-preview :repository="selectedRepository" />
 
-      <repository-search @selected="repositorySelected" />
+      <repository-search @selected="setRepository" />
 
       <h2 class="mt-5 mb-3">
         Document Information
@@ -34,7 +34,7 @@
           :value="user.email"
         />
         <v-text-field
-          v-model="formValues.title"
+          v-model="label"
           label="Request Title*"
           outlined
           required
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { Repository } from '~/models/Repository'
 
 export default {
@@ -78,27 +78,44 @@ export default {
     data () {
         return {
             repositories: [],
-            selectedRepository: null,
             formValid: true,
             formValues: {
                 name: '',
-                title: '',
                 details: ''
             }
         }
     },
     computed: {
         ...mapGetters({
-            user: 'supabaseAuth/authUser'
+            user: 'supabaseAuth/authUser',
+            getSelectedRepository: 'supabaseCreate/repository',
+            getLabel: 'supabaseCreate/label'
         }),
+        selectedRepository: {
+            get () {
+                return this.getSelectedRepository
+            },
+            set (val) {
+                this.setRepository(val)
+            }
+        },
+        label: {
+            get () {
+                return this.getLabel
+            },
+            set (val) {
+                this.setLabel(val)
+            }
+        },
         submitEnabled () {
             return this.selectedRepository?.id && this.$refs.formValid
         }
     },
     methods: {
-        repositorySelected (repository) {
-            this.selectedRepository = repository
-        },
+        ...mapMutations({
+            setRepository: 'supabaseCreate/setRepository',
+            setLabel: 'supabaseCreate/setLabel'
+        }),
         submitRequest () {
             this.$toast.success('Submitted Request!')
         }

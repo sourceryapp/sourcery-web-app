@@ -33,6 +33,9 @@ export const getters = {
     pages(state: SupabaseCreateState) {
         return state.pages
     },
+    repository(state: SupabaseCreateState) {
+        return state.repository
+    },
     repositoryName(state: SupabaseCreateState) {
         if (state.repository) {
             let name = state.repository.name
