@@ -42,7 +42,7 @@
         />
         <p>Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collections, etc.). Citations are appreciated but not necessary!</p>
         <v-textarea
-          v-model="formValues.details"
+          v-model="citation"
           label="Request Details"
           outlined
           placeholder="Type spells, potions, information, and citations (if you have them) here…"
@@ -80,8 +80,7 @@ export default {
             repositories: [],
             formValid: true,
             formValues: {
-                name: '',
-                details: ''
+                name: ''
             }
         }
     },
@@ -89,7 +88,8 @@ export default {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
             getSelectedRepository: 'supabaseCreate/repository',
-            getLabel: 'supabaseCreate/label'
+            getLabel: 'supabaseCreate/label',
+            getCitation: 'supabaseCreate/citation'
         }),
         selectedRepository: {
             get () {
@@ -107,6 +107,14 @@ export default {
                 this.setLabel(val)
             }
         },
+        citation: {
+            get () {
+                return this.getCitation
+            },
+            set (val) {
+                this.setCitation(val)
+            }
+        },
         submitEnabled () {
             return this.selectedRepository?.id && this.$refs.formValid
         }
@@ -114,7 +122,8 @@ export default {
     methods: {
         ...mapMutations({
             setRepository: 'supabaseCreate/setRepository',
-            setLabel: 'supabaseCreate/setLabel'
+            setLabel: 'supabaseCreate/setLabel',
+            setCitation: 'supabaseCreate/setCitation'
         }),
         submitRequest () {
             this.$toast.success('Submitted Request!')
