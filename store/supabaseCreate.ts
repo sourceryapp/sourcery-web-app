@@ -30,6 +30,9 @@ export const getters = {
     citation(state: SupabaseCreateState) {
         return state.citation
     },
+    label(state: SupabaseCreateState) {
+        return state.label
+    },
     pages(state: SupabaseCreateState) {
         return state.pages
     },
@@ -76,11 +79,12 @@ export const mutations: MutationTree<SupabaseCreateState> = {
     setRepository(state: SupabaseCreateState, value: Repository) {
         state.repository = value
     },
-    setLabel(state: SupabaseCreateState) {
-        const match = state.citation.match(/^(\w(\s|\.|\(|\))*)+/)
-        if (match && match.length > 0) {
-            state.label = match[0].trim()
-        }
+    setLabel(state: SupabaseCreateState, value: string) {
+        // const match = state.citation.match(/^(\w(\s|\.|\(|\))*)+/)
+        // if (match && match.length > 0) {
+        //     state.label = match[0].trim()
+        // }
+        state.label = value
     },
     setClient(state: SupabaseCreateState, value: SourceryUser) {
         state.client = value
