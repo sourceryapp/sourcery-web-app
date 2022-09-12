@@ -18,7 +18,8 @@ export const initialState = () => {
         label: '',
         status: null as Status | null,
         integrationData: null as IntegrationData | null,
-        pricing: null as PricingSummary | null
+        pricing: null as PricingSummary | null,
+        clientName: ''
     }
 }
 
@@ -29,6 +30,9 @@ export const state = initialState
 export const getters = {
     citation(state: SupabaseCreateState) {
         return state.citation
+    },
+    clientName(state: SupabaseCreateState) {
+        return state.clientName
     },
     label(state: SupabaseCreateState) {
         return state.label
@@ -73,6 +77,9 @@ export const mutations: MutationTree<SupabaseCreateState> = {
     setCitation(state: SupabaseCreateState, value: string) {
         state.citation = value
     },
+    setClientName(state: SupabaseCreateState, value: string) {
+        state.clientName = value
+    },
     setPages(state: SupabaseCreateState, value: number) {
         state.pages = value
     },
@@ -108,6 +115,7 @@ export const mutations: MutationTree<SupabaseCreateState> = {
         state.status = initial.status
         state.integrationData = initial.integrationData
         state.pricing = initial.pricing
+        state.clientName = initial.clientName
     }
 }
 

@@ -20,7 +20,7 @@
       </p>
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
-          v-model="formValues.name"
+          v-model="clientName"
           label="Your name*"
           outlined
           required
@@ -78,10 +78,7 @@ export default {
     data () {
         return {
             repositories: [],
-            formValid: true,
-            formValues: {
-                name: ''
-            }
+            formValid: true
         }
     },
     computed: {
@@ -89,7 +86,8 @@ export default {
             user: 'supabaseAuth/authUser',
             getSelectedRepository: 'supabaseCreate/repository',
             getLabel: 'supabaseCreate/label',
-            getCitation: 'supabaseCreate/citation'
+            getCitation: 'supabaseCreate/citation',
+            getClientName: 'supabaseCreate/clientName'
         }),
         selectedRepository: {
             get () {
@@ -115,15 +113,26 @@ export default {
                 this.setCitation(val)
             }
         },
+        clientName: {
+            get () {
+                return this.getClientName
+            },
+            set (val) {
+                this.setClientName(val)
+            }
+        },
         submitEnabled () {
-            return this.selectedRepository?.id && this.$refs.formValid
+            return this.selectedRepository?.id &&
+              this.formValid &&
+              this.citation
         }
     },
     methods: {
         ...mapMutations({
             setRepository: 'supabaseCreate/setRepository',
             setLabel: 'supabaseCreate/setLabel',
-            setCitation: 'supabaseCreate/setCitation'
+            setCitation: 'supabaseCreate/setCitation',
+            setClientName: 'supabaseCreate/setClientName'
         }),
         submitRequest () {
             this.$toast.success('Submitted Request!')
