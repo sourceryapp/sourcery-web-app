@@ -31,7 +31,7 @@
           outlined
           readonly
           disabled
-          :value="user.email"
+          :value="clientEmail"
         />
         <v-text-field
           v-model="label"
@@ -54,7 +54,7 @@
           <v-btn class="px-4" to="/dashboard">
             Back
           </v-btn>
-          <v-btn class="px-4" color="primary" :disabled="!submitEnabled" @click="submitRequest">
+          <v-btn class="px-4" color="primary" :disabled="!submitEnabled" @click="submitRequestInsert">
             Submit
           </v-btn>
         </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Repository } from '~/models/Repository'
 
 export default {
@@ -78,17 +78,24 @@ export default {
     data () {
         return {
             repositories: [],
-            formValid: true
+            formValid: true,
+            submitting: false
         }
     },
     computed: {
         ...mapGetters({
-            user: 'supabaseAuth/authUser',
+            authUser: 'supabaseAuth/authUser',
+            authUserMeta: 'supabaseAuth/authUserMeta',
             getSelectedRepository: 'supabaseCreate/repository',
             getLabel: 'supabaseCreate/label',
             getCitation: 'supabaseCreate/citation',
-            getClientName: 'supabaseCreate/clientName'
+            getClientName: 'supabaseCreate/clientName',
+            getClient: 'supabaseCreate/client',
+            getClientEmail: 'supabaseCreate/clientEmail'
         }),
+        clientEmail () {
+            return this.getClientEmail
+        },
         selectedRepository: {
             get () {
                 return this.getSelectedRepository
@@ -124,7 +131,14 @@ export default {
         submitEnabled () {
             return this.selectedRepository?.id &&
               this.formValid &&
-              this.citation
+              this.citation &&
+              !this.submitting
+        }
+    },
+    mounted () {
+        this.setClient(this.authUser)
+        if (this.authUserMeta?.name) {
+            this.clientName = this.authUserMeta.name
         }
     },
     methods: {
@@ -132,10 +146,20 @@ export default {
             setRepository: 'supabaseCreate/setRepository',
             setLabel: 'supabaseCreate/setLabel',
             setCitation: 'supabaseCreate/setCitation',
-            setClientName: 'supabaseCreate/setClientName'
+            setClientName: 'supabaseCreate/setClientName',
+            setClient: 'supabaseCreate/setClient'
         }),
-        submitRequest () {
+        ...mapActions({
+            submitRequest: 'supabaseCreate/insert'
+        }),
+        async submitRequestInsert () {
+            this.submitting = true
             this.$toast.success('Submitted Request!')
+            const r = await this.submitRequest()
+            this.submitting = false
+            if (r[0] && r[0].id) {
+                this.$router.push(`/request/${r[0].id}`)
+            }
         }
     }
 }

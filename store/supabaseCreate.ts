@@ -34,6 +34,12 @@ export const getters = {
     clientName(state: SupabaseCreateState) {
         return state.clientName
     },
+    clientEmail(state: SupabaseCreateState) {
+        return state.client?.email
+    },
+    client(state: SupabaseCreateState) {
+        return state.client
+    },
     label(state: SupabaseCreateState) {
         return state.label
     },
@@ -121,10 +127,6 @@ export const mutations: MutationTree<SupabaseCreateState> = {
 
 export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
     async insert({ state, commit, rootGetters }: { state: SupabaseCreateState, commit: Commit, rootGetters: any }) {
-        commit('setLabel')
-
-        commit('setClient', rootGetters['supabaseAuth/authUser'])
-
         const submittedStatus = await Status.getByName('Submitted')
 
         if (!submittedStatus) {
@@ -157,9 +159,27 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
         if (r) {
             // Successful insert.
             if (Array.isArray(r) && r.length > 0) {
+
+                // Lets update the request client.
+                const new_request = await Request.getById(r[0].id)
+                
+                if ( new_request && new_request.request_client  ) {
+                    console.log('has request client ready', new_request.request_client)
+                    if ( state.clientName ) {
+                        const updated_request_client_info = await new_request.request_client.updateAll({
+                            name: state.clientName,
+                            label: state.label
+                        })
+                        console.log('updated_all', updated_request_client_info)
+                    }
+                    
+                } else {
+                    console.log('no request client yet', new_request)
+                }
+
                 const id = r[0].id
                 const notify_payload = {
-                    user_id: rootGetters['supabaseAuth/authUser'].id,
+                    user_id: state.client.id,
                     request_id: id,
                     action: 'request_submitted_to_your_org',
                     token: await getToken(),
