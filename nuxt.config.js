@@ -32,7 +32,7 @@ export default {
             '/cookies-notice',
             '/team',
             '/dashboard',
-            '/request/create',
+            // '/request/create',
             '/archiveSpace',
             '/archiveSpace/',
             '/join-us',
