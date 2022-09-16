@@ -23,16 +23,18 @@
         <v-card max-width="500" class="chat-card">
           <v-list-item two-line class="chat-card-title-bar">
             <v-list-item-content>
-              <v-list-item-title class="text-h6">
+              <v-list-item-title class="text-h6 light-mode-white">
                 {{ chatTitle }}
               </v-list-item-title>
-              <v-list-item-subtitle>{{ chatSubtitle }}</v-list-item-subtitle>
+              <v-list-item-subtitle class="light-mode-white">
+                {{ chatSubtitle }}
+              </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action class="nostack">
               <v-menu offset-y>
                 <template #activator="{ on, attrs }">
                   <v-btn
-                    class="mx-2"
+                    class="light-mode-white mx-2"
                     icon
                     v-bind="attrs"
                     v-on="on"
@@ -51,10 +53,10 @@
                   </v-list-item>
                 </v-list>
               </v-menu>
-              <v-btn icon @click="toggleMinimize">
+              <v-btn icon class="light-mode-white" @click="toggleMinimize">
                 <v-icon>{{ minimizeIcon }}</v-icon>
               </v-btn>
-              <v-btn icon @click="close">
+              <v-btn icon class="light-mode-white" @click="close">
                 <v-icon>{{ closeIcon }}</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -297,6 +299,10 @@ export default {
               background: linear-gradient(45deg, #654EA3, #431A5A);
             }
 
+            .chat-card-title {
+
+            }
+
             .cap-height {
               max-height: 350px;
             }
@@ -332,6 +338,12 @@ export default {
 
         }
     }
+}
+
+.theme--light {
+  .light-mode-white {
+    color: white!important;
+  }
 }
 
 .nostack {
