@@ -94,7 +94,7 @@ export class Repository {
                 featured_image:featured_images (*)
             `)
             .order('name')
-            .eq('organization.slug', 'sourcery')
+            .in('organization.slug', ['sourcery', 'sourcery-test'])
 
         if ( error ) {
             console.log(error)
@@ -102,11 +102,31 @@ export class Repository {
         }
 
         if ( Array.isArray(repositories) ) {
-            const reps = repositories.filter(x => x.organization?.slug === 'sourcery')
+            const reps = repositories.filter(x => ['sourcery', 'sourcery-test'].includes(x.organization?.slug))
             const reps_objs = reps.map(x => new Repository(x))
             return reps_objs
         }
         return []
+    }
+
+    public static async getById(id : number) {
+        const { data: repositories, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                organization:organizations (*),
+                featured_image:featured_images (*)
+            `)
+            .eq('id', id)
+
+        if ( error ) {
+            console.log(error)
+            return []
+        }
+
+        if ( Array.isArray(repositories) && repositories.length > 0 ) {
+            return new Repository(repositories[0])
+        }
+        return false
     }
 
     async saveImage(image : FeaturedImage) {
