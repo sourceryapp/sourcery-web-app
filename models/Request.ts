@@ -137,7 +137,8 @@ export class Request {
                 *,
                 status!requests_status_id_fkey (*),
                 repository:repositories (*),
-                request_clients (*)
+                request_clients (*),
+                request_vendors (*)
             `)
             .order('created_at', { ascending: false })
             .eq('user_id', user_id)
@@ -172,7 +173,8 @@ export class Request {
                 *,
                 status!requests_status_id_fkey (*),
                 repository:repositories (*),
-                request_vendors (*)
+                request_vendors (*),
+                request_clients (*)
             `)
             .order('created_at', { ascending: false })
             .in('repository_id', repository_ids)
