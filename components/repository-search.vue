@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { Repository } from '~/models/Repository'
 
 export default {
@@ -23,14 +24,33 @@ export default {
         }
     },
     async fetch () {
-        this.repositories = await Repository.getActive()
+        this.repositories = [
+            ...await Repository.getActive(),
+            ...await Repository.getGhost()
+        ]
     },
     computed: {
+        ...mapGetters({
+            authUser: 'supabaseAuth/authUser',
+            isAdmin: 'supabaseAuth/isAdmin'
+        }),
         visibleRepositories () {
             // Currently simple search.
             return this.repositories.filter((x) => {
                 const search_string = `${x.name} ${x.organization.name} ${x.address1} ${x.address2} ${x.city} ${x.state} ${x.postal_code}`
-                return search_string.toLowerCase().includes(this.searchTerm.toLowerCase())
+
+                if (this.$utils.isTestUser(this.authUser)) {
+                    if (this.$utils.isATestOrganization(x.organization)) {
+                        return search_string.toLowerCase().includes(this.searchTerm.toLowerCase())
+                    }
+                    return false
+                }
+
+                if (!this.$utils.isATestOrganization(x.organization)) {
+                    return search_string.toLowerCase().includes(this.searchTerm.toLowerCase())
+                }
+
+                return this.isAdmin
             })
         }
     },

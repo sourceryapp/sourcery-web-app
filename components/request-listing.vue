@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { Request } from '~/models/Request'
 
 export default {
@@ -103,8 +103,14 @@ export default {
         }
     },
     computed: {
+        ...mapGetters({
+            authUser: 'supabaseAuth/authUser'
+        }),
+        isClient () {
+            return this.request.user_id === this.authUser.id
+        },
         label () {
-            if (!this.client) {
+            if (!this.isClient) {
                 return this.request.request_vendor.label
             }
             return this.request.request_client.label

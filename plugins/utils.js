@@ -104,6 +104,14 @@ export default ({ app }, inject) => {
                 twitter: 'https://twitter.com/sourcery_app',
                 facebook: 'https://www.facebook.com/SourceryApp',
                 instagram: 'https://www.instagram.com/sourcery_app/'
+            },
+
+            isTestUser (authUser) {
+                return authUser.email === 'sourcerytest@gmail.com'
+            },
+
+            isATestOrganization (organization) {
+                return ['sourcery-test'].includes(organization.slug)
             }
         }
     })()

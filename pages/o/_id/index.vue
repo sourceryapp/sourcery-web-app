@@ -32,7 +32,7 @@
                 </v-list-item-title>
                 <v-list-item-subtitle>{{ repoAddress( repo ) }}</v-list-item-subtitle>
               </v-list-item-content>
-              <v-list-item-action>
+              <v-list-item-action v-if="showRequestButton">
                 <v-btn
                   color="primary"
                   outlined
@@ -64,6 +64,7 @@ import { mapGetters } from 'vuex'
 import SourceryCard from '@/components/card-with-header.vue'
 import OrganizationAppBar from '@/components/organization-app-bar.vue'
 import { Organization } from '~/models/Organization'
+import { Repository } from '~/models/Repository'
 
 export default {
     name: 'Organization',
@@ -80,8 +81,22 @@ export default {
     },
     computed: {
         ...mapGetters({
-            isAdmin: 'supabaseAuth/isAdmin'
-        })
+            isAdmin: 'supabaseAuth/isAdmin',
+            authUser: 'supabaseAuth/authUser'
+        }),
+        showRequestButton () {
+            if (this.isAdmin) {
+                return true
+            }
+
+            if (this.$utils.isTestUser(this.authUser)) {
+                if (this.$utils.isATestOrganization(this.organization)) {
+                    return true
+                }
+                return false
+            }
+            return true
+        }
     },
     methods: {
         repoAddress (repo) {
@@ -103,9 +118,10 @@ export default {
             }
             return addr
         },
-        makeRequestAtRepository (repo) {
-            this.$store.commit('supabaseCreate/setRepository', repo)
-            this.$router.push({ name: 'request-create' })
+        async makeRequestAtRepository (repo) {
+            const repository = await Repository.getById(repo.id)
+            this.$store.commit('supabaseCreate/setRepository', repository)
+            this.$router.push('/request/create')
         }
     }
 }
