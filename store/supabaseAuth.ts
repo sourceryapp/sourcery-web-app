@@ -45,6 +45,9 @@ export const getters: GetterTree<SupabaseState, SupabaseState> = {
     userOrganizations(state: SupabaseState) {
         return state.authUserOrganizations
     },
+    userOrganizationIds(state: SupabaseState) {
+        return state.authUserOrganizations.map(x => x.id)
+    },
     userRepositories(state: SupabaseState) {
         return state.authUserOrganizations.map(x => x.repositories).flat()
     },
