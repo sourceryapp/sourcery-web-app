@@ -24,15 +24,19 @@ export default {
         }
     },
     async fetch () {
-        this.repositories = [
+        const repositories = [
             ...await Repository.getActive(),
-            ...await Repository.getGhost()
+            ...await Repository.getGhost(),
+            ...await Repository.getOwned(this.userOrganizationIds)
         ]
+        // Remove duplicates
+        this.repositories = [...new Map(repositories.map(m => [m.id, m])).values()]
     },
     computed: {
         ...mapGetters({
             authUser: 'supabaseAuth/authUser',
-            isAdmin: 'supabaseAuth/isAdmin'
+            isAdmin: 'supabaseAuth/isAdmin',
+            userOrganizationIds: 'supabaseAuth/userOrganizationIds'
         }),
         visibleRepositories () {
             // Currently simple search.

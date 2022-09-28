@@ -129,6 +129,24 @@ export class Repository {
         return false
     }
 
+    public static async getOwned(orgIds : String[]) {
+        const { data: repositories, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                organization:organizations (*),
+                featured_image:featured_images (*)
+            `)
+            .order('name')
+            .in('organization_id', orgIds)
+            .eq('active', false)
+        
+        if ( Array.isArray(repositories) ) {
+            const reps_objs = repositories.map(x => new Repository(x))
+            return reps_objs
+        }
+        return []
+    }
+
     async saveImage(image : FeaturedImage) {
         const { data: replaced, error } = await supabase.from(TABLE_NAME)
             .update({ featured_image_id : image.id })
