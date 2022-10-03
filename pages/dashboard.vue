@@ -18,7 +18,7 @@
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
             <span v-if="newJobs.length === 0">Out looking for toadstools.<br>No new requests.</span>
           </card-with-action>
-          <card-with-action title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
+          <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
@@ -27,6 +27,10 @@
           <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
             <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
             <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
+          </card-with-action>
+          <card-with-action v-if="$vuetify.breakpoint.mobile" title="Recently Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
+            <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
+            <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
           <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
         </v-col>

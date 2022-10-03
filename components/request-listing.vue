@@ -110,7 +110,7 @@ export default {
             return this.request.user_id === this.authUser.id
         },
         label () {
-            if (!this.isClient) {
+            if (!this.client) {
                 return this.request.request_vendor.label
             }
             return this.request.request_client.label

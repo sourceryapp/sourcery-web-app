@@ -8,6 +8,8 @@ import { IntegrationData } from '~/models/IntegrationData'
 import { PricingSummary } from '~/models/PricingSummary'
 import { notify } from '~/plugins/sourcery-functions'
 import { getToken } from '~/plugins/supabase'
+import { RequestClient } from '~/models/RequestClient'
+import { RequestVendor } from '~/models/RequestVendor'
 
 export const initialState = () => {
     return {
@@ -162,22 +164,25 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
 
                 // Lets update the request client.
                 const new_request = await Request.getById(r[0].id)
-                
-                if ( new_request && new_request.request_client  ) {
-                    console.log('has request client ready', new_request.request_client)
-                    if ( state.clientName ) {
-                        const updated_request_client_info = await new_request.request_client.updateAll({
-                            name: state.clientName,
-                            label: state.label
-                        })
-                        console.log('updated_all', updated_request_client_info)
+                const id = r[0].id
+
+                if ( new_request ) {
+                    const updated_request_client_info = await RequestClient.updateById(id, { 
+                        label: state.label,
+                        name: state.clientName
+                    })
+                    const updated_request_vendor_info = await RequestVendor.updateById(id, { 
+                        label: state.label
+                    })
+
+                    if ( updated_request_client_info && updated_request_vendor_info ) {
+                        console.log('Updated both client/vendor references!')
+                    } else {
+                        console.log('Did not update both references.', updated_request_client_info, updated_request_vendor_info)
                     }
-                    
-                } else {
-                    console.log('no request client yet', new_request)
                 }
 
-                const id = r[0].id
+                
                 const notify_payload = {
                     user_id: state.client.id,
                     request_id: id,

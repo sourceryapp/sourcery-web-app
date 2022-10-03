@@ -3,6 +3,12 @@ import type { definitions } from '~/types/supabase'
 
 const TABLE_NAME = 'request_clients'
 
+export type CreateRequestClient = {
+    request_id: number,
+    label: string,
+    name: string | null
+}
+
 export class RequestClient {
     request_id: number
     label: string
@@ -12,7 +18,7 @@ export class RequestClient {
         request_id,
         label,
         name
-    }: RequestClient) {
+    }: CreateRequestClient) {
         this.request_id = request_id
         this.label = label
         this.name = name
@@ -59,5 +65,10 @@ export class RequestClient {
             return false
         }
         return true
+    }
+
+    static async updateById(id: number, { label, name } : { label: string, name: string }) {
+        const rc = new RequestClient({ request_id: id, label, name })
+        return await rc.updateAll({ label, name })
     }
 }
