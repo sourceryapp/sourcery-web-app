@@ -3,6 +3,11 @@ import type { definitions } from '~/types/supabase'
 
 const TABLE_NAME = 'request_vendors'
 
+export type CreateRequestVendor = {
+    request_id: number,
+    label: string
+}
+
 export class RequestVendor {
     request_id: number
     label: string
@@ -10,7 +15,7 @@ export class RequestVendor {
     constructor({
         request_id,
         label
-    }: RequestVendor) {
+    }: CreateRequestVendor) {
         this.request_id = request_id
         this.label = label
     }
@@ -27,5 +32,10 @@ export class RequestVendor {
 
         this.label = label
         return true
+    }
+
+    static async updateById(id: number, { label } : { label: string }) {
+        const rv = new RequestVendor({ request_id: id, label })
+        return await rv.update(label)
     }
 }
