@@ -29,6 +29,12 @@ export type CreateRequest = {
     user?: User
 }
 
+export type UpdateRequestInProgress = {
+    [key: string]: string | null | undefined
+    archive_citation?: string | null
+    archive_notes?: string | null
+}
+
 export class Request {
     id: number | null
     repository_id: number
@@ -158,7 +164,7 @@ export class Request {
     /**
      * Return requests that are requested to the repositories given.
      * @param repositories 
-     * @param includeArchived 
+     * @param status String[]
      * @returns Request[]
      */
     public static async getForRepositories(repositories: Repository[], status = []) {
@@ -335,5 +341,24 @@ export class Request {
             status = await this.request_vendor?.update(label) || false
         }
         return status
+    }
+
+    async update(updateObject : UpdateRequestInProgress) {
+        const approved = ['archive_notes', 'archive_citation']
+        const ks = Object.keys(updateObject)
+        ks.forEach(x => {
+            if ( !approved.includes(x) ) {
+                delete updateObject[x]
+            }
+        })
+        const { data: updated, error } = await supabase.from(TABLE_NAME)
+            .update(updateObject)
+            .eq('id', this.id)
+
+        if (error) {
+            console.log(error)
+            return false
+        }
+        return true
     }
 }

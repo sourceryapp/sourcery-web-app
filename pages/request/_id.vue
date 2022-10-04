@@ -172,6 +172,7 @@
               placeholder="Type any notes, links, and context here..."
               counter
               :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
             />
           </v-card-text>
         </v-card>
@@ -200,6 +201,10 @@
             </v-btn>
           </div>
           <div>
+            <p class="float-left mr-4 mt-1">
+              <em v-if="!draftSaveInProgress">Draft Saved</em>
+              <em v-else>Draft saving in progres...</em>
+            </p>
             <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
               Move to In Progress
             </v-btn>
@@ -272,7 +277,8 @@ export default {
             editing: false,
             editingLabelValue: '',
             hasSatisfiedRequestInText: false,
-            completeLoading: false
+            completeLoading: false,
+            draftSaveInProgress: false
         }
     },
     computed: {
@@ -407,7 +413,8 @@ export default {
             requestPickUp: 'supabaseRequest/pickUp',
             saveLabel: 'supabaseRequest/setLabel',
             startChat: 'supabaseChat/openForRequest',
-            complete: 'supabaseRequest/complete'
+            complete: 'supabaseRequest/complete',
+            update: 'supabaseRequest/update'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -476,6 +483,16 @@ export default {
             this.completeLoading = false
             this.$toast.success('Request completed!')
             this.$refs.confirmCompleteDialog.closeDialog()
+        },
+        async saveInProgress () {
+            this.draftSaveInProgress = true
+            const updated = await this.update({
+                archive_notes: this.requestArchiveNotes
+            })
+            if (!updated) {
+                this.$toast.error('Issue saving draft.')
+            }
+            this.draftSaveInProgress = false
         }
     }
 }

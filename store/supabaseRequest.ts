@@ -1,4 +1,5 @@
 import { Request } from '~/models/Request'
+import type { UpdateRequestInProgress } from '~/models/Request'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
@@ -63,6 +64,16 @@ export const mutations: MutationTree<SupabaseRequestState> = {
     setArchiveNotes(state: SupabaseRequestState, value: string) {
         if ( state.request ) {
             state.request.archive_notes = value
+        }
+    },
+    setUpdateProps(state: SupabaseRequestState, value: UpdateRequestInProgress) {
+        if ( state.request ) {
+            if ( value.archive_citation !== undefined ) {
+                state.request.archive_citation = value.archive_citation
+            }
+            if ( value.archive_notes !== undefined ) {
+                state.request.archive_notes = value.archive_notes
+            }
         }
     },
     clear(state: SupabaseRequestState) {
@@ -131,6 +142,20 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 })
                 return true
             }
+        }
+        return false
+    },
+    async update( { state, commit }: { state: SupabaseRequestState, commit: Commit}, updateObj : UpdateRequestInProgress) {
+        if ( state.request ) {
+            const r = new Request(state.request)
+            const result = await r.update(updateObj)
+
+            if ( result ) {
+                // Successful update of properties, commit them
+                commit('setUpdateProps', updateObj)
+            }
+
+            return result
         }
         return false
     },
