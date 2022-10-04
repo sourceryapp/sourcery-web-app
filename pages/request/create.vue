@@ -38,7 +38,7 @@
           label="Request Title*"
           outlined
           required
-          :rules="[$sourceryForms.rules.required]"
+          :rules="[$sourceryForms.rules.required, $sourceryForms.rules.characterCount100]"
         />
         <p>Help your Sourcerer locate your document by providing as much relevant information as you have (e.g., page numbers, box or folder numbers, name of collections, etc.). Citations are appreciated but not necessary!</p>
         <v-textarea

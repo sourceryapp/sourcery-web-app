@@ -14,12 +14,12 @@
           {{ pageTitle }}
         </h1>
 
-        <v-card v-if="!isComplete && !isArchived" class="pb-2">
+        <v-card v-if="!isComplete && !isArchived" class="pa-5">
           <v-card-text>
             <v-row>
-              <v-col v-if="featuredImageSrc" cols="5">
+              <!-- <v-col v-if="featuredImageSrc" cols="5">
                 <v-img :src="featuredImageSrc" aspect-ratio="1.65" />
-              </v-col>
+              </v-col> -->
               <v-col>
                 <div class="text-h5 mb-2">
                   <v-row>
@@ -203,8 +203,9 @@
             <v-checkbox
               v-model="hasSatisfiedRequestInText"
               class="font-size-20"
-              label="I've provided information in Notes &amp; Links that satisfies the request."
+              label="Mark as Resolved with no Attachments"
             />
+            <p>This is useful for situations where you might not have the documents or capacity to fulfill the request.  A completed request with context will provide a better experience for the end user than cancelling!</p>
           </v-card-text>
         </v-card>
 
