@@ -66,6 +66,11 @@ export const mutations: MutationTree<SupabaseRequestState> = {
             state.request.archive_notes = value
         }
     },
+    setArchiveCitation(state: SupabaseRequestState, value: string) {
+        if ( state.request ) {
+            state.request.archive_citation = value
+        }
+    },
     setUpdateProps(state: SupabaseRequestState, value: UpdateRequestInProgress) {
         if ( state.request ) {
             if ( value.archive_citation !== undefined ) {

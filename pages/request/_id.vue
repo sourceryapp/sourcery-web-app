@@ -177,6 +177,21 @@
           </v-card-text>
         </v-card>
 
+        <v-card v-if="!isComplete && !isArchived && canManage" class="my-3 px-4">
+          <v-card-title>Corrected Citation</v-card-title>
+          <v-card-text>
+            <v-textarea
+              v-model="requestArchiveCitation"
+              outlined
+              rows="3"
+              placeholder="Place a corrected citation here if applicable."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
+            />
+          </v-card-text>
+        </v-card>
+
         <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2">
           <file-manager :id="id" title="Attachments" title-class="text-h6" />
         </v-card>
@@ -203,7 +218,7 @@
           <div>
             <p class="float-left mr-4 mt-1">
               <em v-if="!draftSaveInProgress">Draft Saved</em>
-              <em v-else>Draft saving in progres...</em>
+              <em v-else>Draft saving in progress...</em>
             </p>
             <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
               Move to In Progress
@@ -300,6 +315,14 @@ export default {
             },
             set (val) {
                 this.setArchiveNotes(val)
+            }
+        },
+        requestArchiveCitation: {
+            get () {
+                return this.request.archive_citation ? this.request.archive_citation : ''
+            },
+            set (val) {
+                this.setArchiveCitation(val)
             }
         },
         requestArchiveNotesRead () {
@@ -405,7 +428,8 @@ export default {
     },
     methods: {
         ...mapMutations({
-            setArchiveNotes: 'supabaseRequest/setArchiveNotes'
+            setArchiveNotes: 'supabaseRequest/setArchiveNotes',
+            setArchiveCitation: 'supabaseRequest/setArchiveCitation'
         }),
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
@@ -487,7 +511,8 @@ export default {
         async saveInProgress () {
             this.draftSaveInProgress = true
             const updated = await this.update({
-                archive_notes: this.requestArchiveNotes
+                archive_notes: this.requestArchiveNotes,
+                archive_citation: this.requestArchiveCitation
             })
             if (!updated) {
                 this.$toast.error('Issue saving draft.')
