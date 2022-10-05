@@ -96,16 +96,11 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="mr-2">
-            <v-btn color="primary" class="px-4" @click="startChat(request)">
-              Open Chat
-            </v-btn>
             <v-spacer />
-            <v-btn v-if="isSubmitted && (isOwner || canManage)" color="primary" class="px-4" @click="cancel">
-              Cancel
-            </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived && isOwner" class="px-4" color="primary" @click="archive">
-              Archive
-            </v-btn>
+            <request-actions-dropdown-button
+              :request="request"
+              @requestActionsDispatch="handleRequestAction"
+            />
           </v-card-actions>
         </v-card>
 
@@ -519,6 +514,22 @@ export default {
                 this.$toast.error('Issue saving draft.')
             }
             this.draftSaveInProgress = false
+        },
+        handleRequestAction (action) {
+            switch (action) {
+            case 'openChat':
+                this.startChat(this.request)
+                break
+            case 'editLabel':
+                this.editing = true
+                break
+            case 'cancelRequest':
+                this.cancel()
+                break
+            case 'archiveRequest':
+                this.archive()
+                break
+            }
         }
     }
 }

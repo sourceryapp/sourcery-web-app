@@ -27,19 +27,19 @@ export const getters = {
         return (state.request) ? state.request.id : null
     },
     isComplete(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Complete'
+        return Request.isComplete(state.request)
     },
     isPickedUp(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'In Progress'
+        return Request.isPickedUp(state.request)
     },
     isSubmitted(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Submitted'
+        return Request.isSubmitted(state.request)
     },
     isArchived(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Archived'
+        return Request.isArchived(state.request)
     },
     isCancelled(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Cancelled'
+        return Request.isCancelled(state.request)
     },
     prettyStatus(state: SupabaseRequestState) {
         return (state.request?.status?.name) ? state.request.status.name : 'Unknown'

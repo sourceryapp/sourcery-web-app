@@ -361,4 +361,38 @@ export class Request {
         }
         return true
     }
+
+
+    /**
+     * A bunch of static methods for status checks and stuff
+     */
+    static isComplete(request : Request | null) {
+        return request?.status?.name === 'Complete'
+    }
+    
+    static isPickedUp (request : Request | null) {
+        return request?.status?.name === 'In Progress'
+    }
+    
+    static isSubmitted (request : Request | null) {
+        return request?.status?.name === 'Submitted'
+    }
+    
+    static isArchived (request : Request | null) {
+        return request?.status?.name === 'Archived'
+    }
+    
+    static isCancelled (request : Request | null) {
+        return request?.status?.name === 'Cancelled'
+    }
+
+    static isOwner (user_id : string, request : Request | null) {
+        return user_id === request?.user_id
+    }
+
+    static canManage (repositories : Repository[], request : Request | null) {
+        return repositories
+            .map(x => x.id)
+            .includes(request ? request.repository_id : null)
+    }
 }
