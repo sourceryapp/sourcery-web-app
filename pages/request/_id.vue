@@ -187,13 +187,13 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2">
+        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2 mb-4">
           <file-manager :id="id" title="Attachments" title-class="text-h6" />
         </v-card>
 
         <Attachments v-if="!canManage || isArchived || isComplete" />
 
-        <v-card v-if="!isComplete && !isArchived && canManage" class="my-4">
+        <v-card v-if="!isComplete && !isArchived && canManage && !hasAttachments" class="my-4">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"
@@ -201,6 +201,17 @@
               label="Mark as Resolved with no Attachments"
             />
             <p>This is useful for situations where you might not have the documents or capacity to fulfill the request.  A completed request with context will provide a better experience for the end user than cancelling!</p>
+
+            <v-textarea
+              v-if="hasSatisfiedRequestInText"
+              v-model="requestArchiveNotes"
+              outlined
+              rows="3"
+              placeholder="Type any notes, links, and context here..."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
+            />
           </v-card-text>
         </v-card>
 
@@ -402,13 +413,15 @@ export default {
         messagesCardTitle () {
             return `Message History (${this.messageCount})`
         },
+        hasAttachments () {
+            return this.request.attachments?.length > 0
+        },
         canComplete () {
-            const hasEnoughAttachments = this.request.attachments?.length > 0
             if (!this.canManage) {
                 return false
             }
 
-            if (hasEnoughAttachments) {
+            if (this.hasAttachments) {
                 return true
             }
 

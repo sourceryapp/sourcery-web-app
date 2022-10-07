@@ -172,7 +172,7 @@ export default {
 
             if (this.showPickUp) {
                 list.push({
-                    name: 'Pick Up Request',
+                    name: 'Move to In Progress',
                     action: this.pickUp
                 })
             }
