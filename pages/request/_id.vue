@@ -172,10 +172,18 @@
           </v-card-text>
         </v-card>
 
+        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2 mb-4">
+          <file-manager :id="id" title="Attachments" title-class="text-h6" />
+        </v-card>
+
+        <Attachments v-if="!canManage || isArchived || isComplete" />
+
         <v-card v-if="!isComplete && !isArchived && canManage" class="my-3 px-4">
           <v-card-title>Corrected Citation</v-card-title>
           <v-card-text>
+            <v-checkbox v-model="showCorrectedCitation" label="Provide a corrected citation?" />
             <v-textarea
+              v-if="showCorrectedCitation"
               v-model="requestArchiveCitation"
               outlined
               rows="3"
@@ -186,12 +194,6 @@
             />
           </v-card-text>
         </v-card>
-
-        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2 mb-4">
-          <file-manager :id="id" title="Attachments" title-class="text-h6" />
-        </v-card>
-
-        <Attachments v-if="!canManage || isArchived || isComplete" />
 
         <v-card v-if="!isComplete && !isArchived && canManage && !hasAttachments" class="my-4">
           <v-card-text>
@@ -300,7 +302,8 @@ export default {
             editingLabelValue: '',
             hasSatisfiedRequestInText: false,
             completeLoading: false,
-            draftSaveInProgress: false
+            draftSaveInProgress: false,
+            showCorrectedCitation: false
         }
     },
     computed: {
