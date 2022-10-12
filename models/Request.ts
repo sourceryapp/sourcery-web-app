@@ -29,6 +29,12 @@ export type CreateRequest = {
     user?: User
 }
 
+export type UpdateRequestInProgress = {
+    [key: string]: string | null | undefined
+    archive_citation?: string | null
+    archive_notes?: string | null
+}
+
 export class Request {
     id: number | null
     repository_id: number
@@ -158,7 +164,7 @@ export class Request {
     /**
      * Return requests that are requested to the repositories given.
      * @param repositories 
-     * @param includeArchived 
+     * @param status String[]
      * @returns Request[]
      */
     public static async getForRepositories(repositories: Repository[], status = []) {
@@ -335,5 +341,58 @@ export class Request {
             status = await this.request_vendor?.update(label) || false
         }
         return status
+    }
+
+    async update(updateObject : UpdateRequestInProgress) {
+        const approved = ['archive_notes', 'archive_citation']
+        const ks = Object.keys(updateObject)
+        ks.forEach(x => {
+            if ( !approved.includes(x) ) {
+                delete updateObject[x]
+            }
+        })
+        const { data: updated, error } = await supabase.from(TABLE_NAME)
+            .update(updateObject)
+            .eq('id', this.id)
+
+        if (error) {
+            console.log(error)
+            return false
+        }
+        return true
+    }
+
+
+    /**
+     * A bunch of static methods for status checks and stuff
+     */
+    static isComplete(request : Request | null) {
+        return request?.status?.name === 'Complete'
+    }
+    
+    static isPickedUp (request : Request | null) {
+        return request?.status?.name === 'In Progress'
+    }
+    
+    static isSubmitted (request : Request | null) {
+        return request?.status?.name === 'Submitted'
+    }
+    
+    static isArchived (request : Request | null) {
+        return request?.status?.name === 'Archived'
+    }
+    
+    static isCancelled (request : Request | null) {
+        return request?.status?.name === 'Cancelled'
+    }
+
+    static isOwner (user_id : string, request : Request | null) {
+        return user_id === request?.user_id
+    }
+
+    static canManage (repositories : Repository[], request : Request | null) {
+        return repositories
+            .map(x => x.id)
+            .includes(request ? request.repository_id : null)
     }
 }

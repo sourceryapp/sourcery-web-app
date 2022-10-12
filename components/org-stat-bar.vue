@@ -30,9 +30,9 @@ export default {
             type: Number,
             default: 0
         },
-        turnaroundDays: {
-            type: Number,
-            default: 0
+        turnaroundText: {
+            type: String,
+            default: 'N/A'
         }
     },
     data () {
@@ -63,7 +63,7 @@ export default {
                 new: this.newCount,
                 progress: this.progressCount,
                 completed: this.completedCount,
-                avg_turnaround: `${this.turnaroundDays} days`
+                avg_turnaround: this.turnaroundText
             }
         }
     }

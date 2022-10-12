@@ -1,4 +1,5 @@
 import { Request } from '~/models/Request'
+import type { UpdateRequestInProgress } from '~/models/Request'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
@@ -26,19 +27,19 @@ export const getters = {
         return (state.request) ? state.request.id : null
     },
     isComplete(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Complete'
+        return Request.isComplete(state.request)
     },
     isPickedUp(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'In Progress'
+        return Request.isPickedUp(state.request)
     },
     isSubmitted(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Submitted'
+        return Request.isSubmitted(state.request)
     },
     isArchived(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Archived'
+        return Request.isArchived(state.request)
     },
     isCancelled(state: SupabaseRequestState) {
-        return state.request?.status?.name === 'Cancelled'
+        return Request.isCancelled(state.request)
     },
     prettyStatus(state: SupabaseRequestState) {
         return (state.request?.status?.name) ? state.request.status.name : 'Unknown'
@@ -63,6 +64,21 @@ export const mutations: MutationTree<SupabaseRequestState> = {
     setArchiveNotes(state: SupabaseRequestState, value: string) {
         if ( state.request ) {
             state.request.archive_notes = value
+        }
+    },
+    setArchiveCitation(state: SupabaseRequestState, value: string) {
+        if ( state.request ) {
+            state.request.archive_citation = value
+        }
+    },
+    setUpdateProps(state: SupabaseRequestState, value: UpdateRequestInProgress) {
+        if ( state.request ) {
+            if ( value.archive_citation !== undefined ) {
+                state.request.archive_citation = value.archive_citation
+            }
+            if ( value.archive_notes !== undefined ) {
+                state.request.archive_notes = value.archive_notes
+            }
         }
     },
     clear(state: SupabaseRequestState) {
@@ -131,6 +147,20 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 })
                 return true
             }
+        }
+        return false
+    },
+    async update( { state, commit }: { state: SupabaseRequestState, commit: Commit}, updateObj : UpdateRequestInProgress) {
+        if ( state.request ) {
+            const r = new Request(state.request)
+            const result = await r.update(updateObj)
+
+            if ( result ) {
+                // Successful update of properties, commit them
+                commit('setUpdateProps', updateObj)
+            }
+
+            return result
         }
         return false
     },

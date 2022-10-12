@@ -14,12 +14,12 @@
           {{ pageTitle }}
         </h1>
 
-        <v-card v-if="!isComplete && !isArchived" class="pb-2">
+        <v-card v-if="!isComplete && !isArchived" class="pa-5">
           <v-card-text>
             <v-row>
-              <v-col v-if="featuredImageSrc" cols="5">
+              <!-- <v-col v-if="featuredImageSrc" cols="5">
                 <v-img :src="featuredImageSrc" aspect-ratio="1.65" />
-              </v-col>
+              </v-col> -->
               <v-col>
                 <div class="text-h5 mb-2">
                   <v-row>
@@ -96,16 +96,11 @@
             </v-row>
           </v-card-text>
           <v-card-actions class="mr-2">
-            <v-btn color="primary" class="px-4" @click="startChat(request)">
-              Open Chat
-            </v-btn>
             <v-spacer />
-            <v-btn v-if="isSubmitted && (isOwner || canManage)" color="primary" class="px-4" @click="cancel">
-              Cancel
-            </v-btn>
-            <v-btn v-if="(isComplete || isCancelled) && !isArchived && isOwner" class="px-4" color="primary" @click="archive">
-              Archive
-            </v-btn>
+            <request-actions-dropdown-button
+              :request="request"
+              @requestActionsDispatch="handleRequestAction"
+            />
           </v-card-actions>
         </v-card>
 
@@ -172,22 +167,52 @@
               placeholder="Type any notes, links, and context here..."
               counter
               :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
             />
           </v-card-text>
         </v-card>
 
-        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2">
+        <v-card v-if="canManage && !isArchived && !isComplete" class="px-4 py-2 mb-4">
           <file-manager :id="id" title="Attachments" title-class="text-h6" />
         </v-card>
 
         <Attachments v-if="!canManage || isArchived || isComplete" />
 
-        <v-card v-if="!isComplete && !isArchived && canManage" class="my-4">
+        <v-card v-if="!isComplete && !isArchived && canManage" class="my-3 px-4">
+          <v-card-title>Corrected Citation</v-card-title>
+          <v-card-text>
+            <v-checkbox v-model="showCorrectedCitation" label="Provide a corrected citation?" />
+            <v-textarea
+              v-if="showCorrectedCitation"
+              v-model="requestArchiveCitation"
+              outlined
+              rows="3"
+              placeholder="Place a corrected citation here if applicable."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
+            />
+          </v-card-text>
+        </v-card>
+
+        <v-card v-if="!isComplete && !isArchived && canManage && !hasAttachments" class="my-4">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"
               class="font-size-20"
-              label="I've provided information in Notes &amp; Links that satisfies the request."
+              label="Mark as Resolved with no Attachments"
+            />
+            <p>This is useful for situations where you might not have the documents or capacity to fulfill the request.  A completed request with context will provide a better experience for the end user than cancelling!</p>
+
+            <v-textarea
+              v-if="hasSatisfiedRequestInText"
+              v-model="requestArchiveNotes"
+              outlined
+              rows="3"
+              placeholder="Type any notes, links, and context here..."
+              counter
+              :rules="[$sourceryForms.rules.largeTextAreaCounter]"
+              @change="saveInProgress"
             />
           </v-card-text>
         </v-card>
@@ -200,6 +225,10 @@
             </v-btn>
           </div>
           <div>
+            <p class="float-left mr-4 mt-1">
+              <em v-if="!draftSaveInProgress">Draft Saved</em>
+              <em v-else>Draft saving in progress...</em>
+            </p>
             <v-btn v-if="isSubmitted" class="px-4" color="primary" @click="pickUp">
               Move to In Progress
             </v-btn>
@@ -272,7 +301,9 @@ export default {
             editing: false,
             editingLabelValue: '',
             hasSatisfiedRequestInText: false,
-            completeLoading: false
+            completeLoading: false,
+            draftSaveInProgress: false,
+            showCorrectedCitation: false
         }
     },
     computed: {
@@ -294,6 +325,14 @@ export default {
             },
             set (val) {
                 this.setArchiveNotes(val)
+            }
+        },
+        requestArchiveCitation: {
+            get () {
+                return this.request.archive_citation ? this.request.archive_citation : ''
+            },
+            set (val) {
+                this.setArchiveCitation(val)
             }
         },
         requestArchiveNotesRead () {
@@ -377,13 +416,15 @@ export default {
         messagesCardTitle () {
             return `Message History (${this.messageCount})`
         },
+        hasAttachments () {
+            return this.request.attachments?.length > 0
+        },
         canComplete () {
-            const hasEnoughAttachments = this.request.attachments?.length > 0
             if (!this.canManage) {
                 return false
             }
 
-            if (hasEnoughAttachments) {
+            if (this.hasAttachments) {
                 return true
             }
 
@@ -399,7 +440,8 @@ export default {
     },
     methods: {
         ...mapMutations({
-            setArchiveNotes: 'supabaseRequest/setArchiveNotes'
+            setArchiveNotes: 'supabaseRequest/setArchiveNotes',
+            setArchiveCitation: 'supabaseRequest/setArchiveCitation'
         }),
         ...mapActions({
             requestCancel: 'supabaseRequest/cancel',
@@ -407,7 +449,8 @@ export default {
             requestPickUp: 'supabaseRequest/pickUp',
             saveLabel: 'supabaseRequest/setLabel',
             startChat: 'supabaseChat/openForRequest',
-            complete: 'supabaseRequest/complete'
+            complete: 'supabaseRequest/complete',
+            update: 'supabaseRequest/update'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -476,6 +519,33 @@ export default {
             this.completeLoading = false
             this.$toast.success('Request completed!')
             this.$refs.confirmCompleteDialog.closeDialog()
+        },
+        async saveInProgress () {
+            this.draftSaveInProgress = true
+            const updated = await this.update({
+                archive_notes: this.requestArchiveNotes,
+                archive_citation: this.requestArchiveCitation
+            })
+            if (!updated) {
+                this.$toast.error('Issue saving draft.')
+            }
+            this.draftSaveInProgress = false
+        },
+        handleRequestAction (action) {
+            switch (action) {
+            case 'openChat':
+                this.startChat(this.request)
+                break
+            case 'editLabel':
+                this.editing = true
+                break
+            case 'cancelRequest':
+                this.cancel()
+                break
+            case 'archiveRequest':
+                this.archive()
+                break
+            }
         }
     }
 }

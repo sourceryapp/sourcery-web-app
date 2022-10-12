@@ -83,7 +83,7 @@ export const mutations: MutationTree<SupabaseChatState> = {
         state.request = initial.request
         state.messages = initial.messages
         state.gotNewMessages = initial.gotNewMessages
-        state.hasAgreedToTerms = initial.hasAgreedToTerms
+        state.hasAgreedToTerms = localStorage.DoNotShowChatMessageAgain ? true : initial.hasAgreedToTerms
     },
     setJustGotNewMessages(state: SupabaseChatState, value = true) {
         state.gotNewMessages = value

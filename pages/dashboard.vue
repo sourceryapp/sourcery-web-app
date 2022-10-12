@@ -10,7 +10,13 @@
       </h1>
 
       <logged-out-card />
-      <org-stat-bar v-if="isOrgMember" :new-count="newJobs.length" :progress-count="inProgressJobs.length" :completed-count="completedAndArchivedJobs.length" />
+      <org-stat-bar
+        v-if="isOrgMember"
+        :new-count="newJobs.length"
+        :progress-count="inProgressJobs.length"
+        :completed-count="completedAndArchivedJobs.length"
+        :turnaround-text="averageTimeText"
+      />
 
       <v-row v-if="isOrgMember">
         <v-col cols="12" lg="6">
@@ -66,6 +72,7 @@ import RequestListing from '@/components/request-listing.vue'
 import OrgStatBar from '@/components/org-stat-bar.vue'
 import ButtonLarge from '@/components/button-large.vue'
 import { Request } from '~/models/Request'
+import { Organization } from '~/models/Organization'
 
 export default {
     name: 'Dashboard',
@@ -83,6 +90,7 @@ export default {
         const logged_in = store.getters['supabaseAuth/authUser'] && store.getters['supabaseAuth/authUser'].id
         let requests = []
         let jobs = []
+        let avgTimeMeta
         if (logged_in) {
             const uid = store.getters['supabaseAuth/authUser'].id
             requests = await Request.getForCreator(uid, ['In Progress', 'Submitted', 'Complete'])
@@ -91,12 +99,14 @@ export default {
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
             const user_repositories = store.getters['supabaseAuth/userRepositories']
             jobs = await Request.getForRepositories(user_repositories, ['In Progress', 'Submitted', 'Complete', 'Archived'])
+            avgTimeMeta = await Organization.getAverageTurnaroundTime(store.getters['supabaseAuth/userOrganizationIds'][0])
         }
 
         return {
             requests,
             jobs,
-            organizations: []
+            organizations: [],
+            avgTimeMeta
         }
     },
     data () {
@@ -104,7 +114,8 @@ export default {
             requests: [],
             jobs: [],
             organizations: [],
-            limit: 4
+            limit: 4,
+            avgTimeMeta: null
         }
     },
     computed: {
@@ -138,6 +149,36 @@ export default {
         },
         completedJobsLimited () {
             return this.completedJobs.slice(0, this.limit)
+        },
+        averageTimeText () {
+            const day = 86400
+            const hour = 3600
+            const minute = 60
+
+            const totalseconds = this.avgTimeMeta ? Math.trunc(this.avgTimeMeta.averagetime) : 0
+
+            const daysout = Math.floor(totalseconds / day)
+            const hoursout = Math.floor((totalseconds - daysout * day) / hour)
+            const minutesout = Math.floor((totalseconds - daysout * day - hoursout * hour) / minute)
+            const secondsout = totalseconds - daysout * day - hoursout * hour - minutesout * minute
+
+            if (totalseconds === 0) {
+                return 'N/A'
+            }
+
+            if (daysout > 0) {
+                return `${daysout} day(s)`
+            }
+
+            if (hoursout > 0) {
+                return `${hoursout} hour(s)`
+            }
+
+            if (minutesout > 0) {
+                return `${minutesout} min`
+            }
+
+            return `${secondsout} sec`
         }
     }
 }

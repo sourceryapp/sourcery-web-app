@@ -104,7 +104,8 @@ export default {
     },
     computed: {
         ...mapGetters({
-            authUser: 'supabaseAuth/authUser'
+            authUser: 'supabaseAuth/authUser',
+            userRepositories: 'supabaseAuth/userRepositories'
         }),
         isClient () {
             return this.request.user_id === this.authUser.id
@@ -136,6 +137,9 @@ export default {
             const statuses = ['In Progress', 'Complete']
             return statuses.includes(this.request.status.name)
         },
+        showPickUp () {
+            return Request.isSubmitted(this.request) && Request.canManage(this.userRepositories, this.request)
+        },
         actionButtonColor () {
             return this.$vuetify.theme.dark ? '#707070' : '#C3C3C3'
         },
@@ -163,6 +167,13 @@ export default {
                 list.push({
                     name: 'Open Chat',
                     action: this.openChat
+                })
+            }
+
+            if (this.showPickUp) {
+                list.push({
+                    name: 'Move to In Progress',
+                    action: this.pickUp
                 })
             }
 
@@ -197,6 +208,17 @@ export default {
                 }
             }
             this.$toast.error('Issue saving label.')
+        },
+        async pickUp () {
+            if (this.request instanceof Request) {
+                const result = await this.request.pickUp()
+                if (result) {
+                    this.$toast.success('Picked up request.')
+                    this.$emit('requestUpdated')
+                    return
+                }
+            }
+            this.$toast.error('Issue picking up request.')
         }
     }
 }

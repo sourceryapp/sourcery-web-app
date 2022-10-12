@@ -66,6 +66,7 @@
           </v-list-item>
           <v-card-text v-if="!hasAgreedToTerms" class="cap-height">
             <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.  By chatting with experts, you understand that you will not get an immediate response, and agree to treat experts with respect or subject your account to ban.</p>
+            <v-checkbox v-model="initialMessageDoNotShowAgain" label="Do not show message again." />
             <v-btn @click="handleAgreeToTerms()">
               I agree.
             </v-btn>
@@ -119,7 +120,8 @@ export default {
             closeIcon: 'mdi-close',
             sending: false,
             newMessageWhileSending: '',
-            reportingShowConfirm: false
+            reportingShowConfirm: false,
+            initialMessageDoNotShowAgain: false
         }
     },
     computed: {
@@ -190,6 +192,13 @@ export default {
             flush: 'post'
         }
     },
+    created () {
+        console.log(localStorage.DoNotShowChatMessageAgain)
+        if (localStorage.DoNotShowChatMessageAgain) {
+            this.initialMessageDoNotShowAgain = true
+            this.agreeToTerms()
+        }
+    },
     methods: {
         ...mapMutations({
             clear: 'supabaseChat/clear',
@@ -252,6 +261,9 @@ export default {
         },
         handleAgreeToTerms () {
             this.agreeToTerms()
+            if (this.initialMessageDoNotShowAgain) {
+                localStorage.DoNotShowChatMessageAgain = true
+            }
             nextTick(this.scrollToBottom)
         },
         report () {
