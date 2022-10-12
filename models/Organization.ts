@@ -128,4 +128,15 @@ export class Organization {
         }
         return true
     }
+
+    public static async getAverageTurnaroundTime(id : Number) {
+        const { data, error } = await supabase.rpc('get_average_time_for_requests', { org_id: id })
+
+        if ( data && data.length > 0 ) {
+            return data[0]
+        }
+
+        console.log(error)
+        return false
+    }
 }
