@@ -1,5 +1,5 @@
 <template>
-  <v-list-item class="repository-list-item" two-line :input-value="selected" @click="selectRepository">
+  <v-list-item class="repository-list-item" two-line :input-value="selected" :disabled="disabled" @click="selectRepository">
     <v-list-item-content>
       <v-list-item-title>
         {{ titleText }}
@@ -22,7 +22,8 @@ export default {
     },
     data () {
         return {
-            selected: false
+            selected: false,
+            shortlistDisabled: ['unt']
         }
     },
     computed: {
@@ -31,6 +32,9 @@ export default {
         },
         subText () {
             return this.repository?.name
+        },
+        disabled () {
+            return this.shortlistDisabled.includes(this.repository?.organization?.slug)
         }
     },
     created () {

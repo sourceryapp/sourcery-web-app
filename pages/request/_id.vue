@@ -202,7 +202,7 @@
               class="font-size-20"
               label="Mark as Resolved with no Attachments"
             />
-            <p>This is useful for situations where you might not have the documents or capacity to fulfill the request.  A completed request with context will provide a better experience for the end user than cancelling!</p>
+            <p>This is useful for situations where you might not have the documents or capacity to fulfill the request.  A completed request with context will provide a better experience for the end user than cancelling.</p>
 
             <v-textarea
               v-if="hasSatisfiedRequestInText"
