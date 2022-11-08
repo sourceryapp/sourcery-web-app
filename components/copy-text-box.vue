@@ -12,7 +12,7 @@
     </div>
 
     <p v-else>
-      No citation provided.
+      {{ defaultText }}
     </p>
   </div>
 </template>
@@ -23,6 +23,10 @@ export default {
         text: {
             type: String,
             default: null
+        },
+        defaultText: {
+            type: String,
+            default: 'No citation provided.'
         }
     },
     data () {

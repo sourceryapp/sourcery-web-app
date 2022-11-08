@@ -37,7 +37,8 @@ export default {
             '/archiveSpace/',
             '/join-us',
             '/roadmap',
-            '/email/reset'
+            '/email/reset',
+            '/brand-resources'
         ],
 
         /**
