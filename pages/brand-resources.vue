@@ -23,12 +23,17 @@
                     <button-request-sourcery ref="request_button_example" :dark="dark" :rounded="rounded" />
                   </v-card-text>
                   <v-card-text>
-                    <v-btn @click="getMarkup">
-                      Get Markup
+                    <v-btn color="primary" @click="getMarkup">
+                      {{ getMarkupButtonText }}
                     </v-btn>
                   </v-card-text>
-                  <v-card-text class="d-flex justify-center">
-                    <copy-text-box :text="markupText" default-text="Press Get Markup to retrieve code to copy." />
+                  <v-card-text class="">
+                    <h3>Button HTML</h3>
+                    <copy-text-box :text="markupText" :default-text="`Press ${getMarkupButtonText} to retrieve code to copy.`" />
+                  </v-card-text>
+                  <v-card-text>
+                    <h3>Bonus: Hover CSS</h3>
+                    <copy-text-box :text="hoverCSS" :default-text="`Press ${getMarkupButtonText} to retrieve code to copy.`" />
                   </v-card-text>
                 </v-card>
               </v-col>
@@ -68,12 +73,22 @@ export default {
         return {
             dark: false,
             rounded: false,
-            markupText: ''
+            markupText: '',
+            hoverCSS: ''
+        }
+    },
+    computed: {
+        getMarkupButtonText () {
+            if (!this.markupText) {
+                return 'Get Code'
+            }
+            return 'Update Code'
         }
     },
     methods: {
         getMarkup () {
             this.markupText = this.$refs.request_button_example?.markup
+            this.hoverCSS = this.$refs.request_button_example?.hoverCSS
         }
     }
 }
