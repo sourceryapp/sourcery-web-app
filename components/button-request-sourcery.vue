@@ -19,7 +19,7 @@ export default {
     },
     computed: {
         styleTagText () {
-            let styles = 'font-size: 14px;padding: 10px 15px;font-family: sans-serif;border: 1px solid black;font-weight: bold; line-height: 1; vertical-align: middle; text-decoration: none;'
+            let styles = 'font-size: 14px;padding: 10px 15px;font-family: sans-serif;border: 1px solid black;font-weight: bold; line-height: 1; vertical-align: middle; text-decoration: none; box-sizing: border-box; text-align: center;'
 
             if (this.dark) {
                 styles += 'color: white; background-color: black; border-color: white;'
@@ -47,10 +47,7 @@ export default {
             return c
         },
         markup () {
-            return `<a class="${this.linkClass}" style="${this.styleTagText}" href="https://sourceryapp.org/login">
-                    Request with Sourcery
-                    <img style="${this.imageStyleTagText}" src="~/assets/sourcery-button_stars.svg">
-                </a>`
+            return `<a class="${this.linkClass}" style="${this.styleTagText}" href="https://sourceryapp.org/login">Request with Sourcery <img style="${this.imageStyleTagText}" src="~/assets/sourcery-button_stars.svg"></a>`
         },
         hoverCSS () {
             if (this.dark) {
