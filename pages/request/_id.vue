@@ -143,7 +143,7 @@
               </v-card-text>
             </card-with-header>
 
-            <button-large text="Print History and Citations" :click-action="print" />
+            <button-large text="Print History and Citations" :click-action="print" :disabled="printingLoading" />
           </v-col>
         </v-row>
 
@@ -303,7 +303,8 @@ export default {
             hasSatisfiedRequestInText: false,
             completeLoading: false,
             draftSaveInProgress: false,
-            showCorrectedCitation: false
+            showCorrectedCitation: false,
+            printingLoading: false
         }
     },
     computed: {
@@ -450,7 +451,8 @@ export default {
             saveLabel: 'supabaseRequest/setLabel',
             startChat: 'supabaseChat/openForRequest',
             complete: 'supabaseRequest/complete',
-            update: 'supabaseRequest/update'
+            update: 'supabaseRequest/update',
+            userPrinted: 'supabaseRequest/userPrinted'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -503,8 +505,11 @@ export default {
             this.editing = false
             this.editingLabelValue = this.requestLabel
         },
-        print () {
+        async print () {
+            this.printingLoading = true
+            await this.userPrinted()
             window.print()
+            this.printingLoading = false
         },
         openCompleteRequestDialog () {
             this.$refs.confirmCompleteDialog.openDialog()

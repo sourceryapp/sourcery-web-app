@@ -273,6 +273,22 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
     },
+
+    async userPrinted({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }) {
+        if ( state.request ) {
+            const { data: insert_id, error } = await supabase.rpc('request_printed', {
+                request_id: state.request.id,
+                user_id: rootGetters['supabaseAuth/authUser'].id
+            })
+
+            if ( error ) {
+                console.log('Error saving request_event: userPrinted')
+            }
+
+            return insert_id
+        }
+        return null
+    }
 }
 
 /**

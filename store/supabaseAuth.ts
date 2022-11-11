@@ -148,20 +148,6 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
         }
         return false
     },
-    async fetchUserHasPassword({ state, commit }: { state: SupabaseState, commit: Commit }) {
-        if (state.authUser) {
-            let { data, error } = await supabase.rpc('is_password_exist', {
-                user_id: state.authUser.id
-            })
-            if (error) {
-                console.error(error)
-                commit('setAuthUserHasPassword', false)
-                return false
-            } else {
-                commit('setAuthUserHasPassword', !!data)
-            }
-        }
-    },
     async updateMeta({ state, commit }: { state: SupabaseState, commit: Commit }, { keyName, keyValue }: { keyName: string, keyValue: string }) {
         if (state.authUserMeta) {
             const meta = new SourceryUser(state.authUserMeta)
@@ -182,7 +168,7 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
 
         return false
     },
-    async changePassword({ state, dispatch }: { state: SupabaseState, dispatch: Dispatch }, newPass: string) {
+    async changePassword({ state }: { state: SupabaseState }, newPass: string) {
         if (state.authUser) {
             const { user, error } = await supabase.auth.update({
                 password: newPass
@@ -192,7 +178,6 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
             if (error) {
                 return false
             }
-            dispatch('fetchUserHasPassword')
             return true
         }
         return false

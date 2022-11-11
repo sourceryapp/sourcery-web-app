@@ -224,8 +224,7 @@ export default {
         }),
         ...mapActions({
             fetchUserMeta: 'supabaseAuth/fetchUserMeta',
-            fetchUserOrganizations: 'supabaseAuth/fetchUserOrganizations',
-            fetchUserHasPassword: 'supabaseAuth/fetchUserHasPassword'
+            fetchUserOrganizations: 'supabaseAuth/fetchUserOrganizations'
         }),
         async registerSubmit () {
             try {
