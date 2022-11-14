@@ -274,6 +274,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
     },
 
+    // An all in once function for tracking a print.
     async userPrinted({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }) {
         if ( state.request ) {
             const { data: insert_id, error } = await supabase.rpc('request_printed', {
