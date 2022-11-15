@@ -213,7 +213,8 @@ export default {
         ...mapActions({
             addAttachment: 'supabaseRequest/addAttachment',
             deleteAttachment: 'supabaseRequest/deleteAttachment',
-            complete: 'supabaseRequest/complete'
+            complete: 'supabaseRequest/complete',
+            attachmentDownloaded: 'supabaseRequest/attachmentDownloaded'
         }),
         resetUploadForm () {
             // reset form to initial state
@@ -296,6 +297,7 @@ export default {
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
+                await this.attachmentDownloaded()
             }
         }
     }

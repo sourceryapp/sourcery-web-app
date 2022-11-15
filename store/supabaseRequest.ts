@@ -229,6 +229,14 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     size: file.size
                 })
                 const status = await newAttachment.insert()
+
+                // Add an event for attachment added.
+                // If insert_id and event_error are both null, you have hit a rate limit.
+                const { data: insert_id, error: event_error } = await supabase.rpc('event_add_attachment', {
+                    request_id: state.request.id,
+                    user_id: rootGetters['supabaseAuth/authUser'].id
+                })
+
                 await dispatch('getById', state.request.id)
             }
 
@@ -238,7 +246,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
     },
-    async deleteAttachment({ state, commit, dispatch }, attachment) {
+    async deleteAttachment({ state, commit, dispatch, rootGetters }, attachment) {
         // Get the filename from the Google Storage URL
         const url = new URL(attachment.url)
         const path = decodeURIComponent(url.pathname)
@@ -262,6 +270,11 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
 
             const result = await attachment.delete()
 
+            const { data: insert_id, error: event_error } = await supabase.rpc('event_remove_attachment', {
+                request_id: state.request.id,
+                user_id: rootGetters['supabaseAuth/authUser'].id
+            })
+
             if (result === false) {
                 throw 'attachment was deleted but record was not.'
             }
@@ -272,6 +285,22 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             console.log(error)
             return false
         }
+    },
+
+    async attachmentDownloaded({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }) {
+        if ( state.request ) {
+            const { data: insert_id, error } = await supabase.rpc('event_download_attachment', {
+                request_id: state.request.id,
+                user_id: rootGetters['supabaseAuth/authUser'].id
+            })
+
+            if ( error ) {
+                console.log('Error saving event_download_attachment')
+            }
+
+            return insert_id
+        }
+        return null
     },
 
     // An all in once function for tracking a print.
