@@ -1,6 +1,13 @@
 <template>
   <div class="request-events">
     <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title v-html="`Request Created.`" />
+          <v-list-item-subtitle>{{ request.created_at | normalDateAndTime }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider />
       <template v-for="(event, index) in events">
         <v-list-item
           :key="event.id"
