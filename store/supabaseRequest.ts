@@ -93,7 +93,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         commit('set', r)
         return true
     },
-    async pickUp({ state, commit, dispatch, rootGetters }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch, rootGetters: any }) {
+    async pickUp({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
             const in_progress = await state.request.pickUp()
             if (in_progress) {
@@ -110,7 +110,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
         return false
     },
-    async cancel({ state, commit }: { state: SupabaseRequestState, commit: Commit }) {
+    async cancel({ state, commit, dispatch }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch }) {
         if (state.request) {
             const deleted = await state.request.cancel()
             if (deleted) {
@@ -231,11 +231,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 const status = await newAttachment.insert()
 
                 // Add an event for attachment added.
-                // If insert_id and event_error are both null, you have hit a rate limit.
-                const { data: insert_id, error: event_error } = await supabase.rpc('event_add_attachment', {
-                    request_id: state.request.id,
-                    user_id: rootGetters['supabaseAuth/authUser'].id
-                })
+                await dispatch('sendRequestEventRPC', 'event_add_attachment')
 
                 await dispatch('getById', state.request.id)
             }
@@ -270,10 +266,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
 
             const result = await attachment.delete()
 
-            const { data: insert_id, error: event_error } = await supabase.rpc('event_remove_attachment', {
-                request_id: state.request.id,
-                user_id: rootGetters['supabaseAuth/authUser'].id
-            })
+            await dispatch('sendRequestEventRPC', 'event_remove_attachment')
 
             if (result === false) {
                 throw 'attachment was deleted but record was not.'
@@ -287,32 +280,21 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
     },
 
-    async attachmentDownloaded({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }) {
+    /**
+     * Sends a request event track to the BaaS.
+     * 
+     * @param eventName The name of the RPC function being called.
+     * @returns int8 ID if successful insert, null if error or rate limited.
+     */
+    async sendRequestEventRPC({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }, eventName : string) {
         if ( state.request ) {
-            const { data: insert_id, error } = await supabase.rpc('event_download_attachment', {
+            const { data: insert_id, error } = await supabase.rpc(eventName, {
                 request_id: state.request.id,
                 user_id: rootGetters['supabaseAuth/authUser'].id
             })
 
             if ( error ) {
-                console.log('Error saving event_download_attachment')
-            }
-
-            return insert_id
-        }
-        return null
-    },
-
-    // An all in once function for tracking a print.
-    async userPrinted({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }) {
-        if ( state.request ) {
-            const { data: insert_id, error } = await supabase.rpc('request_printed', {
-                request_id: state.request.id,
-                user_id: rootGetters['supabaseAuth/authUser'].id
-            })
-
-            if ( error ) {
-                console.log('Error saving request_event: userPrinted')
+                console.log(`Error saving request_event: ${eventName}`)
             }
 
             return insert_id

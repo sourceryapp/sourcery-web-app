@@ -452,7 +452,7 @@ export default {
             startChat: 'supabaseChat/openForRequest',
             complete: 'supabaseRequest/complete',
             update: 'supabaseRequest/update',
-            userPrinted: 'supabaseRequest/userPrinted'
+            sendRequestEventRPC: 'supabaseRequest/sendRequestEventRPC'
         }),
         async archive () {
             if (confirm('Are you sure you want to archive this item? This action cannot be undone.')) {
@@ -507,7 +507,7 @@ export default {
         },
         async print () {
             this.printingLoading = true
-            await this.userPrinted()
+            await this.sendRequestEventRPC('request_printed')
             window.print()
             this.printingLoading = false
         },

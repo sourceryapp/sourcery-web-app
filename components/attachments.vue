@@ -214,7 +214,7 @@ export default {
             addAttachment: 'supabaseRequest/addAttachment',
             deleteAttachment: 'supabaseRequest/deleteAttachment',
             complete: 'supabaseRequest/complete',
-            attachmentDownloaded: 'supabaseRequest/attachmentDownloaded'
+            sendRequestEventRPC: 'supabaseRequest/sendRequestEventRPC'
         }),
         resetUploadForm () {
             // reset form to initial state
@@ -297,7 +297,7 @@ export default {
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
-                await this.attachmentDownloaded()
+                await this.sendRequestEventRPC('event_download_attachment')
             }
         }
     }
