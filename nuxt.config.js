@@ -160,7 +160,9 @@ export default {
 
         '~/plugins/sourcery-functions',
 
-        '~/plugins/filesize'
+        '~/plugins/filesize',
+
+        '~/plugins/filters'
 
     ],
 

@@ -240,6 +240,8 @@
             </v-btn>
           </div>
         </div>
+
+        <request-events :request="request" />
       </template>
     </v-flex>
     <dialog-general ref="confirmCompleteDialog">
