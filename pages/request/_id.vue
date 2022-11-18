@@ -195,7 +195,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-if="!isComplete && !isArchived && canManage && !hasAttachments" class="my-4">
+        <v-card v-if="!isComplete && !isArchived && canManage && !hasAttachments" class="my-4 px-5">
           <v-card-text>
             <v-checkbox
               v-model="hasSatisfiedRequestInText"

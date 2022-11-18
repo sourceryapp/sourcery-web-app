@@ -162,7 +162,9 @@ export default {
 
         '~/plugins/filesize',
 
-        '~/plugins/filters'
+        '~/plugins/filters',
+
+        '~/plugins/sorting'
 
     ],
 
