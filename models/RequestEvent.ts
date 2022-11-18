@@ -74,4 +74,21 @@ export class RequestEvent {
 
         return []
     }
+
+    async insert() {
+        const query = supabase.rpc('event_add_internal', {
+            request_id: this.request_id,
+            user_id: this.user_id,
+            message: this.description
+        })
+
+        let { data: insert_id, error } = await query
+
+        if ( error ) {
+            console.log(error)
+            return false
+        }
+
+        return insert_id
+    } 
 }

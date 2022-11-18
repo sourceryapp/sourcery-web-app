@@ -14,12 +14,9 @@
           {{ pageTitle }}
         </h1>
 
-        <v-card v-if="!isComplete && !isArchived" class="pa-5">
+        <v-card v-if="!isComplete && !isArchived" class="pa-5 mb-4">
           <v-card-text>
             <v-row>
-              <!-- <v-col v-if="featuredImageSrc" cols="5">
-                <v-img :src="featuredImageSrc" aspect-ratio="1.65" />
-              </v-col> -->
               <v-col>
                 <div class="text-h5 mb-2">
                   <v-row>
@@ -157,6 +154,8 @@
           </v-col>
         </v-row>
 
+        <request-events v-if="canManage" :request="request" />
+
         <v-card v-if="!isComplete && !isArchived && canManage" class="my-3 px-4">
           <v-card-title>General Notes &amp; Links</v-card-title>
           <v-card-text>
@@ -240,8 +239,6 @@
             </v-btn>
           </div>
         </div>
-
-        <request-events :request="request" />
       </template>
     </v-flex>
     <dialog-general ref="confirmCompleteDialog">
