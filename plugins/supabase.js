@@ -20,7 +20,6 @@ export default async function setStore ({ store, route, app: { router } }) {
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     await store.dispatch('supabaseAuth/fetchUserMeta')
     await store.dispatch('supabaseAuth/fetchUserOrganizations')
-    // await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
     supabase.auth.onAuthStateChange(async (_, session) => {
         const hasPasswordResetToken = store.getters['supabaseAuth/resetAccessToken']

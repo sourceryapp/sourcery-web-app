@@ -1,10 +1,24 @@
 <template>
   <div>
-    <v-btn v-if="to" :to="to" block x-large class="text-uppercase gradient-button">
+    <v-btn
+      v-if="to"
+      :to="to"
+      block
+      x-large
+      class="text-uppercase gradient-button"
+      :disabled="disabled"
+    >
       {{ displayText }}
     </v-btn>
 
-    <v-btn v-else block x-large class="text-uppercase gradient-button" @click="clickAction">
+    <v-btn
+      v-else
+      block
+      x-large
+      class="text-uppercase gradient-button"
+      :disabled="disabled"
+      @click="clickAction"
+    >
       {{ displayText }}
     </v-btn>
   </div>
@@ -24,6 +38,10 @@ export default {
         clickAction: {
             type: Function,
             default: null
+        },
+        disabled: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {

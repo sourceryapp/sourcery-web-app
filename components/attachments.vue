@@ -1,7 +1,7 @@
 <template>
   <div class="attachments-group">
-    <v-card v-if="(isPickedUp || isSubmitted) && userIsVendor" class="mt-3">
-      <v-card-title primary-title class="text-h5">
+    <v-card v-if="(isPickedUp || isSubmitted) && userIsVendor" class="mt-3 px-5">
+      <v-card-title primary-title>
         Attachments
       </v-card-title>
       <v-card-text v-if="isComplete == false">
@@ -91,23 +91,25 @@
     </v-card>
 
     <template v-if="isComplete || isArchived">
-      <v-card class="mt-3">
+      <v-card class="mt-3 px-5">
         <v-card-title>
           <div>
-            <div class="text-h5">
+            <div>
               Download Images
             </div>
-
-            <div><span class="grey--text text--darken-4">Click/Touch each image to download.</span></div>
           </div>
         </v-card-title>
-        <v-layout wrap>
+        <v-layout v-if="request.attachments.length > 0" wrap>
           <v-flex v-for="(attachment, index) in request.attachments" :key="index" xs3 class="pa-2">
             <a @click="downloadAttachment(attachment)">
               <v-img :src="!attachment.isPDF() ? attachment.url : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
             </a>
           </v-flex>
         </v-layout>
+
+        <v-card-text v-else>
+          <p>No attachments to download - request was completed with text or outside of Sourcery.</p>
+        </v-card-text>
       </v-card>
     </template>
 
@@ -213,7 +215,8 @@ export default {
         ...mapActions({
             addAttachment: 'supabaseRequest/addAttachment',
             deleteAttachment: 'supabaseRequest/deleteAttachment',
-            complete: 'supabaseRequest/complete'
+            complete: 'supabaseRequest/complete',
+            sendRequestEventRPC: 'supabaseRequest/sendRequestEventRPC'
         }),
         resetUploadForm () {
             // reset form to initial state
@@ -296,6 +299,7 @@ export default {
                 document.body.appendChild(a)
                 a.click()
                 document.body.removeChild(a)
+                await this.sendRequestEventRPC('event_download_attachment')
             }
         }
     }

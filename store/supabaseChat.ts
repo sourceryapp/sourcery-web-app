@@ -3,7 +3,7 @@ import { RequestComment } from '~/models/RequestComment'
 import { Organization } from '~/models/Organization'
 import { Report } from '~/models/Report'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
-import { getToken } from '~/plugins/supabase'
+import { getToken, supabase } from '~/plugins/supabase'
 import { notify } from '~/plugins/sourcery-functions'
 
 const initialState = () => {
@@ -156,6 +156,11 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
         if (insert) {
             commit('addMessage', insert)
             try {
+                // insert_id and error will be null if rate limited.
+                const { data: insert_id, error } = await supabase.rpc('sent_chat', {
+                    request_id: state.request.id,
+                    user_id: user_id
+                })
                 const token = await getToken()
                 const sendNotif = await notify({
                     user_id: user_id,

@@ -90,7 +90,6 @@ export default {
 
         // Not gonna lie, slight hack here.  Sometimes, eat least in local development, there was a chance we haven't populated all the auth data by the time these components attempt to reach vuex-root.  Could quite literally be a $tick problem, so this just guarantees one more.
         await store.dispatch('supabaseAuth/fetchUserMeta')
-        await store.dispatch('supabaseAuth/fetchUserHasPassword')
 
         return {
             cards: /* (store.state.meta.stripeCustomerId)

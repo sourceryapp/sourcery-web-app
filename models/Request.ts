@@ -237,7 +237,8 @@ export class Request {
             if (error) {
                 console.log(error)
             }
-            // this.status_id = in_progress_status.id
+
+            this.sendRequestRPC('event_status_changed')
             return true
         }
         return false
@@ -273,7 +274,8 @@ export class Request {
             if (error) {
                 console.log(error)
             }
-            // this.status_id = archive_status.id
+
+            this.sendRequestRPC('event_status_changed')
             return true
         }
         return false
@@ -290,7 +292,7 @@ export class Request {
                 console.log(error)
             }
 
-            // this.status_id = cancel_status.id
+            this.sendRequestRPC('event_status_changed')
             return true
         }
         return false
@@ -313,7 +315,8 @@ export class Request {
             if (error) {
                 console.log(error)
             }
-            // this.status_id = complete_status.id
+
+            this.sendRequestRPC('event_status_changed')
             return true
         }
         return false
@@ -340,6 +343,7 @@ export class Request {
         } else {
             status = await this.request_vendor?.update(label) || false
         }
+        this.sendRequestRPC('event_request_edited')
         return status
     }
 
@@ -359,7 +363,32 @@ export class Request {
             console.log(error)
             return false
         }
+        this.sendRequestRPC('event_request_edited')
         return true
+    }
+
+    /**
+     * Sends a request event track to the BaaS.
+     * 
+     * @param eventName The name of the RPC function being called.
+     * @returns int8 ID if successful insert, NULL if rate limited, FALSE if error.
+     */
+    async sendRequestRPC(eventName : string) {
+        const user = supabase.auth.user()
+        if ( !user ) {
+            return false
+        }
+
+        const { data: insert_id, error } = await supabase.rpc(eventName, {
+            request_id: this.id,
+            user_id: user.id
+        })
+
+        if ( error ) {
+            console.log(`Error saving request_event: ${eventName}`)
+            return false
+        }
+        return insert_id
     }
 
 

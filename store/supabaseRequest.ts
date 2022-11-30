@@ -93,7 +93,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         commit('set', r)
         return true
     },
-    async pickUp({ state, commit, dispatch, rootGetters }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch, rootGetters: any }) {
+    async pickUp({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
             const in_progress = await state.request.pickUp()
             if (in_progress) {
@@ -110,7 +110,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
         }
         return false
     },
-    async cancel({ state, commit }: { state: SupabaseRequestState, commit: Commit }) {
+    async cancel({ state, commit, dispatch }: { state: SupabaseRequestState, commit: Commit, dispatch: Dispatch }) {
         if (state.request) {
             const deleted = await state.request.cancel()
             if (deleted) {
@@ -229,6 +229,10 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                     size: file.size
                 })
                 const status = await newAttachment.insert()
+
+                // Add an event for attachment added.
+                await dispatch('sendRequestEventRPC', 'event_add_attachment')
+
                 await dispatch('getById', state.request.id)
             }
 
@@ -238,7 +242,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
     },
-    async deleteAttachment({ state, commit, dispatch }, attachment) {
+    async deleteAttachment({ state, commit, dispatch, rootGetters }, attachment) {
         // Get the filename from the Google Storage URL
         const url = new URL(attachment.url)
         const path = decodeURIComponent(url.pathname)
@@ -262,6 +266,8 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
 
             const result = await attachment.delete()
 
+            await dispatch('sendRequestEventRPC', 'event_remove_attachment')
+
             if (result === false) {
                 throw 'attachment was deleted but record was not.'
             }
@@ -273,6 +279,28 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             return false
         }
     },
+
+    /**
+     * Sends a request event track to the BaaS.
+     * 
+     * @param eventName The name of the RPC function being called.
+     * @returns int8 ID if successful insert, null if error or rate limited.
+     */
+    async sendRequestEventRPC({ state, rootGetters } : { state: SupabaseRequestState, rootGetters: any }, eventName : string) {
+        if ( state.request ) {
+            const { data: insert_id, error } = await supabase.rpc(eventName, {
+                request_id: state.request.id,
+                user_id: rootGetters['supabaseAuth/authUser'].id
+            })
+
+            if ( error ) {
+                console.log(`Error saving request_event: ${eventName}`)
+            }
+
+            return insert_id
+        }
+        return null
+    }
 }
 
 /**
