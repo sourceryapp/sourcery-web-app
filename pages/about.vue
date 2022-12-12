@@ -4,7 +4,7 @@
       <sourcery-header class="mx-n4" />
       <div class="page-content">
         <img src="~/assets/sourcery-tubes.png" class="accent-image">
-        <h1 class="font-size-48 mb-7">
+        <h1 class="font-size-48 about-header mb-7">
           About Sourcery
         </h1>
         <p>Sourcery—an open source, not-for-profit, web-based application for providing remote access to archival documents—aims to improve how researchers request document scans from archivists and how archivists fulfill those requests.</p>
@@ -93,6 +93,11 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+.theme--light .about-header,
+.theme--light .barlow-header {
+  color: #654EA3;
 }
 
 .font-size-48 {

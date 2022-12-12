@@ -686,6 +686,9 @@ h1 {
   font-size: 28px;
 }
 
+.theme--light .light-purple {
+  color: black;
+}
 .light-purple {
   color: rgb(213, 178, 213);
 }
