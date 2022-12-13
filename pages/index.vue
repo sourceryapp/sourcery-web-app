@@ -19,7 +19,7 @@
         >
         <img
           class="header__mockup"
-          src="~/assets/doublephone-sourcery-02.png"
+          src="~/assets/doublephone-sourcery-02-compressed.png"
           alt=""
         >
         <div class="header__buttons">
@@ -425,10 +425,12 @@ h1 {
     grid-area: logo;
 }
 .header__mockup {
-    width: 100%;
+    width: auto;
     padding: 24px 0;
     grid-area: mockup;
     filter: drop-shadow(16px 8px 8px rgb(41, 32, 67, 0.3));
+    max-height: 400px;
+    margin: 0 auto;
 }
 .header__buttons {
     grid-area: buttons;
@@ -525,6 +527,7 @@ h1 {
         width: auto;
         max-width: 100%;
         object-fit: contain;
+        max-height: initial;
     }
     .feature {
         height: 240px;
