@@ -95,6 +95,10 @@ export default {
   width: 100%;
 }
 
+.about-header {
+  font-family: 'Fira Sans', 'sans-serif';
+}
+
 .theme--light .about-header,
 .theme--light .barlow-header {
   color: #654EA3;

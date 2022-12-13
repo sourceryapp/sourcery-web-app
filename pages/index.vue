@@ -19,7 +19,7 @@
         >
         <img
           class="header__mockup"
-          src="../static/img/sourcery-mockup-no-shadow.png"
+          src="~/assets/doublephone-sourcery-02.png"
           alt=""
         >
         <div class="header__buttons">
@@ -134,106 +134,6 @@
             <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
           </v-col>
         </v-row>
-
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_researching_22gp.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Easy document requests
-              </h4>
-              <p class="feature-text">
-                Request a document using just a citation and where
-                it’s located.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_collaborators_prrw.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="order-sm-first col-12 col-sm-6">
-            <div class="feature-desc ">
-              <h4 class="feature-title">
-                High quality sources
-              </h4>
-              <p class="feature-text">
-                Receive high resolution scans from institutions and
-                Sourcery-registered researchers.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_folder_files_nweq.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Streamlining workflows for institutions
-              </h4>
-              <p class="feature-text">
-                Give archival staff and patrons one easy platform
-                for requesting and receiving scans.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_wallet_aym5.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="order-sm-first col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Cut the travel fees
-              </h4>
-              <p class="feature-text">
-                Save your wallet from expensive flights and
-                transportation.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_absorbed_in_xahs.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Get back to what’s important
-              </h4>
-              <p class="feature-text">
-                Gain efficient, affordable access with Sourcery.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
       </v-container>
     </v-flex>
     <section id="how-does-sourcery-work">
@@ -340,18 +240,7 @@
         </v-container>
         <div class="cta-buttons">
           <v-btn
-            to="/login"
-            x-large
-            block
-            color="primary"
-            class="text-h5 font-weight-bold"
-            height="76px"
-            outlined
-          >
-            Log In
-          </v-btn>
-          <v-btn
-            to="/register"
+            to="/join-us"
             x-large
             block
             color="primary"
@@ -359,7 +248,7 @@
             height="76px"
             depressed
           >
-            Sign Up
+            Become a Partner
           </v-btn>
           <!-- <v-btn
             to="/join-us"
@@ -371,11 +260,6 @@
           >
             Sign Up
           </v-btn> -->
-          <p>
-            Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
-              Let us know.
-            </nuxt-link>
-          </p>
         </div>
       </div>
     </section>
@@ -619,9 +503,9 @@ h1 {
     height: 300px;
 }
 .cta-buttons {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #ready {
     margin-bottom: 24px;
@@ -673,12 +557,7 @@ h1 {
         align-items: center;
     }
     .cta-buttons {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: none;
-        align-items: center;
-        gap: 48px;
+
     }
 }
 
