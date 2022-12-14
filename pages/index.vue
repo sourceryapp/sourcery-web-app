@@ -44,7 +44,7 @@
           >
             Sign Up
           </v-btn> -->
-          <v-btn
+          <!-- <v-btn
             to="/login"
             x-large
             block
@@ -54,7 +54,7 @@
             outlined
           >
             Log In
-          </v-btn>
+          </v-btn> -->
           <p class="mt-2 text-white top-callout-text">
             Remote access to archival documents.
           </p>
@@ -82,9 +82,9 @@
       offset-lg3
       offset-xl4
     >
-      <v-container>
+      <v-container class="py-8">
         <h1 id="meet" class="mt-8">
-          Meet Sourcery.
+          How Sourcery Can Work for Your Institution
         </h1>
 
         <v-row align="center" class="mb-5">
@@ -93,9 +93,21 @@
           </v-col>
           <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
             <h2 class="light-purple">
-              Optimize Your Workflow
+              Optimize your Research Requests Workflow
             </h2>
-            <p>Manage or make requests from a simple, intuitive dashboard.<br>Fulfill requests on any device connected to the internet with the device's camera or by uploading a file like a pdf, jpg, png, and more.</p>
+            <p>Manage requests for document scans and other researcher requests from a simple, intuitive dashboard. Fulfill requests on any device connected to the internet with the device's camera or by uploading a pdf, jpg, png, or other file.</p>
+          </v-col>
+        </v-row>
+
+        <v-row align="center" class="mb-5">
+          <v-col md="2" cols="12" :align="calloutAlignment">
+            <SvgsHomepage-Communicate />
+          </v-col>
+          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
+            <h2 class="light-purple">
+              Communicate Directly
+            </h2>
+            <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
           </v-col>
         </v-row>
 
@@ -111,7 +123,7 @@
           </v-col>
         </v-row>
 
-        <v-row align="center" class="mb-5">
+        <!-- <v-row align="center" class="mb-5">
           <v-col md="2" cols="12" :align="calloutAlignment">
             <SvgsHomepage-Interface />
           </v-col>
@@ -121,19 +133,7 @@
             </h2>
             <p>Say goodbye to remembering multiple usernames and passwords for different institutional portals. Submit requests to any of our partner institutions on a single interface and manage them on one dashboard.</p>
           </v-col>
-        </v-row>
-
-        <v-row align="center" class="mb-5">
-          <v-col md="2" cols="12" :align="calloutAlignment">
-            <SvgsHomepage-Communicate />
-          </v-col>
-          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
-            <h2 class="light-purple">
-              Communicate Directly
-            </h2>
-            <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
-          </v-col>
-        </v-row>
+        </v-row>         -->
       </v-container>
     </v-flex>
     <section id="how-does-sourcery-work">
@@ -208,15 +208,6 @@
               Corporation for Digital Scholarship</a>, a not-for-profit organization.
           </p>
         </div>
-        <v-btn
-          to="/about"
-          color="primary"
-          outlined
-          x-large
-          :block="$vuetify.breakpoint.mobile"
-        >
-          Learn More
-        </v-btn>
       </div>
     </section>
 
@@ -238,29 +229,47 @@
             </v-col>
           </v-row>
         </v-container>
-        <div class="cta-buttons">
-          <v-btn
-            to="/join-us"
-            x-large
-            block
-            color="primary"
-            class="text-h5 font-weight-bold"
-            height="76px"
-            depressed
-          >
-            Become a Partner
-          </v-btn>
-          <!-- <v-btn
-            to="/join-us"
-            x-large
-            block
-            color="white"
-            class="black--text text-h5 font-weight-bold"
-            height="76px"
-          >
-            Sign Up
-          </v-btn> -->
-        </div>
+        <v-container>
+          <v-row>
+            <v-col cols="12" sm="6" md="4">
+              <v-btn
+                to="/join-us"
+                x-large
+                block
+                color="primary"
+                class="text-h5 font-weight-bold"
+                height="76px"
+                depressed
+              >
+                Become a Partner
+              </v-btn>
+            </v-col>
+            <v-col cols="12" sm="6" md="4">
+              <v-btn
+                to="/login"
+                x-large
+                block
+                color="primary"
+                class="black--text text-h5 font-weight-bold"
+                height="76px"
+              >
+                Log In
+              </v-btn>
+            </v-col>
+            <v-col cols="12" sm="6" md="4" class="mx-auto">
+              <v-btn
+                to="/about"
+                color="primary"
+                outlined
+                x-large
+                height="76px"
+                block
+              >
+                Learn More
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
       </div>
     </section>
 
@@ -506,9 +515,17 @@ h1 {
 }
 .cta-buttons {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-wrap: wrap;
+    gap: 48px;
+    justify-content: space-between;
+    align-content: space-around;
+
 }
+
+.cta-buttons .v-btn {
+  min-width: 350px;
+}
+
 #ready {
     margin-bottom: 24px;
 }
@@ -558,9 +575,6 @@ h1 {
         display: flex;
         flex-direction: column;
         align-items: center;
-    }
-    .cta-buttons {
-
     }
 }
 

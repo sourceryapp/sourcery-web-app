@@ -12,7 +12,7 @@
           For Repositories &amp; Archivists
         </h2>
         <p>For archivists, Sourcery provides archivists a streamlined, cross-platform (mobile, tablet, or laptop) reference scanning workflow, including tools to: help clarify, categorize, staff, and track outstanding requests; manage researcher communication; set and easily collect fees (for institutions that charge for these services); assess the true costs of their labor; and report these costs to decision makers in advocating for additional resources and staff.</p>
-        <button-large
+        <!-- <button-large
           v-if="$vuetify.breakpoint.smAndDown"
           class="mb-4 pr-8"
           text="Become a Sourcery Partner"
@@ -20,13 +20,14 @@
           left-gradient="#31167A"
           to="/join-us"
           :block="false"
-        />
+        /> -->
         <h2 class="barlow-header mb-2">
           For Researchers &amp; Requesters
         </h2>
         <p>For researchers, Sourcery aims to provide a single, simple interface for requesting remote access to not-yet digitized documents at repositories around the world. With Sourcery on a phone or laptop, a researcher seeking a document can simply enter the document's location and citation information and receive a scan directly from within the app. It aims to provide better tools for communicating with archivists, provide easier payment options, allow for tracking requests placed at multiple archives within a single interface, and integrate with popular research tools like Zotero and Tropy.</p>
+        <br>
         <p>Existing means of providing remote access to non-digitized sources create confusion for researchers and extra work for already stretched archivists. Sourcery aims to remedy these problems, creating new and more efficient pathways of computer-mediated research and systems to facilitate and properly account for and fund the often unaccounted and under-resourced labor of archivists in providing reference scans. At the same time, Sourcery recognizes that much archival research depends on close contact between researchers and archivists. By providing more effective online access, Sourcery ultimately aims to free up both researchers and archivists to focus on the sustained, mutual journeys of intellectual discovery at the heart of archival research.</p>
-        <button-large
+        <!-- <button-large
           v-if="$vuetify.breakpoint.smAndDown"
           class="mb-4 pr-8"
           text="Request with Sourcery"
@@ -34,15 +35,15 @@
           left-gradient="#B86FD1"
           to="/login"
           :block="false"
-        />
-        <v-row v-if="$vuetify.breakpoint.mdAndUp" class="pr-8">
+        /> -->
+        <!-- <v-row v-if="$vuetify.breakpoint.mdAndUp" class="pr-8">
           <v-col>
             <button-large text="Become a Sourcery Partner" right-gradient="#B86FD1" left-gradient="#31167A" to="/join-us" />
           </v-col>
           <v-col>
             <button-large text="Request with Sourcery" right-gradient="#DD4A8B" left-gradient="#B86FD1" to="/login" />
           </v-col>
-        </v-row>
+        </v-row> -->
       </div>
     </div>
     <sourcery-footer id="footer" />

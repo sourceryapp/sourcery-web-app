@@ -47,7 +47,7 @@
             <v-divider class="mb-12" />
           </div>
           <h1 class="mb-12">
-            Alumni
+            Consulting Partners
           </h1>
           <div class="d-flex flex-wrap mx-sm-n12 justify-center justify-sm-space-between">
             <v-card
@@ -104,49 +104,9 @@ export default {
         return {
             members: [
                 {
-                    name: 'Brian Daley',
-                    title: 'Co-PI/Lead Developer',
-                    bio: 'For nearly 20 years, Brian has been creating for web and mobile platforms as a freelancer and a web developer with University Communications at the University of Connecticut. His work includes projects like the UConn homepage and UConn Health, as well as many other high-profile digital marketing campaigns and websites.'
-                },
-                {
-                    name: 'Brooke Foti Gemmell',
-                    title: 'Lead Designer',
-                    bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
-                },
-                {
-                    name: 'Samson Weiner',
-                    title: 'Developer',
-                    bio: 'Samson joined the Sourcery team in the Fall of 2018 while an undergraduate. He is continuing his studies as a graduate student at the University of Connecticut studying computer science. His main area of research involves applying algorithms to evolutionary and biological problems, though his interests extend to computational theory as a whole. Outside of research and Sourcery, Samson enjoys exploring new media outlets and technology. His favorite quarantine activities have been cooking, reading, and art.'
-                },
-                {
-                    name: 'Alex Mueller',
-                    title: 'UX Designer & Developer',
-                    bio: 'Alex Mueller is a senior studying Digital Media and Design with a concentration in Web and Interactive Media. He has loved doing design work as a hobby for the past 5 years and is looking forward to pursuing design as a career. He also has been interested in programming since he was a child and likes to combine both his design and development skills wherever he can. Outside of school, he enjoys playing the drums and photography.'
-                },
-                {
-                    name: 'Greg Colati',
-                    title: 'Co-I/Senior Strategist',
-                    bio: 'Greg Colati is the Director of the Digital Preservation Repository Program at UConn, as well as the head of the Connecticut Digital Archive, a statewide preservation-oriented digital repository service for libraries, archives, museums, and memory institutions. Mr. Colati has more than 25 years  experience in archives and cultural heritage institutions. He is currently an adjunct Professor UConn’s department of Digital Media and Design and has taught courses in archives management and digital repositories at Simmons University GSLIS, the University of Denver and for the Society of American Archivists.'
-                },
-                {
-                    name: 'Wes Hamrick',
-                    title: 'Business Manager',
-                    bio: 'Wes Hamrick is a postdoctoral fellow at Greenhouse Studios at the University of Connecticut, where he serves as project manager on a number of digital humanities projects, including an AR (augmented reality) experience, the document delivery app Sourcery, and a digital game for learning Early Modern Irish. He specialises in British and Irish literature of the long eighteenth century.'
-                },
-                {
-                    name: 'Garrett McComas',
-                    title: 'Outreach Coordinator',
-                    bio: 'Garrett McComas has a MLIS from University of Illinois at Urbana-Champaign and began working at Greenhouse Studios in 2020. He enjoys creating sustainable digital humanities projects with researchers and libraries. As a part of the Sourcery team, he leverages his background as a researcher and his experiences working with libraries and archives to work on Community Outreach for the project.'
-                },
-                {
-                    name: 'Sara Sikes',
-                    title: 'Co-I/Senior Strategist',
-                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
-                },
-                {
-                    name: 'Tom Scheinfeldt',
-                    title: 'PI/Project Director',
-                    bio: 'Tom Scheinfeldt is Associate Professor of Digital Humanities at the University of Connecticut where he holds a joint appointment in the Department of Digital Media & Design and the Department of History. He is also Director of Greenhouse Studios (greenhousestudios.uconn.edu), a transdisciplinary research unit that solves the problems and explores the opportunities of scholarship in the "digital age." Formerly Managing Director of the Roy Rosenzweig Center for History and New Media at George Mason University, Tom has directed several award-winning digital humanities and academic software projects, including Omeka, THATCamp, and the September 11 Digital Archive. You can follow Tom on Twitter at @foundhistory.'
+                    name: 'Carly Wanner-Hyde',
+                    title: 'Project Lead / Head Designer',
+                    bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
                 },
                 {
                     name: 'Brian Kelleher',
@@ -154,10 +114,16 @@ export default {
                     bio: 'Prior to working for the Digital Experience Group, Brian worked as a web developer for University Communications at UConn, where he created and managed WordPress websites such as the premier news website UConn Today.  Brian was also the principle web developer for a live-streaming video startup where he created web and native mobile applications, and worked extensively with emerging cloud technology.'
                 },
                 {
-                    name: 'Carly Wanner-Hyde',
-                    title: 'Project Lead / Head Designer - alpha version',
-                    bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
+                    name: 'Brian Daley',
+                    title: 'Co-PI / Lead Developer',
+                    bio: 'For nearly 20 years, Brian has been creating for web and mobile platforms as a freelancer and a web developer with University Communications at the University of Connecticut. His work includes projects like the UConn homepage and UConn Health, as well as many other high-profile digital marketing campaigns and websites.'
+                },
+                {
+                    name: 'Tom Scheinfeldt',
+                    title: 'PI / Project Director',
+                    bio: 'Tom Scheinfeldt is Associate Professor of Digital Humanities at the University of Connecticut where he holds a joint appointment in the Department of Digital Media & Design and the Department of History. He is also Director of Greenhouse Studios (greenhousestudios.uconn.edu), a transdisciplinary research unit that solves the problems and explores the opportunities of scholarship in the "digital age." Formerly Managing Director of the Roy Rosenzweig Center for History and New Media at George Mason University, Tom has directed several award-winning digital humanities and academic software projects, including Omeka, THATCamp, and the September 11 Digital Archive. You can follow Tom on Twitter at @foundhistory.'
                 }
+
             ],
             alumni: [
                 {
@@ -196,6 +162,41 @@ export default {
                     name: 'Wenchao Lou',
                     title: 'UI/UX Designer',
                     bio: 'Wenchao Lou is a Digital Media & Design major student at the University of Connecticut. Within the Digital Media & Design program, she concentrates in Game Design. She has experience in video production, web design, UI/UX design and game design.'
+                },
+                {
+                    name: 'Brooke Foti Gemmell',
+                    title: 'Lead Designer',
+                    bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
+                },
+                {
+                    name: 'Samson Weiner',
+                    title: 'Developer',
+                    bio: 'Samson joined the Sourcery team in the Fall of 2018 while an undergraduate. He is continuing his studies as a graduate student at the University of Connecticut studying computer science. His main area of research involves applying algorithms to evolutionary and biological problems, though his interests extend to computational theory as a whole. Outside of research and Sourcery, Samson enjoys exploring new media outlets and technology. His favorite quarantine activities have been cooking, reading, and art.'
+                },
+                {
+                    name: 'Alex Mueller',
+                    title: 'UX Designer & Developer',
+                    bio: 'Alex Mueller is a senior studying Digital Media and Design with a concentration in Web and Interactive Media. He has loved doing design work as a hobby for the past 5 years and is looking forward to pursuing design as a career. He also has been interested in programming since he was a child and likes to combine both his design and development skills wherever he can. Outside of school, he enjoys playing the drums and photography.'
+                },
+                {
+                    name: 'Greg Colati',
+                    title: 'Co-I/Senior Strategist',
+                    bio: 'Greg Colati is the Director of the Digital Preservation Repository Program at UConn, as well as the head of the Connecticut Digital Archive, a statewide preservation-oriented digital repository service for libraries, archives, museums, and memory institutions. Mr. Colati has more than 25 years  experience in archives and cultural heritage institutions. He is currently an adjunct Professor UConn’s department of Digital Media and Design and has taught courses in archives management and digital repositories at Simmons University GSLIS, the University of Denver and for the Society of American Archivists.'
+                },
+                {
+                    name: 'Wes Hamrick',
+                    title: 'Business Manager',
+                    bio: 'Wes Hamrick is a postdoctoral fellow at Greenhouse Studios at the University of Connecticut, where he serves as project manager on a number of digital humanities projects, including an AR (augmented reality) experience, the document delivery app Sourcery, and a digital game for learning Early Modern Irish. He specialises in British and Irish literature of the long eighteenth century.'
+                },
+                {
+                    name: 'Garrett McComas',
+                    title: 'Outreach Coordinator',
+                    bio: 'Garrett McComas has a MLIS from University of Illinois at Urbana-Champaign and began working at Greenhouse Studios in 2020. He enjoys creating sustainable digital humanities projects with researchers and libraries. As a part of the Sourcery team, he leverages his background as a researcher and his experiences working with libraries and archives to work on Community Outreach for the project.'
+                },
+                {
+                    name: 'Sara Sikes',
+                    title: 'Co-I/Senior Strategist',
+                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
                 }
             ]
         }
@@ -206,8 +207,9 @@ export default {
     },
     computed: {
         members_sorted () {
-            const members_copy = [...this.members].sort(this.sortByLastName)
-            return members_copy
+            // const members_copy = [...this.members].sort(this.sortByLastName)
+            // return members_copy
+            return this.members
         },
         alumni_sorted () {
             const alumni_copy = [...this.alumni].sort(this.sortByLastName)
