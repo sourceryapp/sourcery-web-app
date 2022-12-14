@@ -3,9 +3,10 @@
     <v-btn
       v-if="to"
       :to="to"
-      block
+      :block="block"
       x-large
       class="text-uppercase gradient-button"
+      :style="gradientStyle"
       :disabled="disabled"
     >
       {{ displayText }}
@@ -13,9 +14,10 @@
 
     <v-btn
       v-else
-      block
+      :block="block"
       x-large
       class="text-uppercase gradient-button"
+      :style="gradientStyle"
       :disabled="disabled"
       @click="clickAction"
     >
@@ -42,6 +44,18 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        leftGradient: {
+            type: String,
+            default: '#654EA3'
+        },
+        rightGradient: {
+            type: String,
+            default: '#431A5A'
+        },
+        block: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -50,6 +64,17 @@ export default {
                 return this.text.replace('and', '&')
             }
             return this.text
+        },
+        buttonClass () {
+            let c = 'text-uppercase gradient-button'
+            if (this.light) {
+                c += ' gradient-button-light'
+            }
+            return c
+        },
+        gradientStyle () {
+            const s = `background: linear-gradient(45deg, ${this.leftGradient}, ${this.rightGradient});`
+            return s
         }
     }
 }
@@ -57,7 +82,6 @@ export default {
 
 <style scoped>
 .gradient-button {
-    background: linear-gradient(45deg, #654EA3, #431A5A);
     max-width: 100%;
 }
 </style>

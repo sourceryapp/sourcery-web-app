@@ -6,6 +6,7 @@
         style="position:fixed; width: 100%"
       />
     </v-fade-transition>
+
     <header
       v-intersect="onIntersect"
       class="landing-header"
@@ -18,11 +19,11 @@
         >
         <img
           class="header__mockup"
-          src="../static/img/sourcery-mockup-no-shadow.png"
+          src="~/assets/doublephone-sourcery-02-compressed.png"
           alt=""
         >
         <div class="header__buttons">
-          <v-btn
+          <!-- <v-btn
             to="/register"
             x-large
             block
@@ -32,7 +33,7 @@
             depressed
           >
             Sign Up
-          </v-btn>
+          </v-btn> -->
           <!-- <v-btn
             to="/join-us"
             x-large
@@ -54,17 +55,22 @@
           >
             Log In
           </v-btn>
-          <p class="mt-2 text-white">
-            Interested in working with Sourcery as an institution? <nuxt-link class="link-white" to="/join-us">
-              Let us know.
-            </nuxt-link>
+          <p class="mt-2 text-white top-callout-text">
+            Remote access to archival documents.
           </p>
         </div>
         <div class="header__slogan">
-          <p>Delivering archival documents straight to your device</p>
+          <p>
+            Open source
+            <SvgsSparkle height="10" class="svg-sparkle-contain" />
+            Not for profit
+            <SvgsSparkle height="10" class="svg-sparkle-contain" />
+            Community Driven
+          </p>
         </div>
       </div>
     </header>
+
     <v-flex
       xs12
       sm10
@@ -78,105 +84,54 @@
     >
       <v-container>
         <h1 id="meet" class="mt-8">
-          Meet Sourcery
+          Meet Sourcery.
         </h1>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_researching_22gp.svg"
-              alt=""
-            >
+
+        <v-row align="center" class="mb-5">
+          <v-col md="2" cols="12" :align="calloutAlignment">
+            <SvgsHomepage-Optimize />
           </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Easy document requests
-              </h4>
-              <p class="feature-text">
-                Request a document using just a citation and where
-                it’s located.
-              </p>
-            </div>
+          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
+            <h2 class="light-purple">
+              Optimize Your Workflow
+            </h2>
+            <p>Manage or make requests from a simple, intuitive dashboard.<br>Fulfill requests on any device connected to the internet with the device's camera or by uploading a file like a pdf, jpg, png, and more.</p>
           </v-col>
         </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_collaborators_prrw.svg"
-              alt=""
-            >
+
+        <v-row align="center" class="mb-5">
+          <v-col md="2" cols="12" :align="calloutAlignment">
+            <SvgsHomepage-Analytics />
           </v-col>
-          <v-col class="order-sm-first col-12 col-sm-6">
-            <div class="feature-desc ">
-              <h4 class="feature-title">
-                High quality sources
-              </h4>
-              <p class="feature-text">
-                Receive high resolution scans from institutions and
-                Sourcery-registered researchers.
-              </p>
-            </div>
+          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
+            <h2 class="light-purple">
+              Access Rich Usage Analytics
+            </h2>
+            <p>See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
           </v-col>
         </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_folder_files_nweq.svg"
-              alt=""
-            >
+
+        <v-row align="center" class="mb-5">
+          <v-col md="2" cols="12" :align="calloutAlignment">
+            <SvgsHomepage-Interface />
           </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Streamlining workflows for institutions
-              </h4>
-              <p class="feature-text">
-                Give archival staff and patrons one easy platform
-                for requesting and receiving scans.
-              </p>
-            </div>
+          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
+            <h2 class="light-purple">
+              Request from a Single Interface
+            </h2>
+            <p>Say goodbye to remembering multiple usernames and passwords for different institutional portals. Submit requests to any of our partner institutions on a single interface and manage them on one dashboard.</p>
           </v-col>
         </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_wallet_aym5.svg"
-              alt=""
-            >
+
+        <v-row align="center" class="mb-5">
+          <v-col md="2" cols="12" :align="calloutAlignment">
+            <SvgsHomepage-Communicate />
           </v-col>
-          <v-col class="order-sm-first col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Cut the travel fees
-              </h4>
-              <p class="feature-text">
-                Save your wallet from expensive flights and
-                transportation.
-              </p>
-            </div>
-          </v-col>
-        </v-row>
-        <v-row class="align-center">
-          <v-col>
-            <img
-              class="feature-illustration"
-              src="../static/img/landing-illustrations/undraw_absorbed_in_xahs.svg"
-              alt=""
-            >
-          </v-col>
-          <v-col class="col-12 col-sm-6">
-            <div class="feature-desc">
-              <h4 class="feature-title">
-                Get back to what’s important
-              </h4>
-              <p class="feature-text">
-                Gain efficient, affordable access with Sourcery.
-              </p>
-            </div>
+          <v-col offset-md="1" md="9" cols="12" :align="calloutAlignment">
+            <h2 class="light-purple">
+              Communicate Directly
+            </h2>
+            <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
           </v-col>
         </v-row>
       </v-container>
@@ -285,18 +240,7 @@
         </v-container>
         <div class="cta-buttons">
           <v-btn
-            to="/login"
-            x-large
-            block
-            color="primary"
-            class="text-h5 font-weight-bold"
-            height="76px"
-            outlined
-          >
-            Log In
-          </v-btn>
-          <v-btn
-            to="/register"
+            to="/join-us"
             x-large
             block
             color="primary"
@@ -304,7 +248,7 @@
             height="76px"
             depressed
           >
-            Sign Up
+            Become a Partner
           </v-btn>
           <!-- <v-btn
             to="/join-us"
@@ -316,11 +260,6 @@
           >
             Sign Up
           </v-btn> -->
-          <p>
-            Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
-              Let us know.
-            </nuxt-link>
-          </p>
         </div>
       </div>
     </section>
@@ -376,6 +315,12 @@ export default {
                 return true
             }
             return false
+        },
+        calloutAlignment () {
+            if (this.$vuetify.breakpoint.smAndDown) {
+                return 'center'
+            }
+            return ''
         }
     },
     methods: {
@@ -424,7 +369,7 @@ body {
     --sourcery-500: #654ea3;
     --sourcery-700: #413268;
     --sourcery-900: #292043;
-    --max-width: 840px;
+    --max-width: 940px;
 }
 .Cookie--dark-lime a.Cookie__button {
     background-color: grey;
@@ -451,16 +396,19 @@ h1 {
     color: var(--sourcery-900);
 }
 #meet {
-    text-align: center;
-    margin-bottom: 36px;
+  font-family: 'Barlow', sans-serif;
+  font-weight: 500;
+  font-size: 36px;
+  text-align: center;
+  margin-bottom: 48px;
 }
 .landing-header {
     padding: 48px 24px;
     background: rgb(146, 79, 190);
     background: linear-gradient(
-        135deg,
-        rgba(146, 79, 190, 1) 0%,
-        rgba(111, 77, 170, 1) 50%
+        112deg,
+        rgba(166, 109, 171, 1) 0%,
+        rgba(104, 81, 164, 1) 100%
     );
 }
 .header-content {
@@ -469,21 +417,25 @@ h1 {
     display: grid;
     align-items: center;
     grid-template-areas: 'logo' 'mockup' 'buttons' 'slogan';
-    row-gap: 12px;
+    row-gap: 2px;
 }
 .header__logo {
     width: 100%;
-    max-height: 60px;
+    max-width: 510px;
     grid-area: logo;
 }
 .header__mockup {
-    width: 100%;
+    width: auto;
     padding: 24px 0;
     grid-area: mockup;
     filter: drop-shadow(16px 8px 8px rgb(41, 32, 67, 0.3));
+    max-height: 400px;
+    margin: 0 auto;
 }
 .header__buttons {
     grid-area: buttons;
+    padding-top: 20px;
+    padding-bottom: 10px;
 }
 .header__buttons a:first-child {
     margin-bottom: 12px;
@@ -497,7 +449,9 @@ h1 {
 }
 .header__slogan p {
     color: white;
-    font-size: 24px;
+    font-size: 17px;
+    text-transform: uppercase;
+    margin-bottom: 0;
 }
 .text-white {
   color: white;
@@ -551,9 +505,9 @@ h1 {
     height: 300px;
 }
 .cta-buttons {
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    gap: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #ready {
     margin-bottom: 24px;
@@ -563,15 +517,17 @@ h1 {
         padding: 96px 24px;
     }
     .header-content {
-        grid-template-areas: 'logo mockup' 'slogan mockup' 'buttons mockup';
+        grid-template-areas: '. mockup' 'logo mockup' 'slogan mockup' 'buttons mockup' '. mockup';
         column-gap: 96px;
-        grid-template-columns: 5fr 4fr;
+        grid-template-columns: 6fr 4fr;
+        grid-template-rows: 1fr auto auto auto 1fr;
     }
     .header__mockup {
         padding: 0;
         width: auto;
         max-width: 100%;
         object-fit: contain;
+        max-height: initial;
     }
     .feature {
         height: 240px;
@@ -604,12 +560,28 @@ h1 {
         align-items: center;
     }
     .cta-buttons {
-        width: 100%;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: none;
-        align-items: center;
-        gap: 48px;
+
     }
+}
+
+.top-callout-text {
+  font-size: 28px;
+}
+
+.theme--light .light-purple {
+  color: black;
+}
+.light-purple {
+  color: rgb(213, 178, 213);
+}
+
+h2 {
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.svg-sparkle-contain {
+  margin-bottom: 1px;
+  margin-right: 2px;
+  margin-left: 2px;
 }
 </style>
