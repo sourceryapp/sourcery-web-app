@@ -1,7 +1,7 @@
 <template>
   <div v-if="repository" class="repository-preview mb-4 mt-2">
     <v-img
-      :src="repository.featured_image?.url"
+      :src="featuredImageUrl"
       max-height="200"
       class="repository-image"
     >
@@ -41,6 +41,12 @@ export default {
                 return address
             }
             return ''
+        },
+        featuredImageUrl () {
+            if (this.repository?.featured_image?.url) {
+                return this.repository.featured_image.url
+            }
+            return '/img/fallbacks/default-header.jpg'
         }
     }
 }
