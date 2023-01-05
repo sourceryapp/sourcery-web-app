@@ -11,7 +11,7 @@
       <v-img
         src="/img/fallbacks/default-header.jpg"
         max-height="200"
-        class="repository-image mb-6"
+        class="repository-image mb-6 rounded-lg"
       />
 
       <repository-search @selected="setRepository" />
@@ -166,14 +166,14 @@ export default {
         ...mapActions({
             submitRequest: 'supabaseCreate/insert'
         }),
-        async submitRequestInsert () {
-            this.submitting = true
-            this.$toast.success('Submitted Request!')
-            const r = await this.submitRequest()
-            this.submitting = false
-            if (r[0] && r[0].id) {
-                this.$router.push(`/request/${r[0].id}`)
-            }
+        submitRequestInsert () {
+            // this.submitting = true
+            this.$toast.success('Successful, but disabled in this test.')
+            // const r = await this.submitRequest()
+            // this.submitting = false
+            // if (r[0] && r[0].id) {
+            //     this.$router.push(`/request/${r[0].id}`)
+            // }
         }
     }
 }

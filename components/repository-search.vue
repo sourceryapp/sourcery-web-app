@@ -13,8 +13,20 @@
       }"
       @input="selectedRepositoryItem"
     >
-      <template #no-data>
+      <template #prepend-item>
         <v-list-item @click="selectCreateNewRepository">
+          <v-list-item-content>
+            <v-list-item-title>
+              Submit New Repository: {{ searchText }}
+            </v-list-item-title>
+            <v-list-item-subtitle>
+              <em>User Custom Entry</em>
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
+      <template #no-data>
+        <v-list-item class="no-data-menu-item" @click="selectCreateNewRepository">
           <v-list-item-content>
             <v-list-item-title>
               Submit New Repository: {{ searchText }}
@@ -39,7 +51,7 @@
 
     <repository-preview :repository="selectedRepository" @unselect="unselect" />
 
-    <div class="repository-item-list">
+    <div class="repository-item-list mt-2">
       <div class="repository-item-list-filter-row">
         <span class="browse-text text-h5 font-weight-light text-uppercase">Browse</span>
         <v-btn icon @click="toggleBrowse">
@@ -166,5 +178,9 @@ export default {
     .v-text-field__details {
         display: none;
     }
+}
+
+.no-data-menu-item {
+    display: none;
 }
 </style>

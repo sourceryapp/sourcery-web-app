@@ -1,7 +1,7 @@
 <template>
   <div v-show="!!repository" class="repository-preview mb-4 mt-2">
     <span class="repository-preview-name">{{ repositoryName }}</span>
-    <v-btn icon small @click="unselect">
+    <v-btn icon small color="white" @click="unselect">
       <v-icon>mdi-close</v-icon>
     </v-btn>
   </div>
@@ -43,5 +43,11 @@ export default {
   display: inline-flex;
   align-items: center;
   column-gap: 20px;
+}
+</style>
+
+<style>
+.theme--light .repository-preview {
+  color: white;
 }
 </style>
