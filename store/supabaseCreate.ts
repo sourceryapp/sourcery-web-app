@@ -15,7 +15,7 @@ export const initialState = () => {
     return {
         client: null as SourceryUser | null,
         citation: '',
-        repository: null as Repository | null,
+        repository: null as Repository | string | null,
         pages: 0,
         label: '',
         status: null as Status | null,
@@ -52,7 +52,7 @@ export const getters = {
         return state.repository
     },
     repositoryName(state: SupabaseCreateState) {
-        if (state.repository) {
+        if (typeof state.repository !== 'string' && state.repository) {
             let name = state.repository.name
             if (state.repository.organization) {
                 name += ` - ${state.repository.organization.name}`
@@ -62,7 +62,7 @@ export const getters = {
         return ''
     },
     repositoryId(state: SupabaseCreateState) {
-        if (state.repository) {
+        if (typeof state.repository !== 'string' && state.repository) {
             return state.repository.id
         }
         return null
@@ -129,79 +129,81 @@ export const mutations: MutationTree<SupabaseCreateState> = {
 
 export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
     async insert({ state, commit, rootGetters }: { state: SupabaseCreateState, commit: Commit, rootGetters: any }) {
-        const submittedStatus = await Status.getByName('Submitted')
 
-        if (!submittedStatus) {
-            console.log('Was not able to receive a status.')
-            return null
-        }
+        return
+        // const submittedStatus = await Status.getByName('Submitted')
 
-        commit('setStatus', submittedStatus)
+        // if (!submittedStatus) {
+        //     console.log('Was not able to receive a status.')
+        //     return null
+        // }
 
-        if (!state.status || !state.status.id || !state.repository || !state.repository.id || !state.client || !state.client.id) {
-            console.log('Was missing essential information to create a request.', state)
-            return null
-        }
+        // commit('setStatus', submittedStatus)
 
-        const request = new Request({
-            repository_id: state.repository.id,
-            citation: state.citation,
-            pages: state.pages,
-            status_id: state.status.id,
-            user_id: state.client.id,
-            id: null,
-            created_at: null,
-            updated_at: null,
-            archive_citation: null,
-            archive_notes: null
-        })
+        // if (!state.status || !state.status.id || !state.repository || !state.repository.id || !state.client || !state.client.id) {
+        //     console.log('Was missing essential information to create a request.', state)
+        //     return null
+        // }
 
-        const r = await request.insert()
+        // const request = new Request({
+        //     repository_id: state.repository.id,
+        //     citation: state.citation,
+        //     pages: state.pages,
+        //     status_id: state.status.id,
+        //     user_id: state.client.id,
+        //     id: null,
+        //     created_at: null,
+        //     updated_at: null,
+        //     archive_citation: null,
+        //     archive_notes: null
+        // })
 
-        if (r) {
-            // Successful insert.
-            if (Array.isArray(r) && r.length > 0) {
+        // const r = await request.insert()
 
-                // Lets update the request client.
-                const new_request = await Request.getById(r[0].id)
-                const id = r[0].id
+        // if (r) {
+        //     // Successful insert.
+        //     if (Array.isArray(r) && r.length > 0) {
 
-                if ( new_request ) {
-                    const updated_request_client_info = await RequestClient.updateById(id, { 
-                        label: state.label,
-                        name: state.clientName
-                    })
-                    const updated_request_vendor_info = await RequestVendor.updateById(id, { 
-                        label: state.label
-                    })
+        //         // Lets update the request client.
+        //         const new_request = await Request.getById(r[0].id)
+        //         const id = r[0].id
 
-                    if ( updated_request_client_info && updated_request_vendor_info ) {
-                        console.log('Updated both client/vendor references!')
-                    } else {
-                        console.log('Did not update both references.', updated_request_client_info, updated_request_vendor_info)
-                    }
-                }
+        //         if ( new_request ) {
+        //             const updated_request_client_info = await RequestClient.updateById(id, { 
+        //                 label: state.label,
+        //                 name: state.clientName
+        //             })
+        //             const updated_request_vendor_info = await RequestVendor.updateById(id, { 
+        //                 label: state.label
+        //             })
+
+        //             if ( updated_request_client_info && updated_request_vendor_info ) {
+        //                 console.log('Updated both client/vendor references!')
+        //             } else {
+        //                 console.log('Did not update both references.', updated_request_client_info, updated_request_vendor_info)
+        //             }
+        //         }
 
                 
-                const notify_payload = {
-                    user_id: state.client.id,
-                    request_id: id,
-                    action: 'request_submitted_to_your_org',
-                    token: await getToken(),
-                    message_text: null
-                }
-                try {
-                    await notify(notify_payload)
-                } catch (e) {
-                    // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
-                    console.log(e)
-                }
+        //         const notify_payload = {
+        //             user_id: state.client.id,
+        //             request_id: id,
+        //             action: 'request_submitted_to_your_org',
+        //             token: await getToken(),
+        //             message_text: null
+        //         }
+        //         try {
+        //             await notify(notify_payload)
+        //         } catch (e) {
+        //             // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
+        //             console.log(e)
+        //         }
 
-            }
+        //     }
 
-            commit('reset')
-        }
+        //     commit('reset')
+        // }
 
-        return r
+        // return r
     }
 }

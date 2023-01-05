@@ -1,24 +1,9 @@
 <template>
-  <div v-if="repository" class="repository-preview mb-4 mt-2">
-    <v-img
-      :src="featuredImageUrl"
-      max-height="200"
-      class="repository-image"
-    >
-      <div class="fill-height grey-gradient" />
-    </v-img>
-    <p class="title-text mt-2 mb-0">
-      {{ repository.organization?.name }}
-      <v-btn icon>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </p>
-    <p class="subtitle-text mb-0">
-      {{ repository.name }}
-    </p>
-    <p class="supporting-text mb-0">
-      {{ addressLine }}
-    </p>
+  <div v-show="!!repository" class="repository-preview mb-4 mt-2">
+    <span class="repository-preview-name">{{ repositoryName }}</span>
+    <v-btn icon small @click="unselect">
+      <v-icon>mdi-close</v-icon>
+    </v-btn>
   </div>
 </template>
 
@@ -26,55 +11,37 @@
 export default {
     props: {
         repository: {
-            type: Object,
+            type: [String, Object],
             default: () => {}
         }
     },
     computed: {
-        addressLine () {
-            if (this.repository) {
-                let address = `${this.repository.address1}`
-                if (this.repository.address2) {
-                    address += `, ${this.repository.address2}`
-                }
-                address += `, ${this.repository.city}, ${this.repository.state}`
-                return address
+        repositoryName () {
+            if (!this.repository) {
+                return 'None Selected'
             }
-            return ''
-        },
-        featuredImageUrl () {
-            if (this.repository?.featured_image?.url) {
-                return this.repository.featured_image.url
+            if (typeof this.repository === 'string') {
+                return this.repository
             }
-            return '/img/fallbacks/default-header.jpg'
+            return this.repository.organization.name
+        }
+    },
+    methods: {
+        unselect () {
+            this.$emit('unselect')
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-.grey-gradient {
-    background-color: rgba(0,0,0,0.2)
-}
-
-.title-text {
-    font-size: 24px;
-    font-weight: 500;
-}
-
-.subtitle-text {
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.supporting-text {
-    font-size: 16px;
-    font-weight: 300;
-}
-</style>
-
-<style>
-.repository-preview .v-image__image {
-    border-radius: 5px;
+.repository-preview {
+  background-color: #654EA3;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  column-gap: 20px;
 }
 </style>

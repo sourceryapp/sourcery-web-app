@@ -8,6 +8,9 @@
       item-text="organization.name"
       :search-input.sync="searchText"
       return-object
+      :menu-props="{
+        closeOnContentClick: true
+      }"
       @input="selectedRepositoryItem"
     >
       <template #no-data>
@@ -34,8 +37,18 @@
       </template>
     </v-autocomplete>
 
+    <repository-preview :repository="selectedRepository" @unselect="unselect" />
+
     <div class="repository-item-list">
-      <repository-list-item v-for="repo in visibleRepositories" :key="repo.id" :repository="repo" @selected="selectedRepositoryItem" />
+      <div class="repository-item-list-filter-row">
+        <span class="browse-text text-h5 font-weight-light text-uppercase">Browse</span>
+        <v-btn icon @click="toggleBrowse">
+          <v-icon>{{ toggleBrowseIcon }}</v-icon>
+        </v-btn>
+      </div>
+      <div v-if="browseOpen" class="repository-item-list-items">
+        <repository-list-item v-for="repo in visibleRepositories" :key="repo.id" :repository="repo" @selected="selectedRepositoryItem" />
+      </div>
     </div>
   </div>
 </template>
@@ -49,7 +62,8 @@ export default {
         return {
             repositories: [],
             selectedRepository: null,
-            searchText: ''
+            searchText: '',
+            browseOpen: true
         }
     },
     async fetch () {
@@ -85,14 +99,35 @@ export default {
 
                 return this.isAdmin
             })
+        },
+        toggleBrowseIcon () {
+            if (this.browseOpen) {
+                return 'mdi-menu-down'
+            }
+            return 'mdi-menu-up'
         }
     },
     methods: {
         selectedRepositoryItem (repository) {
+            this.selectedRepository = repository
             this.$emit('selected', repository)
+            this.setBrowse(false)
         },
         selectCreateNewRepository () {
-            this.$toast.success('Creating new! ' + this.searchText)
+            this.selectedRepository = this.searchText
+            this.$emit('selected', this.searchText)
+            this.setBrowse(false)
+        },
+        toggleBrowse () {
+            this.browseOpen = !this.browseOpen
+        },
+        setBrowse (bool = true) {
+            this.browseOpen = !!bool
+        },
+        unselect () {
+            this.selectedRepository = null
+            this.$emit('selected', null)
+            this.setBrowse(true)
         }
     }
 }
@@ -105,12 +140,31 @@ export default {
     }
 }
 .repository-item-list {
-    column-count: 2;
     border: 1px solid rgba(0, 0, 0, 0.38);
     border-radius: 10px;
     padding: 20px 40px;
     * {
         break-inside: avoid-column;
+    }
+
+    .repository-item-list-filter-row {
+        width: 100%;
+        margin-bottom: 10px;
+        display:flex;
+
+        .browse-text {
+            align-self: center;
+        }
+    }
+
+    .repository-item-list-items {
+        column-count: 2;
+    }
+}
+
+.repository-search {
+    .v-text-field__details {
+        display: none;
     }
 }
 </style>

@@ -8,7 +8,11 @@
         Select Repository
       </h2>
 
-      <repository-preview :repository="selectedRepository" />
+      <v-img
+        src="/img/fallbacks/default-header.jpg"
+        max-height="200"
+        class="repository-image mb-6"
+      />
 
       <repository-search @selected="setRepository" />
 
@@ -16,7 +20,7 @@
         Document Information
       </h2>
       <p v-if="selectedRepository">
-        Currently requesting from {{ selectedRepository.name }} - {{ selectedRepository.organization.name }}
+        Currently requesting from {{ currentlyRequestingFromText }}
       </p>
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
@@ -59,6 +63,7 @@
           </v-btn>
         </div>
       </v-form>
+      </v-img>
     </v-flex>
   </v-layout>
 </template>
@@ -133,6 +138,15 @@ export default {
               this.formValid &&
               this.citation &&
               !this.submitting
+        },
+        currentlyRequestingFromText () {
+            if (!this.selectedRepository) {
+                return ''
+            }
+            if (typeof this.selectedRepository === 'string') {
+                return this.selectedRepository
+            }
+            return `${this.selectedRepository.name} - ${this.selectedRepository.organization.name}`
         }
     },
     mounted () {
