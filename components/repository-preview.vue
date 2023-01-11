@@ -37,7 +37,7 @@ export default {
 <style lang="scss" scoped>
 .repository-preview {
   background-color: #654EA3;
-  padding: 5px 10px;
+  padding: 15px;
   border-radius: 5px;
   font-size: 15px;
   display: inline-flex;

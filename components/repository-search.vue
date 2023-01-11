@@ -1,6 +1,7 @@
 <template>
   <div class="repository-search mb-4">
     <v-autocomplete
+      ref="repository_search_auto"
       v-model="selectedRepository"
       outlined
       placeholder="Search or Enter New Repositories..."
@@ -12,6 +13,7 @@
         closeOnContentClick: true
       }"
       @input="selectedRepositoryItem"
+      @keyup.13="selectCreateNewRepository"
     >
       <template #prepend-item>
         <v-list-item @click="selectCreateNewRepository">
@@ -128,6 +130,7 @@ export default {
         selectCreateNewRepository () {
             this.selectedRepository = this.searchText
             this.$emit('selected', this.searchText)
+            this.$refs.repository_search_auto.blur()
             this.setBrowse(false)
         },
         toggleBrowse () {
