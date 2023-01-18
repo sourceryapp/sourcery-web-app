@@ -1,5 +1,5 @@
 <template>
-  <div v-show="!!repository" class="repository-preview mb-4 mt-2">
+  <div v-show="!!repository" class="repository-preview mb-6 mt-2">
     <span class="repository-preview-name">{{ repositoryName }}</span>
     <v-btn icon small color="white" @click="unselect">
       <v-icon>mdi-close</v-icon>
@@ -21,7 +21,7 @@ export default {
                 return 'None Selected'
             }
             if (typeof this.repository === 'string') {
-                return this.repository
+                return `Custom Entry: ${this.repository}`
             }
             return this.repository.organization.name
         }

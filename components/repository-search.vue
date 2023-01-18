@@ -53,6 +53,8 @@
 
     <repository-preview :repository="selectedRepository" @unselect="unselect" />
 
+    <v-text-field v-if="isCustom" label="Location" placeholder="Help us find where this is located." outlined class="mb-4" />
+
     <div class="repository-item-list mt-2">
       <div class="repository-item-list-filter-row">
         <span class="browse-text text-h5 font-weight-light text-uppercase">Browse</span>
@@ -77,7 +79,8 @@ export default {
             repositories: [],
             selectedRepository: null,
             searchText: '',
-            browseOpen: true
+            browseOpen: true,
+            isCustom: false
         }
     },
     async fetch () {
@@ -123,11 +126,13 @@ export default {
     },
     methods: {
         selectedRepositoryItem (repository) {
+            this.isCustom = false
             this.selectedRepository = repository
             this.$emit('selected', repository)
             this.setBrowse(false)
         },
         selectCreateNewRepository () {
+            this.isCustom = true
             this.selectedRepository = this.searchText
             this.$emit('selected', this.searchText)
             this.$refs.repository_search_auto.blur()
@@ -156,8 +161,9 @@ export default {
 }
 .repository-item-list {
     border: 1px solid rgba(0, 0, 0, 0.38);
-    border-radius: 10px;
+    border-radius: 4px;
     padding: 20px 40px;
+    margin-top: 4px;
     * {
         break-inside: avoid-column;
     }

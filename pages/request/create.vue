@@ -9,7 +9,7 @@
       </h2>
 
       <v-img
-        src="/img/fallbacks/default-header.jpg"
+        src="/img/fallbacks/default-header-80opat.jpg"
         max-height="200"
         class="repository-image mb-6 rounded-lg"
       />
