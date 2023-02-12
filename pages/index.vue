@@ -222,16 +222,50 @@
                 class="section-img ready-img"
               >
             </v-col>
-            <v-col class="order-sm-first col-12 col-sm-6">
+            <v-col class="order-sm-first col-12 col-sm-6 px-0">
               <h1 id="ready">
                 Ready to try Sourcery?
               </h1>
+              <v-col id="button-wrap" class="px-0">
+                <v-col>
+                  <v-btn
+                    to=""
+                    color="primary"
+                    x-large
+                    height="76px"
+                    block
+                  >
+                    Register
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn
+                    to="/login"
+                    x-large
+                    block
+                    color="primary"
+                    height="76px"
+                    outlined
+                  >
+                    Log In
+                  </v-btn>
+                </v-col>
+              </v-col>
+              <v-col id="learn-more" class="text-center">
+                <v-btn
+                  to="/about"
+                  text
+                  color="white"
+                >
+                  Learn More
+                </v-btn>
+              </v-col>
             </v-col>
           </v-row>
         </v-container>
         <v-container>
           <v-row>
-            <v-col cols="12" sm="6" md="4">
+            <!-- <v-col cols="12" sm="6" md="4">
               <v-btn
                 to="/join-us"
                 x-large
@@ -243,31 +277,7 @@
               >
                 Become a Partner
               </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-btn
-                to="/login"
-                x-large
-                block
-                color="primary"
-                class="black--text text-h5 font-weight-bold"
-                height="76px"
-              >
-                Log In
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" md="4" class="mx-auto">
-              <v-btn
-                to="/about"
-                color="primary"
-                outlined
-                x-large
-                height="76px"
-                block
-              >
-                Learn More
-              </v-btn>
-            </v-col>
+            </v-col> -->
           </v-row>
         </v-container>
       </div>
@@ -527,9 +537,24 @@ h1 {
 }
 
 #ready {
-    margin-bottom: 24px;
+    font-size: 28px;
+    padding-inline: 12px;
+    margin-bottom: 12px;
 }
+
+#learn-more {
+  text-decoration: underline;
+}
+
 @media only screen and (min-width: 600px) {
+    #button-wrap {
+      display: flex;
+      flex-direction: row;
+    }
+    #ready {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
     .landing-header {
         padding: 96px 24px;
     }
