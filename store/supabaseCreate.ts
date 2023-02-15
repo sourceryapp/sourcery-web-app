@@ -1,9 +1,9 @@
-import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
-import { Attachment } from '~/models/Attachment'
+import type { Commit, ActionTree, MutationTree } from 'vuex'
 import { User as SourceryUser } from '~/models/User'
 import { Repository } from '~/models/Repository'
 import { Status } from '~/models/Status'
 import { Request } from '~/models/Request'
+import { RequestsProspective } from '~/models/RequestsProspective'
 import { IntegrationData } from '~/models/IntegrationData'
 import { PricingSummary } from '~/models/PricingSummary'
 import { notify } from '~/plugins/sourcery-functions'
@@ -21,7 +21,8 @@ export const initialState = () => {
         status: null as Status | null,
         integrationData: null as IntegrationData | null,
         pricing: null as PricingSummary | null,
-        clientName: ''
+        clientName: '',
+        location: ''
     }
 }
 
@@ -78,6 +79,12 @@ export const getters = {
     },
     hasIntegrationData(state: SupabaseCreateState) {
         return !!state.integrationData
+    },
+    isCustom(state: SupabaseCreateState) {
+        return (typeof state.repository === 'string') ? true : false
+    },
+    location(state: SupabaseCreateState) {
+        return state.location
     }
 }
 
@@ -91,7 +98,7 @@ export const mutations: MutationTree<SupabaseCreateState> = {
     setPages(state: SupabaseCreateState, value: number) {
         state.pages = value
     },
-    setRepository(state: SupabaseCreateState, value: Repository) {
+    setRepository(state: SupabaseCreateState, value: Repository | string) {
         state.repository = value
     },
     setLabel(state: SupabaseCreateState, value: string) {
@@ -113,6 +120,9 @@ export const mutations: MutationTree<SupabaseCreateState> = {
     setPricing(state: SupabaseCreateState, value: PricingSummary) {
         state.pricing = value
     },
+    setLocation(state: SupabaseCreateState, value: string) {
+        state.location = value
+    },
     reset(state: SupabaseCreateState) {
         const initial = initialState()
         state.client = initial.client
@@ -124,86 +134,120 @@ export const mutations: MutationTree<SupabaseCreateState> = {
         state.integrationData = initial.integrationData
         state.pricing = initial.pricing
         state.clientName = initial.clientName
+        state.location = initial.location
     }
 }
 
 export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
-    async insert({ state, commit, rootGetters }: { state: SupabaseCreateState, commit: Commit, rootGetters: any }) {
+    async insert({ state, commit, getters, rootGetters }: { state: SupabaseCreateState, commit: Commit, getters: any, rootGetters: any }) {
 
-        return
-        // const submittedStatus = await Status.getByName('Submitted')
+        // If the request is to a custom prospective repository
+        if ( getters.isCustom && typeof state.repository === 'string' ) {
+            console.log('Trying to insert custom!', getters.isCustom)
+            if ( !state.repository || !state.client || !state.client.id) {
+                console.log('Was missing essential information to create a request.', state)
+                return null
+            }
 
-        // if (!submittedStatus) {
-        //     console.log('Was not able to receive a status.')
-        //     return null
-        // }
+            const request_prospective = new RequestsProspective({
+                user_id: state.client.id,
+                title: state.label,
+                description: state.citation,
+                repository_name: state.repository,
+                repository_location: state.location
+            })
 
-        // commit('setStatus', submittedStatus)
+            const r = await request_prospective.insert()
 
-        // if (!state.status || !state.status.id || !state.repository || !state.repository.id || !state.client || !state.client.id) {
-        //     console.log('Was missing essential information to create a request.', state)
-        //     return null
-        // }
+            if ( r ) {
+                // Successful insert
+                // @TODO do some spreadsheet insert here
+                commit('reset')
+            }
+            return r
+        }
+        
+        // If the request is for a registered repository
+        else {
+            console.log('Trying to insert not custom!', getters.isCustom)
+            const submittedStatus = await Status.getByName('Submitted')
 
-        // const request = new Request({
-        //     repository_id: state.repository.id,
-        //     citation: state.citation,
-        //     pages: state.pages,
-        //     status_id: state.status.id,
-        //     user_id: state.client.id,
-        //     id: null,
-        //     created_at: null,
-        //     updated_at: null,
-        //     archive_citation: null,
-        //     archive_notes: null
-        // })
+            if ( submittedStatus ) {
+                commit('setStatus', submittedStatus)
+            }
 
-        // const r = await request.insert()
+            if (
+                !submittedStatus ||
+                !state.status ||
+                !state.status.id ||
+                !state.repository ||
+                !(state.repository instanceof Repository) ||
+                !state.repository.id || !state.client || !state.client.id
+            ) {
+                console.log( 'Was missing essential information to create a request.' )
+                return null
+            }
 
-        // if (r) {
-        //     // Successful insert.
-        //     if (Array.isArray(r) && r.length > 0) {
+            const request = new Request({
+                repository_id: state.repository.id,
+                citation: state.citation,
+                pages: state.pages,
+                status_id: state.status.id,
+                user_id: state.client.id,
+                id: null,
+                created_at: null,
+                updated_at: null,
+                archive_citation: null,
+                archive_notes: null
+            })
 
-        //         // Lets update the request client.
-        //         const new_request = await Request.getById(r[0].id)
-        //         const id = r[0].id
+            const r = await request.insert()
 
-        //         if ( new_request ) {
-        //             const updated_request_client_info = await RequestClient.updateById(id, { 
-        //                 label: state.label,
-        //                 name: state.clientName
-        //             })
-        //             const updated_request_vendor_info = await RequestVendor.updateById(id, { 
-        //                 label: state.label
-        //             })
+            if (r) {
+                // Successful insert.
+                if (Array.isArray(r) && r.length > 0) {
+    
+                    // Lets update the request client.
+                    const new_request = await Request.getById(r[0].id)
+                    const id = r[0].id
+    
+                    if ( new_request ) {
+                        const updated_request_client_info = await RequestClient.updateById(id, { 
+                            label: state.label,
+                            name: state.clientName
+                        })
+                        const updated_request_vendor_info = await RequestVendor.updateById(id, { 
+                            label: state.label
+                        })
+    
+                        if ( updated_request_client_info && updated_request_vendor_info ) {
+                            console.log('Updated both client/vendor references!')
+                        } else {
+                            console.log('Did not update both references.', updated_request_client_info, updated_request_vendor_info)
+                        }
+                    }
+    
+                    
+                    const notify_payload = {
+                        user_id: state.client.id,
+                        request_id: id,
+                        action: 'request_submitted_to_your_org',
+                        token: await getToken(),
+                        message_text: null
+                    }
+                    try {
+                        await notify(notify_payload)
+                    } catch (e) {
+                        // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
+                        console.log(e)
+                    }
+    
+                }
+    
+                commit('reset')
+            }
 
-        //             if ( updated_request_client_info && updated_request_vendor_info ) {
-        //                 console.log('Updated both client/vendor references!')
-        //             } else {
-        //                 console.log('Did not update both references.', updated_request_client_info, updated_request_vendor_info)
-        //             }
-        //         }
-
-                
-        //         const notify_payload = {
-        //             user_id: state.client.id,
-        //             request_id: id,
-        //             action: 'request_submitted_to_your_org',
-        //             token: await getToken(),
-        //             message_text: null
-        //         }
-        //         try {
-        //             await notify(notify_payload)
-        //         } catch (e) {
-        //             // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
-        //             console.log(e)
-        //         }
-
-        //     }
-
-        //     commit('reset')
-        // }
-
-        // return r
+            return r
+        }
     }
 }

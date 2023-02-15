@@ -63,7 +63,6 @@
           </v-btn>
         </div>
       </v-form>
-      </v-img>
     </v-flex>
   </v-layout>
 </template>
@@ -71,6 +70,7 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Repository } from '~/models/Repository'
+import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
     async asyncData ({ store }) {
@@ -134,7 +134,7 @@ export default {
             }
         },
         submitEnabled () {
-            return this.selectedRepository?.id &&
+            return this.selectedRepository &&
               this.formValid &&
               this.citation &&
               !this.submitting
@@ -166,14 +166,16 @@ export default {
         ...mapActions({
             submitRequest: 'supabaseCreate/insert'
         }),
-        submitRequestInsert () {
-            // this.submitting = true
+        async submitRequestInsert () {
+            this.submitting = true
             this.$toast.success('Successful, but disabled in this test.')
-            // const r = await this.submitRequest()
-            // this.submitting = false
-            // if (r[0] && r[0].id) {
-            //     this.$router.push(`/request/${r[0].id}`)
-            // }
+            const r = await this.submitRequest()
+            this.submitting = false
+            if (r && r instanceof RequestsProspective) {
+                this.$router.push('/dashboard')
+            } else if (Array.isArray(r) && r[0] && r[0].id) {
+                this.$router.push(`/request/${r[0].id}`)
+            }
         }
     }
 }

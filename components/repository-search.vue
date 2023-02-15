@@ -59,7 +59,14 @@
       <h3 class="font-weight-medium mb-3">
         Let's make sure you're spell is clear.
       </h3>
-      <v-text-field label="What is the town, state, and country this repository is located in?*" placeholder="What is the town, state, and country this repository is located in?*" outlined class="mb-4" hide-details />
+      <v-text-field
+        v-model="location"
+        label="What is the town, state, and country this repository is located in?*"
+        placeholder="What is the town, state, and country this repository is located in?*"
+        outlined
+        class="mb-4"
+        hide-details
+      />
     </div>
 
     <div class="repository-item-list mt-2">
@@ -77,7 +84,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { Repository } from '~/models/Repository'
 
 export default {
@@ -86,8 +93,7 @@ export default {
             repositories: [],
             selectedRepository: null,
             searchText: '',
-            browseOpen: true,
-            isCustom: false
+            browseOpen: true
         }
     },
     async fetch () {
@@ -103,8 +109,17 @@ export default {
         ...mapGetters({
             authUser: 'supabaseAuth/authUser',
             isAdmin: 'supabaseAuth/isAdmin',
-            userOrganizationIds: 'supabaseAuth/userOrganizationIds'
+            userOrganizationIds: 'supabaseAuth/userOrganizationIds',
+            getLocation: 'supabaseCreate/location'
         }),
+        location: {
+            get () {
+                return this.getLocation
+            },
+            set (val) {
+                this.setLocation(val)
+            }
+        },
         visibleRepositories () {
             // Currently simple search.
             return this.repositories.filter((x) => {
@@ -129,17 +144,24 @@ export default {
                 return 'mdi-menu-down'
             }
             return 'mdi-menu-up'
+        },
+        isCustom () {
+            if (typeof this.selectedRepository === 'string') {
+                return true
+            }
+            return false
         }
     },
     methods: {
+        ...mapMutations({
+            setLocation: 'supabaseCreate/setLocation'
+        }),
         selectedRepositoryItem (repository) {
-            this.isCustom = false
             this.selectedRepository = repository
             this.$emit('selected', repository)
             this.setBrowse(false)
         },
         selectCreateNewRepository () {
-            this.isCustom = true
             this.selectedRepository = this.searchText
             this.$emit('selected', this.searchText)
             this.$refs.repository_search_auto.blur()
