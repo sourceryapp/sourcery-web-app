@@ -12,6 +12,8 @@
       :menu-props="{
         closeOnContentClick: true
       }"
+      hide-details
+      class="mb-4"
       @input="selectedRepositoryItem"
       @keyup.13="selectCreateNewRepository"
     >
@@ -53,7 +55,12 @@
 
     <repository-preview :repository="selectedRepository" @unselect="unselect" />
 
-    <v-text-field v-if="isCustom" label="Location" placeholder="Help us find where this is located." outlined class="mb-4" />
+    <div v-if="isCustom" class="location-clarification mb-8">
+      <h3 class="font-weight-medium mb-3">
+        Let's make sure you're spell is clear.
+      </h3>
+      <v-text-field label="What is the town, state, and country this repository is located in?*" placeholder="What is the town, state, and country this repository is located in?*" outlined class="mb-4" hide-details />
+    </div>
 
     <div class="repository-item-list mt-2">
       <div class="repository-item-list-filter-row">
@@ -162,7 +169,7 @@ export default {
 .repository-item-list {
     border: 1px solid rgba(0, 0, 0, 0.38);
     border-radius: 4px;
-    padding: 20px 40px;
+    padding: 16px 32px;
     margin-top: 4px;
     * {
         break-inside: avoid-column;
@@ -170,7 +177,6 @@ export default {
 
     .repository-item-list-filter-row {
         width: 100%;
-        margin-bottom: 10px;
         display:flex;
 
         .browse-text {
@@ -180,6 +186,7 @@ export default {
 
     .repository-item-list-items {
         column-count: 2;
+        padding-top: 10px;
     }
 }
 
@@ -191,5 +198,11 @@ export default {
 
 .no-data-menu-item {
     display: none;
+}
+
+.location-clarification {
+  h3 {
+    font-size: 22px;
+  }
 }
 </style>
