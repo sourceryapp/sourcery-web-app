@@ -234,6 +234,7 @@
                     x-large
                     height="76px"
                     block
+                    @click="showDialog"
                   >
                     Register
                   </v-btn>
@@ -263,9 +264,9 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-container>
+        <!-- <v-container>
           <v-row>
-            <!-- <v-col cols="12" sm="6" md="4">
+            <v-col cols="12" sm="6" md="4">
               <v-btn
                 to="/join-us"
                 x-large
@@ -277,10 +278,26 @@
               >
                 Become a Partner
               </v-btn>
-            </v-col> -->
+            </v-col>
           </v-row>
-        </v-container>
+        </v-container> -->
       </div>
+
+      <v-dialog v-model="dialogVisible" width="500">
+        <v-card>
+          <v-card-title id="ready" class="text-h4">
+            Ready to try Sourcery?
+          </v-card-title>
+          <v-card-text>
+            <!-- add form elements here -->
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="primary" @click="dialogVisible = false">
+              Close
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </section>
 
     <sourcery-footer :text="true" />
@@ -313,7 +330,8 @@ export default {
     middleware: null,
     data: () => ({
         isIntersecting: true,
-        mailchimpLink: 'https://mailchi.mp/4de98c4698dd/coming-soon'
+        mailchimpLink: 'https://mailchi.mp/4de98c4698dd/coming-soon',
+        dialogVisible: false
     }),
     head () {
         return {
@@ -378,6 +396,9 @@ export default {
         },
         onIntersect (entries, observer) {
             this.isIntersecting = entries[0].isIntersecting
+        },
+        showDialog () {
+            this.dialogVisible = true
         }
     }
 }
