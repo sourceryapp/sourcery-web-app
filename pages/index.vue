@@ -287,7 +287,7 @@
                   <v-btn
                     to="/register"
                     x-large
-                    color="primary"
+                    color="rgb(146, 79, 190)"
                     height="300"
                     class="modal-button"
                   >
@@ -306,7 +306,7 @@
                   <v-btn
                     to="/join-us"
                     x-large
-                    color="primary"
+                    color="rgb(146, 79, 190)"
                     height="300"
                     class="modal-button"
                   >
