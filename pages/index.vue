@@ -264,84 +264,81 @@
             </v-col>
           </v-row>
         </v-container>
-        <!-- <v-container>
-          <v-row>
-            <v-col cols="12" sm="6" md="4">
-              <v-btn
-                to="/join-us"
-                x-large
-                block
-                color="primary"
-                class="text-h5 font-weight-bold"
-                height="76px"
-                depressed
-              >
-                Become a Partner
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container> -->
       </div>
 
-      <v-dialog v-model="dialogVisible" width="500">
-        <v-card>
-          <v-card-title id="ready" class="text-h4">
-            Ready to try Sourcery?
+      <v-dialog v-model="dialogVisible" width="650">
+        <v-card id="modal-card">
+          <v-card-title>
+            <h3 id="ready">
+              Ready to try Sourcery?
+            </h3>
           </v-card-title>
           <v-card-text>
-            <v-container>
-              <v-row>
-                <p class="text-h5">
-                  I am looking to...
-                </p>
-              </v-row>
+            <v-container class="pb-0">
               <v-row>
                 <v-col cols="12">
+                  <h2 id="modal-subtitle">
+                    I am looking to...
+                  </h2>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="auto" class="modal-button-wrap">
                   <v-btn
                     to="/register"
                     x-large
-                    block
                     color="primary"
+                    height="300"
+                    class="modal-button"
                   >
-                    <img
-                      src="@/static/img/icons_document.png"
-                      contain
-                      height="80"
-                    >
-                    Request Documents
+                    <div class="modal-button-content">
+                      <img
+                        src="@/static/img/icons_document.png"
+                        height="180"
+                      >
+                      <span class="modal-button-text">
+                        Request Documents
+                      </span>
+                    </div>
                   </v-btn>
                 </v-col>
-                <v-col cols="12">
+                <v-col cols="auto" class="modal-button-wrap">
                   <v-btn
                     to="/join-us"
                     x-large
-                    block
                     color="primary"
+                    height="300"
+                    class="modal-button"
                   >
-                    <img
-                      src="@/static/img/icons_institution.png"
-                      contain
-                      height="80"
-                    >
-                    Become a Partner Institution
+                    <div class="modal-button-content">
+                      <img
+                        src="@/static/img/icons_institution.png"
+                        height="160"
+                      >
+                      <span class="modal-button-text">
+                        Become a Partner Institution
+                      </span>
+                    </div>
                   </v-btn>
                 </v-col>
-                <v-col>
-                  <p>Have an account? </p>
-                  <v-btn
-                    to="/login"
-                    text
-                    color="white"
-                  >
-                    Log in
-                  </v-btn>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <span class="login-link-text">
+                    Have an account?
+                    <NuxtLink to="/login">
+                      Log in.
+                    </NuxtLink>
+                  </span>
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
-          <v-card-actions>
-            <v-btn @click="dialogVisible = false">
-              Close
+          <v-card-actions class="pt-0">
+            <v-btn rounded @click="dialogVisible = false">
+              <v-icon>
+                mdi-close
+              </v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -613,6 +610,44 @@ h1 {
 
 #learn-more {
   text-decoration: underline;
+}
+.login-link-text {
+  font-size: 18px;
+  display: inline-block;
+  color: white;
+  margin-right: 10px; /* adjust as needed */
+}
+
+#modal-subtitle {
+  color: white;
+  text-transform: uppercase;
+}
+
+.modal-button-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-button {
+  width: 260px;
+}
+
+.modal-button-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: auto;
+  width: 250px;
+}
+
+.modal-button-text {
+  color: white;
+  margin-top: 30px;
+  font-size: 20px;
+  white-space: normal;
+  text-align: center;
 }
 
 @media only screen and (min-width: 600px) {
