@@ -289,10 +289,58 @@
             Ready to try Sourcery?
           </v-card-title>
           <v-card-text>
-            <!-- add form elements here -->
+            <v-container>
+              <v-row>
+                <p class="text-h5">
+                  I am looking to...
+                </p>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <v-btn
+                    to="/register"
+                    x-large
+                    block
+                    color="primary"
+                  >
+                    <img
+                      src="@/static/img/icons_document.png"
+                      contain
+                      height="80"
+                    >
+                    Request Documents
+                  </v-btn>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn
+                    to="/join-us"
+                    x-large
+                    block
+                    color="primary"
+                  >
+                    <img
+                      src="@/static/img/icons_institution.png"
+                      contain
+                      height="80"
+                    >
+                    Become a Partner Institution
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <p>Have an account? </p>
+                  <v-btn
+                    to="/login"
+                    text
+                    color="white"
+                  >
+                    Log in
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" @click="dialogVisible = false">
+            <v-btn @click="dialogVisible = false">
               Close
             </v-btn>
           </v-card-actions>
