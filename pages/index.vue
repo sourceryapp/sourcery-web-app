@@ -230,7 +230,7 @@
                 <v-col>
                   <v-btn
                     to=""
-                    color="primary"
+                    color="rgb(146, 79, 190)"
                     x-large
                     height="76px"
                     block
@@ -244,7 +244,7 @@
                     to="/login"
                     x-large
                     block
-                    color="primary"
+                    color="rgb(146, 79, 190)"
                     height="76px"
                     outlined
                   >
