@@ -6,7 +6,7 @@ import { Request } from '~/models/Request'
 import { RequestsProspective } from '~/models/RequestsProspective'
 import { IntegrationData } from '~/models/IntegrationData'
 import { PricingSummary } from '~/models/PricingSummary'
-import { notify } from '~/plugins/sourcery-functions'
+import { notify, prospective } from '~/plugins/sourcery-functions'
 import { getToken } from '~/plugins/supabase'
 import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
@@ -141,6 +141,8 @@ export const mutations: MutationTree<SupabaseCreateState> = {
 export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
     async insert({ state, commit, getters, rootGetters }: { state: SupabaseCreateState, commit: Commit, getters: any, rootGetters: any }) {
 
+        console.log('inserting')
+
         // If the request is to a custom prospective repository
         if ( getters.isCustom && typeof state.repository === 'string' ) {
             console.log('Trying to insert custom!', getters.isCustom)
@@ -159,9 +161,23 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
 
             const r = await request_prospective.insert()
 
+            console.log(r)
+
             if ( r ) {
                 // Successful insert
-                // @TODO do some spreadsheet insert here
+                let new_rp = new RequestsProspective(r)
+                const prospective_data = {
+                    ...new_rp.toSpreadsheetJSON(),
+                    token: await getToken()
+                }
+
+                try {
+                    await prospective(prospective_data)
+                } catch (e) {
+                    // This is a google auth error probably
+                    console.log(e)
+                }
+
                 commit('reset')
             }
             return r

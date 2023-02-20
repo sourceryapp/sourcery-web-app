@@ -68,6 +68,18 @@ export class RequestsProspective {
         }
     }
 
+    toSpreadsheetJSON() {
+        return {
+            id: this.id,
+            user_id: this.user_id,
+            title: this.title,
+            description: this.description,
+            repository_name: this.repository_name,
+            repository_location: this.repository_location,
+            created_at: this.created_at
+        }
+    }
+
     async insert() {
         const { data: request_prospective, error } = await supabase.from(TABLE_NAME)
             .insert([
