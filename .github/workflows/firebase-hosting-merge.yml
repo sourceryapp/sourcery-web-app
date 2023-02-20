@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        env:
+          NODE_ENV: development
+        with:
+          node-version: '16'
       - run: yarn install && nuxt generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
