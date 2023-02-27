@@ -7,11 +7,11 @@ import * as env from 'sourcery-env'
 /**
  * Uncomment and fillin your local supabase instance information for testing against a local db.
  */
-const local = {
-    SUPABASE_URL: 'http://localhost:54321',
-    SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0'
-}
-Object.assign(env, local)
+// const local = {
+//     SUPABASE_URL: 'http://localhost:54321',
+//     SUPABASE_KEY: 'keyhere'
+// }
+// Object.assign(env, local)
 
 /**
  * Don't completely overwrite the
