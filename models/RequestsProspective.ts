@@ -97,4 +97,29 @@ export class RequestsProspective {
 
         return null
     }
+
+
+    static async getForUser(user_id: string) {
+        const { data: requests, error } = await supabase.from(TABLE_NAME)
+            .select(`*`)
+            .order('created_at', { ascending: false })
+            .eq('user_id', user_id)
+
+        if ( Array.isArray(requests) ) {
+            const rp = requests.map(x => new RequestsProspective(x))
+            return rp
+        }
+
+        return []
+    }
+
+    static async countForUser(user_id: string) {
+        const query = supabase.from(TABLE_NAME)
+            .select('user_id', { count: 'exact' })
+            .eq('user_id', user_id)
+
+        let { data, error, count } = await query
+
+        return count
+    }
 }
