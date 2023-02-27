@@ -96,14 +96,13 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
     async pickUp({ state, dispatch, rootGetters }: { state: SupabaseRequestState, dispatch: Dispatch, rootGetters: any }) {
         if (state.request) {
             const in_progress = await state.request.pickUp()
-            if (in_progress) {
+            if (in_progress && state.request.id) {
                 await dispatch('getById', state.request.id)
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
                     action: 'request_you_submitted_picked_up',
-                    token: await getToken(),
-                    message_text: null
+                    token: await getToken()
                 })
                 return true
             }
@@ -136,14 +135,13 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
             const completed = await state.request.complete({
                 archive_notes: state.request.archive_notes
             })
-            if (completed) {
+            if (completed && state.request.id) {
                 await dispatch('getById', state.request.id)
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
                     action: 'request_you_submitted_complete',
-                    token: await getToken(),
-                    message_text: null
+                    token: await getToken()
                 })
                 return true
             }

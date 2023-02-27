@@ -171,12 +171,34 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                     token: await getToken()
                 }
 
-                try {
-                    await prospective(prospective_data)
-                } catch (e) {
-                    // This is a google auth error probably
-                    console.log(e)
+                if ( new_rp && new_rp.id ) {
+
+                    console.log('insert was successful lets try and do our functions')
+
+                    if ( prospective_data.id !== null ) {
+                        try {
+                            await prospective(prospective_data)
+                        } catch (e) {
+                            // This is a google auth error probably
+                            console.log(e)
+                        }
+                    }
+                    
+    
+                    const prospective_notify_payload = {
+                        user_id: state.client.id,
+                        rp_id: new_rp.id,
+                        action: 'npi_request_to_requester',
+                        token: await getToken()
+                    }
+                    try {
+                        await notify(prospective_notify_payload)
+                    } catch (e) {
+                        // This is likely a 'too many within a short period' errors, shouldn't affect the front-end.
+                        console.log(e)
+                    }
                 }
+                
 
                 commit('reset')
             }
@@ -248,8 +270,7 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                         user_id: state.client.id,
                         request_id: id,
                         action: 'request_submitted_to_your_org',
-                        token: await getToken(),
-                        message_text: null
+                        token: await getToken()
                     }
                     try {
                         await notify(notify_payload)
