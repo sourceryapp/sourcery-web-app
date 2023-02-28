@@ -63,6 +63,35 @@
               </v-list>
             </v-menu>
           </v-col>
+          <v-col cols="2" align-self="center">
+            <v-menu offset-y>
+              <template #activator="{ on: { click }, attrs }">
+                <v-btn
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  :color="actionButtonColor"
+                  style="z-index:1"
+                  v-bind="attrs"
+                  @click.stop.prevent="click"
+                >
+                  <v-icon dark>
+                    mdi-message-processing
+                  </v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(item, index) in requestActionsList"
+                  :key="index"
+                  @click.prevent="item.action"
+                >
+                  <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
           <v-col
             cols="auto"
             :class="labelClass"
