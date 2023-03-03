@@ -8,7 +8,11 @@
         Select Repository
       </h2>
 
-      <repository-preview :repository="selectedRepository" />
+      <v-img
+        src="/img/fallbacks/default-header-80opat.jpg"
+        max-height="200"
+        class="repository-image mb-6 rounded-lg"
+      />
 
       <repository-search @selected="setRepository" />
 
@@ -16,7 +20,7 @@
         Document Information
       </h2>
       <p v-if="selectedRepository">
-        Currently requesting from {{ selectedRepository.name }} - {{ selectedRepository.organization.name }}
+        Currently requesting from {{ currentlyRequestingFromText }}
       </p>
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
@@ -66,6 +70,7 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Repository } from '~/models/Repository'
+import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
     async asyncData ({ store }) {
@@ -129,10 +134,19 @@ export default {
             }
         },
         submitEnabled () {
-            return this.selectedRepository?.id &&
+            return this.selectedRepository &&
               this.formValid &&
               this.citation &&
               !this.submitting
+        },
+        currentlyRequestingFromText () {
+            if (!this.selectedRepository) {
+                return ''
+            }
+            if (typeof this.selectedRepository === 'string') {
+                return this.selectedRepository
+            }
+            return `${this.selectedRepository.name} - ${this.selectedRepository.organization.name}`
         }
     },
     mounted () {
@@ -154,10 +168,12 @@ export default {
         }),
         async submitRequestInsert () {
             this.submitting = true
-            this.$toast.success('Submitted Request!')
+            this.$toast.success('Successful, but disabled in this test.')
             const r = await this.submitRequest()
             this.submitting = false
-            if (r[0] && r[0].id) {
+            if (r && r instanceof RequestsProspective) {
+                this.$router.push('/dashboard')
+            } else if (Array.isArray(r) && r[0] && r[0].id) {
                 this.$router.push(`/request/${r[0].id}`)
             }
         }

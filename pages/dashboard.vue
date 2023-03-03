@@ -3,7 +3,7 @@
     <v-flex
       xs12
       sm10
-      offset-sm-1
+      offset-sm1
     >
       <h1 class="mb-4">
         {{ pageTitle }}
@@ -46,7 +46,20 @@
 
         <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
       </sourcery-card> -->
-      <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-12">
+
+      <v-alert
+        v-if="prospectiveRequestCount > 0"
+        border="left"
+        close-text="Close Alert"
+        dark
+        dismissible
+        class="mt-4"
+      >
+        You have {{ prospectiveRequestCount }} pending prospective requests.  You can view <nuxt-link to="/request/prospective">
+          those here.
+        </nuxt-link>
+      </v-alert>
+      <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-8">
         <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
           <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
@@ -94,6 +107,7 @@ export default {
         if (logged_in) {
             const uid = store.getters['supabaseAuth/authUser'].id
             requests = await Request.getForCreator(uid, ['In Progress', 'Submitted', 'Complete'])
+            await store.dispatch('supabaseProspective/countForUser')
         }
 
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
@@ -121,7 +135,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
-            isOrgMember: 'supabaseAuth/ownsAnOrganization'
+            isOrgMember: 'supabaseAuth/ownsAnOrganization',
+            prospectiveRequestCount: 'supabaseProspective/requestCount'
         }),
         pageTitle () {
             if (this.isOrgMember) {

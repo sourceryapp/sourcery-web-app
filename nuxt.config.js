@@ -5,6 +5,15 @@
 import * as env from 'sourcery-env'
 
 /**
+ * Uncomment and fillin your local supabase instance information for testing against a local db.
+ */
+// const local = {
+//     SUPABASE_URL: 'http://localhost:54321',
+//     SUPABASE_KEY: 'keyhere'
+// }
+// Object.assign(env, local)
+
+/**
  * Don't completely overwrite the
  * existing env vars.
  */
@@ -158,7 +167,7 @@ export default {
 
         '~/plugins/supabase',
 
-        '~/plugins/sourcery-functions',
+        '~/plugins/sourcery-functions.ts',
 
         '~/plugins/filesize',
 
