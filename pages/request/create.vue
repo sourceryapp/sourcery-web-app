@@ -168,9 +168,11 @@ export default {
         }),
         async submitRequestInsert () {
             this.submitting = true
-            this.$toast.success('Successful, but disabled in this test.')
             const r = await this.submitRequest()
             this.submitting = false
+            if (r) {
+                this.$toast.success('Successful!')
+            }
             if (r && r instanceof RequestsProspective) {
                 this.$router.push('/dashboard')
             } else if (Array.isArray(r) && r[0] && r[0].id) {

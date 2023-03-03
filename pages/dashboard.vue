@@ -50,9 +50,7 @@
       <v-alert
         v-if="prospectiveRequestCount > 0"
         border="left"
-        close-text="Close Alert"
         dark
-        dismissible
         class="mt-4"
       >
         You have {{ prospectiveRequestCount }} pending prospective requests.  You can view <nuxt-link to="/request/prospective">
@@ -182,11 +180,19 @@ export default {
             }
 
             if (daysout > 0) {
-                return `${daysout} day(s)`
+                let d = 'day'
+                if (daysout > 1) {
+                    d += 's'
+                }
+                return `${daysout} ${d}`
             }
 
             if (hoursout > 0) {
-                return `${hoursout} hour(s)`
+                let h = 'hour'
+                if (hoursout > 1) {
+                    h += 's'
+                }
+                return `${hoursout} ${h}`
             }
 
             if (minutesout > 0) {
