@@ -50,9 +50,7 @@
       <v-alert
         v-if="prospectiveRequestCount > 0"
         border="left"
-        close-text="Close Alert"
         dark
-        dismissible
         class="mt-4"
       >
         You have {{ prospectiveRequestCount }} pending prospective requests.  You can view <nuxt-link to="/request/prospective">
