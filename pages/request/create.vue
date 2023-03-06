@@ -54,6 +54,11 @@
           :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]"
         />
 
+        <card-disclaimer v-if="repositoryIsCustom" title="Requesting from Unregistered Institution">
+          <p>Our team will reach out to the institution on your behalf to attempt to retrieve your documents, based on the information you provided.  If the institution chooses to fulfill the request through Sourcery, they will create an account and you will see your request move to "in-progress".</p>
+          <p>If an institution prefers not to fulfill the request through Sourcery, your request will not be fulfilled and will remain as “pending” on your dashboard. There is also a chance the repository will contact you directly via email.  There is no guarantee an institution fulfills this requests or sends documents.</p>
+        </card-disclaimer>
+
         <div class="d-flex justify-space-between my-1 mb-5">
           <v-btn class="px-4" to="/dashboard">
             Back
@@ -138,6 +143,9 @@ export default {
               this.formValid &&
               this.citation &&
               !this.submitting
+        },
+        repositoryIsCustom () {
+            return typeof this.selectedRepository === 'string'
         },
         currentlyRequestingFromText () {
             if (!this.selectedRepository) {

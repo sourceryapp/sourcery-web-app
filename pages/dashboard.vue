@@ -53,7 +53,7 @@
         dark
         class="mt-4"
       >
-        You have {{ prospectiveRequestCount }} pending prospective requests.  You can view <nuxt-link to="/request/prospective">
+        You have {{ prospectiveRequestCount }} requests with unregistered organizations.  You can view <nuxt-link to="/request/unregistered">
           those here.
         </nuxt-link>
       </v-alert>
