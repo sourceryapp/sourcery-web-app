@@ -22,7 +22,7 @@
           src="~/assets/doublephone-sourcery-02-compressed.png"
           alt=""
         >
-        <div class="header__buttons">
+        <div class="header__callout">
           <!-- <v-btn
             to="/register"
             x-large
@@ -67,6 +67,14 @@
             <SvgsSparkle height="10" class="svg-sparkle-contain" />
             Community Driven
           </p>
+        </div>
+        <div class="header__cta-button-group">
+          <v-btn outlined x-large @click="showDialog">
+            Register
+          </v-btn>
+          <v-btn outlined x-large to="/login">
+            Login
+          </v-btn>
         </div>
       </div>
     </header>
@@ -222,55 +230,127 @@
                 class="section-img ready-img"
               >
             </v-col>
-            <v-col class="order-sm-first col-12 col-sm-6">
+            <v-col class="order-sm-first col-12 col-sm-6 px-0">
               <h1 id="ready">
                 Ready to try Sourcery?
               </h1>
-            </v-col>
-          </v-row>
-        </v-container>
-        <v-container>
-          <v-row>
-            <v-col cols="12" sm="6" md="4">
-              <v-btn
-                to="/join-us"
-                x-large
-                block
-                color="primary"
-                class="text-h5 font-weight-bold"
-                height="76px"
-                depressed
-              >
-                Become a Partner
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" md="4">
-              <v-btn
-                to="/login"
-                x-large
-                block
-                color="primary"
-                class="black--text text-h5 font-weight-bold"
-                height="76px"
-              >
-                Log In
-              </v-btn>
-            </v-col>
-            <v-col cols="12" sm="6" md="4" class="mx-auto">
-              <v-btn
-                to="/about"
-                color="primary"
-                outlined
-                x-large
-                height="76px"
-                block
-              >
-                Learn More
-              </v-btn>
+              <v-col id="button-wrap" class="px-0">
+                <v-col>
+                  <v-btn
+                    to=""
+                    color="primary"
+                    x-large
+                    height="76px"
+                    block
+                    @click="showDialog"
+                  >
+                    Register
+                  </v-btn>
+                </v-col>
+                <v-col>
+                  <v-btn
+                    to="/login"
+                    x-large
+                    block
+                    color="primary"
+                    height="76px"
+                    outlined
+                  >
+                    Log In
+                  </v-btn>
+                </v-col>
+              </v-col>
+              <v-col id="learn-more" class="text-center">
+                <v-btn
+                  to="/about"
+                  text
+                  color="white"
+                >
+                  Learn More
+                </v-btn>
+              </v-col>
             </v-col>
           </v-row>
         </v-container>
       </div>
+
+      <v-dialog v-model="dialogVisible" width="650">
+        <v-card id="modal-card">
+          <v-card-title>
+            <h3 id="ready">
+              Ready to try Sourcery?
+            </h3>
+          </v-card-title>
+          <v-card-text>
+            <v-container class="pb-0">
+              <v-row>
+                <v-col cols="12">
+                  <h2 id="modal-subtitle">
+                    I am looking to...
+                  </h2>
+                </v-col>
+              </v-row>
+              <v-row justify="center">
+                <v-col cols="auto" class="modal-button-wrap">
+                  <v-btn
+                    to="/register"
+                    x-large
+                    color="rgb(146, 79, 190)"
+                    height="300"
+                    class="modal-button"
+                  >
+                    <div class="modal-button-content">
+                      <img
+                        src="@/static/img/icons_document.png"
+                        height="180"
+                      >
+                      <span class="modal-button-text">
+                        Request Documents
+                      </span>
+                    </div>
+                  </v-btn>
+                </v-col>
+                <v-col cols="auto" class="modal-button-wrap">
+                  <v-btn
+                    to="/join-us"
+                    x-large
+                    color="rgb(146, 79, 190)"
+                    height="300"
+                    class="modal-button"
+                  >
+                    <div class="modal-button-content">
+                      <img
+                        src="@/static/img/icons_institution.png"
+                        height="160"
+                      >
+                      <span class="modal-button-text">
+                        Become a Partner Institution
+                      </span>
+                    </div>
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="12">
+                  <span class="login-link-text">
+                    Have an account?
+                    <NuxtLink to="/login">
+                      Log in.
+                    </NuxtLink>
+                  </span>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions class="pt-0">
+            <v-btn rounded @click="dialogVisible = false">
+              <v-icon>
+                mdi-close
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </section>
 
     <sourcery-footer :text="true" />
@@ -303,7 +383,8 @@ export default {
     middleware: null,
     data: () => ({
         isIntersecting: true,
-        mailchimpLink: 'https://mailchi.mp/4de98c4698dd/coming-soon'
+        mailchimpLink: 'https://mailchi.mp/4de98c4698dd/coming-soon',
+        dialogVisible: false
     }),
     head () {
         return {
@@ -368,6 +449,9 @@ export default {
         },
         onIntersect (entries, observer) {
             this.isIntersecting = entries[0].isIntersecting
+        },
+        showDialog () {
+            this.dialogVisible = true
         }
     }
 }
@@ -425,7 +509,7 @@ h1 {
     margin: 0 auto;
     display: grid;
     align-items: center;
-    grid-template-areas: 'logo' 'mockup' 'buttons' 'slogan';
+    grid-template-areas: 'logo' 'mockup' 'slogan' 'callout' 'buttons';
     row-gap: 2px;
 }
 .header__logo {
@@ -441,13 +525,14 @@ h1 {
     max-height: 400px;
     margin: 0 auto;
 }
-.header__buttons {
+.header__cta-button-group {
     grid-area: buttons;
-    padding-top: 20px;
-    padding-bottom: 10px;
+    /* padding-top: 20px;
+    padding-bottom: 10px; */
 }
-.header__buttons a:first-child {
-    margin-bottom: 12px;
+.header__callout {
+  grid-area: callout;
+  margin-bottom: 10px;
 }
 .header__slogan {
     grid-area: slogan;
@@ -527,17 +612,70 @@ h1 {
 }
 
 #ready {
-    margin-bottom: 24px;
+    font-size: 28px;
+    padding-inline: 12px;
+    margin-bottom: 12px;
 }
+
+#learn-more {
+  text-decoration: underline;
+}
+.login-link-text {
+  font-size: 18px;
+  display: inline-block;
+  color: white;
+  margin-right: 10px; /* adjust as needed */
+}
+
+#modal-subtitle {
+  color: white;
+  text-transform: uppercase;
+}
+
+.modal-button-wrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-button {
+  width: 260px;
+}
+
+.modal-button-content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: auto;
+  width: 250px;
+}
+
+.modal-button-text {
+  color: white;
+  margin-top: 30px;
+  font-size: 20px;
+  white-space: normal;
+  text-align: center;
+}
+
 @media only screen and (min-width: 600px) {
+    #button-wrap {
+      display: flex;
+      flex-direction: row;
+    }
+    #ready {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
     .landing-header {
         padding: 96px 24px;
     }
     .header-content {
-        grid-template-areas: '. mockup' 'logo mockup' 'slogan mockup' 'buttons mockup' '. mockup';
+        grid-template-areas: '. mockup' 'logo mockup' 'slogan mockup' 'callout mockup' 'buttons mockup' '. mockup';
         column-gap: 96px;
         grid-template-columns: 6fr 4fr;
-        grid-template-rows: 1fr auto auto auto 1fr;
+        grid-template-rows: 1fr auto auto auto auto 1fr;
     }
     .header__mockup {
         padding: 0;
@@ -545,6 +683,9 @@ h1 {
         max-width: 100%;
         object-fit: contain;
         max-height: initial;
+    }
+    .header__slogan {
+      margin-bottom: 10px;
     }
     .feature {
         height: 240px;
@@ -597,5 +738,14 @@ h2 {
   margin-bottom: 1px;
   margin-right: 2px;
   margin-left: 2px;
+}
+
+.header__cta-button-group {
+  display: flex;
+  column-gap: 20px;
+}
+
+.header__cta-button-group .v-btn {
+  flex-grow: 1;
 }
 </style>

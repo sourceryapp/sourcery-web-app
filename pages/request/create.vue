@@ -8,7 +8,11 @@
         Select Repository
       </h2>
 
-      <repository-preview :repository="selectedRepository" />
+      <v-img
+        src="/img/fallbacks/default-header-80opat.jpg"
+        max-height="200"
+        class="repository-image mb-6 rounded-lg"
+      />
 
       <repository-search @selected="setRepository" />
 
@@ -16,7 +20,7 @@
         Document Information
       </h2>
       <p v-if="selectedRepository">
-        Currently requesting from {{ selectedRepository.name }} - {{ selectedRepository.organization.name }}
+        Currently requesting from {{ currentlyRequestingFromText }}
       </p>
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
@@ -50,6 +54,11 @@
           :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]"
         />
 
+        <card-disclaimer v-if="repositoryIsCustom" title="Requesting from Unregistered Institution">
+          <p>If the institution you're looking for isn't already a registered user of Sourcery, our team will reach out to the institution to let them know that they have a request waiting. If they choose to fulfill the request through Sourcery, they will create an account and you will see your request status go to “in-progress”. Once the repository has fulfilled the request, you will receive your documents through the app.</p>
+          <p>If an institution prefers not to fulfill the request through Sourcery, your request will not be fulfilled and will remain as “pending” on your dashboard. There is also a chance the repository will contact you directly via email.</p>
+        </card-disclaimer>
+
         <div class="d-flex justify-space-between my-1 mb-5">
           <v-btn class="px-4" to="/dashboard">
             Back
@@ -66,6 +75,7 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from 'vuex'
 import { Repository } from '~/models/Repository'
+import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
     async asyncData ({ store }) {
@@ -129,10 +139,22 @@ export default {
             }
         },
         submitEnabled () {
-            return this.selectedRepository?.id &&
+            return this.selectedRepository &&
               this.formValid &&
               this.citation &&
               !this.submitting
+        },
+        repositoryIsCustom () {
+            return typeof this.selectedRepository === 'string'
+        },
+        currentlyRequestingFromText () {
+            if (!this.selectedRepository) {
+                return ''
+            }
+            if (typeof this.selectedRepository === 'string') {
+                return this.selectedRepository
+            }
+            return `${this.selectedRepository.name} - ${this.selectedRepository.organization.name}`
         }
     },
     mounted () {
@@ -154,10 +176,14 @@ export default {
         }),
         async submitRequestInsert () {
             this.submitting = true
-            this.$toast.success('Submitted Request!')
             const r = await this.submitRequest()
             this.submitting = false
-            if (r[0] && r[0].id) {
+            if (r) {
+                this.$toast.success('Successful!')
+            }
+            if (r && r instanceof RequestsProspective) {
+                this.$router.push('/dashboard')
+            } else if (Array.isArray(r) && r[0] && r[0].id) {
                 this.$router.push(`/request/${r[0].id}`)
             }
         }

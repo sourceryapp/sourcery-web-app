@@ -3,7 +3,7 @@
     <v-flex
       xs12
       sm10
-      offset-sm-1
+      offset-sm1
     >
       <h1 class="mb-4">
         {{ pageTitle }}
@@ -46,7 +46,18 @@
 
         <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
       </sourcery-card> -->
-      <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-12">
+
+      <v-alert
+        v-if="prospectiveRequestCount > 0"
+        border="left"
+        dark
+        class="mt-4"
+      >
+        You have {{ prospectiveRequestCount }} requests with unregistered organizations.  You can view <nuxt-link to="/request/unregistered">
+          those here.
+        </nuxt-link>
+      </v-alert>
+      <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-8">
         <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
           <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
@@ -94,6 +105,7 @@ export default {
         if (logged_in) {
             const uid = store.getters['supabaseAuth/authUser'].id
             requests = await Request.getForCreator(uid, ['In Progress', 'Submitted', 'Complete'])
+            await store.dispatch('supabaseProspective/countForUser')
         }
 
         if (store.getters['supabaseAuth/ownsAnOrganization']) {
@@ -121,7 +133,8 @@ export default {
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
-            isOrgMember: 'supabaseAuth/ownsAnOrganization'
+            isOrgMember: 'supabaseAuth/ownsAnOrganization',
+            prospectiveRequestCount: 'supabaseProspective/requestCount'
         }),
         pageTitle () {
             if (this.isOrgMember) {
@@ -167,11 +180,19 @@ export default {
             }
 
             if (daysout > 0) {
-                return `${daysout} day(s)`
+                let d = 'day'
+                if (daysout > 1) {
+                    d += 's'
+                }
+                return `${daysout} ${d}`
             }
 
             if (hoursout > 0) {
-                return `${hoursout} hour(s)`
+                let h = 'hour'
+                if (hoursout > 1) {
+                    h += 's'
+                }
+                return `${hoursout} ${h}`
             }
 
             if (minutesout > 0) {

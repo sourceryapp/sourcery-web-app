@@ -168,7 +168,8 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
-import { supabase } from '~/plugins/supabase'
+import { getToken, supabase } from '~/plugins/supabase'
+import { notify } from '~/plugins/sourcery-functions'
 
 export default {
     name: 'Register',
@@ -250,9 +251,10 @@ export default {
                 // await this.fetchUserHasPassword()
 
                 try {
-                    const notifystatus = await this.$sourceryFunctions.notify({
+                    const notifystatus = await notify({
                         user_id: user.id,
-                        action: 'signed_up'
+                        action: 'signed_up',
+                        token: await getToken()
                     })
                     console.log('notifystatus', notifystatus)
                 } catch (error) {
