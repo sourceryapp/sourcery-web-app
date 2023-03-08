@@ -22,7 +22,7 @@
           src="~/assets/doublephone-sourcery-02-compressed.png"
           alt=""
         >
-        <div class="header__buttons">
+        <div class="header__callout">
           <!-- <v-btn
             to="/register"
             x-large
@@ -67,6 +67,14 @@
             <SvgsSparkle height="10" class="svg-sparkle-contain" />
             Community Driven
           </p>
+        </div>
+        <div class="header__cta-button-group">
+          <v-btn outlined large @click="showDialog">
+            Register
+          </v-btn>
+          <v-btn outlined large to="/login">
+            Login
+          </v-btn>
         </div>
       </div>
     </header>
@@ -501,7 +509,7 @@ h1 {
     margin: 0 auto;
     display: grid;
     align-items: center;
-    grid-template-areas: 'logo' 'mockup' 'buttons' 'slogan';
+    grid-template-areas: 'logo' 'mockup' 'slogan' 'callout' 'buttons';
     row-gap: 2px;
 }
 .header__logo {
@@ -517,13 +525,13 @@ h1 {
     max-height: 400px;
     margin: 0 auto;
 }
-.header__buttons {
+.header__cta-button-group {
     grid-area: buttons;
-    padding-top: 20px;
-    padding-bottom: 10px;
+    /* padding-top: 20px;
+    padding-bottom: 10px; */
 }
-.header__buttons a:first-child {
-    margin-bottom: 12px;
+.header__callout {
+  grid-area: callout;
 }
 .header__slogan {
     grid-area: slogan;
@@ -663,10 +671,10 @@ h1 {
         padding: 96px 24px;
     }
     .header-content {
-        grid-template-areas: '. mockup' 'logo mockup' 'slogan mockup' 'buttons mockup' '. mockup';
+        grid-template-areas: '. mockup' 'callout mockup' 'logo mockup' 'slogan mockup' 'buttons mockup' '. mockup';
         column-gap: 96px;
         grid-template-columns: 6fr 4fr;
-        grid-template-rows: 1fr auto auto auto 1fr;
+        grid-template-rows: 1fr auto auto auto auto 1fr;
     }
     .header__mockup {
         padding: 0;
@@ -674,6 +682,9 @@ h1 {
         max-width: 100%;
         object-fit: contain;
         max-height: initial;
+    }
+    .header__slogan {
+      margin-bottom: 20px;
     }
     .feature {
         height: 240px;
@@ -726,5 +737,14 @@ h2 {
   margin-bottom: 1px;
   margin-right: 2px;
   margin-left: 2px;
+}
+
+.header__cta-button-group {
+  display: flex;
+  column-gap: 20px;
+}
+
+.header__cta-button-group .v-btn {
+  flex-grow: 1;
 }
 </style>

@@ -111,7 +111,7 @@ export default ({ app }, inject) => {
             },
 
             isATestOrganization (organization) {
-                return ['sourcery-test'].includes(organization.slug)
+                return ['sourcery-test', 'sourcery'].includes(organization.slug)
             }
         }
     })()

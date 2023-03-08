@@ -4,7 +4,7 @@
       ref="repository_search_auto"
       v-model="selectedRepository"
       outlined
-      placeholder="Search or Enter New Repositories..."
+      placeholder="Enter Repository"
       :items="repositories"
       item-text="organization.name"
       :search-input.sync="searchText"
@@ -93,7 +93,7 @@ export default {
             repositories: [],
             selectedRepository: null,
             searchText: '',
-            browseOpen: true
+            browseOpen: false
         }
     },
     async fetch () {
@@ -124,6 +124,10 @@ export default {
             // Currently simple search.
             return this.repositories.filter((x) => {
                 // const search_string = `${x.name} ${x.organization.name} ${x.address1} ${x.address2} ${x.city} ${x.state} ${x.postal_code}`
+
+                if (this.isAdmin) {
+                    return this.isAdmin
+                }
 
                 if (this.$utils.isTestUser(this.authUser)) {
                     if (this.$utils.isATestOrganization(x.organization)) {
