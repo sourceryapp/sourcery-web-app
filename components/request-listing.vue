@@ -8,9 +8,15 @@
       :to="cardClickAction"
       class="my-4 rounded-lg"
       outlined
+      color="grey darken-3"
     >
       <v-container>
         <v-row>
+          <v-col
+            cols="auto"
+            :class="labelClass"
+            z-index="2"
+          />
           <v-col class="pa-0">
             <v-card-title v-if="!editing">
               {{ label }}
@@ -34,11 +40,10 @@
               />
             </v-fade-transition>
           </v-col>
-          <v-col v-if="requestActionsList.length > 0" cols="2" align-self="center">
+          <v-col v-if="requestActionsList.length > 0" cols="auto" align-self="center" class="pr-0">
             <v-menu offset-y>
               <template #activator="{ on: { click }, attrs }">
                 <v-btn
-                  class="mx-2"
                   fab
                   dark
                   small
@@ -63,47 +68,20 @@
               </v-list>
             </v-menu>
           </v-col>
-          <v-col cols="2" align-self="center">
-            <v-menu offset-y>
-              <template #activator="{ on: { click }, attrs }">
-                <v-btn
-                  class="mx-2"
-                  fab
-                  dark
-                  small
-                  :color="actionButtonColor"
-                  style="z-index:1"
-                  v-bind="attrs"
-                  @click.stop.prevent="click"
-                >
-                  <v-icon dark>
-                    mdi-message-processing
-                  </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item
-                  v-for="(item, index) in requestActionsList"
-                  :key="index"
-                  @click.prevent="item.action"
-                >
-                  <v-list-item-title>{{ item.name }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </v-col>
-          <v-col
-            cols="auto"
-            :class="labelClass"
-            z-index="2"
-          >
-            <p
-              class="font-weight-bold text-button ma-0"
-              :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+          <v-col cols="auto" align-self="center" class="pr-0">
+            <v-btn
+              fab
+              dark
+              small
+              :color="actionButtonColor"
+              style="z-index:1"
             >
-              {{ request.status.name }}
-            </p>
+              <v-icon dark>
+                mdi-message-processing
+              </v-icon>
+            </v-btn>
           </v-col>
+          <v-col cols="auto" />
         </v-row>
       </v-container>
     </v-card>
@@ -146,7 +124,7 @@ export default {
             return this.request.request_client.label
         },
         labelClass () {
-            let classes = 'd-flex align-center justify-center rounded-r-lg px-4'
+            let classes = 'd-flex align-center justify-center rounded-l-lg px-2'
             const status_name = this.request?.status?.name
             if (status_name === 'Submitted') {
                 classes += ' bg-teal'
