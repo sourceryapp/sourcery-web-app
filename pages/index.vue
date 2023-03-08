@@ -69,10 +69,10 @@
           </p>
         </div>
         <div class="header__cta-button-group">
-          <v-btn outlined large @click="showDialog">
+          <v-btn outlined x-large @click="showDialog">
             Register
           </v-btn>
-          <v-btn outlined large to="/login">
+          <v-btn outlined x-large to="/login">
             Login
           </v-btn>
         </div>
@@ -532,6 +532,7 @@ h1 {
 }
 .header__callout {
   grid-area: callout;
+  margin-bottom: 10px;
 }
 .header__slogan {
     grid-area: slogan;
@@ -671,7 +672,7 @@ h1 {
         padding: 96px 24px;
     }
     .header-content {
-        grid-template-areas: '. mockup' 'callout mockup' 'logo mockup' 'slogan mockup' 'buttons mockup' '. mockup';
+        grid-template-areas: '. mockup' 'logo mockup' 'slogan mockup' 'callout mockup' 'buttons mockup' '. mockup';
         column-gap: 96px;
         grid-template-columns: 6fr 4fr;
         grid-template-rows: 1fr auto auto auto auto 1fr;
@@ -684,7 +685,7 @@ h1 {
         max-height: initial;
     }
     .header__slogan {
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .feature {
         height: 240px;
