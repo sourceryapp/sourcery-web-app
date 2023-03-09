@@ -50,7 +50,6 @@
       <v-alert
         v-if="prospectiveRequestCount > 0"
         border="left"
-        dark
         class="mt-4"
       >
         You have {{ prospectiveRequestCount }} requests with unregistered organizations.  You can view <nuxt-link to="/request/unregistered">
