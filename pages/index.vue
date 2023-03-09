@@ -69,10 +69,10 @@
           </p>
         </div>
         <div class="header__cta-button-group">
-          <v-btn outlined x-large @click="showDialog">
+          <v-btn outlined x-large dark @click="showDialog">
             Register
           </v-btn>
-          <v-btn outlined x-large to="/login">
+          <v-btn outlined x-large to="/login" dark>
             Login
           </v-btn>
         </div>
