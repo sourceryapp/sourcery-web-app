@@ -7,7 +7,6 @@
       v-if="request"
       :to="cardClickAction"
       class="my-4 rounded-lg"
-      outlined
       color="grey darken-3"
     >
       <v-container>
@@ -70,11 +69,13 @@
           </v-col>
           <v-col cols="auto" align-self="center" class="pr-0">
             <v-btn
+              v-if="showChatInit"
               fab
               dark
               small
               :color="actionButtonColor"
               style="z-index:1"
+              @click.prevent="openChat"
             >
               <v-icon dark>
                 mdi-message-processing
