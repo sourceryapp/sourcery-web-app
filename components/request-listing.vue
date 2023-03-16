@@ -18,7 +18,7 @@
           />
           <v-col class="pa-0">
             <v-card-title v-if="!editing">
-              <span class="text-truncate" style="max-width: 215px;">{{ label }}</span>
+              <span class="text-truncate" style="max-width: 200px;">{{ label }}</span>
             </v-card-title>
             <v-card-title v-else>
               <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
@@ -26,8 +26,8 @@
             <v-card-subtitle>
               <span v-if="client">{{ request.repository.name }}</span>
               <span v-else>
-                <span v-if="request.request_client">{{ request.request_client.name }}</span>
-                <span v-else>Submitted by {email}</span>
+                <span v-if="requestUser && requestUser.name">{{ requestUser.name }}</span>
+                <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 200px;">Submitted by {{ requestUser.email }}</span>
               </span>
               <br>
               <span class="font-italic font-weight-light">
@@ -97,6 +97,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { Request } from '~/models/Request'
+import { User } from '~/models/User'
 
 export default {
     props: {
@@ -112,7 +113,8 @@ export default {
     data () {
         return {
             editing: false,
-            editingLabelValue: ''
+            editingLabelValue: '',
+            requestUser: null
         }
     },
     computed: {
@@ -199,6 +201,7 @@ export default {
     },
     created () {
         this.editingLabelValue = this.label
+        this.fetchRequestUser()
     },
 
     methods: {
@@ -208,6 +211,16 @@ export default {
         editLabel () {
             this.editing = !this.editing
             console.log('edit label')
+        },
+        fetchRequestUser () {
+            if (this.requestUser) {
+                return
+            }
+            User.getById(this.request.user_id).then((user) => {
+                console.log('getting user')
+                console.log(user)
+                this.requestUser = user
+            })
         },
         openChat () {
             this.startChat(this.request)
