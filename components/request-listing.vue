@@ -18,15 +18,17 @@
           />
           <v-col class="pa-0">
             <v-card-title v-if="!editing">
-              {{ label }}
+              <span class="text-truncate" style="max-width: 215px;">{{ label }}</span>
             </v-card-title>
             <v-card-title v-else>
               <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
             </v-card-title>
             <v-card-subtitle>
-              {{ citation }}
-              <br>
               {{ request.repository.name }}
+              <br>
+              <span class="font-italic font-weight-light">
+                Submitted {{ formatDate(request.created_at) }}
+              </span>
             </v-card-subtitle>
             <v-fade-transition>
               <v-overlay
@@ -69,7 +71,6 @@
           </v-col>
           <v-col cols="auto" align-self="center" class="pr-0">
             <v-btn
-              v-if="showChatInit"
               fab
               dark
               small
@@ -227,6 +228,15 @@ export default {
                 }
             }
             this.$toast.error('Issue picking up request.')
+        },
+        formatDate (dateString) {
+            const date = new Date(dateString)
+            const options = { year: 'numeric', month: 'short', day: 'numeric' }
+            const formattedDate = date.toLocaleDateString('en-US', options)
+            const suffixes = ['th', 'st', 'nd', 'rd']
+            const day = date.getDate()
+            const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0]
+            return formattedDate.replace(/\b\d{1,2}\b/, `$&${suffix}`)
         }
     }
 }
