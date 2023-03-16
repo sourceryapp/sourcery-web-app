@@ -24,7 +24,11 @@
               <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
             </v-card-title>
             <v-card-subtitle>
-              {{ request.repository.name }}
+              <span v-if="client">{{ request.repository.name }}</span>
+              <span v-else>
+                <span v-if="request.request_client">{{ request.request_client.name }}</span>
+                <span v-else>Submitted by {email}</span>
+              </span>
               <br>
               <span class="font-italic font-weight-light">
                 Submitted {{ formatDate(request.created_at) }}
@@ -191,6 +195,7 @@ export default {
         citation () {
             return (this.request.citation.length > 100) ? this.request.citation.substr(0, 99) + '&hellip;' : this.request.citation
         }
+
     },
     created () {
         this.editingLabelValue = this.label
