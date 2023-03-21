@@ -30,7 +30,7 @@ export default {
     layout: 'landing-beta',
     data () {
         return {
-            gformsLink: 'https://docs.google.com/forms/d/e/1FAIpQLSez2BHbLH_cIJXQlYy05IZ5kXBxmQ7q8nM6CT6sQw-0ujtWZw/viewform?embedded=true'
+            gformsLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfQiW-UJgjb8o6ynACtCDSFFda_BxloIQ90NnQMNnqRIIjprw/viewform?embedded=true'
         }
     }
 }
