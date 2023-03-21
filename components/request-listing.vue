@@ -7,21 +7,32 @@
       v-if="request"
       :to="cardClickAction"
       class="my-4 rounded-lg"
-      outlined
+      color="grey darken-3"
     >
       <v-container>
         <v-row>
+          <v-col
+            cols="auto"
+            :class="labelClass"
+            z-index="2"
+          />
           <v-col class="pa-0">
             <v-card-title v-if="!editing">
-              {{ label }}
+              <span class="text-truncate" style="max-width: 200px;">{{ label }}</span>
             </v-card-title>
             <v-card-title v-else>
               <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
             </v-card-title>
             <v-card-subtitle>
-              {{ citation }}
+              <span v-if="client">{{ request.repository.name }}</span>
+              <span v-else>
+                <span v-if="requestUser && requestUser.name">{{ requestUser.name }}</span>
+                <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 200px;">Submitted by {{ requestUser.email }}</span>
+              </span>
               <br>
-              {{ request.repository.name }}
+              <span class="font-italic font-weight-light">
+                Submitted {{ formatDate(request.created_at) }}
+              </span>
             </v-card-subtitle>
             <v-fade-transition>
               <v-overlay
@@ -34,11 +45,10 @@
               />
             </v-fade-transition>
           </v-col>
-          <v-col v-if="requestActionsList.length > 0" cols="2" align-self="center">
+          <v-col v-if="requestActionsList.length > 0" cols="auto" align-self="center" class="pr-0">
             <v-menu offset-y>
               <template #activator="{ on: { click }, attrs }">
                 <v-btn
-                  class="mx-2"
                   fab
                   dark
                   small
@@ -63,18 +73,21 @@
               </v-list>
             </v-menu>
           </v-col>
-          <v-col
-            cols="auto"
-            :class="labelClass"
-            z-index="2"
-          >
-            <p
-              class="font-weight-bold text-button ma-0"
-              :class="$vuetify.theme.dark ? 'black--text' : 'white--text'"
+          <v-col cols="auto" align-self="center" class="pr-0">
+            <v-btn
+              fab
+              dark
+              small
+              :color="actionButtonColor"
+              style="z-index:1"
+              @click.prevent="openChat"
             >
-              {{ request.status.name }}
-            </p>
+              <v-icon dark>
+                mdi-message-processing
+              </v-icon>
+            </v-btn>
           </v-col>
+          <v-col cols="auto" />
         </v-row>
       </v-container>
     </v-card>
@@ -84,6 +97,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { Request } from '~/models/Request'
+import { User } from '~/models/User'
 
 export default {
     props: {
@@ -99,7 +113,8 @@ export default {
     data () {
         return {
             editing: false,
-            editingLabelValue: ''
+            editingLabelValue: '',
+            requestUser: null
         }
     },
     computed: {
@@ -117,7 +132,7 @@ export default {
             return this.request.request_client.label
         },
         labelClass () {
-            let classes = 'd-flex align-center justify-center rounded-r-lg px-4'
+            let classes = 'd-flex align-center justify-center rounded-l-lg px-2'
             const status_name = this.request?.status?.name
             if (status_name === 'Submitted') {
                 classes += ' bg-teal'
@@ -182,9 +197,11 @@ export default {
         citation () {
             return (this.request.citation.length > 100) ? this.request.citation.substr(0, 99) + '&hellip;' : this.request.citation
         }
+
     },
     created () {
         this.editingLabelValue = this.label
+        this.fetchRequestUser()
     },
 
     methods: {
@@ -194,6 +211,16 @@ export default {
         editLabel () {
             this.editing = !this.editing
             console.log('edit label')
+        },
+        fetchRequestUser () {
+            if (this.requestUser) {
+                return
+            }
+            User.getById(this.request.user_id).then((user) => {
+                console.log('getting user')
+                console.log(user)
+                this.requestUser = user
+            })
         },
         openChat () {
             this.startChat(this.request)
@@ -219,6 +246,15 @@ export default {
                 }
             }
             this.$toast.error('Issue picking up request.')
+        },
+        formatDate (dateString) {
+            const date = new Date(dateString)
+            const options = { year: 'numeric', month: 'short', day: 'numeric' }
+            const formattedDate = date.toLocaleDateString('en-US', options)
+            const suffixes = ['th', 'st', 'nd', 'rd']
+            const day = date.getDate()
+            const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0]
+            return formattedDate.replace(/\b\d{1,2}\b/, `$&${suffix}`)
         }
     }
 }
