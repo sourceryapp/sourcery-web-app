@@ -5,7 +5,7 @@
       v-model="selectedRepository"
       outlined
       placeholder="Enter Repository"
-      :items="repositories"
+      :items="visibleRepositories"
       item-text="organization.name"
       :search-input.sync="searchText"
       return-object
