@@ -7,7 +7,7 @@
       v-if="request"
       :to="cardClickAction"
       class="my-4 rounded-lg"
-      color="grey darken-3"
+      :color="cardColor"
     >
       <v-container>
         <v-row>
@@ -30,8 +30,14 @@
                 <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 200px;">Submitted by {{ requestUser.email }}</span>
               </span>
               <br>
-              <span class="font-italic font-weight-light">
+              <span v-if="isSubmitted" class="font-italic font-weight-light">
                 Submitted {{ formatDate(request.created_at) }}
+              </span>
+              <span v-if="isPickedUp" class="font-italic font-weight-light">
+                In Progress
+              </span>
+              <span v-if="isPostAction" class="font-italic font-weight-light">
+                {{ status }}
               </span>
             </v-card-subtitle>
             <v-fade-transition>
@@ -131,6 +137,22 @@ export default {
             }
             return this.request.request_client.label
         },
+        status () {
+            const s = this.request?.status?.name
+            if (!s) {
+                return 'Created'
+            }
+            return s
+        },
+        isSubmitted () {
+            return Request.isSubmitted(this.request)
+        },
+        isPickedUp () {
+            return Request.isPickedUp(this.request)
+        },
+        isPostAction () {
+            return Request.isCancelled(this.request) || Request.isComplete(this.request) || Request.isArchived(this.request)
+        },
         labelClass () {
             let classes = 'd-flex align-center justify-center rounded-l-lg px-2'
             const status_name = this.request?.status?.name
@@ -157,6 +179,9 @@ export default {
         },
         actionButtonColor () {
             return this.$vuetify.theme.dark ? '#707070' : '#C3C3C3'
+        },
+        cardColor () {
+            return this.$vuetify.theme.dark ? 'grey darken-3' : ''
         },
         cardClickAction () {
             if (this.editing) {
