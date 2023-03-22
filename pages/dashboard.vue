@@ -18,12 +18,11 @@
         :turnaround-text="averageTimeText"
       />
 
-      <org-stat-bar
+      <user-stat-bar
         v-if="isResearcher"
         :new-count="newRequests.length"
         :progress-count="inProgressRequests.length"
         :completed-count="completedAndArchivedRequests.length"
-        :turnaround-text="averageTimeText"
       />
 
       <v-row v-if="isOrgMember">
@@ -111,6 +110,7 @@ import LoggedOutCard from '@/components/logged-out-card.vue'
 import ViewHistoryButton from '@/components/view-history-button.vue'
 import RequestListing from '@/components/request-listing.vue'
 import OrgStatBar from '@/components/org-stat-bar.vue'
+import UserStatBar from '@/components/user-stat-bar.vue'
 import ButtonLarge from '@/components/button-large.vue'
 import { Request } from '~/models/Request'
 import { Organization } from '~/models/Organization'
@@ -124,6 +124,7 @@ export default {
         ViewHistoryButton,
         RequestListing,
         OrgStatBar,
+        UserStatBar,
         CardWithAction,
         ButtonLarge
     },
