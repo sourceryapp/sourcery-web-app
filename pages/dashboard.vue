@@ -39,7 +39,7 @@
         </v-col>
         <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
-            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="true" />
+            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
             <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
           </card-with-action>
           <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
@@ -143,8 +143,6 @@ export default {
             jobs = await Request.getForRepositories(user_repositories, ['In Progress', 'Submitted', 'Complete', 'Archived'])
             avgTimeMeta = await Organization.getAverageTurnaroundTime(store.getters['supabaseAuth/userOrganizationIds'][0])
         }
-        console.log(requests)
-
         return {
             requests,
             jobs,
