@@ -18,6 +18,14 @@
         :turnaround-text="averageTimeText"
       />
 
+      <org-stat-bar
+        v-if="isResearcher"
+        :new-count="newRequests.length"
+        :progress-count="inProgressRequests.length"
+        :completed-count="completedAndArchivedRequests.length"
+        :turnaround-text="averageTimeText"
+      />
+
       <v-row v-if="isOrgMember">
         <v-col cols="12" lg="6">
           <card-with-action title="Pending" :number-requests="newJobs.length" action="/requests?status=1">
@@ -31,12 +39,35 @@
         </v-col>
         <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
-            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
+            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="true" />
             <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
           </card-with-action>
           <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
+          </card-with-action>
+          <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
+        </v-col>
+      </v-row>
+      <v-row v-if="isResearcher">
+        <v-col cols="12" lg="6">
+          <card-with-action title="Pending" :number-requests="newRequests.length" action="/requests?status=1">
+            <request-listing v-for="request in newRequestsLimited" :key="`njl-${request.id}`" :request="request" :client="true" />
+            <span v-if="newRequests.length === 0">Out looking for toadstools.<br>No new requests.</span>
+          </card-with-action>
+          <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
+            <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="request" :client="false" />
+            <span v-if="completedRequests.length === 0">No recently completed requests.</span>
+          </card-with-action>
+        </v-col>
+        <v-col cols="12" lg="6">
+          <card-with-action title="In - Progress" :number-requests="inProgressRequests.length" action="/requests?status=2">
+            <request-listing v-for="request in inProgressRequestsLimited" :key="`ipjl-${request.id}`" :request="request" :client="true" />
+            <span v-if="inProgressRequests.length === 0">All spells have been cast!<br>No requests in-progress.</span>
+          </card-with-action>
+          <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
+            <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="job" :client="false" />
+            <span v-if="completedRequests.length === 0">No recently completed requests.</span>
           </card-with-action>
           <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
         </v-col>
@@ -112,6 +143,7 @@ export default {
             jobs = await Request.getForRepositories(user_repositories, ['In Progress', 'Submitted', 'Complete', 'Archived'])
             avgTimeMeta = await Organization.getAverageTurnaroundTime(store.getters['supabaseAuth/userOrganizationIds'][0])
         }
+        console.log(requests)
 
         return {
             requests,
@@ -141,26 +173,53 @@ export default {
             }
             return 'Dashboard'
         },
+        isResearcher () {
+            if (this.isOrgMember) {
+                return false
+            }
+            return true
+        },
         newJobs () {
             return this.jobs.filter(x => x.status?.name === 'Submitted')
+        },
+        newRequests () {
+            return this.requests.filter(x => x.status?.name === 'Submitted')
         },
         inProgressJobs () {
             return this.jobs.filter(x => x.status?.name === 'In Progress')
         },
+        inProgressRequests () {
+            return this.requests.filter(x => x.status?.name === 'In Progress')
+        },
         completedJobs () {
             return this.jobs.filter(x => x.status?.name === 'Complete')
+        },
+        completedRequests () {
+            return this.requests.filter(x => x.status?.name === 'Complete')
         },
         completedAndArchivedJobs () {
             return this.jobs.filter(x => x.status?.name === 'Complete' || x.status?.name === 'Archived')
         },
+        completedAndArchivedRequests () {
+            return this.requests.filter(x => x.status?.name === 'Complete' || x.status?.name === 'Archived')
+        },
         newJobsLimited () {
             return this.newJobs.slice(0, this.limit)
+        },
+        newRequestsLimited () {
+            return this.newRequests.slice(0, this.limit)
         },
         inProgressJobsLimited () {
             return this.inProgressJobs.slice(0, this.limit)
         },
+        inProgressRequestsLimited () {
+            return this.inProgressRequests.slice(0, this.limit)
+        },
         completedJobsLimited () {
             return this.completedJobs.slice(0, this.limit)
+        },
+        completedRequestsLimited () {
+            return this.completedRequests.slice(0, this.limit)
         },
         averageTimeText () {
             const day = 86400

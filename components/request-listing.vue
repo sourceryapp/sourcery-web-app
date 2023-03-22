@@ -242,8 +242,6 @@ export default {
                 return
             }
             User.getById(this.request.user_id).then((user) => {
-                console.log('getting user')
-                console.log(user)
                 this.requestUser = user
             })
         },
