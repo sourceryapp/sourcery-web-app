@@ -95,7 +95,9 @@ export default {
         }
 
         const user_repositories = store.getters['supabaseAuth/userRepositories']
+        // const user_id = store.getters['supabaseAuth/authUser']?.id
         const jobs = await Request.getForRepositories(user_repositories, ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled'])
+        // const requests = await Request.getForCreator(user_id, ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled'])
 
         const statuses = await Status.getAll()
 

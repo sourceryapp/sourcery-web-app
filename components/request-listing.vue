@@ -103,7 +103,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { Request } from '~/models/Request'
-import { User } from '~/models/User'
 
 export default {
     props: {
@@ -218,20 +217,19 @@ export default {
             }
 
             return list
-        },
-        citation () {
-            return (this.request.citation.length > 100) ? this.request.citation.substr(0, 99) + '&hellip;' : this.request.citation
         }
-
     },
     created () {
         this.editingLabelValue = this.label
-        this.fetchRequestUser()
+        if (!this.client) {
+            this.fetchRequestUser()
+        }
     },
 
     methods: {
         ...mapActions({
-            startChat: 'supabaseChat/openForRequest'
+            startChat: 'supabaseChat/openForRequest',
+            getUser: 'supabaseUserCache/get_user'
         }),
         editLabel () {
             this.editing = !this.editing
@@ -241,8 +239,10 @@ export default {
             if (this.requestUser) {
                 return
             }
-            User.getById(this.request.user_id).then((user) => {
-                this.requestUser = user
+            this.getUser(this.request.user_id).then((user) => {
+                if (user) {
+                    this.requestUser = user
+                }
             })
         },
         openChat () {

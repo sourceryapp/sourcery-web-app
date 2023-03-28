@@ -135,7 +135,7 @@ export default {
                 }
                 // {
                 //     name: 'Jack Dineen',
-                //     title: 'Temporary University Specialist',
+                //     title: 'Sourcery Operations Specialist',
                 //     bio: 'Bio here'
                 // }
 

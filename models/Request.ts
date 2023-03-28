@@ -132,10 +132,10 @@ export class Request {
      * @param includeArchived 
      * @returns Request[]
      */
-    public static async getForCreator(user_id: string, status = []) {
+    public static async getForCreator(user_id: string, status : Array<string> = [], offset = 0) {
 
         if (status.length < 1) {
-            return []
+            status = Status.get_all_status_names()
         }
 
         const query = supabase.from(TABLE_NAME)
@@ -149,6 +149,7 @@ export class Request {
             .order('created_at', { ascending: false })
             .eq('user_id', user_id)
             .in('status.name', status)
+            .range(offset, 100)
 
         let { data: requests, error } = await query
 
@@ -167,10 +168,10 @@ export class Request {
      * @param status String[]
      * @returns Request[]
      */
-    public static async getForRepositories(repositories: Repository[], status = []) {
+    public static async getForRepositories(repositories: Repository[], status : Array<string> = [], offset = 0) {
 
         if (status.length < 1) {
-            return []
+            status = Status.get_all_status_names()
         }
 
         const repository_ids = repositories.map(x => x.id)
@@ -185,6 +186,7 @@ export class Request {
             .order('created_at', { ascending: false })
             .in('repository_id', repository_ids)
             .in('status.name', status)
+            .range(offset, 100)
 
         let { data: requests, error } = await query
 
