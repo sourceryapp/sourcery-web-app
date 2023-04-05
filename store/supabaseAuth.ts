@@ -128,11 +128,12 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
         }
         return false
     },
-    async fetchUserMeta({ state, commit }: { state: SupabaseState, commit: Commit }) {
+    async fetchUserMeta({ state, commit, dispatch }: { state: SupabaseState, commit: Commit, dispatch: Dispatch }) {
         if (state.authUser) {
             const meta = await SourceryUser.getById(state.authUser.id)
             if (meta) {
                 commit('setAuthUserMeta', meta.toJSON())
+                dispatch('supabaseUserCache/add_user', meta, { root: true })
                 return true
             }
         }

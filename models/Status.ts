@@ -11,6 +11,10 @@ export class Status {
         this.name = name
     }
 
+    static get_all_status_names() {
+        return ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled']
+    }
+
     public toJSON() {
         return {
             id: this.id,

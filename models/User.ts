@@ -57,4 +57,12 @@ export class User {
         }
         return null
     }
+
+    public static async getByIds(user_ids: Array<string>) {
+        let { data: users, error } = await supabase.from<User>('user').select('*').in('id', user_ids)
+        if ( Array.isArray(users) && users.length > 0 ) {
+            return users.map(x => new User(x))
+        }
+        return []
+    }
 }
