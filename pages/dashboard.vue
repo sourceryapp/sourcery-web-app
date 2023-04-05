@@ -20,21 +20,21 @@
 
       <v-row v-if="isOrgMember">
         <v-col cols="12" lg="6">
-          <card-with-action title="Pending" :number-requests="newJobs.length" action="/requests?status=1">
+          <card-with-action title="Pending" :number-requests="newJobs.length" action="/requests?status=1&o=1">
             <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
             <span v-if="newJobs.length === 0">Out looking for toadstools.<br>No new requests.</span>
           </card-with-action>
-          <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
+          <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4&o=1">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
         </v-col>
         <v-col cols="12" lg="6">
-          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2">
+          <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2&o=1">
             <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
             <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
           </card-with-action>
-          <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4">
+          <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4&o=1">
             <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>

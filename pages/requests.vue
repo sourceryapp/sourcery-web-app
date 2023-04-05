@@ -1,166 +1,74 @@
 <template>
   <v-layout>
     <v-flex xs12 sm10 xl6 offset-sm1 offset-xl3>
-      <h1 class="mb-4">
-        Requests
-      </h1>
-
-      <v-text-field
-        v-model="filter.text"
-        class="request-search-input"
-        outlined
-        clearable
-        prepend-inner-icon="mdi-magnify"
-        placeholder="Search Requests"
-        hide-details
-        :rounded="false"
-      />
-
-      <v-row justify="end">
-        <v-col class="text-right">
-          <v-menu
-            v-model="filterOpen"
-            :close-on-content-click="false"
-            offset-y
-            left
-            bottom
-          >
-            <template #activator="{ on, attrs }">
-              <v-btn
-                text
-                v-bind="attrs"
-                v-on="on"
-              >
-                Filter/Sort By
-                <v-icon>mdi-arrow-down</v-icon>
-              </v-btn>
-            </template>
-
-            <v-card>
-              <v-card-text>
-                <span class="text-uppercase">Status</span>
-                <v-checkbox
-                  v-for="status in statuses"
-                  :key="`statuscheck-${status.id}`"
-                  v-model="filter.status"
-                  :label="status.name"
-                  color="#644ea2"
-                  :value="status.id"
-                  hide-details
-                />
-              </v-card-text>
-            </v-card>
-          </v-menu>
+      <v-row align="center" justify="space-between" class="mb-3">
+        <v-col cols="12" sm="auto">
+          <h1>
+            {{ title }}
+          </h1>
+        </v-col>
+        <v-col class="mb-3 mb-sm-0" cols="auto">
+          <v-btn text @click="switchType">
+            {{ switchTypeButtonText }}
+          </v-btn>
         </v-col>
       </v-row>
 
-      <v-row>
-        <v-col>
-          <v-chip v-for="(s, index) in filter.status" :key="s" class="ma-2" close @click:close="removeStatusFromFilter(index)">
-            {{ statuses.find(x => x.id === s).name }}
-          </v-chip>
-        </v-col>
-      </v-row>
-
-      <v-row v-if="filteredRequests.length > 0">
-        <v-col v-for="request in filteredRequests" :key="request.id" cols="12" md="6">
-          <request-listing :request="request" :client="false" />
-        </v-col>
-      </v-row>
-
-      <v-row v-else>
-        <v-col>
-          <p>No requests for the current filter.</p>
-        </v-col>
-      </v-row>
+      <search-requests ref="requests_search" :type="type" />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
-import { Request } from '~/models/Request'
-import { Status } from '~/models/Status'
-import RequestListing from '~/components/request-listing.vue'
+import { mapGetters } from 'vuex'
+import SearchRequests from '~/components/search/requests.vue'
 
 export default {
     components: {
-        RequestListing
-    },
-    async asyncData ({ route, store }) {
-        const filter = {
-            status: []
-        }
-        if (route.query.status) {
-            filter.status = route.query.status.split(',').map(x => parseInt(x))
-        }
-
-        const user_repositories = store.getters['supabaseAuth/userRepositories']
-        // const user_id = store.getters['supabaseAuth/authUser']?.id
-        const jobs = await Request.getForRepositories(user_repositories, ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled'])
-        // const requests = await Request.getForCreator(user_id, ['Submitted', 'In Progress', 'Complete', 'Archived', 'Cancelled'])
-
-        const statuses = await Status.getAll()
-
-        return {
-            jobs,
-            statuses,
-            filter
-        }
+        SearchRequests
     },
     data () {
         return {
-            filterOpen: false,
-            jobs: [],
-            statuses: [],
-            filter: {
-                status: [],
-                text: ''
-            }
+            manualSwitchType: ''
         }
     },
     computed: {
-        filteredRequests () {
-            let requests = Array.from(this.jobs)
-
-            if (this.filter.text) {
-                requests = requests.filter((x) => {
-                    return x.citation.toLowerCase().includes(this.filter.text.toLowerCase()) || x.request_vendor?.label.toLowerCase().includes(this.filter.text.toLowerCase())
-                })
+        ...mapGetters({
+            hasOrgs: 'supabaseAuth/ownsAnOrganization'
+        }),
+        type () {
+            if (this.manualSwitchType) {
+                return this.manualSwitchType
             }
-
-            if (this.filter.status.length > 0) {
-                requests = requests.filter((x) => {
-                    return this.filter.status.includes(x.status_id)
-                })
+            if (this.$route.query.o) {
+                return 'organization'
             }
-
-            return requests
+            return 'researcher'
+        },
+        title () {
+            if (this.type === 'organization') {
+                return 'Organization Requests'
+            }
+            return 'Personal Requests'
+        },
+        switchTypeButtonText () {
+            let t = 'Switch to '
+            if (this.type === 'researcher') {
+                t += 'organization requests'
+            } else {
+                t += 'personal requests'
+            }
+            return t
         }
     },
     methods: {
-        clearFilter () {
-            this.filter = {
-                status: []
-            }
-        },
-        viewRequest (request) {
-            this.$router.push(`/request/${request.id}`)
-        },
-        removeStatusFromFilter (index) {
-            this.filter.status.splice(index, 1)
+        async switchType () {
+            console.log('switching type')
+            this.$refs.requests_search.clearRequests()
+            this.manualSwitchType = (this.type === 'researcher' && this.hasOrgs) ? 'organization' : 'researcher'
+            await this.$nextTick()
+            this.$refs.requests_search.fetchRequests(true)
         }
     }
 }
 </script>
-
-<style scoped>
-.request-search-input {
-  font-size: 24px;
-}
-</style>
-
-<style>
-.request-search-input input {
-  padding-left: 20px;
-}
-</style>
