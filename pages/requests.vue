@@ -8,7 +8,7 @@
           </h1>
         </v-col>
         <v-col class="mb-3 mb-sm-0" cols="auto">
-          <v-btn text @click="switchType">
+          <v-btn v-if="hasOrgs" text @click="switchType">
             {{ switchTypeButtonText }}
           </v-btn>
         </v-col>
