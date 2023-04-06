@@ -63,7 +63,6 @@ export default {
     },
     methods: {
         async switchType () {
-            console.log('switching type')
             this.$refs.requests_search.clearRequests()
             this.manualSwitchType = (this.type === 'researcher' && this.hasOrgs) ? 'organization' : 'researcher'
             await this.$nextTick()

@@ -241,7 +241,6 @@ export default {
             this.newMessage = ''
             this.sending = true
             this.scrollToBottom()
-            console.log('New Message:', this.newMessage)
             await this.sendChatMessage({
                 vendor: this.isVendor,
                 messageText: this.newMessageWhileSending
@@ -270,8 +269,7 @@ export default {
             this.reportingShowConfirm = true
         },
         async confirmReport () {
-            const result = await this.reportChat()
-            console.log(result)
+            await this.reportChat()
             this.scrollToBottom()
             this.reportingShowConfirm = false
         },

@@ -89,6 +89,16 @@
         </v-col>
       </v-row>
 
+      <v-row v-else class="mt-2">
+        <v-col>
+          <p>
+            No requests yet.  <nuxt-link to="/request/create">
+              Let's make one!
+            </nuxt-link>
+          </p>
+        </v-col>
+      </v-row>
+
       <!-- <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-8">
         <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
           Create<span class="hidden-sm-and-down">&nbsp;Request</span>
