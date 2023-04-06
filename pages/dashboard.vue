@@ -48,6 +48,10 @@
         <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
       </sourcery-card> -->
 
+      <h1 v-if="requests.length > 0 && isOrgMember" class="mb-4">
+        Personal Requests
+      </h1>
+
       <v-alert
         v-if="prospectiveRequestCount > 0"
         border="left"
@@ -59,17 +63,16 @@
       </v-alert>
 
       <user-stat-bar
-        v-if="requests.length > 0"
         :new-count="newRequests.length"
         :progress-count="inProgressRequests.length"
         :completed-count="completedAndArchivedRequests.length"
       />
 
-      <v-row v-if="requests.length > 0">
+      <v-row>
         <v-col cols="12" lg="6">
           <card-with-action title="Pending" :number-requests="newRequests.length" action="/requests?status=1">
             <request-listing v-for="request in newRequestsLimited" :key="`njl-${request.id}`" :request="request" :client="true" />
-            <span v-if="newRequests.length === 0">Out looking for toadstools.<br>No new requests.</span>
+            <span v-if="newRequests.length === 0">No new requests.</span>
           </card-with-action>
           <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
             <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="request" :client="true" />
@@ -79,7 +82,7 @@
         <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressRequests.length" action="/requests?status=2">
             <request-listing v-for="request in inProgressRequestsLimited" :key="`ipjl-${request.id}`" :request="request" :client="true" />
-            <span v-if="inProgressRequests.length === 0">All spells have been cast!<br>No requests in-progress.</span>
+            <span v-if="inProgressRequests.length === 0">No requests in-progress.</span>
           </card-with-action>
           <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
             <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="job" :client="true" />
@@ -89,7 +92,7 @@
         </v-col>
       </v-row>
 
-      <v-row v-else class="mt-2">
+      <v-row v-if="requests.length === 0" class="mt-2">
         <v-col>
           <p>
             No requests yet.  <nuxt-link to="/request/create">
