@@ -8,7 +8,7 @@
             Join Us
           </h1>
           <p>Fill out the form below if you are interested in joining us as an institution or as a researcher during our testing phase.</p>
-          <embed-google-form :link="gformsLink" />
+          <join-us-form />
         </v-flex>
       </v-layout>
     </div>
@@ -19,20 +19,15 @@
 <script>
 import Footer from '~/components/footer'
 import Header from '~/components/purple-header.vue'
-import EmbedGoogleForm from '~/components/embed-google-form.vue'
+import JoinUsForm from '~/components/join-us-form.vue'
 
 export default {
     components: {
         'sourcery-footer': Footer,
         'sourcery-header': Header,
-        EmbedGoogleForm
+        'join-us-form': JoinUsForm
     },
-    layout: 'landing-beta',
-    data () {
-        return {
-            gformsLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfQiW-UJgjb8o6ynACtCDSFFda_BxloIQ90NnQMNnqRIIjprw/viewform?embedded=true'
-        }
-    }
+    layout: 'landing-beta'
 }
 </script>
 
