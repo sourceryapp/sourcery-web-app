@@ -3,10 +3,7 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 
 export const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY,
-    {
-        multiTab: false
-    }
+    process.env.SUPABASE_KEY
 )
 
 export const postgrest = new PostgrestClient(process.env.SUPABASE_URL)

@@ -25,18 +25,19 @@
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
           v-model="clientName"
-          label="Your name*"
+          :label="clientNameLabel"
           outlined
           required
           :rules="[$sourceryForms.rules.required]"
         />
         <v-text-field
-          label="Your Email"
+          :label="clientEmailLabel"
           outlined
           readonly
           disabled
           :value="clientEmail"
         />
+        <user-lookup-modal :seed-email="clientEmail" @user-selected="clientSelected" />
         <v-text-field
           v-model="label"
           label="Request Title*"
@@ -78,7 +79,7 @@ import { Repository } from '~/models/Repository'
 import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
-    async asyncData ({ store }) {
+    async asyncData () {
         const repositories = await Repository.getActive()
 
         return {
@@ -101,10 +102,26 @@ export default {
             getCitation: 'supabaseCreate/citation',
             getClientName: 'supabaseCreate/clientName',
             getClient: 'supabaseCreate/client',
-            getClientEmail: 'supabaseCreate/clientEmail'
+            getClientEmail: 'supabaseCreate/clientEmail',
+            ownsAnOrganization: 'supabaseAuth/ownsAnOrganization'
         }),
         clientEmail () {
             return this.getClientEmail
+        },
+        clientIsUser () {
+            return !(this.getClient && this.getClient.id && this.getClient.id !== this.authUser.id)
+        },
+        clientEmailLabel () {
+            if (!this.clientIsUser) {
+                return 'Client Email'
+            }
+            return 'Your Email'
+        },
+        clientNameLabel () {
+            if (!this.clientIsUser) {
+                return 'Client Name'
+            }
+            return 'Your Name'
         },
         selectedRepository: {
             get () {
@@ -186,6 +203,9 @@ export default {
             } else if (Array.isArray(r) && r[0] && r[0].id) {
                 this.$router.push(`/request/${r[0].id}`)
             }
+        },
+        clientSelected (user) {
+            this.setClient(user)
         }
     }
 }

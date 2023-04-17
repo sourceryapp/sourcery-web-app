@@ -1,5 +1,5 @@
 import { supabase } from '~/plugins/supabase'
-import type { definitions } from '~/types/supabase'
+
 
 const TABLE_NAME = 'attachments'
 const STORAGE_BUCKET_NAME = 'attachments'

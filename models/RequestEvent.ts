@@ -1,5 +1,4 @@
 import { supabase } from '~/plugins/supabase'
-import type { definitions } from '~/types/supabase'
 import { Status } from '~/models/Status'
 import { User } from '~/models/User'
 

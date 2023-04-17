@@ -30,7 +30,19 @@ export type ProspectiveParams = {
     token?: string
 }
 
-export const notify = async ({ action, user_id, request_id, message_text, token, rp_id } : NotifyParams) => {
+export type GetOrCreateUserParams = {
+    email: string,
+    token?: string
+}
+
+function get_function_headers(token: string) {
+    return {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+}
+
+export async function notify({ action, user_id, request_id, message_text, token, rp_id } : NotifyParams) {
     /** Bit clunky at the moment, but toggle this if testing emails. */
     if (!is_prod || !token) {
         return false
@@ -46,10 +58,7 @@ export const notify = async ({ action, user_id, request_id, message_text, token,
     }
 
     const result = await axios.post(`${functions_base}/${fname}`, data, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+        headers: get_function_headers(token)
     })
 
     return result
@@ -75,10 +84,28 @@ export async function prospective ({ id, user_id, title, description, repository
     console.log(url)
 
     const result = await axios.post(url, data, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+        headers: get_function_headers(token)
+    })
+
+    return result
+}
+
+
+export async function get_or_create_user({ email, token } : GetOrCreateUserParams) {
+    if ( !token || !email ) {
+        return false
+    }
+
+    const fname = 'get_or_create_user'
+
+    const data = {
+        email
+    }
+
+    const url = `${functions_base}/${fname}`
+
+    const result = await axios.post(url, data, {
+        headers: get_function_headers(token)
     })
 
     return result
