@@ -301,6 +301,18 @@ export default {
 
 .request-card {
   height: 108px;
+
+  @media screen and (max-width: 380px) {
+    height: 130px;
+  }
+
+  @media screen and (max-width: 333px) {
+    height: 152px;
+  }
+
+  @media screen and (max-width: 300px) {
+    height: 174px;
+  }
 }
 
 .row-flex {
