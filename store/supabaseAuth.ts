@@ -97,6 +97,7 @@ export const mutations: MutationTree<SupabaseState> = {
         state.redirectHome = value
     },
     clear(state: SupabaseState) {
+        localStorage.removeItem('sourceryInProgressRequest')
         const initial = initialState()
         state.authUser = initial.authUser
         state.authUserMeta = initial.authUserMeta

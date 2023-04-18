@@ -1,6 +1,7 @@
 export default function ({ store, redirect, route, $config }) {
     const vars = {}
     // REGEX to match hash and query params (#= and &=)
+    // See /login/redirect page, /email/reset page for other ways to do this in future.
     route.fullPath.replace(/[?&|?#]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
         vars[key] = value
     })
