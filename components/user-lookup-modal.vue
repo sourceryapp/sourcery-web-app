@@ -4,6 +4,7 @@
       <v-card>
         <v-card-title>Select a Patron</v-card-title>
         <v-card-text>
+          <p>As an organization owner, you can submit requests on behalf of another user.  If the user does not yet exist, an account will be created for them and they will be sent a confirmation email upon clicking "Verify User".</p>
           <v-text-field
             v-model="email"
             type="email"
@@ -14,7 +15,9 @@
           />
 
           <p v-if="confirmedText">
-            <v-icon>mdi-check</v-icon>
+            <v-icon :class="confirmedIcon">
+              {{ confirmedIcon }}
+            </v-icon>
             {{ confirmedText }}
           </p>
         </v-card-text>
@@ -29,7 +32,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn @click="openDialog">
+    <v-btn color="primary" class="mb-4" @click="openDialog">
       Creating on behalf of a patron?
     </v-btn>
   </div>
@@ -66,8 +69,16 @@ export default {
         confirmedText () {
             if (this.confirmed && this.retrievedUser) {
                 return `Confirmed creating on behalf of ${this.retrievedUser.email}`
+            } else if (this.confirming) {
+                return 'Confirming...'
             }
             return false
+        },
+        confirmedIcon () {
+            if (this.confirming) {
+                return 'mdi-refresh'
+            }
+            return 'mdi-check'
         },
         confirmedAndHasValidUser () {
             return this.confirmed && this.retrievedUser && this.retrievedUser.id && !this.confirming
@@ -87,7 +98,10 @@ export default {
     },
     methods: {
         cancel () {
-            this.close()
+            this.reset()
+            this.open = false
+        },
+        reset () {
             this.email = ''
             this.confirming = false
             this.created = false
@@ -123,6 +137,7 @@ export default {
                 email: this.retrievedUser.email,
                 id: this.retrievedUser.id
             }))
+            this.reset()
             this.open = false
         },
         openDialog () {
@@ -135,5 +150,15 @@ export default {
 <style lang="scss">
 .user-lookup-modal-content {
     background: black;
+}
+
+.mdi-refresh {
+    animation:spin 2s linear infinite;
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform:rotate(360deg);
+    }
 }
 </style>

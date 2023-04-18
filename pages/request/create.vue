@@ -22,6 +22,7 @@
       <p v-if="selectedRepository">
         Currently requesting from {{ currentlyRequestingFromText }}
       </p>
+      <user-lookup-modal v-if="ownsAnOrganization || isAdmin" :seed-email="clientEmail" @user-selected="clientSelected" />
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
           v-model="clientName"
@@ -37,7 +38,6 @@
           disabled
           :value="clientEmail"
         />
-        <user-lookup-modal :seed-email="clientEmail" @user-selected="clientSelected" />
         <v-text-field
           v-model="label"
           label="Request Title*"
@@ -97,6 +97,7 @@ export default {
         ...mapGetters({
             authUser: 'supabaseAuth/authUser',
             authUserMeta: 'supabaseAuth/authUserMeta',
+            isAdmin: 'supabaseAuth/isAdmin',
             getSelectedRepository: 'supabaseCreate/repository',
             getLabel: 'supabaseCreate/label',
             getCitation: 'supabaseCreate/citation',
