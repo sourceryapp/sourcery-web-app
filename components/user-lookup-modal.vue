@@ -14,12 +14,18 @@
             :disabled="inputDisabled"
           />
 
-          <p v-if="confirmedText">
-            <v-icon :class="confirmedIcon">
-              {{ confirmedIcon }}
-            </v-icon>
-            {{ confirmedText }}
-          </p>
+          <v-row v-if="confirmedText" align="center">
+            <v-col cols="auto">
+              <v-icon :class="confirmedIcon">
+                {{ confirmedIcon }}
+              </v-icon>
+            </v-col>
+            <v-col>
+              <p class="mb-0">
+                {{ confirmedText }}
+              </p>
+            </v-col>
+          </v-row>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -32,8 +38,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn color="primary" class="mb-4" @click="openDialog">
-      Creating on behalf of a patron?
+    <v-btn color="primary" @click="openDialog">
+      Create On Behalf of Patron
     </v-btn>
   </div>
 </template>
@@ -68,7 +74,7 @@ export default {
         },
         confirmedText () {
             if (this.confirmed && this.retrievedUser) {
-                return `Confirmed creating on behalf of ${this.retrievedUser.email}`
+                return `You are now creating a request on behalf of ${this.retrievedUser.email}`
             } else if (this.confirming) {
                 return 'Confirming...'
             }

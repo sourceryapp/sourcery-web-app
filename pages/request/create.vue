@@ -22,7 +22,18 @@
       <p v-if="selectedRepository">
         Currently requesting from {{ currentlyRequestingFromText }}
       </p>
-      <user-lookup-modal v-if="ownsAnOrganization || isAdmin" :seed-email="clientEmail" @user-selected="clientSelected" />
+
+      <v-row align="center" class="mb-4">
+        <v-col v-if="!clientIsUser" cols="auto">
+          <v-btn @click="revertToClient">
+            Revert
+          </v-btn>
+        </v-col>
+        <v-col>
+          <user-lookup-modal v-if="ownsAnOrganization || isAdmin" :seed-email="clientEmail" @user-selected="clientSelected" />
+        </v-col>
+      </v-row>
+
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
           v-model="clientName"
@@ -207,6 +218,9 @@ export default {
         },
         clientSelected (user) {
             this.setClient(user)
+        },
+        revertToClient () {
+            this.setClient(this.authUser)
         }
     }
 }
