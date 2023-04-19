@@ -14,7 +14,6 @@
             <p>What is the name of your institution?</p>
             <v-text-field
               v-model="institutionName"
-              v-form
               :rules="institutionNameRules"
               required
               dense
@@ -29,7 +28,6 @@
             <p>What is the name of the repository?</p>
             <v-text-field
               v-model="repository"
-              v-form
               :rules="repositoryRules"
               required
               dense
@@ -51,7 +49,6 @@
             </span>
             <v-text-field
               v-model="accountEmail"
-              v-form
               :rules="accountEmailRules"
               required
               dense
@@ -66,7 +63,6 @@
             <p>What is the repository's website?</p>
             <v-text-field
               v-model="repositoryWebsite"
-              v-form
               :rules="repositoryWebsiteRules"
               required
               dense
@@ -76,130 +72,175 @@
             />
           </v-col>
         </v-row>
-        <v-row dense class="pb-0">
+        <v-container class="mx-0 px-0 my-0 py-0">
+          <v-row dense class="pb-0">
+            <v-col sm="12">
+              <p>What is the Institution's physical address?</p>
+              <v-row dense>
+                <v-col sm="12" dense>
+                  <v-text-field
+                    v-model="institutionAddress"
+                    :rules="institutionAddressRules"
+                    required
+                    dense
+                    outlined
+                    placeholder="Street Address*"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+              </v-row>
+              <v-row dense class="my-0 py-0">
+                <v-col sm="4">
+                  <v-text-field
+                    v-model="institutionCity"
+                    :rules="institutionCityRules"
+                    required
+                    dense
+                    outlined
+                    placeholder="City*"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+                <v-col sm="4">
+                  <v-select
+                    v-model="institutionState"
+                    :items="states"
+                    :rules="[v => !!v || 'State is required']"
+                    required
+                    dense
+                    item-value="code"
+                    item-text="name"
+                    placeholder="State*"
+                    outlined
+                    clearable
+                    class="italic-placeholder"
+                  />
+                </v-col>
+                <v-col sm="4">
+                  <v-text-field
+                    v-model="institutionZip"
+                    :rules="institutionZipRules"
+                    required
+                    dense
+                    outlined
+                    placeholder="Zip Code*"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-row v-if="!addressTwo" dense class="d-flex justify-end text-center">
+          <v-btn small text color="primary" class="mb-2" @click="addAddress">
+            Add another address
+            <v-icon dark>
+              mdi-plus
+            </v-icon>
+          </v-btn>
+        </v-row>
+        <v-container v-if="addressTwo" class="mx-0 my-0 px-0 py-0">
+          <v-row dense class="pb-0">
+            <v-col sm="12">
+              <v-row dense>
+                <v-col sm="12" dense>
+                  <v-text-field
+                    v-model="institutionAddressTwo"
+                    dense
+                    outlined
+                    placeholder="Address Line 2"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+              </v-row>
+              <v-row dense class="my-0 py-0">
+                <v-col sm="4">
+                  <v-text-field
+                    v-model="institutionCityTwo"
+                    dense
+                    outlined
+                    placeholder="City"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+                <v-col sm="4">
+                  <v-select
+                    v-model="institutionStateTwo"
+                    :items="states"
+                    dense
+                    item-value="code"
+                    item-text="name"
+                    placeholder="State"
+                    outlined
+                    clearable
+                    class="italic-placeholder"
+                  />
+                </v-col>
+                <v-col sm="4">
+                  <v-text-field
+                    v-model="institutionZipTwo"
+                    required
+                    dense
+                    outlined
+                    placeholder="Zip Code"
+                    class="italic-placeholder"
+                  />
+                </v-col>
+              </v-row>
+            </v-col>
+          </v-row>
+        </v-container>
+        <v-row dense>
           <v-col sm="12">
-            <p>What is the Institution's physical address?</p>
-            <v-row dense>
-              <v-col sm="7" dense>
-                <v-text-field
-                  v-model="institutionAddress"
-                  v-form
-                  :rules="institutionAddressRules"
-                  required
-                  dense
-                  outlined
-                  placeholder="Street Address*"
-                  class="italic-placeholder"
-                />
-              </v-col>
-              <v-col sm="5" dense>
-                <v-text-field
-                  v-model="institutionAddress2"
-                  v-form
-                  dense
-                  outlined
-                  placeholder="Address Line 2"
-                  class="italic-placeholder"
-                />
-              </v-col>
-            </v-row>
-            <v-row dense class="mt-0 pt-0 location-row">
-              <v-col sm="4">
-                <v-text-field
-                  v-model="institutionCity"
-                  v-form
-                  :rules="institutionCityRules"
-                  required
-                  dense
-                  outlined
-                  placeholder="City*"
-                  class="italic-placeholder"
-                />
-              </v-col>
-              <v-col sm="4">
-                <v-select
-                  v-model="institutionState"
-                  v-form
-                  :items="states"
-                  :rules="[v => !!v || 'State is required']"
-                  required
-                  dense
-                  item-value="code"
-                  item-text="name"
-                  placeholder="State*"
-                  outlined
-                  clearable
-                  class="italic-placeholder"
-                />
-              </v-col>
-              <v-col sm="4">
-                <v-text-field
-                  v-model="institutionZip"
-                  v-form
-                  :rules="institutionZipRules"
-                  required
-                  dense
-                  outlined
-                  placeholder="Zip Code*"
-                  class="italic-placeholder"
-                />
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col sm="12">
-                <p>If you have a repository photo that you would like to be included on the Sourcery site, please email it to sourceryapp@gmail.com</p>
-                <v-radio-group v-model="photoOption">
-                  <v-radio label="I am sending a photo to the email address" value="sending" />
-                  <v-radio label="I am not sending a photo to the email address" value="not_sending" />
-                </v-radio-group>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col sm="12">
-                <p>Who should we contact for any additional details?</p>
-                <v-text-field
-                  v-model="contactName"
-                  v-form
-                  :rules="contactNameRules"
-                  required
-                  dense
-                  outlined
-                  placeholder="First and Last Name*"
-                  class="italic-placeholder"
-                />
-                <v-text-field
-                  v-model="contactEmail"
-                  v-form
-                  :rules="contactEmailRules"
-                  required
-                  dense
-                  outlined
-                  placeholder="Contact Email Address*"
-                  class="italic-placeholder"
-                />
-              </v-col>
-            </v-row>
-            <v-row dense class="d-flex justify-space-between mt-0 mb-2">
-              <v-col cols="auto">
-                <v-btn
-                  large
-                  color="rgb(146, 79, 190)"
-                  @click="submitForm"
-                >
-                  <span class="font-weight-medium" style="color: white;">Submit</span>
-                </v-btn>
-              </v-col>
-              <v-col cols="auto">
-                <v-btn
-                  large
-                  text
-                  color="rgb(146, 79, 190)"
-                  @click="resetForm"
-                >
-                  <span class="font-weight-medium" style="color: white;">Clear Form</span>
-                </v-btn>
-              </v-col>
-            </v-row>
+            <p>If you have a repository photo that you would like to be included on the Sourcery site, please email it to sourceryapp@gmail.com</p>
+            <v-radio-group v-model="photoOption">
+              <v-radio label="I am sending a photo to the email address" value="sending" />
+              <v-radio label="I am not sending a photo to the email address" value="not_sending" />
+            </v-radio-group>
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col sm="12">
+            <p>Who should we contact for any additional details?</p>
+            <v-text-field
+              v-model="contactName"
+              :rules="contactNameRules"
+              required
+              dense
+              outlined
+              placeholder="First and Last Name*"
+              class="italic-placeholder"
+            />
+            <v-text-field
+              v-model="contactEmail"
+              :rules="contactEmailRules"
+              required
+              dense
+              outlined
+              placeholder="Contact Email Address*"
+              class="italic-placeholder"
+            />
+          </v-col>
+        </v-row>
+        <v-row dense class="d-flex justify-space-between mt-0 mb-2">
+          <v-col cols="auto">
+            <v-btn
+              large
+              color="rgb(146, 79, 190)"
+              @click="submitForm"
+            >
+              <span class="font-weight-medium" style="color: white;">Submit</span>
+            </v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              large
+              text
+              color="rgb(146, 79, 190)"
+              @click="resetForm"
+            >
+              <span class="font-weight-medium" style="color: white;">Clear Form</span>
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -217,10 +258,15 @@ export default {
         accountEmail: '',
         repositoryWebsite: '',
         institutionAddress: '',
-        institutionAddress2: '',
         institutionCity: '',
         institutionState: '',
         institutionZip: '',
+        // Do not add a second address by default
+        institutionAddressTwo: '',
+        institutionCityTwo: '',
+        institutionStateTwo: '',
+        institutionZipTwo: '',
+        addressTwo: false,
         photoOption: '',
         contactName: '',
         contactEmail: '',
@@ -255,78 +301,74 @@ export default {
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
         ],
         states: [
-            { name: 'AL', code: 'Alabama' },
-            { name: 'AK', code: 'Alaska' },
-            { name: 'AZ', code: 'Arizona' },
-            { name: 'AR', code: 'Arkansas' },
-            { name: 'CA', code: 'California' },
-            { name: 'CO', code: 'Colorado' },
-            { name: 'CT', code: 'Connecticut' },
-            { name: 'DE', code: 'Delaware' },
-            { name: 'DC', code: 'District Of Columbia' },
-            { name: 'FL', code: 'Florida' },
-            { name: 'GA', code: 'Georgia' },
-            { name: 'HI', code: 'Hawaii' },
-            { name: 'ID', code: 'Idaho' },
-            { name: 'IL', code: 'Illinois' },
-            { name: 'IN', code: 'Indiana' },
-            { name: 'IA', code: 'Iowa' },
-            { name: 'KS', code: 'Kansas' },
-            { name: 'KY', code: 'Kentucky' },
-            { name: 'LA', code: 'Louisiana' },
-            { name: 'ME', code: 'Maine' },
-            { name: 'MD', code: 'Maryland' },
-            { name: 'MA', code: 'Massachusetts' },
-            { name: 'MI', code: 'Michigan' },
-            { name: 'MN', code: 'Minnesota' },
-            { name: 'MS', code: 'Mississippi' },
-            { name: 'MO', code: 'Missouri' },
-            { name: 'MT', code: 'Montana' },
-            { name: 'NE', code: 'Nebraska' },
-            { name: 'NV', code: 'Nevada' },
-            { name: 'NH', code: 'New Hampshire' },
-            { name: 'NJ', code: 'New Jersey' },
-            { name: 'NM', code: 'New Mexico' },
-            { name: 'NY', code: 'New York' },
-            { name: 'NC', code: 'North Carolina' },
-            { name: 'ND', code: 'North Dakota' },
-            { name: 'OH', code: 'Ohio' },
-            { name: 'OK', code: 'Oklahoma' },
-            { name: 'OR', code: 'Oregon' },
-            { name: 'PA', code: 'Pennsylvania' },
-            { name: 'RI', code: 'Rhode Island' },
-            { name: 'SC', code: 'South Carolina' },
-            { name: 'SD', code: 'South Dakota' },
-            { name: 'TN', code: 'Tennessee' },
-            { name: 'TX', code: 'Texas' },
-            { name: 'UT', code: 'Utah' },
-            { name: 'VT', code: 'Vermont' },
-            { name: 'VA', code: 'Virginia' },
-            { name: 'WA', code: 'Washington' },
-            { name: 'WV', code: 'West Virginia' },
-            { name: 'WI', code: 'Wisconsin' },
-            { name: 'WY', code: 'Wyoming' }
-        ],
-        selectedState: ''
+            { code: 'AL', name: 'Alabama' },
+            { code: 'AK', name: 'Alaska' },
+            { code: 'AZ', name: 'Arizona' },
+            { code: 'AR', name: 'Arkansas' },
+            { code: 'CA', name: 'California' },
+            { code: 'CO', name: 'Colorado' },
+            { code: 'CT', name: 'Connecticut' },
+            { code: 'DE', name: 'Delaware' },
+            { code: 'DC', name: 'District Of Columbia' },
+            { code: 'FL', name: 'Florida' },
+            { code: 'GA', name: 'Georgia' },
+            { code: 'HI', name: 'Hawaii' },
+            { code: 'ID', name: 'Idaho' },
+            { code: 'IL', name: 'Illinois' },
+            { code: 'IN', name: 'Indiana' },
+            { code: 'IA', name: 'Iowa' },
+            { code: 'KS', name: 'Kansas' },
+            { code: 'KY', name: 'Kentucky' },
+            { code: 'LA', name: 'Louisiana' },
+            { code: 'ME', name: 'Maine' },
+            { code: 'MD', name: 'Maryland' },
+            { code: 'MA', name: 'Massachusetts' },
+            { code: 'MI', name: 'Michigan' },
+            { code: 'MN', name: 'Minnesota' },
+            { code: 'MS', name: 'Mississippi' },
+            { code: 'MO', name: 'Missouri' },
+            { code: 'MT', name: 'Montana' },
+            { code: 'NE', name: 'Nebraska' },
+            { code: 'NV', name: 'Nevada' },
+            { code: 'NH', name: 'New Hampshire' },
+            { code: 'NJ', name: 'New Jersey' },
+            { code: 'NM', name: 'New Mexico' },
+            { code: 'NY', name: 'New York' },
+            { code: 'NC', name: 'North Carolina' },
+            { code: 'ND', name: 'North Dakota' },
+            { code: 'OH', name: 'Ohio' },
+            { code: 'OK', name: 'Oklahoma' },
+            { code: 'OR', name: 'Oregon' },
+            { code: 'PA', name: 'Pennsylvania' },
+            { code: 'RI', name: 'Rhode Island' },
+            { code: 'SC', name: 'South Carolina' },
+            { code: 'SD', name: 'South Dakota' },
+            { code: 'TN', name: 'Tennessee' },
+            { code: 'TX', name: 'Texas' },
+            { code: 'UT', name: 'Utah' },
+            { code: 'VT', name: 'Vermont' },
+            { code: 'VA', name: 'Virginia' },
+            { code: 'WA', name: 'Washington' },
+            { code: 'WV', name: 'West Virginia' },
+            { code: 'WI', name: 'Wisconsin' },
+            { code: 'WY', name: 'Wyoming' }
+        ]
     }),
     methods: {
         submitForm () {
-            this.validate()
-        },
-        resetForm () {
-            this.reset()
-            this.resetValidation()
-        },
-        validate () {
             if (this.$refs.form.validate()) {
                 this.$emit('submit-form', 'true')
             }
         },
-        reset () {
+        resetForm () {
+            if (this.addressTwo) {
+                this.addressTwo = false
+            }
             this.$refs.form.reset()
-        },
-        resetValidation () {
             this.$refs.form.resetValidation()
+        },
+        addAddress () {
+            this.addressTwo = true
         }
     }
 }
