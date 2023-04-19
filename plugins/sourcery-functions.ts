@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { supabase } from '~/plugins/supabase'
 
 const supabase_url_base = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace('.supabase.co', '') : ''
 let functions_base = supabase_url_base + '.functions.supabase.co'
@@ -31,8 +32,7 @@ export type ProspectiveParams = {
 }
 
 export type GetOrCreateUserParams = {
-    email: string,
-    token?: string
+    email: string
 }
 
 function get_function_headers(token: string) {
@@ -91,22 +91,24 @@ export async function prospective ({ id, user_id, title, description, repository
 }
 
 
-export async function get_or_create_user({ email, token } : GetOrCreateUserParams) {
-    if ( !token || !email ) {
+export async function get_or_create_user({ email } : GetOrCreateUserParams) {
+    if ( !email ) {
         return false
     }
 
     const fname = 'get_or_create_user'
-
-    const data = {
+    const request_data = {
         email
     }
 
-    const url = `${functions_base}/${fname}`
-
-    const result = await axios.post(url, data, {
-        headers: get_function_headers(token)
+    const { data, error } = await supabase.functions.invoke(fname, {
+        body: JSON.stringify(request_data)
     })
 
-    return result
+    if ( error ) {
+        console.log(error)
+        return false
+    }
+
+    return data
 }

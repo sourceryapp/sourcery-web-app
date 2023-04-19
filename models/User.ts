@@ -69,13 +69,10 @@ export class User {
 
     public static async getOrSignUp(email : string) {
         // Note - this can only be called successfully by admins or org owners.
-        const result = await get_or_create_user({
-            email,
-            token: await getToken()
-        })
+        const result = await get_or_create_user({ email })
 
-        if ( result && result.status === 200 && result.data?.data ) {
-            return result.data.data
+        if ( result && result.status === 'success' && result.data ) {
+            return result.data
         }
 
         return false
