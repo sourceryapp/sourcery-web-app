@@ -21,7 +21,7 @@ export default async function setStore ({ store, route, app: { router } }) {
     supabase.auth.onAuthStateChange(async (_, session) => {
         const hasPasswordResetToken = store.getters['supabaseAuth/resetAccessToken']
 
-        console.log(_, session)
+        // console.log(_, session)
 
         if (_ === 'SIGNED_OUT') {
             store.commit('supabaseChat/clear')

@@ -20,10 +20,8 @@ export default {
             if (!this.repository) {
                 return 'None Selected'
             }
-            if (typeof this.repository === 'string') {
-                return `Custom Entry: ${this.repository}`
-            }
-            return this.repository.organization.name
+
+            return this.$utils.repositoryDisplayText(this.repository)
         }
     },
     methods: {

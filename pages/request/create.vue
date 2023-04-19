@@ -9,7 +9,7 @@
       </h2>
 
       <v-img
-        src="/img/fallbacks/default-header-80opat.jpg"
+        :src="selectedRepositoryImageUrl"
         max-height="200"
         class="repository-image mb-6 rounded-lg"
       />
@@ -177,13 +177,13 @@ export default {
             return typeof this.selectedRepository === 'string'
         },
         currentlyRequestingFromText () {
-            if (!this.selectedRepository) {
-                return ''
+            return this.$utils.repositoryDisplayText(this.selectedRepository)
+        },
+        selectedRepositoryImageUrl () {
+            if (this.selectedRepository && this.selectedRepository.featured_image?.url) {
+                return this.selectedRepository.featured_image?.url
             }
-            if (typeof this.selectedRepository === 'string') {
-                return this.selectedRepository
-            }
-            return `${this.selectedRepository.name} - ${this.selectedRepository.organization.name}`
+            return this.$utils.defaultRepositoryPhoto()
         }
     },
     mounted () {
