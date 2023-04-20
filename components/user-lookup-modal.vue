@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title>Select a Patron</v-card-title>
         <v-card-text>
-          <p>As an organization owner, you can submit requests on behalf of another user.  If the user does not yet exist, an account will be created for them and they will be sent a confirmation email upon clicking "Verify User".</p>
+          <p>As an organization owner, you can submit requests on behalf of another user.  If the user does not yet exist, the user will be sent an invitation to join Sourcery upon clicking "Verify User".</p>
           <v-text-field
             v-model="email"
             type="email"
