@@ -1,5 +1,5 @@
 import { supabase } from '~/plugins/supabase'
-import type { definitions } from '~/types/supabase'
+
 import { Repository } from '~/models/Repository'
 import { FeaturedImage } from '~/models/FeaturedImage'
 

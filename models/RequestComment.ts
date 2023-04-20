@@ -1,5 +1,4 @@
 import { supabase } from '~/plugins/supabase'
-import type { definitions } from '~/types/supabase'
 import type { Request } from '~/models/Request'
 
 const TABLE_NAME = 'request_comments'

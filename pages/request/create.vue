@@ -9,7 +9,7 @@
       </h2>
 
       <v-img
-        src="/img/fallbacks/default-header-80opat.jpg"
+        :src="selectedRepositoryImageUrl"
         max-height="200"
         class="repository-image mb-6 rounded-lg"
       />
@@ -22,16 +22,28 @@
       <p v-if="selectedRepository">
         Currently requesting from {{ currentlyRequestingFromText }}
       </p>
+
+      <v-row align="center" class="mb-4">
+        <v-col v-if="!clientIsUser" cols="auto">
+          <v-btn @click="revertToClient">
+            Revert
+          </v-btn>
+        </v-col>
+        <v-col>
+          <user-lookup-modal v-if="ownsAnOrganization || isAdmin" :seed-email="clientEmail" @user-selected="clientSelected" />
+        </v-col>
+      </v-row>
+
       <v-form ref="createRequestForm" v-model="formValid" lazy-validation>
         <v-text-field
           v-model="clientName"
-          label="Your name*"
+          :label="clientNameLabel"
           outlined
           required
           :rules="[$sourceryForms.rules.required]"
         />
         <v-text-field
-          label="Your Email"
+          :label="clientEmailLabel"
           outlined
           readonly
           disabled
@@ -78,7 +90,7 @@ import { Repository } from '~/models/Repository'
 import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
-    async asyncData ({ store }) {
+    async asyncData () {
         const repositories = await Repository.getActive()
 
         return {
@@ -96,15 +108,32 @@ export default {
         ...mapGetters({
             authUser: 'supabaseAuth/authUser',
             authUserMeta: 'supabaseAuth/authUserMeta',
+            isAdmin: 'supabaseAuth/isAdmin',
             getSelectedRepository: 'supabaseCreate/repository',
             getLabel: 'supabaseCreate/label',
             getCitation: 'supabaseCreate/citation',
             getClientName: 'supabaseCreate/clientName',
             getClient: 'supabaseCreate/client',
-            getClientEmail: 'supabaseCreate/clientEmail'
+            getClientEmail: 'supabaseCreate/clientEmail',
+            ownsAnOrganization: 'supabaseAuth/ownsAnOrganization'
         }),
         clientEmail () {
             return this.getClientEmail
+        },
+        clientIsUser () {
+            return !(this.getClient && this.getClient.id && this.getClient.id !== this.authUser.id)
+        },
+        clientEmailLabel () {
+            if (!this.clientIsUser) {
+                return 'Client Email'
+            }
+            return 'Your Email'
+        },
+        clientNameLabel () {
+            if (!this.clientIsUser) {
+                return 'Client Name'
+            }
+            return 'Your Name'
         },
         selectedRepository: {
             get () {
@@ -148,13 +177,13 @@ export default {
             return typeof this.selectedRepository === 'string'
         },
         currentlyRequestingFromText () {
-            if (!this.selectedRepository) {
-                return ''
+            return this.$utils.repositoryDisplayText(this.selectedRepository)
+        },
+        selectedRepositoryImageUrl () {
+            if (this.selectedRepository && this.selectedRepository.featured_image?.url) {
+                return this.selectedRepository.featured_image?.url
             }
-            if (typeof this.selectedRepository === 'string') {
-                return this.selectedRepository
-            }
-            return `${this.selectedRepository.name} - ${this.selectedRepository.organization.name}`
+            return this.$utils.defaultRepositoryPhoto()
         }
     },
     mounted () {
@@ -186,6 +215,12 @@ export default {
             } else if (Array.isArray(r) && r[0] && r[0].id) {
                 this.$router.push(`/request/${r[0].id}`)
             }
+        },
+        clientSelected (user) {
+            this.setClient(user)
+        },
+        revertToClient () {
+            this.setClient(this.authUser)
         }
     }
 }

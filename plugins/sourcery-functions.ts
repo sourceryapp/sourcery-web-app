@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { supabase } from '~/plugins/supabase'
 
 const supabase_url_base = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace('.supabase.co', '') : ''
 let functions_base = supabase_url_base + '.functions.supabase.co'
@@ -30,7 +31,18 @@ export type ProspectiveParams = {
     token?: string
 }
 
-export const notify = async ({ action, user_id, request_id, message_text, token, rp_id } : NotifyParams) => {
+export type GetOrCreateUserParams = {
+    email: string
+}
+
+function get_function_headers(token: string) {
+    return {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+}
+
+export async function notify({ action, user_id, request_id, message_text, token, rp_id } : NotifyParams) {
     /** Bit clunky at the moment, but toggle this if testing emails. */
     if (!is_prod || !token) {
         return false
@@ -46,10 +58,7 @@ export const notify = async ({ action, user_id, request_id, message_text, token,
     }
 
     const result = await axios.post(`${functions_base}/${fname}`, data, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+        headers: get_function_headers(token)
     })
 
     return result
@@ -75,11 +84,31 @@ export async function prospective ({ id, user_id, title, description, repository
     console.log(url)
 
     const result = await axios.post(url, data, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
+        headers: get_function_headers(token)
     })
 
     return result
+}
+
+
+export async function get_or_create_user({ email } : GetOrCreateUserParams) {
+    if ( !email ) {
+        return false
+    }
+
+    const fname = 'get_or_create_user'
+    const request_data = {
+        email
+    }
+
+    const { data, error } = await supabase.functions.invoke(fname, {
+        body: JSON.stringify(request_data)
+    })
+
+    if ( error ) {
+        console.log(error)
+        return false
+    }
+
+    return data
 }
