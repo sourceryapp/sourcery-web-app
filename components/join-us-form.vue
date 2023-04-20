@@ -361,7 +361,12 @@ export default {
             if (this.$refs.form.validate()) {
                 this.$emit('submit-form', 'true')
 
-                const addressTwo = this.institutionAddressTwo + ', ' + this.institutionCityTwo + ' ' + this.institutionStateTwo + ' ' + this.institutionZipTwo
+                let addressTwoInsert = ''
+                if (this.addressTwo) {
+                    addressTwoInsert = this.institutionAddressTwo + ', ' + this.institutionCityTwo + ', ' + this.institutionStateTwo + ' ' + this.institutionZipTwo
+                } else {
+                    addressTwoInsert = ''
+                }
 
                 const { data, error } = await supabase
                     .from('institution-ingestion')
@@ -375,7 +380,7 @@ export default {
                             city: this.institutionCity,
                             state: this.institutionState,
                             zip: this.institutionZip,
-                            address_line_2: addressTwo,
+                            address_line_2: addressTwoInsert,
                             photo_option: this.photoOption,
                             contact_name: this.contactName,
                             contact_email: this.contactEmail
