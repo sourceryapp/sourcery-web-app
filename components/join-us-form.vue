@@ -179,7 +179,7 @@
                 <v-col sm="4">
                   <v-text-field
                     v-model="institutionZipTwo"
-                    required
+                    :rules="[v => /^\d{5}$/.test(v) || 'Zip code must be 5 digits']"
                     dense
                     outlined
                     placeholder="Zip Code"
@@ -249,6 +249,8 @@
 </template>
 
 <script>
+import { supabase } from '~/plugins/supabase'
+
 export default {
     name: 'JoinUsForm',
     data: () => ({
@@ -355,9 +357,35 @@ export default {
         ]
     }),
     methods: {
-        submitForm () {
+        async submitForm () {
             if (this.$refs.form.validate()) {
                 this.$emit('submit-form', 'true')
+
+                const addressTwo = this.institutionAddressTwo + ', ' + this.institutionCityTwo + ' ' + this.institutionStateTwo + ' ' + this.institutionZipTwo
+
+                const { data, error } = await supabase
+                    .from('institution-ingestion')
+                    .insert([
+                        {
+                            name: this.institutionName,
+                            repository: this.repository,
+                            account_email: this.accountEmail,
+                            website: this.repositoryWebsite,
+                            address: this.institutionAddress,
+                            city: this.institutionCity,
+                            state: this.institutionState,
+                            zip: this.institutionZip,
+                            address_line_2: addressTwo,
+                            photo_option: this.photoOption,
+                            contact_name: this.contactName,
+                            contact_email: this.contactEmail
+                        }
+                    ])
+                if (error) {
+                    console.log('error', error)
+                } else {
+                    console.log('data', data)
+                }
             }
         },
         resetForm () {
