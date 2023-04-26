@@ -127,65 +127,6 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-row v-if="!addressTwo" dense class="d-flex justify-end text-center">
-          <v-btn small text color="primary" class="mb-2" @click="addAddress">
-            Add another address
-            <v-icon dark>
-              mdi-plus
-            </v-icon>
-          </v-btn>
-        </v-row>
-        <v-container v-if="addressTwo" class="mx-0 my-0 px-0 py-0">
-          <v-row dense class="pb-0">
-            <v-col sm="12">
-              <v-row dense>
-                <v-col sm="12" dense>
-                  <v-text-field
-                    v-model="institutionAddressTwo"
-                    dense
-                    outlined
-                    placeholder="Address Line 2"
-                    class="italic-placeholder"
-                  />
-                </v-col>
-              </v-row>
-              <v-row dense class="my-0 py-0">
-                <v-col sm="4">
-                  <v-text-field
-                    v-model="institutionCityTwo"
-                    dense
-                    outlined
-                    placeholder="City"
-                    class="italic-placeholder"
-                  />
-                </v-col>
-                <v-col sm="4">
-                  <v-select
-                    v-model="institutionStateTwo"
-                    :items="states"
-                    dense
-                    item-value="code"
-                    item-text="name"
-                    placeholder="State"
-                    outlined
-                    clearable
-                    class="italic-placeholder"
-                  />
-                </v-col>
-                <v-col sm="4">
-                  <v-text-field
-                    v-model="institutionZipTwo"
-                    :rules="[v => /^\d{5}$/.test(v) || 'Zip code must be 5 digits']"
-                    dense
-                    outlined
-                    placeholder="Zip Code"
-                    class="italic-placeholder"
-                  />
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-container>
         <v-row dense>
           <v-col sm="12">
             <p>If you have a repository photo that you would like to be included on the Sourcery site, please email it to sourceryapp@gmail.com</p>
@@ -214,6 +155,18 @@
               dense
               outlined
               placeholder="Contact Email Address*"
+              class="italic-placeholder"
+            />
+          </v-col>
+        </v-row>
+        <v-row dense>
+          <v-col sm="12">
+            <p>Would you like to provide any additional details?</p>
+            <v-textarea
+              v-model="additionalDetails"
+              dense
+              outlined
+              placeholder="Let us know!"
               class="italic-placeholder"
             />
           </v-col>
@@ -259,14 +212,11 @@ export default {
         institutionCity: '',
         institutionState: '',
         institutionZip: '',
-        institutionAddressTwo: '',
-        institutionCityTwo: '',
-        institutionStateTwo: '',
-        institutionZipTwo: '',
         addressTwo: false,
         photoOption: '',
         contactName: '',
         contactEmail: '',
+        additionalDetails: '',
         institutionNameRules: [
             v => !!v || 'Institution Name is required'
         ],
@@ -350,13 +300,6 @@ export default {
             if (this.$refs.form.validate()) {
                 this.$emit('submit-form', 'true')
 
-                let addressTwoInsert = ''
-                if (this.addressTwo) {
-                    addressTwoInsert = this.institutionAddressTwo + ', ' + this.institutionCityTwo + ', ' + this.institutionStateTwo + ' ' + this.institutionZipTwo
-                } else {
-                    addressTwoInsert = ''
-                }
-
                 const { data, error } = await supabase
                     .from('institution-ingestion')
                     .insert([
@@ -369,10 +312,10 @@ export default {
                             city: this.institutionCity,
                             state: this.institutionState,
                             zip: this.institutionZip,
-                            address_line_2: addressTwoInsert,
                             photo_option: this.photoOption,
                             contact_name: this.contactName,
-                            contact_email: this.contactEmail
+                            contact_email: this.contactEmail,
+                            additional_details: this.additionalDetails
                         }
                     ])
                 if (error) {
