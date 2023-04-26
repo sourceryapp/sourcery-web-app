@@ -73,7 +73,7 @@
             <v-col sm="12">
               <p>What is the Institution's physical address?</p>
               <v-row dense>
-                <v-col sm="12" dense>
+                <v-col sm="7" dense>
                   <v-text-field
                     v-model="institutionAddress"
                     :rules="institutionAddressRules"
@@ -84,9 +84,7 @@
                     class="italic-placeholder"
                   />
                 </v-col>
-              </v-row>
-              <v-row dense class="my-0 py-0">
-                <v-col sm="4">
+                <v-col sm="5">
                   <v-text-field
                     v-model="institutionCity"
                     :rules="institutionCityRules"
@@ -97,7 +95,9 @@
                     class="italic-placeholder"
                   />
                 </v-col>
-                <v-col sm="4">
+              </v-row>
+              <v-row dense class="my-0 py-0">
+                <v-col sm="6">
                   <v-select
                     v-model="institutionState"
                     :items="states"
@@ -112,7 +112,7 @@
                     class="italic-placeholder"
                   />
                 </v-col>
-                <v-col sm="4">
+                <v-col sm="6">
                   <v-text-field
                     v-model="institutionZip"
                     :rules="institutionZipRules"
