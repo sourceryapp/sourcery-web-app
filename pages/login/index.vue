@@ -4,9 +4,6 @@
       <register-to-submit-request
         ref="login_with_link_dialog"
       />
-      <v-alert type="warning" dismissible>
-        NOTICE: If your last log in was before April 12, 2022, you might need to use the One-Time Link login, then reset your password.
-      </v-alert>
       <v-form @submit.prevent="handleEmailPassLogin">
         <h1 class="text-center mb-2">
           Log In

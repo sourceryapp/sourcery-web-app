@@ -112,6 +112,17 @@ export default ({ app }, inject) => {
 
             isATestOrganization (organization) {
                 return ['sourcery-test', 'sourcery'].includes(organization.slug)
+            },
+
+            repositoryDisplayText (repository) {
+                if (!repository || typeof repository === 'string') {
+                    return repository
+                }
+                return `${repository.name} - ${repository.organization.name}`
+            },
+
+            defaultRepositoryPhoto () {
+                return '/img/fallbacks/default-header-80opat.jpg'
             }
         }
     })()

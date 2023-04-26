@@ -3,10 +3,7 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 
 export const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY,
-    {
-        multiTab: false
-    }
+    process.env.SUPABASE_KEY
 )
 
 export const postgrest = new PostgrestClient(process.env.SUPABASE_URL)
@@ -24,7 +21,7 @@ export default async function setStore ({ store, route, app: { router } }) {
     supabase.auth.onAuthStateChange(async (_, session) => {
         const hasPasswordResetToken = store.getters['supabaseAuth/resetAccessToken']
 
-        console.log(_, session)
+        // console.log(_, session)
 
         if (_ === 'SIGNED_OUT') {
             store.commit('supabaseChat/clear')

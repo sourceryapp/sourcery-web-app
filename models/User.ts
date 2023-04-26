@@ -1,5 +1,5 @@
-import { supabase } from '~/plugins/supabase'
-import { definitions } from '~/types/supabase'
+import { supabase, getToken } from '~/plugins/supabase'
+import { get_or_create_user } from '~/plugins/sourcery-functions'
 
 const TABLE_NAME = 'user'
 
@@ -41,7 +41,7 @@ export class User {
     public async save() {
         if ( this.id ) {
             console.log('Property has an ID, update')
-            return await supabase.from<definitions['user']>(TABLE_NAME)
+            return await supabase.from(TABLE_NAME)
                 .update(this.toUpdateJSON())
                 .eq('id', this.id)
         } else {
@@ -50,7 +50,8 @@ export class User {
     }
 
     public static async getById(user_id : string) {
-        let { data: user, error } = await supabase.from<User>('user').select('*').eq('id', user_id)
+        let { data: user, error } = await supabase.from('user').select('*').eq('id', user_id)
+        type SupabaseUser = typeof user
         if ( Array.isArray(user) && user.length > 0 && user[0] && user[0].id ) {
             const u = new User(user[0])
             return u
@@ -64,5 +65,16 @@ export class User {
             return users.map(x => new User(x))
         }
         return []
+    }
+
+    public static async getOrSignUp(email : string) {
+        // Note - this can only be called successfully by admins or org owners.
+        const result = await get_or_create_user({ email })
+
+        if ( result && result.status === 'success' && result.data ) {
+            return result.data
+        }
+
+        return false
     }
 }

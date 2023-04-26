@@ -30,6 +30,7 @@ export default {
          */
         publicPaths: [
             '/login',
+            '/login/redirect',
             '/about',
             '/',
             '/register',

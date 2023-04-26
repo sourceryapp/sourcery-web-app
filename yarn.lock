@@ -2330,9 +2330,9 @@
     cross-fetch "^3.1.5"
 
 "@supabase/gotrue-js@^1.22.21":
-  version "1.22.21"
-  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.22.21.tgz#99ac0f49d72dc64a362cbc740553841aa40936a7"
-  integrity sha512-AhsbBU+5j7BKSqfpLDkEcxy3ruDD+J+dHaYxXGHNWiiIJBYtK2jmNcMYA7M30MYjajnhoILJFC7LtHWl1lWj2Q==
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/@supabase/gotrue-js/-/gotrue-js-1.24.0.tgz#0afbb158071a8dd5e78cf386a068c71c9f534425"
+  integrity sha512-6PVv7mHCFOxLm6TSBfR7hsq/y3CMKpvzePVR+ZWtlFBTjJ2J87g2OYE9bgC61P5TNeZopUXKw93H92yz0MTALw==
   dependencies:
     cross-fetch "^3.0.6"
 
@@ -2343,10 +2343,10 @@
   dependencies:
     cross-fetch "^3.1.5"
 
-"@supabase/realtime-js@^1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@supabase/realtime-js/-/realtime-js-1.7.4.tgz#701a4f87b3068b239d9f937ccde8850a174acf88"
-  integrity sha512-h/Jk3PCLkIVonsNavof/LvHbvF41UD+D+mWcA3m8yHzJ2TLbV3S4XDYId+A3AkvFOAork7Ns/9O8rK0uY4F4zw==
+"@supabase/realtime-js@^1.7.5":
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/@supabase/realtime-js/-/realtime-js-1.7.5.tgz#387f094655c11d5608df9a3039c5f01186a5f401"
+  integrity sha512-nXuoxt7NE1NTI+G8WBim1K2gkUC8YE3e9evBUG+t6xwd9Sq+sSOrjcE0qJ8/Y631BCnLzlhX6yhFYQFh1oQDOg==
   dependencies:
     "@types/phoenix" "^1.5.4"
     websocket "^1.0.34"
@@ -2358,15 +2358,15 @@
   dependencies:
     cross-fetch "^3.1.0"
 
-"@supabase/supabase-js@^1.29.1":
-  version "1.35.6"
-  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.35.6.tgz#df5a2c132035ab9e5462ed474587902b3e767a66"
-  integrity sha512-KDRXRr+kdGwruIUizZPALbe5YccMYFVyZJf1sFWKLncaLYSFiM6iKFnqCrNeQ4JFoZZiICkiTl1FUuai62jVpg==
+"@supabase/supabase-js@1":
+  version "1.35.7"
+  resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-1.35.7.tgz#2d7a899f12b4772fe3a276a97d1702cedc302c7a"
+  integrity sha512-X+qCzmj5sH0dozagbLoK7LzysBaWoivO0gsAUAPPBQkQupQWuBfaOqG18gKhlfL0wp2PL888QzhQNScp/IwUfA==
   dependencies:
     "@supabase/functions-js" "^1.3.4"
     "@supabase/gotrue-js" "^1.22.21"
     "@supabase/postgrest-js" "^0.37.4"
-    "@supabase/realtime-js" "^1.7.4"
+    "@supabase/realtime-js" "^1.7.5"
     "@supabase/storage-js" "^1.7.2"
 
 "@szmarczak/http-timer@^1.1.2":
@@ -4280,9 +4280,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001228, caniuse-lite@^1.0.30001370:
-  version "1.0.30001374"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001374.tgz#3dab138e3f5485ba2e74bd13eca7fe1037ce6f57"
-  integrity sha512-mWvzatRx3w+j5wx/mpFN5v5twlPrabG8NqX2c6e45LCpymdoGqNvRkRutFUqpRTXKFQFNQJasvK0YT7suW6/Hw==
+  version "1.0.30001478"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001478.tgz"
+  integrity sha512-gMhDyXGItTHipJj2ApIvR+iVB5hd0KP3svMWWXDvZOmjzJJassGLMfxRkQCSYgGd2gtdL/ReeiyvMSFD1Ss6Mw==
 
 cardinal@^2.1.1:
   version "2.1.1"
