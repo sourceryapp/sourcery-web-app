@@ -28,11 +28,9 @@
             <p>What is the name of the repository?</p>
             <v-text-field
               v-model="repository"
-              :rules="repositoryRules"
-              required
               dense
               outlined
-              placeholder="Repository Name*"
+              placeholder="Repository Name"
               class="italic-placeholder"
             />
           </v-col>
@@ -63,11 +61,9 @@
             <p>What is the repository's website?</p>
             <v-text-field
               v-model="repositoryWebsite"
-              :rules="repositoryWebsiteRules"
-              required
               dense
               outlined
-              placeholder="Link or URL*"
+              placeholder="Link or URL"
               class="italic-placeholder"
             />
           </v-col>
@@ -263,7 +259,6 @@ export default {
         institutionCity: '',
         institutionState: '',
         institutionZip: '',
-        // Do not add a second address by default
         institutionAddressTwo: '',
         institutionCityTwo: '',
         institutionStateTwo: '',
@@ -275,15 +270,9 @@ export default {
         institutionNameRules: [
             v => !!v || 'Institution Name is required'
         ],
-        repositoryRules: [
-            v => !!v || 'Repository Name is required'
-        ],
         accountEmailRules: [
             v => !!v || 'Account Email is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-        ],
-        repositoryWebsiteRules: [
-            v => !!v || 'Repository Website is required'
         ],
         institutionAddressRules: [
             v => !!v || 'Institution Address is required'
@@ -387,9 +376,9 @@ export default {
                         }
                     ])
                 if (error) {
-                    console.log('error', error)
+                    console.log(error)
                 } else {
-                    console.log('data', data)
+                    console.log(data)
                 }
             }
         },
