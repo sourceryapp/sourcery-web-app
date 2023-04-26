@@ -138,7 +138,7 @@
         </v-row>
         <v-row dense>
           <v-col sm="12">
-            <p>Who should we contact for any additional details?</p>
+            <p>Please provide your contact information</p>
             <v-text-field
               v-model="contactName"
               :rules="contactNameRules"
