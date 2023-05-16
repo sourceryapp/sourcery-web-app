@@ -256,11 +256,13 @@ export default {
     },
     methods: {
         ...mapMutations({
-            clearAuth: 'supabaseAuth/clear'
+            clearAuth: 'supabaseAuth/clear',
+            clearCreate: 'supabaseCreate/reset'
         }),
         async logout () {
             try {
                 this.clearAuth()
+                this.clearCreate()
                 const { error } = await supabase.auth.signOut()
                 this.dialog = false
                 if (error) {

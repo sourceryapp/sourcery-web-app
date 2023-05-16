@@ -22,6 +22,7 @@ export const initialState = () => {
         integrationData: null as IntegrationData | null,
         pricing: null as PricingSummary | null,
         clientName: '',
+        clientEmail: '',
         location: ''
     }
 }
@@ -38,7 +39,10 @@ export const getters = {
         return state.clientName
     },
     clientEmail(state: SupabaseCreateState) {
-        return state.client?.email
+        if ( state.client && state.client.email ) {
+            return state.client.email
+        }
+        return state.clientEmail
     },
     client(state: SupabaseCreateState) {
         return state.client
@@ -111,6 +115,9 @@ export const mutations: MutationTree<SupabaseCreateState> = {
     setClient(state: SupabaseCreateState, value: SourceryUser) {
         state.client = value
     },
+    setClientEmail(state: SupabaseCreateState, value: string) {
+        state.clientEmail = value
+    },
     setStatus(state: SupabaseCreateState, value: Status) {
         state.status = value
     },
@@ -135,6 +142,7 @@ export const mutations: MutationTree<SupabaseCreateState> = {
         state.pricing = initial.pricing
         state.clientName = initial.clientName
         state.location = initial.location
+        state.clientEmail = initial.clientEmail
     }
 }
 

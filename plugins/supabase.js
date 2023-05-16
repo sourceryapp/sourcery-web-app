@@ -3,7 +3,10 @@ import { PostgrestClient } from '@supabase/postgrest-js'
 
 export const supabase = createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_KEY
+    process.env.SUPABASE_KEY,
+    {
+        multiTab: false
+    }
 )
 
 export const postgrest = new PostgrestClient(process.env.SUPABASE_URL)
@@ -67,9 +70,7 @@ export default async function setStore ({ store, route, app: { router } }) {
 
                     if (hasInProgressRequest) {
                         router.push('/request/create')
-                    }
-
-                    if (store.getters['supabaseAuth/shouldRedirectHome']) {
+                    } else if (store.getters['supabaseAuth/shouldRedirectHome']) {
                         store.commit('supabaseAuth/setRedirectHome', false)
                         router.push('/dashboard')
                     }
