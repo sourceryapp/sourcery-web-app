@@ -73,53 +73,14 @@
             <v-col sm="12">
               <p>What is the Institution's physical address?</p>
               <v-row dense>
-                <v-col sm="7" dense>
+                <v-col sm="12" dense>
                   <v-text-field
                     v-model="institutionAddress"
                     :rules="institutionAddressRules"
                     required
                     dense
                     outlined
-                    placeholder="Street Address*"
-                    class="italic-placeholder"
-                  />
-                </v-col>
-                <v-col sm="5">
-                  <v-text-field
-                    v-model="institutionCity"
-                    :rules="institutionCityRules"
-                    required
-                    dense
-                    outlined
-                    placeholder="City*"
-                    class="italic-placeholder"
-                  />
-                </v-col>
-              </v-row>
-              <v-row dense class="my-0 py-0">
-                <v-col sm="6">
-                  <v-select
-                    v-model="institutionState"
-                    :items="states"
-                    :rules="[v => !!v || 'State is required']"
-                    required
-                    dense
-                    item-value="code"
-                    item-text="name"
-                    placeholder="State*"
-                    outlined
-                    clearable
-                    class="italic-placeholder"
-                  />
-                </v-col>
-                <v-col sm="6">
-                  <v-text-field
-                    v-model="institutionZip"
-                    :rules="institutionZipRules"
-                    required
-                    dense
-                    outlined
-                    placeholder="Zip Code*"
+                    placeholder="Address*"
                     class="italic-placeholder"
                   />
                 </v-col>
@@ -209,9 +170,6 @@ export default {
         accountEmail: '',
         repositoryWebsite: '',
         institutionAddress: '',
-        institutionCity: '',
-        institutionState: '',
-        institutionZip: '',
         addressTwo: false,
         photoOption: '',
         contactName: '',
@@ -227,72 +185,12 @@ export default {
         institutionAddressRules: [
             v => !!v || 'Institution Address is required'
         ],
-        institutionCityRules: [
-            v => !!v || 'Institution City is required'
-        ],
-        institutionZipRules: [
-            v => !!v || 'Institution Zip Code is required',
-            v => /^\d{5}$/.test(v) || 'Zip code must be 5 digits'
-        ],
         contactNameRules: [
             v => !!v || 'Contact Name is required'
         ],
         contactEmailRules: [
             v => !!v || 'Contact Email is required',
             v => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-        ],
-        states: [
-            { code: 'AL', name: 'Alabama' },
-            { code: 'AK', name: 'Alaska' },
-            { code: 'AZ', name: 'Arizona' },
-            { code: 'AR', name: 'Arkansas' },
-            { code: 'CA', name: 'California' },
-            { code: 'CO', name: 'Colorado' },
-            { code: 'CT', name: 'Connecticut' },
-            { code: 'DE', name: 'Delaware' },
-            { code: 'DC', name: 'District Of Columbia' },
-            { code: 'FL', name: 'Florida' },
-            { code: 'GA', name: 'Georgia' },
-            { code: 'HI', name: 'Hawaii' },
-            { code: 'ID', name: 'Idaho' },
-            { code: 'IL', name: 'Illinois' },
-            { code: 'IN', name: 'Indiana' },
-            { code: 'IA', name: 'Iowa' },
-            { code: 'KS', name: 'Kansas' },
-            { code: 'KY', name: 'Kentucky' },
-            { code: 'LA', name: 'Louisiana' },
-            { code: 'ME', name: 'Maine' },
-            { code: 'MD', name: 'Maryland' },
-            { code: 'MA', name: 'Massachusetts' },
-            { code: 'MI', name: 'Michigan' },
-            { code: 'MN', name: 'Minnesota' },
-            { code: 'MS', name: 'Mississippi' },
-            { code: 'MO', name: 'Missouri' },
-            { code: 'MT', name: 'Montana' },
-            { code: 'NE', name: 'Nebraska' },
-            { code: 'NV', name: 'Nevada' },
-            { code: 'NH', name: 'New Hampshire' },
-            { code: 'NJ', name: 'New Jersey' },
-            { code: 'NM', name: 'New Mexico' },
-            { code: 'NY', name: 'New York' },
-            { code: 'NC', name: 'North Carolina' },
-            { code: 'ND', name: 'North Dakota' },
-            { code: 'OH', name: 'Ohio' },
-            { code: 'OK', name: 'Oklahoma' },
-            { code: 'OR', name: 'Oregon' },
-            { code: 'PA', name: 'Pennsylvania' },
-            { code: 'RI', name: 'Rhode Island' },
-            { code: 'SC', name: 'South Carolina' },
-            { code: 'SD', name: 'South Dakota' },
-            { code: 'TN', name: 'Tennessee' },
-            { code: 'TX', name: 'Texas' },
-            { code: 'UT', name: 'Utah' },
-            { code: 'VT', name: 'Vermont' },
-            { code: 'VA', name: 'Virginia' },
-            { code: 'WA', name: 'Washington' },
-            { code: 'WV', name: 'West Virginia' },
-            { code: 'WI', name: 'Wisconsin' },
-            { code: 'WY', name: 'Wyoming' }
         ]
     }),
     methods: {
@@ -309,9 +207,6 @@ export default {
                             account_email: this.accountEmail,
                             website: this.repositoryWebsite,
                             address: this.institutionAddress,
-                            city: this.institutionCity,
-                            state: this.institutionState,
-                            zip: this.institutionZip,
                             photo_option: this.photoOption,
                             contact_name: this.contactName,
                             contact_email: this.contactEmail,
