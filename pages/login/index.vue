@@ -146,7 +146,7 @@ export default {
             }
         },
         loginWithOneTimeLink () {
-            this.$refs.login_with_link_dialog.openWithLoginIntent(this.email)
+            this.$refs.login_with_link_dialog.openDialog(this.email)
         }
     }
 }

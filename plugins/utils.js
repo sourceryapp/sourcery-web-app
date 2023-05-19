@@ -107,7 +107,7 @@ export default ({ app }, inject) => {
             },
 
             isTestUser (authUser) {
-                return authUser.email === 'sourcerytest@gmail.com'
+                return authUser?.email === 'sourcerytest@gmail.com'
             },
 
             isATestOrganization (organization) {

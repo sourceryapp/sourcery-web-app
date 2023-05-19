@@ -14,7 +14,7 @@
         class="repository-image mb-6 rounded-lg"
       />
 
-      <repository-search @selected="setRepository" />
+      <repository-search ref="repository_search" @selected="setRepository" />
 
       <h2 class="mt-5 mb-3">
         Document Information
@@ -42,13 +42,23 @@
           required
           :rules="[$sourceryForms.rules.required]"
         />
+
         <v-text-field
+          v-if="isLoggedIn"
           :label="clientEmailLabel"
           outlined
           readonly
           disabled
           :value="clientEmail"
         />
+        <v-text-field
+          v-else
+          v-model="clientEmail"
+          :label="clientEmailLabel"
+          :rules="[$sourceryForms.rules.email]"
+          outlined
+        />
+
         <v-text-field
           v-model="label"
           label="Request Title*"
@@ -75,10 +85,11 @@
           <v-btn class="px-4" to="/dashboard">
             Back
           </v-btn>
-          <v-btn class="px-4" color="primary" :disabled="!submitEnabled" @click="submitRequestInsert">
+          <v-btn class="px-4" color="primary" :disabled="!submitEnabled" @click="handleSubmit">
             Submit
           </v-btn>
         </div>
+        <register-to-submit-request ref="register_to_submit_request_dialog" :submitting-request="true" />
       </v-form>
     </v-flex>
   </v-layout>
@@ -90,18 +101,60 @@ import { Repository } from '~/models/Repository'
 import { RequestsProspective } from '~/models/RequestsProspective'
 
 export default {
-    async asyncData () {
-        const repositories = await Repository.getActive()
-
-        return {
-            repositories
-        }
-    },
     data () {
         return {
             repositories: [],
             formValid: true,
-            submitting: false
+            submitting: false,
+            startingQuery: {}
+        }
+    },
+    async fetch ({ route, store }) {
+        this.repositories = await Repository.getActive()
+        const { repo_id, message, title } = route.query
+
+        // First if we have query items we should load that information
+        // into create request.
+        if (repo_id) {
+            const matchedRepository = this.repositories.find(x => x.id === parseInt(repo_id))
+            if (matchedRepository) {
+                this.selectedRepository = matchedRepository
+                store.commit('supabaseCreate/setRepository', matchedRepository)
+            }
+        }
+
+        if (message) {
+            store.commit('supabaseCreate/setCitation', message)
+            this.citation = message
+        }
+
+        if (title) {
+            this.label = title
+            store.commit('supabaseCreate/setLabel', title)
+        }
+
+        // If we dont have this information already from an ongoing session
+        // we should replace our create request info from localStorage
+        const inProgressRequest = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
+        if (inProgressRequest && inProgressRequest.request) {
+            if (inProgressRequest.request.citation && !this.citation) {
+                console.log('setting citation')
+                store.commit('supabaseCreate/setCitation', inProgressRequest.request.citation)
+            }
+
+            if (inProgressRequest.request.clientName && !this.clientName) {
+                store.commit('supabaseCreate/setClientName', inProgressRequest.request.clientName)
+            }
+
+            if (inProgressRequest.request.label && !this.label) {
+                store.commit('supabaseCreate/setLabel', inProgressRequest.request.label)
+            }
+
+            if (inProgressRequest.request.selectedRepository && !this.selectedRepository) {
+                store.commit('supabaseCreate/setRepository', new Repository(inProgressRequest.request.selectedRepository))
+            }
+
+            localStorage.removeItem('sourceryInProgressRequest')
         }
     },
     computed: {
@@ -109,6 +162,7 @@ export default {
             authUser: 'supabaseAuth/authUser',
             authUserMeta: 'supabaseAuth/authUserMeta',
             isAdmin: 'supabaseAuth/isAdmin',
+            isLoggedIn: 'supabaseAuth/isLoggedIn',
             getSelectedRepository: 'supabaseCreate/repository',
             getLabel: 'supabaseCreate/label',
             getCitation: 'supabaseCreate/citation',
@@ -117,11 +171,16 @@ export default {
             getClientEmail: 'supabaseCreate/clientEmail',
             ownsAnOrganization: 'supabaseAuth/ownsAnOrganization'
         }),
-        clientEmail () {
-            return this.getClientEmail
+        clientEmail: {
+            get () {
+                return this.getClientEmail
+            },
+            set (val) {
+                this.setClientEmail(val)
+            }
         },
         clientIsUser () {
-            return !(this.getClient && this.getClient.id && this.getClient.id !== this.authUser.id)
+            return !(this.getClient && this.getClient.id && this.getClient.id !== this.authUser?.id)
         },
         clientEmailLabel () {
             if (!this.clientIsUser) {
@@ -191,6 +250,10 @@ export default {
         if (this.authUserMeta?.name) {
             this.clientName = this.authUserMeta.name
         }
+
+        if (this.selectedRepository) {
+            this.$refs.repository_search.selectedRepositoryItem(this.selectedRepository)
+        }
     },
     methods: {
         ...mapMutations({
@@ -198,7 +261,8 @@ export default {
             setLabel: 'supabaseCreate/setLabel',
             setCitation: 'supabaseCreate/setCitation',
             setClientName: 'supabaseCreate/setClientName',
-            setClient: 'supabaseCreate/setClient'
+            setClient: 'supabaseCreate/setClient',
+            setClientEmail: 'supabaseCreate/setClientEmail'
         }),
         ...mapActions({
             submitRequest: 'supabaseCreate/insert'
@@ -221,6 +285,13 @@ export default {
         },
         revertToClient () {
             this.setClient(this.authUser)
+        },
+        handleSubmit () {
+            if (this.isLoggedIn) {
+                this.submitRequestInsert()
+            } else {
+                this.$refs.register_to_submit_request_dialog.openDialog(this.clientEmail)
+            }
         }
     }
 }

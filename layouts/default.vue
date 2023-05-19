@@ -59,6 +59,7 @@ import BottomNavigation from '@/components/bottom-navigation.vue'
 import ChatCard from '@/components/chat-card.vue'
 
 export default {
+    name: 'LayoutDefault',
     components: {
         'sourcery-nav-drawer': NavigationDrawer,
         BottomNavigation,

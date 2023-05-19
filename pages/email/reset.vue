@@ -119,8 +119,8 @@ export default {
         const confirmationLinkParams = confirmationLink.searchParams
         this.type = confirmationLinkParams.get('type')
         if (this.type !== 'recovery') {
-            // confirmationLink.searchParams.set('redirect_to', confirmationLinkParams.get('redirect_to') + '/login/redirect')
-            confirmationLink.searchParams.set('redirect_to', 'http://localhost:3000/login/redirect')
+            confirmationLink.searchParams.set('redirect_to', confirmationLinkParams.get('redirect_to') + '/login/redirect')
+            // confirmationLink.searchParams.set('redirect_to', 'http://localhost:3000/login/redirect')
             const newLink = confirmationLink.toString()
             this.redirectLink = newLink
         }
