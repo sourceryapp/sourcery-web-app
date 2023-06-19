@@ -2,9 +2,11 @@
   <div class="user-lookup-modal">
     <v-dialog v-model="open" :width="width">
       <v-card>
-        <v-card-title>Select a Patron</v-card-title>
+        <v-card-title>{{ titleText }}</v-card-title>
         <v-card-text>
-          <p>As an organization owner, you can submit requests on behalf of another user.  If the user does not yet exist, the user will be sent an invitation to join Sourcery upon clicking "Verify User".</p>
+          <slot>
+            <p>As an organization owner, you can submit requests on behalf of another user.  If the user does not yet exist, the user will be sent an invitation to join Sourcery upon clicking "Verify User".</p>
+          </slot>
           <v-text-field
             v-model="email"
             type="email"
@@ -39,7 +41,7 @@
       </v-card>
     </v-dialog>
     <v-btn color="primary" @click="openDialog">
-      Create On Behalf of Patron
+      {{ buttonText }}
     </v-btn>
   </div>
 </template>
@@ -56,6 +58,14 @@ export default {
         width: {
             type: Number,
             default: 600
+        },
+        titleText: {
+            type: String,
+            default: 'Select a Patron'
+        },
+        buttonText: {
+            type: String,
+            default: 'Create On Behalf of Patron'
         }
     },
     data () {
@@ -98,7 +108,6 @@ export default {
     },
     mounted () {
         if (this.seedEmail) {
-            console.log('seeding')
             this.email = this.seedEmail
         }
     },
@@ -148,6 +157,9 @@ export default {
         },
         openDialog () {
             this.open = true
+            if (this.seedEmail) {
+                this.email = this.seedEmail
+            }
         }
     }
 }

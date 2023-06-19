@@ -11,19 +11,16 @@
         <v-card-text>
           <p>{{ bodyText }}</p>
           <v-text-field
-            v-if="allowRegister || loggingIn"
             v-model="newUserEmailAddress"
             label="Email Address"
             :rules="[$sourceryForms.rules.required, $sourceryForms.rules.email]"
             required
           />
-          <p v-if="allowRegister && !loggingIn">
-            Already registered? <NuxtLink to="/login">
-              Login Here
-            </NuxtLink>
+          <p v-if="submittingRequest">
+            Already registered? <a @click="handleAlreadyRegistered">Login Here</a>
           </p>
           <!-- eslint-disable-next-line -->
-          <p v-if="showPrivacyTermsWarning">By submitting your email address to Sourcery you agree to our <NuxtLink to="/terms">Terms &amp; Conditions</NuxtLink>, and have reviewed our <NuxtLink to="/privacy">Privacy Policy</NuxtLink>.</p>
+          <p v-if="showPrivacyTermsWarning">By submitting your email address to Sourcery you agree to our <a target="_blank" href="/terms">Terms &amp; Conditions</a>, and have reviewed our <a target="_blank" href="/privacy">Privacy Policy</a>.</p>
           <!-- skipped -->
 
           <v-alert
@@ -42,14 +39,8 @@
           >
             {{ closeButtonText }}
           </v-btn>
-          <v-btn v-if="allowRegister && !hasSubmitted" color="primary" text type="submit">
-            Register
-          </v-btn>
-          <v-btn v-if="!allowRegister && !loggingIn" color="primary" text nuxt to="/login">
-            Login
-          </v-btn>
-          <v-btn v-if="loggingIn && !hasSubmitted && submitResultAlert.type != `error`" color="primary" text type="submit">
-            Login
+          <v-btn v-if="!hasSubmitted && submitResultAlert.type != `error`" color="primary" text type="submit">
+            Submit
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -62,13 +53,21 @@ import { mapGetters } from 'vuex'
 import { supabase } from '~/plugins/supabase'
 
 export default {
+    props: {
+        submittingRequest: {
+            type: Boolean,
+            default: false
+        },
+        redirectPath: {
+            type: String,
+            default: '/dashboard'
+        }
+    },
     data () {
         return {
             open: false,
             newUserEmailAddress: '',
             form_valid: true,
-            allowRegister: false,
-            loggingIn: false,
             submitResultAlert: {
                 show: false,
                 body: 'There has been an error registering.',
@@ -79,69 +78,63 @@ export default {
     },
     computed: {
         ...mapGetters({
+            selectedRepository: 'supabaseCreate/repository',
+            label: 'supabaseCreate/label',
             citation: 'supabaseCreate/citation',
-            pages: 'supabaseCreate/pages',
-            repository_id: 'supabaseCreate/repositoryId'
+            clientName: 'supabaseCreate/clientName'
         }),
         bodyText () {
-            if (this.allowRegister) {
+            if (this.submittingRequest) {
                 return 'In order to submit a request, you must be registered with Sourcery.  Please log in, or submit your email address to register with us.'
-            } else if (this.loggingIn) {
-                return 'Please submit your email address to receive a link to login via email.'
             }
-            return 'In order to submit a paid request, you must be registered with Sourcery.  Please log in to proceed.'
+            return 'Log in via magic link by submitting your email address below.'
         },
         showPrivacyTermsWarning () {
-            if (this.allowRegister || this.loggingIn) {
-                return true
-            }
-            return false
+            return true
         },
         title () {
-            if (this.allowRegister) {
+            if (this.submittingRequest) {
                 return 'Register to Submit Request'
-            } else if (this.loggingIn) {
-                return 'Log In with One Time Link'
             }
-            return 'Account Required - Paid Request'
+            return 'Log In with Link'
         },
         closeButtonText () {
-            if (this.hasSubmitted) {
-                return 'Close'
-            }
             return 'Cancel'
         },
         closeButtonType () {
-            if (this.hasSubmitted) {
-                return 'primary'
-            }
             return ''
         }
     },
     methods: {
-        openDialog () {
+        openDialog (email = '') {
+            if (email) {
+                this.newUserEmailAddress = email
+            }
             this.open = true
         },
         closeDialog () {
             this.open = false
         },
-        openWithRegisterIntent () {
-            this.allowRegister = true
-            this.openDialog()
-        },
-        openWithLoginIntent (email = '') {
-            if (email) {
-                this.newUserEmailAddress = email
+        saveRequestToLocalStorage () {
+            if (this.submittingRequest) {
+                const localStateData = {
+                    request: {
+                        selectedRepository: this.selectedRepository,
+                        label: this.label,
+                        citation: this.citation,
+                        clientName: this.clientName
+                    }
+                }
+
+                localStorage.setItem('sourceryInProgressRequest', JSON.stringify(localStateData))
             }
-            this.loggingIn = true
-            this.openDialog()
         },
         async register () {
             this.validateRegisterNewEmailForm()
             if (this.form_valid) {
                 try {
                     const url = window.location
-                    const redirection = `${url.origin}/dashboard`
+                    const redirection = `${url.origin}${this.redirectPath}`
                     // const redirection = process.env.BASE_URL === 'http://localhost:3000' ? 'http://localhost:3002/dashboard' : process.env.BASE_URL + '/dashboard'
                     const { error } = await supabase.auth.signIn({ email: this.newUserEmailAddress }, {
                         redirectTo: redirection
@@ -149,23 +142,15 @@ export default {
                     if (error) {
                         throw error
                     }
-                    if (this.loggingIn) {
-                        this.submitResultAlert.body = 'Please check your email for a link to login.'
-                    } else {
+                    if (this.submittingRequest) {
                         this.submitResultAlert.body = 'Please check your email for a link to register.'
+                    } else {
+                        this.submitResultAlert.body = 'Please check your email for a link to login.'
                     }
                     this.submitResultAlert.type = 'success'
                     this.submitResultAlert.show = true
 
-                    const localStateData = {
-                        request: {
-                            citation: this.citation,
-                            pages: this.pages,
-                            repository_id: this.repository_id
-                        }
-                    }
-
-                    localStorage.setItem('sourceryInProgressRequest', JSON.stringify(localStateData))
+                    this.saveRequestToLocalStorage()
 
                     this.hasSubmitted = true
                 } catch (e) {
@@ -177,6 +162,10 @@ export default {
         },
         validateRegisterNewEmailForm () {
             this.$refs.register_new_email_form.validate()
+        },
+        handleAlreadyRegistered () {
+            this.saveRequestToLocalStorage()
+            this.$router.push('/login?redirect=/request/create')
         }
     }
 }
