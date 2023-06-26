@@ -199,7 +199,7 @@ export default {
                 this.$emit('submit-form', 'true')
 
                 const { data, error } = await supabase
-                    .from('institution-ingestion')
+                    .from('institution_ingestion')
                     .insert([
                         {
                             name: this.institutionName,
