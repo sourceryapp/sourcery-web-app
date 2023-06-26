@@ -25,11 +25,10 @@
             </v-card-title>
             <v-card-subtitle>
               <span v-if="client">{{ request.repository.name }}</span>
-              <span v-else>
+              <div v-else>
                 <span v-if="requestUser && requestUser.name">{{ requestUser.name }}</span>
-                <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 300px;">{{ requestUser.email }}</span>
-              </span>
-              <br>
+                <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 200px;display: block;">{{ requestUser.email }}</span>
+              </div>
               <span v-if="isSubmitted" class="font-italic font-weight-light">
                 Submitted {{ formatDate(request.created_at) }}
               </span>
