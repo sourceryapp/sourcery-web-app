@@ -3,6 +3,7 @@ import { Status } from '~/models/Status'
 import { Repository } from '~/models/Repository'
 import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
+import { RequestComment } from '~/models/RequestComment'
 import { Attachment } from '~/models/Attachment'
 import { User } from '~/models/User'
 
@@ -25,6 +26,7 @@ export type CreateRequest = {
     request_client?: RequestClient
     request_vendors?: RequestVendor[] | RequestVendor
     request_vendor?: RequestVendor
+    request_comments?: RequestComment[]
     attachments?: Attachment[]
     user?: User
 }
@@ -52,6 +54,7 @@ export class Request {
     request_client?: RequestClient
     request_vendors?: RequestVendor[]
     request_vendor?: RequestVendor
+    request_comments?: RequestComment[]
     attachments?: Attachment[]
     user?: User
 
@@ -73,6 +76,7 @@ export class Request {
         request_vendors = undefined,
         request_vendor = undefined,
         request_client = undefined,
+        request_comments = undefined,
         attachments = undefined
     }: CreateRequest) {
         this.id = id,
@@ -123,6 +127,10 @@ export class Request {
 
         this.archive_citation = archive_citation
         this.archive_notes = archive_notes
+
+        if (request_comments) {
+            this.request_comments = request_comments
+        }
     }
 
     toInsertJSON() {
@@ -401,6 +409,29 @@ export class Request {
             return false
         }
         return insert_id
+    }
+
+
+    static async getRequestsWithMessages() {
+        const user = supabase.auth.user()
+        if ( !user ) {
+            return false
+        }
+
+        const event_name = 'get_requests_with_last_comment'
+
+        const { data, error } = await supabase.rpc(event_name, {
+            user_id_input: user.id
+        })
+
+        console.log(data)
+
+        if ( error ) {
+            console.log(`Error saving request_event: ${event_name}`)
+            return false
+        }
+        
+        return data
     }
 
 

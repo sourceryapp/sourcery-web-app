@@ -280,7 +280,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .chat-card-viewport {
     position: fixed;
     height: 100vh;
@@ -349,7 +349,9 @@ export default {
         }
     }
 }
+</style>
 
+<style lang="scss" scoped>
 .theme--light {
   .light-mode-white {
     color: white!important;

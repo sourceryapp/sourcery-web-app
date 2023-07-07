@@ -11,7 +11,7 @@
               </v-icon>
             </v-btn>
           </div>
-          <messages-chat-list-item v-for="chat in chats" :key="`chat-brief-${chat.id}`" :chat="chat" @selected-chat="chatSelected" />
+          <messages-chat-list-item v-for="chat in requests" :key="`chat-brief-${chat.request.id}`" :chat="chat" @selected-chat="chatSelected" />
         </v-card>
       </v-col>
       <v-col cols="8" class="d-flex flex-column">
@@ -37,7 +37,12 @@
         </v-card>
         <v-card flat tile class="flex-grow-1 rounded-lg grey darken-4">
           <v-card-text>
-            <p>Chat stuff here.</p>
+            <p v-if="!selectedChat">
+              No chat selected.
+            </p>
+            <div class="chat-card-messages">
+              <messages-chat-bubble v-for="message in messages" :key="`messagebubble-${message.id}`" :user-id="user.id" :message="message" />
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -46,38 +51,63 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { Request } from '~/models/Request'
+import { RequestComment } from '~/models/RequestComment'
+
 export default {
+    async asyncData () {
+        const requests = await Request.getRequestsWithMessages()
+        return {
+            requests
+        }
+    },
     data () {
         return {
-            chats: [
-                {
-                    id: 1,
-                    title: 'A super long title of someones name',
-                    body: 'A really long message body to test the overflow of the text',
-                    date: '2020-01-01',
-                    messages: []
-                }
-            ],
-            selectedChat: null
+            requests: [],
+            selectedChat: null,
+            loading: false
         }
     },
     computed: {
+        ...mapGetters({
+            user: 'supabaseAuth/authUser'
+        }),
         chatTitleName () {
             if (this.selectedChat) {
-                return this.selectedChat.title
+                return this.selectedChat.request.citation
             }
             return 'Create Chat'
         },
         viewRequestAction () {
             if (this.selectedChat) {
-                return '/request/' + this.selectedChat.id
+                return '/request/' + this.selectedChat.request.id
             }
             return '#'
+        },
+        messages () {
+            const c = this.selectedChat?.comments || []
+            c.reverse()
+            return c
         }
     },
     methods: {
         chatSelected (chat) {
-            this.selectedChat = chat
+            console.log('chat selected!')
+            chat.comments = []
+            // this.selectedChat = chat
+            this.loading = true
+            if (this.selectedChat && this.selectedChat.request.id === chat.request.id) {
+                this.loading = false
+                return
+            }
+            RequestComment.getForRequest(chat.request).then((comments) => {
+                console.log('requested!')
+                const newSelected = chat
+                newSelected.comments = comments
+                this.selectedChat = newSelected
+                this.loading = false
+            })
         },
         resetSelectedChat () {
             this.selectedChat = null

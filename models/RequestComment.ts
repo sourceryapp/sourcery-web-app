@@ -54,11 +54,11 @@ export class RequestComment {
             .select(`
                 *
             `)
-            .order('created_at', { ascending: true })
+            .order('created_at', { ascending: false })
             .eq('request_id', request.id)
 
         let { data, error } = await query
-
+        console.log(data)
         if ( Array.isArray(data) ) {
             const rms = data.map(x => new RequestComment(x))
             return rms

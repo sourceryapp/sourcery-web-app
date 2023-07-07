@@ -4,13 +4,13 @@
       <div class="pa-1_5 d-inline-block rounded-circle mr-2 mt-5" />
     </div>
     <v-list-item-content>
-      <v-list-item-title class="text-h6 text-bold">
-        {{ chat.title }}
+      <v-list-item-title class="text-truncate text-h6 text-bold">
+        {{ chat.request.id }}: {{ chat.request.citation }}
       </v-list-item-title>
       <v-list-item-subtitle class="text-truncate d-block">
-        {{ chat.body }}
+        {{ chat.last_comment.content }}
       </v-list-item-subtitle>
-      <v-list-item-subtitle>{{ chat.date }}</v-list-item-subtitle>
+      <v-list-item-subtitle>{{ chat.last_comment.created_at | normalDate }}</v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
 </template>
