@@ -42,6 +42,8 @@
     display: block;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
+    column-gap: 10px;
 }
 
 .chat-card-message.alt-right {
@@ -64,4 +66,13 @@
 
 .chat-card-message .chat-card-message-text.might-be-faded:last-child {
     opacity: 0.8;
+}
+
+.chat-card-message .user-bubble {
+    line-height: 1.2;
+    background-color: #555455;
+}
+
+.chat-card-message.alt-right .user-bubble {
+    background-color: #654EA3;
 }

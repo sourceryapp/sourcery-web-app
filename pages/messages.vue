@@ -43,6 +43,27 @@
             <div class="chat-card-messages">
               <messages-chat-bubble v-for="message in messages" :key="`messagebubble-${message.id}`" :user-id="user.id" :message="message" />
             </div>
+            <div class="chat-form">
+              <v-form ref="chatForm" v-model="newChatTextForm">
+                <v-textarea
+                  v-model="newChatText"
+                  :counter="500"
+                  :rules="[v => !!v || 'Message is required']"
+                  label="Message"
+                  required
+                  outlined
+                  rows="1"
+                  class="mb-2"
+                />
+                <v-btn
+                  color="primary"
+                  class="px-4 py-2"
+                  @click="sendMessage"
+                >
+                  Send
+                </v-btn>
+              </v-form>
+            </div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -66,7 +87,9 @@ export default {
         return {
             requests: [],
             selectedChat: null,
-            loading: false
+            loading: false,
+            newChatTextForm: null,
+            newChatText: ''
         }
     },
     computed: {
@@ -111,6 +134,21 @@ export default {
         },
         resetSelectedChat () {
             this.selectedChat = null
+        },
+        sendMessage () {
+            if (!this.$refs.chatForm.validate()) {
+                return
+            }
+            console.log('sending', this.newChatText, this.newChatTextForm)
+            // const newComment = new RequestComment({
+            //     request_id: this.selectedChat.request.id,
+            //     user_id: this.user.id,
+            //     comment: this.newChatText
+            // })
+            // newComment.save().then((comment) => {
+            //     this.selectedChat.comments.push(comment)
+            //     this.newChatText = ''
+            // })
         }
     }
 }
