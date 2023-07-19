@@ -1,13 +1,13 @@
 <template>
   <div :class="chatMessageClass">
     <div v-if="!isUser" class="pa-3 rounded-circle user-bubble">
-      HG
+      <v-icon>mdi-account-supervisor</v-icon>
     </div>
     <div :class="chatMessageTextClass">
       {{ message.content }}
     </div>
     <div v-if="isUser" class="pa-3 rounded-circle user-bubble">
-      HG
+      <v-icon>mdi-account</v-icon>
     </div>
   </div>
 </template>
@@ -44,6 +44,9 @@ export default {
                 class_string += ' might-be-faded'
             }
             return class_string
+        },
+        senderInitials () {
+            return 'KB'
         }
     }
 }

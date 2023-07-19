@@ -218,7 +218,8 @@ export default {
             dialog: false,
             items1: [
                 { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
-                { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
+                { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' },
+                { title: 'Messages', icon: 'mdi-message', link: '/messages' }
             ],
             items2: [
                 { title: 'History', icon: 'mdi-history', link: '/request/history' },

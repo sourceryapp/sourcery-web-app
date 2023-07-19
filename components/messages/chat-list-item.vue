@@ -10,8 +10,8 @@
       <v-list-item-subtitle class="text-truncate d-block">
         {{ chat.last_comment.content }}
       </v-list-item-subtitle>
-      <v-list-item-subtitle class="text-right">
-        {{ chat.last_comment.created_at | normalDate }}
+      <v-list-item-subtitle class="text-right font-italic">
+        Last Message {{ chat.last_comment.created_at | normalDate }}
       </v-list-item-subtitle>
     </v-list-item-content>
   </v-list-item>
