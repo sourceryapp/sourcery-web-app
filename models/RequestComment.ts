@@ -93,7 +93,7 @@ export class RequestComment {
         }
 
         if ( Array.isArray(requestComment) && requestComment.length > 0 ) {
-            return requestComment[0]
+            return new RequestComment(requestComment[0])
         }
 
         return null

@@ -69,6 +69,7 @@
                 <v-btn
                   color="primary"
                   class="px-4 py-2"
+                  :disabled="loadingSend"
                   @click="sendMessage"
                 >
                   Send
@@ -109,6 +110,7 @@ export default {
             requests: [],
             selectedChat: null,
             loading: false,
+            loadingSend: false,
             newChatTextForm: null,
             newChatText: '',
             createEnabled: false
@@ -143,7 +145,7 @@ export default {
             return '#'
         },
         messages () {
-            const c = this.selectedChat?.comments || []
+            const c = this.selectedChat?.comments ? [...this.selectedChat.comments] : []
             c.reverse()
             if (c.length > 0) {
                 // Array.from({ length: 20 }, (_, i) => i + 1).forEach((i) => {
@@ -187,20 +189,30 @@ export default {
         scrollToBottom () {
             this.$refs.messagesContainer.scrollTop = 9999999999
         },
-        sendMessage () {
+        async sendMessage () {
             if (!this.$refs.chatForm.validate()) {
                 return
             }
+            this.loadingSend = true
             console.log('sending', this.newChatText, this.newChatTextForm)
-            // const newComment = new RequestComment({
-            //     request_id: this.selectedChat.request.id,
-            //     user_id: this.user.id,
-            //     comment: this.newChatText
-            // })
-            // newComment.save().then((comment) => {
-            //     this.selectedChat.comments.push(comment)
-            //     this.newChatText = ''
-            // })
+            const newComment = new RequestComment({
+                request_id: this.selectedChat.request.id,
+                user_id: this.user.id,
+                content: this.newChatText,
+                vendor: false
+            })
+            const c = await newComment.insert()
+            if (!c) {
+                console.log('Error posting comment')
+                this.loadingSend = false
+                this.$toast.error('Error sending chat message.')
+                return
+            }
+            const sc = Object.assign({}, this.selectedChat)
+            sc.comments.unshift(c)
+            this.selectedChat = sc
+            this.loadingSend = false
+            this.newChatText = ''
         }
     }
 }
