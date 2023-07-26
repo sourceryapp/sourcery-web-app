@@ -23,8 +23,8 @@
       </v-col>
       <v-col cols="8" class="d-flex flex-column h-100">
         <v-card flat tile class="mb-6 rounded-lg grey darken-4 flex-grow-2">
-          <div class="d-flex justify-space-between align-center flex-no-wrap">
-            <div class="">
+          <div v-if="!loading" class="d-flex justify-space-between align-center flex-no-wrap">
+            <div>
               <v-card-title class="text-h4 font-weight-bold pb-1">
                 {{ chatTitleName }}
               </v-card-title>
@@ -41,12 +41,14 @@
               </v-card-actions>
             </div>
           </div>
+          <v-skeleton-loader v-if="loading" elevation="2" type="article" />
         </v-card>
         <v-card flat tile class="rounded-lg grey darken-4 mh-0 pos-r flex-grow-1">
           <v-card-text class="d-flex flex-column h-100 justify-end">
-            <p v-if="!selectedChat" class="text-h6">
+            <p v-if="!selectedChat && !loading" class="text-h6">
               Select a chat to view messages.
             </p>
+            <v-skeleton-loader v-if="loading" elevation="2" type="list-item-avatar-three-line, list-item-avatar-three-line, list-item-avatar-three-line" />
             <div ref="messagesContainer" class="chat-card-messages overflow-y-auto px-4 mh-0">
               <messages-chat-bubble v-for="message in messages" :key="`messagebubble-${message.id}`" :user-id="user.id" :message="message" />
             </div>
@@ -170,6 +172,7 @@ export default {
                 this.loading = false
                 return
             }
+            this.selectedChat = null
             RequestComment.getForRequest(chat.request).then((comments) => {
                 console.log('requested!')
                 const newSelected = chat
