@@ -7,3 +7,9 @@
 
 ## Documentation
 [Full Documentation](https://github.com/GreenhouseStudios/sourcery-web-app/wiki)
+
+## Dev Containers
+
+[Dev Containers Documentation](https://code.visualstudio.com/docs/devcontainers/tutorial)
+
+VSCode Commands: `Dev Containers: Rebuild` will build a fresh version on your local machine.
