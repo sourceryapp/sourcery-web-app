@@ -62,3 +62,6 @@ notes
 
 # Yarn Cache
 .yarn
+
+# Dev Containers Output
+nohup.out
