@@ -1,17 +1,25 @@
 <template>
   <div id="content" class="site-content">
-    <v-fade-transition>
-      <sourcery-header
-        v-if="!isIntersecting"
-        style="position:fixed; width: 100%"
-      />
-    </v-fade-transition>
+    <div class="fixed-header" style="position:fixed;width:100%;z-index:1;">
+      <div class="hiring-banner">
+        <a href="https://greenhousestudios.uconn.edu/blog/join-us-full-time-research-associate" class="hiring-banner-link">
+          <p>Sourcery is hiring a Full-Time Research Associate! Find out how to join the team here.</p>
+        </a>
+      </div>
+
+      <v-fade-transition>
+        <sourcery-header
+          v-if="!isIntersecting"
+          style="width: 100%"
+        />
+      </v-fade-transition>
+    </div>
 
     <header
       v-intersect="onIntersect"
       class="landing-header"
     >
-      <div class="header-content">
+      <div class="header-content pt-9">
         <img
           class="header__logo"
           src="../static/img/logo-wordmark-white.svg"
@@ -747,5 +755,21 @@ h2 {
 
 .header__cta-button-group .v-btn {
   flex-grow: 1;
+}
+
+.hiring-banner {
+  text-align: center;
+  background-color: #1E7473;
+  padding: 12px;
+}
+
+.hiring-banner .hiring-banner-link {
+  color: white;
+  font-weight: bold;
+}
+
+.hiring-banner .hiring-banner-link p {
+  margin: 0;
+  margin-bottom: 0;
 }
 </style>
