@@ -1,6 +1,8 @@
 import { Request } from '~/models/Request'
 import { RequestComment } from '~/models/RequestComment'
 import { Organization } from '~/models/Organization'
+import { RequestClient } from '~/models/RequestClient'
+import { RequestVendor } from '~/models/RequestVendor'
 import { Report } from '~/models/Report'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
 import { getToken, supabase } from '~/plugins/supabase'
@@ -103,7 +105,7 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
         }
         return true
     },
-    async openForRequest({ getters, dispatch, commit }: { getters: any, dispatch: Dispatch, commit: Commit }, request: Request) {
+    async openForRequest({ getters, dispatch, commit, rootGetters }: { getters: any, dispatch: Dispatch, commit: Commit, rootGetters: any }, request: Request) {
         commit('clear')
         commit('setRequest', request)
         const organizationRetrieved = await dispatch('getOrganizationForRequest')
@@ -124,6 +126,15 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
                 clearInterval(requestIntervalId)
             }
         }, 1000 * 30)
+
+        if ( rootGetters['supabaseAuth/authUser'] && request.id ) {
+            const user_id = rootGetters['supabaseAuth/authUser'].id
+            if ( user_id === getters.organization.owner_id ) {
+                RequestVendor.updateUnreadById(request.id, false)
+            } else {
+                RequestClient.updateUnreadById(request.id, false)
+            }
+        }
 
         return true
     },
@@ -169,6 +180,11 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
                     request_id: state.request.id,
                     message_text: messageText
                 })
+                if ( vendor ) {
+                    await RequestClient.updateUnreadById(state.request.id, true)
+                } else {
+                    await RequestVendor.updateUnreadById(state.request.id, true)
+                }
             } catch (e) {
                 console.log('Error sending chat notification, might be rate limited.  This is normal.', e)
             }

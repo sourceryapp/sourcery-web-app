@@ -1,6 +1,6 @@
 <template>
   <v-list-item three-line class="borders-y rounded-0 py-2" @click="selectedChat">
-    <div class="d-flex flex-column align-self-stretch">
+    <div v-if="isUnread" class="d-flex flex-column align-self-stretch">
       <div class="pa-1_5 d-inline-block rounded-circle mr-2 mt-5" />
     </div>
     <v-list-item-content>
@@ -18,16 +18,40 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import { RequestClient } from '~/models/RequestClient'
+import { RequestVendor } from '~/models/RequestVendor'
+
 export default {
     props: {
         chat: {
             type: Object,
-            default: () => {}
+            default: () => { }
+        }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'supabaseAuth/authUser'
+        }),
+        isOwner () {
+            return this.chat.request.user_id === this.user.id
+        },
+        isUnread () {
+            if (this.isOwner) {
+                return this.chat.request_client.has_unread
+            } else {
+                return this.chat.request_vendor.has_unread
+            }
         }
     },
     methods: {
         selectedChat () {
             this.$emit('selected-chat', this.chat)
+            if (this.isOwner) {
+                RequestClient.updateUnreadById(this.chat.request.id, false)
+            } else {
+                RequestVendor.updateUnreadById(this.chat.request.id, false)
+            }
         }
     }
 }
@@ -37,6 +61,7 @@ export default {
 .pa-1_5 {
   padding: 6px;
 }
+
 .rounded-circle {
   background-color: #FC00D7;
 }

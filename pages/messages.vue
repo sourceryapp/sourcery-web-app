@@ -144,10 +144,23 @@ export default {
             }
             return '#'
         },
+        isVendor () {
+            if (this.selectedChat) {
+                return this.selectedChat.repository?.organization?.owner_id === this.user.id
+            }
+            return false
+        },
+        isOwner () {
+            if (this.selectedChat) {
+                return this.selectedChat.request.user_id === this.user.id
+            }
+            return false
+        },
         messages () {
             const c = this.selectedChat?.comments ? [...this.selectedChat.comments] : []
             c.reverse()
             if (c.length > 0) {
+                // Mock tests
                 // Array.from({ length: 20 }, (_, i) => i + 1).forEach((i) => {
                 //     c.push({
                 //         id: i,
@@ -181,6 +194,12 @@ export default {
                 newSelected.comments = comments
                 this.selectedChat = newSelected
                 this.loading = false
+                if (this.isVendor) {
+                    this.selectedChat.request_vendor.has_unread = false
+                }
+                if (this.isOwner) {
+                    this.selectedChat.request_client.has_unread = false
+                }
             })
         },
         resetSelectedChat () {
@@ -199,7 +218,7 @@ export default {
                 request_id: this.selectedChat.request.id,
                 user_id: this.user.id,
                 content: this.newChatText,
-                vendor: false
+                vendor: this.isVendor
             })
             const c = await newComment.insert()
             if (!c) {
@@ -208,9 +227,14 @@ export default {
                 this.$toast.error('Error sending chat message.')
                 return
             }
+
             const sc = Object.assign({}, this.selectedChat)
             sc.comments.unshift(c)
             this.selectedChat = sc
+            const ind = this.requests.findIndex(r => r.request.id === this.selectedChat.request.id)
+            if (ind !== -1) {
+                this.requests[ind].last_comment = newComment
+            }
             this.loadingSend = false
             this.newChatText = ''
         }
