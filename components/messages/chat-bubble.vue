@@ -2,13 +2,17 @@
   <div class="mb-3" :class="{ 'border-bot': showDate }">
     <div :class="chatMessageClass">
       <div v-if="!isUser" class="pa-3 rounded-circle user-bubble">
-        <v-icon>mdi-account-supervisor</v-icon>
+        <v-icon dark>
+          mdi-account-supervisor
+        </v-icon>
       </div>
       <div :class="chatMessageTextClass">
         {{ message.content }}
       </div>
       <div v-if="isUser" class="pa-3 rounded-circle user-bubble">
-        <v-icon>mdi-account</v-icon>
+        <v-icon dark>
+          mdi-account
+        </v-icon>
       </div>
     </div>
     <div v-if="showDate" class="d-flex justify-content-end">

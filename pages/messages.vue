@@ -5,7 +5,7 @@
         <v-toolbar @click="messagesOpen = !messagesOpen">
           <v-toolbar-title>Messages</v-toolbar-title>
           <v-spacer />
-          <v-btn fab icon dark>
+          <v-btn fab icon>
             <v-icon dark v-html="messagesOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
           </v-btn>
         </v-toolbar>
@@ -44,7 +44,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="8" class="d-flex flex-column h-md-100">
-        <v-card v-if="!$vuetify.breakpoint.mobile || selectedChat !== null" flat tile class="mb-6 rounded-lg grey darken-4 flex-grow-2">
+        <v-card v-if="!$vuetify.breakpoint.mobile || selectedChat !== null" flat tile class="mb-6 rounded-lg flex-grow-2">
           <div v-if="!loading" class="d-flex justify-space-between align-center flex-no-wrap">
             <div>
               <v-card-title class="text-h4 font-weight-bold pb-1">
@@ -60,7 +60,7 @@
                 <v-btn
                   v-show="selectedChat !== null"
                   outlined
-                  color="white"
+                  :color="$vuetify.theme.dark ? 'white' : 'primary'"
                   class="px-4 py-2 mr-2"
                   :to="viewRequestAction"
                 >
@@ -71,7 +71,7 @@
           </div>
           <v-skeleton-loader v-if="loading" elevation="2" type="article" />
         </v-card>
-        <v-card flat tile class="rounded-lg grey darken-4 mh-0 pos-r flex-grow-1">
+        <v-card flat tile class="rounded-lg 4 mh-0 pos-r flex-grow-1">
           <v-card-text class="d-flex flex-column h-100 justify-end">
             <p v-if="!selectedChat && !loading" class="text-h6">
               Select a chat to view messages.
@@ -271,7 +271,7 @@ export default {
             this.selectedChat = sc
             const ind = this.requests.findIndex(r => r.request.id === this.selectedChat.request.id)
             if (ind !== -1) {
-                this.requests[ind].last_comment = newComment
+                this.requests[ind].last_comment = c
             }
             this.loadingSend = false
             this.newChatText = ''
