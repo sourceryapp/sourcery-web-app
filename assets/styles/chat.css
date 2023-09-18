@@ -50,11 +50,15 @@
     justify-content: flex-end;
 }
 
+.chat-card-message.rounded .chat-card-message-text {
+    border-radius: 15px;
+}
+
 .chat-card-message .chat-card-message-text {
     background-color: #555455;
     color: white;
     padding: 10px 15px;
-    border-radius: 15px;
+    border-radius: 2px;
     max-width: 70%;
     justify-self: left;
 }

@@ -1,7 +1,24 @@
 <template>
-  <div class="messages-page w-100 h-100 px-2">
-    <v-row class="h-100 mxh-85v align-stretch pos-r">
-      <v-col cols="4" class="h-100">
+  <div class="messages-page w-100 h-md-100 px-2">
+    <v-row class="h-md-100 mxh-85v align-stretch pos-r">
+      <v-col v-if="$vuetify.breakpoint.mobile">
+        <v-toolbar @click="messagesOpen = !messagesOpen">
+          <v-toolbar-title>Messages</v-toolbar-title>
+          <v-spacer />
+          <v-btn fab icon dark>
+            <v-icon dark v-html="messagesOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
+          </v-btn>
+        </v-toolbar>
+        <v-card v-show="messagesOpen" flat tile height="200" style="overflow-y:scroll;">
+          <messages-chat-list-item
+            v-for="chat in requests"
+            :key="`chat-brief-xs-${chat.request.id}`"
+            :chat="chat"
+            @selected-chat="chatSelected"
+          />
+        </v-card>
+      </v-col>
+      <v-col v-else cols="12" md="4" class="h-md-100">
         <v-card flat tile class="h-100 rounded-lg grey darken-4">
           <div class="d-flex justify-space-between align-center flex-no-wrap">
             <v-card-title>Messages</v-card-title>
@@ -18,11 +35,16 @@
               </v-icon>
             </v-btn>
           </div>
-          <messages-chat-list-item v-for="chat in requests" :key="`chat-brief-${chat.request.id}`" :chat="chat" @selected-chat="chatSelected" />
+          <messages-chat-list-item
+            v-for="chat in requests"
+            :key="`chat-brief-${chat.request.id}`"
+            :chat="chat"
+            @selected-chat="chatSelected"
+          />
         </v-card>
       </v-col>
-      <v-col cols="8" class="d-flex flex-column h-100">
-        <v-card flat tile class="mb-6 rounded-lg grey darken-4 flex-grow-2">
+      <v-col cols="12" md="8" class="d-flex flex-column h-md-100">
+        <v-card v-if="!$vuetify.breakpoint.mobile || selectedChat !== null" flat tile class="mb-6 rounded-lg grey darken-4 flex-grow-2">
           <div v-if="!loading" class="d-flex justify-space-between align-center flex-no-wrap">
             <div>
               <v-card-title class="text-h4 font-weight-bold pb-1">
@@ -35,7 +57,13 @@
             </div>
             <div>
               <v-card-actions>
-                <v-btn v-show="selectedChat !== null" outlined color="white" class="px-4 py-2 mr-2" :to="viewRequestAction">
+                <v-btn
+                  v-show="selectedChat !== null"
+                  outlined
+                  color="white"
+                  class="px-4 py-2 mr-2"
+                  :to="viewRequestAction"
+                >
                   View Request
                 </v-btn>
               </v-card-actions>
@@ -48,9 +76,19 @@
             <p v-if="!selectedChat && !loading" class="text-h6">
               Select a chat to view messages.
             </p>
-            <v-skeleton-loader v-if="loading" elevation="2" type="list-item-avatar-three-line, list-item-avatar-three-line, list-item-avatar-three-line" />
+            <v-skeleton-loader
+              v-if="loading"
+              elevation="2"
+              type="list-item-avatar-three-line, list-item-avatar-three-line, list-item-avatar-three-line"
+            />
             <div ref="messagesContainer" class="chat-card-messages overflow-y-auto px-4 mh-0">
-              <messages-chat-bubble v-for="message in messages" :key="`messagebubble-${message.id}`" :user-id="user.id" :message="message" />
+              <messages-chat-bubble
+                v-for="(message, i) in messages"
+                :key="`messagebubble-${message.id}`"
+                :user-id="user.id"
+                :message="message"
+                :show-date="messages[i - 1] ? $options.filters.normalDate(messages[i + 1]?.created_at) !== $options.filters.normalDate(message.created_at) : true"
+              />
             </div>
             <div v-show="selectedChat" class="chat-form mt-4">
               <v-form ref="chatForm" v-model="newChatTextForm" lazy-validation>
@@ -66,12 +104,10 @@
                   validate-on-blur
                   @blur="() => $refs.chatForm.resetValidation()"
                 />
-                <v-btn
-                  color="primary"
-                  class="px-4 py-2"
-                  :disabled="loadingSend"
-                  @click="sendMessage"
-                >
+
+                <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
+
+                <v-btn color="primary" class="px-4 py-2" :disabled="loadingSend" @click="sendMessage">
                   Send
                 </v-btn>
               </v-form>
@@ -113,7 +149,8 @@ export default {
             loadingSend: false,
             newChatTextForm: null,
             newChatText: '',
-            createEnabled: false
+            createEnabled: false,
+            messagesOpen: true
         }
     },
     computed: {
@@ -200,6 +237,7 @@ export default {
                 if (this.isOwner) {
                     this.selectedChat.request_client.has_unread = false
                 }
+                this.messagesOpen = false
             })
         },
         resetSelectedChat () {
@@ -242,20 +280,39 @@ export default {
 }
 </script>
 
-<style>
-.w-100 {
-    width: 100%;
-}
-.h-100 {
+<style lang="scss">
+@import '~vuetify/src/styles/settings/_variables';
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .h-md-100 {
     height: 100%;
+  }
 }
+
+.chat-card-messages {
+  max-height: 70vh;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.h-100 {
+  height: 100%;
+}
+
 .mh-0 {
-    min-height: 0;
+  min-height: 0;
 }
-.mxh-85v {
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .mxh-85v {
     max-height: 85vh;
+  }
 }
+
 .pos-r {
   position: relative;
 }
+
 </style>

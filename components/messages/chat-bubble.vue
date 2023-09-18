@@ -1,13 +1,20 @@
 <template>
-  <div :class="chatMessageClass">
-    <div v-if="!isUser" class="pa-3 rounded-circle user-bubble">
-      <v-icon>mdi-account-supervisor</v-icon>
+  <div class="mb-3" :class="{ 'border-bot': showDate }">
+    <div :class="chatMessageClass">
+      <div v-if="!isUser" class="pa-3 rounded-circle user-bubble">
+        <v-icon>mdi-account-supervisor</v-icon>
+      </div>
+      <div :class="chatMessageTextClass">
+        {{ message.content }}
+      </div>
+      <div v-if="isUser" class="pa-3 rounded-circle user-bubble">
+        <v-icon>mdi-account</v-icon>
+      </div>
     </div>
-    <div :class="chatMessageTextClass">
-      {{ message.content }}
-    </div>
-    <div v-if="isUser" class="pa-3 rounded-circle user-bubble">
-      <v-icon>mdi-account</v-icon>
+    <div v-if="showDate" class="d-flex justify-content-end">
+      <div class="chat-card-message-time">
+        <em>{{ message.created_at | normalDate }}</em>
+      </div>
     </div>
   </div>
 </template>
@@ -17,11 +24,15 @@ export default {
     props: {
         message: {
             type: Object,
-            default: () => {}
+            default: () => { }
         },
         userId: {
             type: String,
             default: ''
+        },
+        showDate: {
+            type: Boolean,
+            default: true
         }
     },
     computed: {
@@ -29,7 +40,7 @@ export default {
             return this.message.user_id === this.userId
         },
         chatMessageClass () {
-            let class_string = 'chat-card-message'
+            let class_string = 'chat-card-message mb-0'
             if (this.isUser) {
                 class_string += ' alt-right'
             }
@@ -51,3 +62,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.border-bot {
+    border-bottom: 1px solid darkgrey;
+}
+</style>
