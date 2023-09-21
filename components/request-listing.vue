@@ -10,7 +10,7 @@
           <p v-else>
             <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
           </p>
-          <div>
+          <div v-if="!editing">
             <p v-if="client" class="mb-1 text-truncate">
               {{ request.repository.name }}
             </p>
@@ -314,6 +314,10 @@ export default {
   @media screen and (max-width: 300px) {
     height: 174px;
   }
+}
+
+.v-application .request-card .v-input {
+  position: relative;
 }
 
 .row-flex {
