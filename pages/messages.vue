@@ -2,14 +2,21 @@
   <div class="messages-page w-100 h-md-100 px-2">
     <v-row class="h-md-100 mxh-85v align-stretch pos-r">
       <v-col v-if="$vuetify.breakpoint.mobile">
-        <v-toolbar @click="messagesOpen = !messagesOpen">
+        <v-toolbar class="grey-bg" @click="messagesOpen = !messagesOpen">
           <v-toolbar-title>Messages</v-toolbar-title>
           <v-spacer />
           <v-btn fab icon>
             <v-icon dark v-html="messagesOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'" />
           </v-btn>
         </v-toolbar>
-        <v-card v-show="messagesOpen" flat tile height="200" style="overflow-y:scroll;">
+        <v-card
+          v-show="messagesOpen"
+          flat
+          tile
+          height="200"
+          style="overflow-y:scroll;"
+          class="card-with-action"
+        >
           <messages-chat-list-item
             v-for="chat in requests"
             :key="`chat-brief-xs-${chat.request.id}`"
@@ -19,7 +26,7 @@
         </v-card>
       </v-col>
       <v-col v-else cols="12" md="4" class="h-md-100">
-        <v-card flat tile class="h-100 rounded-lg grey darken-4">
+        <v-card flat tile class="h-100 rounded-lg card-with-action">
           <div class="d-flex justify-space-between align-center flex-no-wrap">
             <v-card-title>Messages</v-card-title>
             <v-btn
@@ -44,7 +51,7 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="8" class="d-flex flex-column h-md-100">
-        <v-card v-if="!$vuetify.breakpoint.mobile || selectedChat !== null" flat tile class="mb-6 rounded-lg flex-grow-2">
+        <v-card v-if="!$vuetify.breakpoint.mobile || selectedChat !== null" flat tile class="mb-6 rounded-lg flex-grow-2 card-with-action">
           <div v-if="!loading" class="d-flex justify-space-between align-center flex-no-wrap">
             <div>
               <v-card-title class="text-h4 font-weight-bold pb-1">

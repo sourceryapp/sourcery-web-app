@@ -1,56 +1,54 @@
 <template>
-  <v-hover
-    v-slot="{ hover }"
-    :key="request.id"
-  >
-    <v-card
-      v-if="request"
-      :to="cardClickAction"
-      class="my-4 rounded-lg request-card"
-      :color="cardColor"
-    >
-      <v-container>
-        <v-row class="row-flex">
-          <v-col
-            cols="auto"
-            :class="labelClass"
-            z-index="2"
-          />
-          <v-col class="pa-0 content-col">
-            <v-card-title v-if="!editing">
-              <span class="text-truncate request-label" style="max-width: 300px;">{{ label }}</span>
-            </v-card-title>
-            <v-card-title v-else>
-              <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
-            </v-card-title>
-            <v-card-subtitle>
-              <span v-if="client">{{ request.repository.name }}</span>
-              <div v-else>
-                <span v-if="requestUser && requestUser.name">{{ requestUser.name }}</span>
-                <span v-if="requestUser && !requestUser.name" class="text-truncate" style="max-width: 200px;display: block;">{{ requestUser.email }}</span>
-              </div>
-              <span v-if="isSubmitted" class="font-italic font-weight-light">
-                Submitted {{ formatDate(request.created_at) }}
-              </span>
-              <span v-if="isPickedUp" class="font-italic font-weight-light">
-                In Progress
-              </span>
-              <span v-if="isPostAction" class="font-italic font-weight-light">
-                {{ status }}
-              </span>
-            </v-card-subtitle>
-            <v-fade-transition>
-              <v-overlay
-                v-if="hover"
-                absolute
-                color="primary"
-                opacity="0.1"
-                class="rounded-lg"
-                z-index="1"
-              />
-            </v-fade-transition>
-          </v-col>
-          <v-col v-if="requestActionsList.length > 0" cols="auto" align-self="center" class="pr-0 mobile-friendly1">
+  <v-hover v-slot="{ hover }" :key="request.id">
+    <v-sheet v-if="request" class="my-4 rounded-lg request-card d-flex align-center" :color="cardColor" @click="cardClickAction">
+      <div :class="{ 'bg-teal': isSubmitted, 'bg-blue': isPickedUp, 'bg-purple': isPostAction }" class="color-bar rounded-l-lg" width="20" z-index="2" />
+      <div class="request-card-content d-flex align-center justify-space-between w-100">
+        <div class="request-card-content-text truncate-container pa-0">
+          <p v-if="!editing" class="text-h6 mb-1 text-truncate">
+            {{ label }}
+          </p>
+          <p v-else>
+            <v-text-field v-model="editingLabelValue" class="edit-label" label="Edit Label" />
+          </p>
+          <div>
+            <p v-if="client" class="mb-1 text-truncate">
+              {{ request.repository.name }}
+            </p>
+            <div v-else>
+              <p v-if="requestUser && requestUser.name" class="mb-1">
+                {{ requestUser.name }}
+              </p>
+              <p
+                v-if="requestUser && !requestUser.name"
+                class="text-truncate mb-1"
+                style="max-width: 200px;display: block;"
+              >
+                {{ requestUser.email }}
+              </p>
+            </div>
+            <span v-if="isSubmitted" class="font-italic font-weight-light">
+              Submitted {{ formatDate(request.created_at) }}
+            </span>
+            <span v-if="isPickedUp" class="font-italic font-weight-light">
+              In Progress
+            </span>
+            <span v-if="isPostAction" class="font-italic font-weight-light">
+              {{ status }}
+            </span>
+          </div>
+          <v-fade-transition>
+            <v-overlay
+              v-if="hover"
+              absolute
+              color="primary"
+              opacity="0.1"
+              class="rounded-lg"
+              z-index="1"
+            />
+          </v-fade-transition>
+        </div>
+        <div class="request-card-actions d-flex">
+          <div v-if="requestActionsList.length > 0" class="pa-2">
             <v-menu offset-y>
               <template #activator="{ on: { click }, attrs }">
                 <v-btn
@@ -68,33 +66,29 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item
-                  v-for="(item, index) in requestActionsList"
-                  :key="index"
-                  @click.prevent="item.action"
-                >
+                <v-list-item v-for="(item, index) in requestActionsList" :key="index" @click.prevent.stop="item.action">
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
-          </v-col>
-          <v-col cols="auto" align-self="center" class="pr-4 mobile-friendly2">
+          </div>
+          <div class="pa-2 pr-4">
             <v-btn
               fab
               dark
               small
               :color="actionButtonColor"
               style="z-index:1"
-              @click.prevent="openChat"
+              @click.prevent.stop="openChat"
             >
               <v-icon dark>
                 mdi-message-processing
               </v-icon>
             </v-btn>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
+          </div>
+        </div>
+      </div>
+    </v-sheet>
   </v-hover>
 </template>
 
@@ -150,19 +144,6 @@ export default {
         isPostAction () {
             return Request.isCancelled(this.request) || Request.isComplete(this.request) || Request.isArchived(this.request)
         },
-        labelClass () {
-            let classes = 'd-flex align-center justify-center rounded-l-lg px-2'
-            const status_name = this.request?.status?.name
-            if (status_name === 'Submitted') {
-                classes += ' bg-teal'
-            } else if (status_name === 'In Progress') {
-                classes += ' bg-blue'
-            } else if (status_name === 'Complete' || status_name === 'Archived' || status_name === 'Cancelled') {
-                classes += ' bg-purple'
-            }
-
-            return classes
-        },
         showLabelEdit () {
             const statuses = ['Submitted', 'In Progress']
             return statuses.includes(this.request.status.name)
@@ -179,12 +160,6 @@ export default {
         },
         cardColor () {
             return this.$vuetify.theme.dark ? 'grey darken-3' : ''
-        },
-        cardClickAction () {
-            if (this.editing) {
-                return undefined
-            }
-            return '/request/' + this.request.id
         },
         requestActionsList () {
             const list = []
@@ -276,12 +251,22 @@ export default {
             const day = date.getDate()
             const suffix = suffixes[(day - 20) % 10] || suffixes[day] || suffixes[0]
             return formattedDate.replace(/\b\d{1,2}\b/, `$&${suffix}`)
+        },
+        cardClickAction () {
+            if (this.editing) {
+                return undefined
+            }
+            this.$router.push({ path: '/request/' + this.request.id })
         }
     }
 }
 </script>
 
 <style>
+.w-100 {
+  width: 100%;
+}
+
 .bg-teal {
   background-color: #69ced5;
 }
@@ -294,12 +279,29 @@ export default {
   background-color: #6b49a9;
 }
 
+.color-bar {
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+}
+
+.truncate-container {
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
 .edit-label {
   z-index: 999;
 }
 
-.request-card {
+.v-application .request-card {
   height: 108px;
+  position: relative;
+  padding-left: 30px;
+  border: 1px solid grey;
+  cursor: pointer;
 
   @media screen and (max-width: 380px) {
     height: 130px;
@@ -324,26 +326,4 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.content-col {
-
-  @media screen and (max-width: 480px) {
-    max-width: 185px;
-    overflow: hidden;
-  }
-}
-
-.mobile-friendly1 {
-  @media screen and (max-width: 400px) {
-    padding-left: 0px;
-  }
-}
-
-.mobile-friendly2 {
-  @media screen and (max-width: 400px) {
-    padding-right: 0px;
-    padding-left: 6px;
-  }
-}
-
 </style>
