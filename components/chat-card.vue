@@ -73,7 +73,7 @@
           </v-card-text>
           <v-card-text v-show="!minimized && hasAgreedToTerms" id="chatScroller" class="overflow-y-scroll cap-height">
             <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
-            <div class="chat-card-messages">
+            <div class="chat-card-messages rounded">
               <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
                 <div :class="chatMessageTextClass(message)">
                   {{ message.content }}
@@ -280,7 +280,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .chat-card-viewport {
     position: fixed;
     height: 100vh;
@@ -329,13 +329,18 @@ export default {
               &.alt-right {
                 justify-content: flex-end;
               }
+              &.rounded {
+                .chat-card-message-text {
+                  border-radius: 15px;
+                }
+              }
                 .chat-card-message-text {
                 background-color: #555455;
                 color: white;
                 padding: 10px 15px;
-                border-radius: 15px;
                 max-width: 70%;
                 justify-self: left;
+                border-radius: 2px;
                 &.alt-purple {
                   background-color: #654EA3;
                   text-align: right;
@@ -349,7 +354,9 @@ export default {
         }
     }
 }
+</style>
 
+<style lang="scss" scoped>
 .theme--light {
   .light-mode-white {
     color: white!important;

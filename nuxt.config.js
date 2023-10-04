@@ -95,7 +95,8 @@ export default {
         '~/assets/styles/sourcery.css',
         // 'material-design-icons-iconfont/dist/material-design-icons.css',
         'paymentfont/css/paymentfont.min.css',
-        '~/assets/styles/addtohomescreen.css'
+        '~/assets/styles/addtohomescreen.css',
+        '~/assets/styles/chat.css'
     ],
 
     /*

@@ -16,7 +16,6 @@ export const getToken = async () => {
 }
 
 export default async function setStore ({ store, route, app: { router } }) {
-    console.log('setting supabase store from plugin')
     store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
     await store.dispatch('supabaseAuth/fetchUserMeta')
     await store.dispatch('supabaseAuth/fetchUserOrganizations')

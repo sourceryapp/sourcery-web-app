@@ -1,5 +1,7 @@
 import { supabase } from '~/plugins/supabase'
 import type { Request } from '~/models/Request'
+import { RequestClient } from '~/models/RequestClient'
+import { RequestVendor } from '~/models/RequestVendor'
 
 const TABLE_NAME = 'request_comments'
 
@@ -54,11 +56,11 @@ export class RequestComment {
             .select(`
                 *
             `)
-            .order('created_at', { ascending: true })
+            .order('created_at', { ascending: false })
             .eq('request_id', request.id)
 
         let { data, error } = await query
-
+        console.log(data)
         if ( Array.isArray(data) ) {
             const rms = data.map(x => new RequestComment(x))
             return rms
@@ -92,8 +94,18 @@ export class RequestComment {
             return null
         }
 
+        // Successful insert
         if ( Array.isArray(requestComment) && requestComment.length > 0 ) {
-            return requestComment[0]
+
+            // Non async let's update the request client or vendor entry to have unread
+            if ( this.vendor ) {
+                RequestClient.updateUnreadById(this.request_id, true)
+            } else {
+                RequestVendor.updateUnreadById(this.request_id, true)
+            }
+
+            // Return the successfully inserted comment
+            return new RequestComment(requestComment[0])
         }
 
         return null

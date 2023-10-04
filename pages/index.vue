@@ -19,7 +19,7 @@
       v-intersect="onIntersect"
       class="landing-header"
     >
-      <div class="header-content pt-9">
+      <div class="header-content pt-9 mt-4">
         <img
           class="header__logo"
           src="../static/img/logo-wordmark-white.svg"
