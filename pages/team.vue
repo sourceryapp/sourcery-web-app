@@ -110,22 +110,22 @@ export default {
                     bio: 'Tom Scheinfeldt is Associate Professor of Digital Humanities at the University of Connecticut where he holds a joint appointment in the Department of Digital Media & Design and the Department of History. He is also Director of Greenhouse Studios (greenhousestudios.uconn.edu), a transdisciplinary research unit that solves the problems and explores the opportunities of scholarship in the "digital age." Formerly Managing Director of the Roy Rosenzweig Center for History and New Media at George Mason University, Tom has directed several award-winning digital humanities and academic software projects, including Omeka, THATCamp, and the September 11 Digital Archive. You can follow Tom on Twitter at @foundhistory.'
                 },
                 {
-                    name: 'Brian Kelleher',
-                    title: 'Developer',
-                    image: 'kelleher.jpg',
-                    bio: 'Prior to working for the Digital Experience Group, Brian worked as a web developer for University Communications at UConn, where he created and managed WordPress websites such as the premier news website UConn Today.  Brian was also the principle web developer for a live-streaming video startup where he created web and native mobile applications, and worked extensively with emerging cloud technology.'
-                },
-                {
                     name: 'Brian Daley',
                     title: 'Co-PI / Lead Developer',
                     image: 'daley.jpg',
                     bio: 'For nearly 20 years, Brian has been creating for web and mobile platforms as a freelancer and a web developer with University Communications at the University of Connecticut. His work includes projects like the UConn homepage and UConn Health, as well as many other high-profile digital marketing campaigns and websites.'
                 },
                 {
-                    name: 'Raven Morris',
-                    title: 'Graduate Research Assistant',
-                    image: 'raven-morris.jpg',
-                    bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
+                    name: 'Sara Sikes',
+                    title: 'Co-I/Senior Strategist',
+                    image: 'sikes.jpg',
+                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
+                },
+                {
+                    name: 'Brian Kelleher',
+                    title: 'Developer',
+                    image: 'kelleher.jpg',
+                    bio: 'Prior to working for the Digital Experience Group, Brian worked as a web developer for University Communications at UConn, where he created and managed WordPress websites such as the premier news website UConn Today.  Brian was also the principle web developer for a live-streaming video startup where he created web and native mobile applications, and worked extensively with emerging cloud technology.'
                 },
                 {
                     name: 'Brooke Foti Gemmell',
@@ -134,19 +134,19 @@ export default {
                     bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
                 },
                 {
-                    name: 'Sara Sikes',
-                    title: 'Co-I/Senior Strategist',
-                    image: 'sikes.jpg',
-                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
-                }
-            ],
-            alumni: [
+                    name: 'Raven Morris',
+                    title: 'Graduate Research Assistant',
+                    image: 'raven-morris.jpg',
+                    bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
+                },
                 {
                     name: 'Lauren Harland',
                     title: 'Undergraduate Research Assistant',
                     image: 'harland.jpg',
                     bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She’s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
-                },
+                }
+            ],
+            alumni: [
                 {
                     name: 'Carly Wanner-Hyde',
                     title: 'Project Lead / Head Designer',
