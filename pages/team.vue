@@ -104,10 +104,10 @@ export default {
         return {
             members: [
                 {
-                    name: 'Carly Wanner-Hyde',
-                    title: 'Project Lead / Head Designer',
-                    image: 'wanner-hyde.jpg',
-                    bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
+                    name: 'Tom Scheinfeldt',
+                    title: 'PI / Project Director',
+                    image: 'scheinfeldt.jpg',
+                    bio: 'Tom Scheinfeldt is Associate Professor of Digital Humanities at the University of Connecticut where he holds a joint appointment in the Department of Digital Media & Design and the Department of History. He is also Director of Greenhouse Studios (greenhousestudios.uconn.edu), a transdisciplinary research unit that solves the problems and explores the opportunities of scholarship in the "digital age." Formerly Managing Director of the Roy Rosenzweig Center for History and New Media at George Mason University, Tom has directed several award-winning digital humanities and academic software projects, including Omeka, THATCamp, and the September 11 Digital Archive. You can follow Tom on Twitter at @foundhistory.'
                 },
                 {
                     name: 'Brian Kelleher',
@@ -122,25 +122,26 @@ export default {
                     bio: 'For nearly 20 years, Brian has been creating for web and mobile platforms as a freelancer and a web developer with University Communications at the University of Connecticut. His work includes projects like the UConn homepage and UConn Health, as well as many other high-profile digital marketing campaigns and websites.'
                 },
                 {
-                    name: 'Tom Scheinfeldt',
-                    title: 'PI / Project Director',
-                    image: 'scheinfeldt.jpg',
-                    bio: 'Tom Scheinfeldt is Associate Professor of Digital Humanities at the University of Connecticut where he holds a joint appointment in the Department of Digital Media & Design and the Department of History. He is also Director of Greenhouse Studios (greenhousestudios.uconn.edu), a transdisciplinary research unit that solves the problems and explores the opportunities of scholarship in the "digital age." Formerly Managing Director of the Roy Rosenzweig Center for History and New Media at George Mason University, Tom has directed several award-winning digital humanities and academic software projects, including Omeka, THATCamp, and the September 11 Digital Archive. You can follow Tom on Twitter at @foundhistory.'
-                },
-                {
                     name: 'Raven Morris',
                     title: 'Graduate Research Assistant',
                     image: 'raven-morris.jpg',
                     bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
+                },
+                {
+                    name: 'Lauren Harland',
+                    title: 'Undergraduate Research Assistant',
+                    image: 'harland.jpg',
+                    bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She’s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
                 }
-                // {
-                //     name: 'Jack Dineen',
-                //     title: 'Sourcery Operations Specialist',
-                //     bio: 'Bio here'
-                // }
 
             ],
             alumni: [
+                {
+                    name: 'Carly Wanner-Hyde',
+                    title: 'Project Lead / Head Designer',
+                    image: 'wanner-hyde.jpg',
+                    bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
+                },
                 {
                     name: 'Lauren Ciulla',
                     title: 'Design Intern',

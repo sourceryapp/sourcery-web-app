@@ -57,7 +57,7 @@
 
     <div v-if="isCustom" class="location-clarification mb-8">
       <h3 class="font-weight-medium mb-3">
-        Let's make sure you're spell is clear.
+        Let's make sure you're request is clear.
       </h3>
       <v-text-field
         v-model="location"
@@ -67,18 +67,6 @@
         class="mb-4"
         hide-details
       />
-    </div>
-
-    <div class="repository-item-list mt-2">
-      <div class="repository-item-list-filter-row">
-        <span class="browse-text text-h5 font-weight-light text-uppercase">Browse</span>
-        <v-btn icon @click="toggleBrowse">
-          <v-icon>{{ toggleBrowseIcon }}</v-icon>
-        </v-btn>
-      </div>
-      <div v-if="browseOpen" class="repository-item-list-items">
-        <repository-list-item v-for="repo in visibleRepositories" :key="repo.id" :repository="repo" @selected="selectedRepositoryItem" />
-      </div>
     </div>
   </div>
 </template>
@@ -92,8 +80,7 @@ export default {
         return {
             repositories: [],
             selectedRepository: null,
-            searchText: '',
-            browseOpen: false
+            searchText: ''
         }
     },
     async fetch () {
@@ -143,12 +130,6 @@ export default {
                 return this.isAdmin
             })
         },
-        toggleBrowseIcon () {
-            if (this.browseOpen) {
-                return 'mdi-menu-down'
-            }
-            return 'mdi-menu-up'
-        },
         isCustom () {
             if (typeof this.selectedRepository === 'string') {
                 return true
@@ -163,24 +144,15 @@ export default {
         selectedRepositoryItem (repository) {
             this.selectedRepository = repository
             this.$emit('selected', repository)
-            this.setBrowse(false)
         },
         selectCreateNewRepository () {
             this.selectedRepository = this.searchText
             this.$emit('selected', this.searchText)
             this.$refs.repository_search_auto.blur()
-            this.setBrowse(false)
-        },
-        toggleBrowse () {
-            this.browseOpen = !this.browseOpen
-        },
-        setBrowse (bool = true) {
-            this.browseOpen = !!bool
         },
         unselect () {
             this.selectedRepository = null
             this.$emit('selected', null)
-            this.setBrowse(true)
         }
     }
 }
