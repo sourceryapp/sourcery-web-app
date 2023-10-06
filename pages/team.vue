@@ -128,14 +128,25 @@ export default {
                     bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
                 },
                 {
+                    name: 'Brooke Foti Gemmell',
+                    title: 'Lead Designer',
+                    image: 'gemmell.jpg',
+                    bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
+                },
+                {
+                    name: 'Sara Sikes',
+                    title: 'Co-I/Senior Strategist',
+                    image: 'sikes.jpg',
+                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
+                }
+            ],
+            alumni: [
+                {
                     name: 'Lauren Harland',
                     title: 'Undergraduate Research Assistant',
                     image: 'harland.jpg',
                     bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She’s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
-                }
-
-            ],
-            alumni: [
+                },
                 {
                     name: 'Carly Wanner-Hyde',
                     title: 'Project Lead / Head Designer',
@@ -189,12 +200,6 @@ export default {
                     bio: 'Wenchao Lou is a Digital Media & Design major student at the University of Connecticut. Within the Digital Media & Design program, she concentrates in Game Design. She has experience in video production, web design, UI/UX design and game design.'
                 },
                 {
-                    name: 'Brooke Foti Gemmell',
-                    title: 'Lead Designer',
-                    image: 'gemmell.jpg',
-                    bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
-                },
-                {
                     name: 'Samson Weiner',
                     title: 'Developer',
                     image: 'weiner.jpg',
@@ -223,12 +228,6 @@ export default {
                     title: 'Outreach Coordinator',
                     image: 'mccomas.jpg',
                     bio: 'Garrett McComas has a MLIS from University of Illinois at Urbana-Champaign and began working at Greenhouse Studios in 2020. He enjoys creating sustainable digital humanities projects with researchers and libraries. As a part of the Sourcery team, he leverages his background as a researcher and his experiences working with libraries and archives to work on Community Outreach for the project.'
-                },
-                {
-                    name: 'Sara Sikes',
-                    title: 'Co-I/Senior Strategist',
-                    image: 'sikes.jpg',
-                    bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
                 }
             ]
         }
