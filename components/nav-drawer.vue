@@ -228,6 +228,7 @@ export default {
                 { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/settings/feedback' }
             ],
             bottomItems: [
+                { title: 'Brand Resources', link: '/brand-resources' },
                 { title: 'Privacy Policy', link: '/privacy' },
                 { title: 'Terms and Conditions', link: '/terms' }
             ],
