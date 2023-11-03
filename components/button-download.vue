@@ -71,6 +71,8 @@ export default {
                 zip.file(attachment.getFileNameAndExtension(), blob)
             })
 
+            zip.file('tropy-upload-me.jsonld', JSON.stringify(this.$getJsonLdFile(this.request.attachments)))
+
             const z = await zip.generateAsync({ type: 'blob' })
 
             const fileName = `request-${this.request.id}-files.zip`
