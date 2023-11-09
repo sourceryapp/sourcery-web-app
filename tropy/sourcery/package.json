@@ -9,7 +9,7 @@
     "test": "electron-mocha --renderer test",
     "lint": "eslint --color src test",
     "build": "rollup -c rollup.config.js",
-    "watch": "rollup -c -w rollup.config.js"
+    "watch": "rollup -c -w"
   },
   "repository": {
     "type": "git",

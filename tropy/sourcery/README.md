@@ -1,17 +1,9 @@
-<p align="center"><img src="icon.svg"></p>
+## Sourcery for Tropy
 
-<h1 align="center">tropy-plugin-example</h1>
-This package is a sample plugin for [Tropy](https://tropy.org). It does not
-actively do anyting, but provides all the necessary scaffolding and build
-scripts to get you setup for your own plugin.
+This plugin requires to be installed in the Tropy plugin directory.  The purpose of it is to create an Import action for JSON-LD files that Sourcery exports in a request attachments zip file.
 
-To get started, just clone or use this template repository on GitHub, find more
-[specifications](https://github.com/tropy/tropy/blob/master/res/plugins/README.md) in
-your Tropy's plugin folder, look up [other
-plugins](https://docs.tropy.org/#plugins) in the user manual and join the
-discussion on the [forums](https://forums.tropy.org).
+## Anything Below This - Original README
 
-Happy hacking!
 
 ## Installation
 * Download the `.zip` file from the [latest

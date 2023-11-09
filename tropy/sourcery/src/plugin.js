@@ -1,5 +1,8 @@
 'use strict'
 
+const path = require('path');
+const fs = require('fs');
+
 // A Tropy plugin is a regular Node.js module. Because of the way the plugin
 // is loaded into Tropy this has to be a CommonJS module. You can use `require`
 // to access the Node.js and Electron APIs or any files bundled with your plugin.
@@ -20,31 +23,40 @@ class SourceryTropyPlugin {
     // hook is triggered.
     this.context = context
 
-    // The sample plugin just prints the constructor arguments to the console
-    // for instructional purposes. You can see it in Tropy if you reload the
-    // project window while the DevTools are open.
-    console.log('Constructed example plugin with options and context:')
-    console.log(this.options)
-    console.log(this.context)
+    // Tropy context dialog to open a file selection window.
+    this.dialog = context.dialog.show
   }
 
   // This method gets called when the import hook is triggered.
   async import(payload) {
-    console.log('here')
-    console.log(payload)
-    this.logger.trace('Called import hook from example plugin')
 
-    // This logs the payload received by the import hook. After this method
-    // completes, Tropy's import command will continue its work with this
-    // payload.
-    console.log(payload)
+    // Allow the user to select a json-ld file.  The filter doesn't currently work on the Tropy wrapper... needs more testing.
+    var selected = await this.dialog('file', {
+      properties: ['openFile'],
+      filters: [{
+        name: 'Sourcery Import Files',
+        extensions: ['jsonld']
+      }]
+    })
 
-    // After this method completes, Tropy's import command will continue its
-    // work with this payload. To have Tropy import JSON-LD data, you can
-    // add it here:
-    payload.data = [
-      // Add your items here!
-    ]
+    // Take the JSONLD file and replace the item paths with absolute paths.
+    if ( selected && selected.length ) {
+      const filePath = selected[0];
+      const ext = path.extname(filePath);
+      if (ext === '.jsonld') {
+        const dir = path.dirname(filePath);
+        const fileContents = fs.readFileSync(filePath, 'utf8');
+        const fileJSON = JSON.parse(fileContents);
+        const uploadItems = fileJSON['@graph'][0]['photo'];
+        for (let index = 0; index < uploadItems.length; index++) {
+          fileJSON['@graph'][0]['photo'][index]['path'] = path.join(dir, fileJSON['@graph'][0]['photo'][index]['path'].replace('./sourcery', ''));
+        }
+
+        // As long as we assign payload.data with JSON-LD structure, it will pass it to the native importer.
+        payload.data = [fileJSON];
+      }
+      
+    }
 
     // Alternatively, to import a list of supported local files or remote
     // URLs you can add the respective arrays instead:
@@ -52,6 +64,7 @@ class SourceryTropyPlugin {
     // payload.files = []
     // payload.urls = []
   }
+
 }
 
 SourceryTropyPlugin.defaults = {}

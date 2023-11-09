@@ -1,5 +1,6 @@
 export default ({ app }, inject) => {
-    const getJsonLdFile = (files) => {
+    const getJsonLdFile = (request) => {
+        console.log(request)
         const jsonLd = {
             '@context': {
                 '@version': 1.1,
@@ -27,26 +28,29 @@ export default ({ app }, inject) => {
                 },
                 creator: 'http://purl.org/dc/elements/1.1/creator'
             },
-            '@graph': [],
+            '@graph': [
+                {
+                    '@type': 'Item',
+                    template: 'https://tropy.org/v1/templates/generic',
+                    title: request.request_client.label,
+                    creator: request.repository.organization.name,
+                    date: request.updated_at,
+                    photo: []
+                }
+            ],
             version: '1.15.2'
         }
 
-        files.forEach((file) => {
-            jsonLd['@graph'].push({
-                '@type': 'Item',
-                template: 'https://tropy.org/v1/templates/generic',
-                title: file.label,
-                creator: file.user_id,
-                photo: [
-                    {
-                        '@type': 'Photo',
-                        checksum: 'unknown',
-                        mimetype: 'unknown',
-                        path: `${file.label}`,
-                        template: 'https://tropy.org/v1/templates/photo',
-                        title: file.label
-                    }
-                ]
+        request.attachments.forEach((file) => {
+            console.log(file)
+            jsonLd['@graph'][0].photo.push({
+                '@type': 'Photo',
+                checksum: 'unknown',
+                mimetype: 'unknown',
+                path: `${file.label ? file.label : file.getFileNameAndExtension()}`,
+                template: 'https://tropy.org/v1/templates/photo',
+                title: file.label ? file.label : file.getFileNameAndExtension(),
+                date: file.created_at
             })
         })
 
