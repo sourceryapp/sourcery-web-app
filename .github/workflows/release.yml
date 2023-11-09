@@ -8,7 +8,7 @@ env:
   PLUGIN_NAME: sourcery
 
 jobs:
-  create-release:
+  create-tropy-plugin-release:
     name: Create release
     runs-on: ubuntu-latest
     permissions:
