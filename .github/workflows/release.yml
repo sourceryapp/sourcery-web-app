@@ -1,12 +1,8 @@
 name: tropy-plugin-release
-# on:
-#   push:
-#     tags:
-#       - v*.*
-
 on:
   push:
-    branches: [ master ]
+    tags:
+      - v*.*
 
 env:
   PLUGIN_NAME: sourcery
