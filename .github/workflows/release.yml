@@ -1,12 +1,8 @@
 name: release
-# on:
-#   push:
-#     tags:
-#       - v*.*
-
 on:
   push:
-    branches: [ master ]
+    tags:
+      - v*.*
 
 env:
   PLUGIN_NAME: sourcery
@@ -26,15 +22,18 @@ jobs:
           node-version: 16
 
       - name: Install dependencies and build
+        working-directory: ./tropy/sourcery
         run: |
           npm ci
           npm run build
 
       - name: Generate version name
+        working-directory: ./tropy/sourcery
         id: version
         run: echo "::set-output name=version::${{ env.PLUGIN_NAME }}-${{github.ref_name}}"
 
       - name: Create zip file
+        working-directory: ./tropy/sourcery
         run: |
           mkdir ${{ steps.version.outputs.version }}
           cp index.js package.json icon-256.png third-party-licenses.txt ${{ steps.version.outputs.version }}
@@ -43,6 +42,6 @@ jobs:
       - name: Create release and upload zip file
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ steps.version.outputs.version }}.zip
+          artifacts: ./tropy/sourcery/${{ steps.version.outputs.version }}.zip
           prerelease: true
           token: ${{ secrets.GITHUB_TOKEN }}
