@@ -175,7 +175,9 @@ export default {
 
         '~/plugins/filters',
 
-        '~/plugins/sorting'
+        '~/plugins/sorting',
+
+        '~/plugins/jsonld-export',
 
     ],
 

@@ -1,0 +1,38 @@
+{
+  "name": "sourcery-for-tropy",
+  "productName": "Sourcery for Tropy",
+  "version": "1.0.0-beta.1",
+  "description": "A Tropy plugin to add support for Sourcery exports",
+  "icon": "icon-256.png",
+  "main": "index.js",
+  "scripts": {
+    "test": "electron-mocha --renderer test",
+    "lint": "eslint --color src test",
+    "build": "rollup -c rollup.config.js",
+    "watch": "rollup -c -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GreenhouseStudios/sourcery-web-app/tropy/sourcery.git"
+  },
+  "keywords": [
+    "tropy",
+    "plugin"
+  ],
+  "license": "AGPL-3.0",
+  "homepage": "https://github.com/GreenhouseStudios/sourcery-web-app/tropy/sourcery.git",
+  "hooks": {
+    "import": true
+  },
+  "options": [],
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "electron": "^18.2.2",
+    "electron-mocha": "^11.0.2",
+    "eslint": "^8.14.0",
+    "rollup": "^2.72.1",
+    "rollup-plugin-license": "^2.7.0"
+  },
+  "dependencies": {}
+}

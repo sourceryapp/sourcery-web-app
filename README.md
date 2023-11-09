@@ -7,3 +7,11 @@
 
 ## Documentation
 [Full Documentation](https://github.com/GreenhouseStudios/sourcery-web-app/wiki)
+
+
+## Tropy Plugin
+
+`cd tropy/sourcery`
+
+`npm i`
+
