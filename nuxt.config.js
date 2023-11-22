@@ -83,8 +83,11 @@ export default {
             // {rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
         ],
         script: [
-            { src: 'https://js.stripe.com/v3/', async: true },
-            { src: '/addtohomescreen.js' }
+            // Service worker registration
+            { src: '/js/sw-registration.js' },
+
+            // Add to homescreen popup
+            { src: '/js/addtohomescreen.js' }
         ]
     },
 
@@ -134,17 +137,26 @@ export default {
      * Workbox
      * @url https://pwa.nuxtjs.org/modules/workbox.html
      */
-    workbox: {
-        importScripts: [
-            // 'firebase-messaging-sw.js'
-        ]
-    },
+    // workbox: {
+    //     workboxURL: 'https://cdn.jsdelivr.net/npm/workbox-sw@7.0.0/build/workbox-sw.min.js',
+    //     enabled: true, // uncomment to debug on dev/local
+    //     cleanupOutdatedCaches: true,
+    //     offlineStrategy: 'NetworkOnly',
+    //     offlinePage: '/offline.html',
+    //     offlineAssets: [
+    //         '/offline.html',
+    //         'https://fonts.googleapis.com/css?family=Roboto:300,400,500&family=Barlow:500,600,700,800&display=swap',
+    //         'https://js.stripe.com/v3/'
+    //     ]
+    // },
+    workbox: false,
 
     /**
      * PWA Manifest
      * @url https://pwa.nuxtjs.org/modules/manifest.html
      */
     manifest: {
+        id: 'org.sourceryapp',
         name: 'Sourcery',
         short_name: 'Sourcery',
         lang: 'en-US',
@@ -177,7 +189,7 @@ export default {
 
         '~/plugins/sorting',
 
-        '~/plugins/jsonld-export',
+        '~/plugins/jsonld-export'
 
     ],
 
@@ -217,7 +229,7 @@ export default {
                 dev: false // don't use in dev mode
             }
         ],
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
         '@nuxtjs/firebase',

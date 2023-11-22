@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sourcery is Offline</title>
+    <style>
+        :root{
+            --purple: rgb(104 81 164)
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin:0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap:15px;
+            max-width:350px;
+        }
+        #cloud {
+            fill: #bcbcbc; 
+            width: 180px !important;
+            height: auto !important;
+            max-width: 100%;
+        }
+        button {
+            background: var(--purple);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        h1 {
+            font-size: 24px;
+            color: #555555
+        }
+        p {
+            font-size: 14px;
+            color: #6C6C6C
+        }
+        h1,p,#cloud {
+            max-width: 100%;
+            margin:0;
+        }
+        button {
+            width: 200px;
+            max-width: 100%;
+            height: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+            letter-spacing: 3px;
+            position:relative
+        }
+        button:hover {
+            background-color: #413268;
+        }
+        #loader {
+            position: absolute;
+            width: 40px;
+            height: auto;
+            top:5px;
+            right: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <svg height="320" viewBox="0 0 32 32" width="320" xmlns="http://www.w3.org/2000/svg" id="cloud">
+            <path
+                d="M24.8008,12.1362a8.8694,8.8694,0,0,0-.9795-2.5434L30,3.4142,28.5872,2,2,28.5872,3.4142,30l5-5H23.5a6.4974,6.4974,0,0,0,1.3008-12.8638ZM23.5,23H10.4141L22.3418,11.0723a6.9049,6.9049,0,0,1,.6006,2.0708l.0986.812.8154.0639A4.4975,4.4975,0,0,1,23.5,23Z" />
+            <path
+                d="M4.2964,23.4487l1.4313-1.4311A4.4774,4.4774,0,0,1,8.144,14.019l.8155-.0639.0991-.812a6.9867,6.9867,0,0,1,10.63-5.0865l1.4431-1.4428A8.9859,8.9859,0,0,0,7.2,12.1362,6.4891,6.4891,0,0,0,4.2964,23.4487Z" />
+        </svg>
+        <h1>Can't Connect to Internet</h1>
+        <p>Sourcery requires an internet connection. Please check your connection settings and click retry.</p>
+        <button>
+            <span>Retry</span>
+            <?xml version="1.0" encoding="utf-8"?>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                style="margin: auto; background: none; shape-rendering: auto;" width="200px" height="200px"
+                viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" id="loader">
+                <g transform="rotate(0 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.9166666666666666s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(30 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.8333333333333334s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(60 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.75s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(90 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.6666666666666666s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(120 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5833333333333334s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(150 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.5s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(180 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.4166666666666667s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(210 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.3333333333333333s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(240 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.25s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(270 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.16666666666666666s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(300 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="-0.08333333333333333s"
+                            repeatCount="indefinite"></animate>
+                    </rect>
+                </g>
+                <g transform="rotate(330 50 50)">
+                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#ffffff">
+                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="0s" repeatCount="indefinite">
+                        </animate>
+                    </rect>
+                </g>
+            </svg>
+        </button>
+    </main>
+
+    <script>
+        const button = document.querySelector('button');
+        button.addEventListener('click', (event) => {
+            button.querySelector('#loader').style.display = 'block';
+            window.location.reload();
+        })
+    </script>
+</body>
+</html>
