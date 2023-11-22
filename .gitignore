@@ -39,7 +39,8 @@ dist
 /tests_output
 
 #VSCode Options
-.vscode
+/.vscode/*
+!/.vscode/extensions.json
 
 # Cloud Functions & Emulator Stuff
 /functions
