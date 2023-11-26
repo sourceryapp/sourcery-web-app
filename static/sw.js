@@ -32,8 +32,6 @@ self.addEventListener('install', async (event) => {
                 // Combine all assets to cache
                 cache.add(offlineFallbackPage)
 
-                console.log(offlineAssets)
-                
                 // Add all assets to cache
                 cache.addAll(offlineAssets);
             })
