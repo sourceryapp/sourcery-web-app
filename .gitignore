@@ -15,7 +15,7 @@ dist
 /.idea
 
 # Service worker
-sw.*
+# sw.*
 
 # Stupid mac files
 .DS_Store
@@ -39,7 +39,8 @@ sw.*
 /tests_output
 
 #VSCode Options
-.vscode
+/.vscode/*
+!/.vscode/extensions.json
 
 # Cloud Functions & Emulator Stuff
 /functions

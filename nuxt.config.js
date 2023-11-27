@@ -79,12 +79,20 @@ export default {
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
             },
             { rel: 'icon', type: 'image/png', href: '/favicon.png' },
-            { rel: 'apple-touch-icon', href: '/apple-icon.png' }
+            { rel: 'apple-touch-icon', href: '/apple-icon.png' },
+            {
+                rel: 'manifest',
+                href: '/manifest.json',
+                crossorigin: 'use-credentials'
+            }
             // {rel: 'stylesheet', type: 'text/css', href: '~/assets/styles/addtohomescreen.css'}
         ],
         script: [
-            { src: 'https://js.stripe.com/v3/', async: true },
-            { src: '/addtohomescreen.js' }
+            // Service worker registration
+            { src: '/js/sw-registration.js' },
+
+            // Add to homescreen popup
+            { src: '/js/addtohomescreen.js' }
         ]
     },
 
@@ -104,53 +112,6 @@ export default {
      */
     env: {
         ...env
-    },
-
-    /**
-     * PWA Icons
-     * @url https://pwa.nuxtjs.org/modules/icon.html
-     */
-    pwa: {
-        icon: {
-            source: 'static/icon-fz.png'
-        }
-    },
-
-    /**
-     * Meta
-     * @todo Add proper meta for FB and Twitter
-     * @url https://pwa.nuxtjs.org/modules/meta.html
-     */
-    meta: {
-        name: 'Sourcery',
-        description:
-            'Sourcery is a way for scholars around the world to assist each other in the acquisition of non-digitized documents.',
-        mobileAppIOS: true,
-        favicon: false,
-        appleStatusBarStyle: 'default' // unfortunately Apple took away the possibility of having a white status bar with black icons on iOS 14
-    },
-
-    /**
-     * Workbox
-     * @url https://pwa.nuxtjs.org/modules/workbox.html
-     */
-    workbox: {
-        importScripts: [
-            // 'firebase-messaging-sw.js'
-        ]
-    },
-
-    /**
-     * PWA Manifest
-     * @url https://pwa.nuxtjs.org/modules/manifest.html
-     */
-    manifest: {
-        name: 'Sourcery',
-        short_name: 'Sourcery',
-        lang: 'en-US',
-        orientation: 'portrait',
-        start_url: '/dashboard',
-        nativeUI: true
     },
 
     /*
@@ -177,7 +138,7 @@ export default {
 
         '~/plugins/sorting',
 
-        '~/plugins/jsonld-export',
+        '~/plugins/jsonld-export'
 
     ],
 
@@ -217,7 +178,7 @@ export default {
                 dev: false // don't use in dev mode
             }
         ],
-        '@nuxtjs/pwa',
+        // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
         '@nuxtjs/firebase',
