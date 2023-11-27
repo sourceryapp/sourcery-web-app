@@ -1,12 +1,6 @@
 <template>
   <div id="content" class="site-content">
     <div class="fixed-header" style="position:fixed;width:100%;z-index:1;">
-      <div class="hiring-banner">
-        <a href="https://greenhousestudios.uconn.edu/blog/join-us-full-time-research-associate" class="hiring-banner-link">
-          <p>Sourcery is hiring a Full-Time Research Associate! Find out how to join the team here.</p>
-        </a>
-      </div>
-
       <v-fade-transition>
         <sourcery-header
           v-if="!isIntersecting"

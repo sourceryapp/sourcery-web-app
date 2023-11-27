@@ -1,14 +1,10 @@
 <template>
   <div class="request-events">
     <v-card class="px-5">
-      <v-card-title>
+      <v-card-title class="flex-nowrap">
         <span>Request Activity Log &amp; Internal Notes</span>
 
         <v-spacer />
-
-        <v-btn v-if="showAddNote" color="primary" @click="openAddNote">
-          + Add Note
-        </v-btn>
 
         <v-btn icon x-large class="ml-3">
           <v-icon @click="show = !show">
@@ -40,10 +36,10 @@
               <template #default>
                 <thead>
                   <tr>
-                    <th class="text-left text-h5 pa-2 pl-4 font-weight-medium">
+                    <th class="text-left text-md-h5 pa-2 pl-4 font-weight-medium">
                       Action / Notes
                     </th>
-                    <th class="text-left text-h5 pa-2 pl-4 font-weight-medium">
+                    <th class="text-left text-md-h5 pa-2 pl-4 font-weight-medium">
                       Date/Time
                     </th>
                   </tr>
@@ -53,13 +49,20 @@
                     v-for="(event, index) in eventRows"
                     :key="`event-row-${index}`"
                   >
-                    <td>{{ event.text }}</td>
-                    <td>{{ event.time | normalDateAndTime }}</td>
+                    <td class="py-2">
+                      {{ event.text }}
+                    </td>
+                    <td class="py-2">
+                      {{ event.time | shortDateAndTime }}
+                    </td>
                   </tr>
                 </tbody>
               </template>
             </v-simple-table>
           </div>
+          <v-btn v-if="showAddNote" color="primary" class="mt-4 mb-3" @click="openAddNote">
+            + Add Note
+          </v-btn>
         </v-card-text>
       </v-expand-transition>
     </v-card>

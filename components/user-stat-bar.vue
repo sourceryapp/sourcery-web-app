@@ -45,7 +45,7 @@ export default {
                     key: 'progress'
                 },
                 {
-                    name: 'Completed/Archived',
+                    name: 'Completed',
                     key: 'completed'
                 }
             ]
