@@ -10,6 +10,11 @@ jobs:
     - name: "Checkout tagged release"
       uses: actions/checkout@v4
 
+    - name: webfactory/ssh-agent
+      uses: webfactory/ssh-agent@v0.4.1
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
     - name: Setup Node
       uses: actions/setup-node@v4
       env:
