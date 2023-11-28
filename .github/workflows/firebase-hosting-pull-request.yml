@@ -11,20 +11,14 @@ jobs:
       - name: Checkout Master
         uses: actions/checkout@v4
 
-      - name: Setup Corepack
-        run:  |
-          corepack enable
-          corepack prepare yarn@4.0.2 --activate
-          yarn set version 4.0.2
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
         env:
           NODE_ENV: development
-      - run: yarn install --ignore-engines --immutable
-      - run: NODE_ENV=development yarn run generate
+      - run: npm ci
+      - run: NODE_ENV=development npm run generate
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

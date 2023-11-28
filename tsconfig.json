@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "es2015",
+        "target": "ES2018",
         "module": "ESNext",
         "moduleResolution": "node",
         "lib": [
@@ -21,17 +21,7 @@
             "@/*": [
                 "./*"
             ]
-        },
-        "types": [
-            "@types/node",
-            "vuetify",
-            "@nuxt/types",
-            "@nuxtjs/firebase"
-        ],
-        "typeRoots": [
-            "./node_modules/@types",
-            "./node_modules/vuetify/types"
-        ]
+        }
     },
     "exclude": [
         "node_modules",

@@ -63,5 +63,6 @@ notes
 
 # Yarn Cache
 .yarn
+.pnp*
 
 nohup.out
