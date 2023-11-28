@@ -8,21 +8,28 @@ jobs:
     environment: development
     runs-on: ubuntu-latest
     steps:
-      - name: "Checkout Master"
+      - name: Checkout Master
         uses: actions/checkout@v2
-      - name: webfactory/ssh-agent
+
+      - name: Set Up SSH Keys
         uses: webfactory/ssh-agent@v0.4.1
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         env:
           NODE_ENV: development
         with:
           node-version: '20'
       - run: corepack enable
-      - run: yarn set version stable
-      - run: yarn install --ignore-engines
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+        env:
+          NODE_ENV: development
+      - run: yarn install --ignore-engines --immutable
       - run: NODE_ENV=development yarn run generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
