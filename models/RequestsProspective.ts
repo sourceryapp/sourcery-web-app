@@ -82,9 +82,8 @@ export class RequestsProspective {
 
     async insert() {
         const { data: request_prospective, error } = await supabase.from(TABLE_NAME)
-            .insert([
-                this.toInsertJSON()
-            ])
+            .insert([this.toInsertJSON()])
+            .select()
 
         if ( error ) {
             console.log(error)

@@ -342,7 +342,7 @@ export class Request {
         return false
     }
 
-    async insert() {
+    async insert() : Promise<CreateRequest | null> {
         const { data: request, error } = await supabase.from(TABLE_NAME)
             .insert([
                 this.toInsertJSON()
@@ -394,7 +394,7 @@ export class Request {
      * @returns int8 ID if successful insert, NULL if rate limited, FALSE if error.
      */
     async sendRequestRPC(eventName : string) {
-        const user = supabase.auth.user()
+        const { data: { user } } = await supabase.auth.getUser()
         if ( !user ) {
             return false
         }
@@ -413,7 +413,7 @@ export class Request {
 
 
     static async getRequestsWithMessages() {
-        const user = supabase.auth.user()
+        const { data: { user } } = await supabase.auth.getUser()
         if ( !user ) {
             return false
         }

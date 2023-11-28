@@ -41,9 +41,8 @@ export class FeaturedImage {
 
     async insert() {
         const { data: image, error } = await supabase.from(TABLE_NAME)
-            .insert([
-                this.toInsertJSON()
-            ])
+            .insert(this.toInsertJSON())
+            .select()
 
         if ( error ) {
             console.log(error)

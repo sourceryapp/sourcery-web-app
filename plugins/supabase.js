@@ -16,7 +16,7 @@ export const getToken = async () => {
 }
 
 export default async function setStore ({ store, route, app: { router } }) {
-    store.commit('supabaseAuth/setAuthUser', supabase.auth.user())
+    store.commit('supabaseAuth/setAuthUser', await supabase.auth.getUser())
     await store.dispatch('supabaseAuth/fetchUserMeta')
     await store.dispatch('supabaseAuth/fetchUserOrganizations')
 

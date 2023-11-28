@@ -1,4 +1,5 @@
 import { supabase } from '~/plugins/supabase'
+import type { Request } from '~/models/Request'
 
 const TABLE_NAME = 'reports'
 
@@ -12,6 +13,7 @@ export class Report {
     id: number | null
     request_id: number
     user_id: string
+    requests?: Request[]
 
     constructor({
         id = null,
@@ -34,8 +36,8 @@ export class Report {
         const query = supabase.from(TABLE_NAME)
             .select(`
                 *,
-                user (*)
-                request:requests (*)
+                user(*),
+                request:requests(*)
             `)
             .order('created_at', { ascending: false })
             .eq('user_id', user_id)
@@ -44,7 +46,9 @@ export class Report {
         let { data: reports, error } = await query
 
         if ( Array.isArray(reports) ) {
-            const rps = reports.map(x => new Report(x))
+            const rps = reports.map(x => {
+                return new Report(x)
+            })
             return rps
         }
 

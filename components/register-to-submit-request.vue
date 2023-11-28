@@ -136,8 +136,11 @@ export default {
                     const url = window.location
                     const redirection = `${url.origin}${this.redirectPath}`
                     // const redirection = process.env.BASE_URL === 'http://localhost:3000' ? 'http://localhost:3002/dashboard' : process.env.BASE_URL + '/dashboard'
-                    const { error } = await supabase.auth.signIn({ email: this.newUserEmailAddress }, {
-                        redirectTo: redirection
+                    const { error } = await supabase.auth.signInWithOtp({
+                        email: this.newUserEmailAddress,
+                        options: {
+                            emailRedirectTo: redirection
+                        }
                     })
                     if (error) {
                         throw error
