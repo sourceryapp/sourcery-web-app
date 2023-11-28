@@ -13,7 +13,7 @@ jobs:
 
       - name: Setup Corepack
         run: corepack enable
-      - run: corepack install
+      - run: corepack use yarn@4
 
       - name: Setup Node
         uses: actions/setup-node@v4
