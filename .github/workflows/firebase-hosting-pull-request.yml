@@ -20,6 +20,8 @@ jobs:
           NODE_ENV: development
         with:
           node-version: '20'
+      - run: corepack enable
+      - run: yarn set version stable
       - run: yarn install --ignore-engines
       - run: NODE_ENV=development yarn run generate
       - uses: FirebaseExtended/action-hosting-deploy@v0
