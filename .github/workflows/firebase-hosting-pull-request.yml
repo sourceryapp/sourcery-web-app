@@ -18,15 +18,12 @@ jobs:
 
       - name: Setup Node
         uses: actions/setup-node@v4
-        env:
-          NODE_ENV: development
         with:
           node-version: '20'
       - run: corepack enable
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
         env:
           NODE_ENV: development
       - run: yarn install --ignore-engines --immutable
