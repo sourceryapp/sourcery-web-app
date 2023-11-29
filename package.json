@@ -76,6 +76,5 @@
     "Brian Daley <brian@uconn.edu>",
     "Samson Weiner <samson.weiner@uconn.edu>",
     "Alex Mueller <alex.mueller@uconn.edu>"
-  ],
-  "packageManager": "yarn@4.0.2"
+  ]
 }

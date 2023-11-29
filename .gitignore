@@ -63,4 +63,5 @@ notes
 .yarn
 .pnp*
 
+# Dev Containers/Tropy Plugin Output
 nohup.out
