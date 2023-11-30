@@ -61,17 +61,17 @@ export const actions : ActionTree<SupabaseManageState, SupabaseManageState> = {
                 throw error
             }
 
-            const { publicURL, error: publicError } = supabase.storage
+            const { data: publicURLData } = supabase.storage
                 .from('attachments')
                 .getPublicUrl(filePath)
 
-            if ( publicError || !publicURL ) {
-                throw publicError
+            if ( !publicURLData || !publicURLData.publicUrl ) {
+                throw new Error('Could not get public URL.')
             }
 
             const featured_image = new FeaturedImage({
                 user_id: rootGetters['supabaseAuth/authUser'].id,
-                url: publicURL,
+                url: publicURLData.publicUrl,
                 label: ''
             })
 
@@ -115,17 +115,17 @@ export const actions : ActionTree<SupabaseManageState, SupabaseManageState> = {
                 throw error
             }
 
-            const { publicURL, error: publicError } = supabase.storage
+            const { data: publicURLData } = supabase.storage
                 .from('attachments')
                 .getPublicUrl(filePath)
 
-            if ( publicError || !publicURL ) {
-                throw publicError
+            if ( !publicURLData || !publicURLData.publicUrl ) {
+                throw new Error('Could not get public URL.')
             }
 
             const featured_image = new FeaturedImage({
                 user_id: rootGetters['supabaseAuth/authUser'].id,
-                url: publicURL,
+                url: publicURLData.publicUrl,
                 label: ''
             })
 

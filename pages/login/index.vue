@@ -128,7 +128,7 @@ export default {
             this.loginError = false
             this.setRedirectHome(true)
             try {
-                const { error } = await supabase.auth.signIn({
+                const { error } = await supabase.auth.signInWithPassword({
                     email: this.passEmail,
                     password: this.passPass
                 })

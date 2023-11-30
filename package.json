@@ -1,6 +1,6 @@
 {
   "name": "sourcery-web-app",
-  "version": "1.0.0-beta.18",
+  "version": "1.0.0-beta.60",
   "private": true,
   "scripts": {
     "dev": "nuxt",
@@ -9,9 +9,9 @@
     "local": "concurrently \"firebase emulators:start --import=.emulator-data --export-on-exit\" \"EMULATOR=local nuxt\"",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "lint": "yarn lint:js",
-    "lint:fix": "yarn lint:js --fix",
-    "precommit": "yarn lint:js",
+    "lint": "npm run lint:js",
+    "lint:fix": "npm run lint:js --fix",
+    "precommit": "npm run lint:js",
     "init": "npx husky install && .husky/post-checkout"
   },
   "dependencies": {
@@ -21,7 +21,7 @@
     "@nuxtjs/google-analytics": "^2.4.0",
     "@nuxtjs/sentry": "^5.0.0",
     "@nuxtjs/toast": "^3.3.1",
-    "@supabase/supabase-js": "1",
+    "@supabase/supabase-js": "^2.39.0",
     "@types/mime-types": "^2.1.1",
     "@types/uuid": "^8.3.4",
     "accounting-js": "^1.1.1",
