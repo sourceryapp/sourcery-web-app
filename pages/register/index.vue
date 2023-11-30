@@ -42,6 +42,7 @@
           validate-on-blur
           prepend-icon="mdi-account-circle"
           outlined
+          autocomplete="off"
         />
         <span v-for="(err, index) in errors.name" :key="index" class="red--text">{{ err }}</span>
         <v-text-field
@@ -55,6 +56,7 @@
           validate-on-blur
           prepend-icon="mdi-email"
           outlined
+          autocomplete="off"
         />
         <span v-for="(err, index) in errors.email" :key="index" class="red--text">{{ err }}</span>
         <v-layout>
@@ -62,7 +64,7 @@
             v-model="password"
             name="password"
             label="Password"
-            autocomplete="false"
+            autocomplete="new-password"
             messages="At least 8 characters and 1 special character."
             :rules="$sourceryForms.rules.password"
             :type="showPass ? 'text' : 'password'"
@@ -230,13 +232,14 @@ export default {
         async registerSubmit () {
             try {
                 this.setJustRegistered(true)
-                const { user, error } = await supabase.auth.signUp({
+                const { data: { user }, error } = await supabase.auth.signUp({
                     email: this.email,
-                    password: this.password
-                }, {
-                    data: {
-                        phone: this.phone,
-                        name: this.name
+                    password: this.password,
+                    options: {
+                        data: {
+                            phone: this.phone,
+                            name: this.name
+                        }
                     }
                 })
 
@@ -244,13 +247,11 @@ export default {
                     throw error
                 }
 
-                console.log(user)
-
-                // NORMALLY we handle this in supabase.js plugin, however we wanted to edit meta before navigating so we handle the fetching here.
-                // await this.fetchUserOrganizations()
-                // await this.fetchUserHasPassword()
-
                 try {
+                    /**
+                   * This just doesn't work right now.  Supabase-js v2 does not populate the page with a valid session until a user is confirmed by default now, with no way to change that option.
+                   * So, the code will run here for reference in case that changes, but we need a new solution.
+                   */
                     const notifystatus = await notify({
                         user_id: user.id,
                         action: 'signed_up',
@@ -262,6 +263,7 @@ export default {
                     console.log(error)
                 }
 
+                console.log('Successfully registered user:', user)
                 // A reminder to future devs that there is a postgres trigger to create user meta on signup, so this should be pretty reliable as long as the user got inserted.
                 this.successMessage = 'Successful signup! Please check your email to confirm and continue.'
             } catch (error) {
@@ -283,13 +285,6 @@ export default {
                 this.errorEmpty = true
                 // console.log("Empty")
             }
-
-            // (2) passwords match
-            // if (this.password !== this.confirm_password) {
-            //   this.execute = false;
-            //   this.errorMatch = true;
-            //   //console.log("Match")
-            // }
 
             // (3) password 8 or more characters
             if (this.password.length < 8) {
