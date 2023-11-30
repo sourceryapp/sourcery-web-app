@@ -63,7 +63,7 @@
     "eslint-plugin-vue": "^7.13.0",
     "eslint-plugin-vuetify": "^1.1.0",
     "faker": "^4.1.0",
-    "firebase-tools": "^9.10.2",
+    "firebase-tools": "^12.9.1",
     "husky": "^6.0.0",
     "prettier-eslint": "^15.0.0",
     "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#master",
