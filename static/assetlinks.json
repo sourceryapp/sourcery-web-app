@@ -1,8 +1,14 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "org.sourceryapp.twa",
-        "sha256_cert_fingerprints": ["7B:E7:48:C1:D1:81:45:FF:96:61:96:AA:57:80:EE:CF:C0:4B:EF:43:59:B5:0B:76:7B:1D:3B:5E:30:79:83:A6"]
-      }
-    }]
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.sourcery",
+      "sha256_cert_fingerprints": [
+        "4E:71:2A:7A:83:12:0B:4F:63:15:44:98:F3:13:3C:88:C3:A8:DB:AB:EF:29:F5:3E:A3:86:96:09:C2:C7:21:CC"
+      ]
+    }
+  }
+]
