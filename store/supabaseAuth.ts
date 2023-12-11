@@ -172,7 +172,7 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
     },
     async changePassword({ state }: { state: SupabaseState }, newPass: string) {
         if (state.authUser) {
-            const { user, error } = await supabase.auth.update({
+            const { data: user, error } = await supabase.auth.updateUser({
                 password: newPass
             })
             console.log(user)

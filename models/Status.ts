@@ -23,7 +23,7 @@ export class Status {
     }
 
     public static async getById(id: number) {
-        let { data: status, error } = await supabase.from<Status>('status')
+        let { data: status, error } = await supabase.from('status')
             .select('*')
             .eq('id', id)
         if ( Array.isArray(status) && status.length > 0 && status[0] && status[0].id ) {
@@ -35,7 +35,7 @@ export class Status {
 
 
     public static async getByName(name : string) {
-        let { data: status, error } = await supabase.from<Status>('status')
+        let { data: status, error } = await supabase.from('status')
             .select('*')
             .eq('name', name)
             .limit(1)
@@ -50,7 +50,7 @@ export class Status {
     }
 
     public static async getAll() {
-        let { data: statuses, error } = await supabase.from<Status>('status')
+        let { data: statuses, error } = await supabase.from('status')
             .select('*')
             .order('id')
 

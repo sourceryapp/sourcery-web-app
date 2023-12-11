@@ -208,19 +208,27 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 throw error
             }
 
-            const { publicURL, error: publicError } = supabase.storage
+            const { data : publicURL } = supabase.storage
                 .from('attachments')
                 .getPublicUrl(filePath)
 
-            if (publicError || !publicURL) {
-                throw publicError
+            if (!publicURL) {
+                throw new Error('Could not get public URL for attachment.')
             }
 
             if (state.request && state.request.id) {
+                const { data: publicURLData } = await supabase.storage
+                    .from('attachments')
+                    .getPublicUrl(filePath)
+
+                if (!publicURLData || !publicURLData.publicUrl) {
+                    throw new Error('Could not get public URL for attachment.')
+                }
+
                 const newAttachment = new Attachment({
                     request_id: state.request.id,
                     user_id: rootGetters['supabaseAuth/authUser'].id,
-                    url: publicURL,
+                    url: publicURLData.publicUrl, // Access the publicUrl property
                     mime: file.type,
                     pages: pages,
                     label: storedFileName,

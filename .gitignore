@@ -21,8 +21,6 @@ dist
 .DS_Store
 */.DS_Store
 
-# No np lock files
-/package-lock.json
 
 # Environment variables
 .env
@@ -63,5 +61,7 @@ notes
 
 # Yarn Cache
 .yarn
+.pnp*
 
+# Dev Containers/Tropy Plugin Output
 nohup.out

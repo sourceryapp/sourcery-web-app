@@ -85,9 +85,8 @@ export class RequestComment {
 
     async insert() {
         const { data: requestComment, error } = await supabase.from(TABLE_NAME)
-            .insert([
-                this.toInsertJSON()
-            ])
+            .insert([this.toInsertJSON()])
+            .select()
         
         if ( error ) {
             console.log(error)
