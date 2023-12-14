@@ -60,7 +60,7 @@ export default {
         },
         redirectPath: {
             type: String,
-            default: '/dashboard'
+            default: '/'
         }
     },
     data () {
