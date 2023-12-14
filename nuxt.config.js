@@ -78,7 +78,7 @@ export default {
                 href:
                     'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
             },
-            { rel: 'icon', type: 'image/png', href: '/favicon.png' },
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
             { rel: 'apple-touch-icon', href: '/apple-icon.png' },
             {
                 rel: 'manifest',
