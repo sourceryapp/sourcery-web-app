@@ -1,6 +1,12 @@
 <template>
   <div id="content" class="site-content">
     <div class="fixed-header" style="position:fixed;width:100%;z-index:1;">
+      <div v-if="isIntersecting" class="top-callout-banner">
+        <p class="white--text">
+          Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="white--text" target="_blank">blog</a>!
+        </p>
+      </div>
+
       <v-fade-transition>
         <sourcery-header
           v-if="!isIntersecting"
@@ -751,19 +757,29 @@ h2 {
   flex-grow: 1;
 }
 
-.hiring-banner {
+.top-callout-banner {
   text-align: center;
-  background-color: #1E7473;
-  padding: 12px;
+  background-color: #3A2C42;
+  padding: 18px 12px;
+  font-weight: normal;
+  font-size: 14px;
+
+  background: linear-gradient(90deg, #4E4273 25%, #6A5690 50%, #4E4273 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1s 1 forwards linear; /* Run once and keep final state */
 }
 
-.hiring-banner .hiring-banner-link {
-  color: white;
-  font-weight: bold;
-}
-
-.hiring-banner .hiring-banner-link p {
+.top-callout-banner p {
   margin: 0;
   margin-bottom: 0;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -100%;
+  }
+  100% {
+    background-position: 140%;
+  }
 }
 </style>

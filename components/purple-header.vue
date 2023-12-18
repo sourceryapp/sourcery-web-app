@@ -35,6 +35,16 @@
           Team
         </v-btn>
         <v-btn
+          text
+          color="white"
+          class="ml-6"
+          large
+          min-width="96px"
+          href="https://sourceryapp.substack.com/"
+        >
+          Blog
+        </v-btn>
+        <v-btn
           outlined
           color="white"
           class="ml-6"
