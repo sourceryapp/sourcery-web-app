@@ -121,4 +121,23 @@ export class RequestsProspective {
 
         return count
     }
+
+    
+    /**
+     * Retrieve all requests that have not been converted to a real request.
+     * @returns Array of RequestsProspective
+     */
+    static async getNonConverted() {
+        const { data: requests, error } = await supabase.from(TABLE_NAME)
+            .select(`*`)
+            .order('created_at', { ascending: false })
+            .eq('converted', false)
+
+        if ( Array.isArray(requests) ) {
+            const rp = requests.map(x => new RequestsProspective(x))
+            return rp
+        }
+
+        return []
+    }
 }

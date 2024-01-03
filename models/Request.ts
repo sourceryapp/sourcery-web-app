@@ -80,7 +80,7 @@ export class Request {
         attachments = undefined
     }: CreateRequest) {
         this.id = id,
-            this.repository_id = repository_id
+        this.repository_id = repository_id
         this.citation = citation
         this.pages = pages
         this.status_id = status_id
@@ -146,7 +146,8 @@ export class Request {
     /**
      * Return requests created by a user_id, and optionally remove those with an 'Archived' status.
      * @param user_id 
-     * @param includeArchived 
+     * @param status string[] 
+     * @param offset number
      * @returns Request[]
      */
     public static async getForCreator(user_id: string, status : Array<string> = [], offset = 0) {
@@ -235,7 +236,11 @@ export class Request {
                 request_clients (*),
                 request_vendors (*),
                 attachments (*),
-                user!requests_user_id_fkey (id, email)
+                user!requests_user_id_fkey (id, email),
+                request_comments (
+                    *,
+                    user!request_comments_user_id_fkey (id, email)
+                )
             `)
             .eq('id', id)
             .limit(1)
@@ -387,6 +392,34 @@ export class Request {
         return true
     }
 
+
+    /**
+     * Creates a request comment on this request if there is not one already in order for it to show on the messages page.
+     */
+    async initializeChat(user_id : string, vendor = false) {
+        if ( !this.id ) { return false }
+        const fresh = await Request.getById(`${this.id}`)
+        if ( fresh ) {
+            if ( fresh.request_comments && fresh.request_comments.length > 0 ) {
+                return true
+            } else {
+                const rc = new RequestComment({
+                    request_id: this.id,
+                    user_id: user_id,
+                    content: 'Request chat created.',
+                    vendor: vendor,
+                    id: null,
+                    created_at: null
+                })
+                const status = await rc.insert()
+                if ( status ) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
     /**
      * Sends a request event track to the BaaS.
      * 
@@ -458,8 +491,18 @@ export class Request {
         return request?.status?.name === 'Cancelled'
     }
 
+    isOwner(user_id : string) {
+        return this.user_id === user_id
+    }
+
     static isOwner (user_id : string, request : Request | null) {
         return user_id === request?.user_id
+    }
+
+    canManage(repositories: Repository[]) {
+        return repositories
+            .map(x => x.id)
+            .includes(this.repository_id)
     }
 
     static canManage (repositories : Repository[], request : Request | null) {

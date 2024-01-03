@@ -53,11 +53,7 @@
 </template>
 
 <script>
-// /* global Stripe */
 import { mapGetters } from 'vuex'
-
-// const stripe = Stripe(process.env.STRIPE_PUBLISHABLE_KEY)
-// const elements = stripe.elements()
 
 export default {
     name: 'AddCard',

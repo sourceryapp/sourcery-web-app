@@ -2,7 +2,7 @@
  * Loads environment vars for the current NODE_ENV
  * Options: production, development
  */
-import * as env from 'sourcery-env'
+// import * as env from 'sourcery-env'
 
 /**
  * Uncomment and fillin your local supabase instance information for testing against a local db.
@@ -17,7 +17,7 @@ import * as env from 'sourcery-env'
  * Don't completely overwrite the
  * existing env vars.
  */
-Object.assign(env, process.env)
+// Object.assign(env, process.env)
 
 export default {
     target: 'static',
@@ -54,7 +54,22 @@ export default {
         /**
          * Max upload size in bytes
          */
-        maxUploadBytes: 52428800
+        maxUploadBytes: parseInt(process.env.MAX_BYTES) || 52428800,
+
+        /**
+         * Define necessary public env vars.
+         */
+        BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
+        API_URL: process.env.API_URL || 'http://localhost:54321',
+        SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
+        SUPABASE_KEY: process.env.SUPABASE_KEY
+    },
+
+    env: {
+        BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
+        API_URL: process.env.API_URL || 'http://localhost:54321',
+        SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
+        SUPABASE_KEY: process.env.SUPABASE_KEY
     },
 
     /*
@@ -106,13 +121,6 @@ export default {
         '~/assets/styles/addtohomescreen.css',
         '~/assets/styles/chat.css'
     ],
-
-    /*
-     ** Env File
-     */
-    env: {
-        ...env
-    },
 
     /*
      ** Plugins
@@ -181,38 +189,9 @@ export default {
         // '@nuxtjs/pwa',
         '@nuxtjs/axios',
         '@nuxtjs/toast',
-        '@nuxtjs/firebase',
+        // '@nuxtjs/firebase',
         '@nuxtjs/sentry'
     ],
-
-    /**
-     * Firebase configuration
-     * @url https://firebase.nuxtjs.org/guide/getting-started#example-configuration
-     */
-    firebase: {
-        config: env.FIREBASE_CONFIG,
-        services: {
-            // auth: {
-            //     persistence: 'local', // default
-            //     initialize: {
-            //         onAuthStateChangedMutation: 'auth/SET_AUTH_USER',
-            //         onAuthStateChangedAction: 'auth/onAuthStateChanged',
-            //         subscribeManually: false
-            //     },
-            //     ssr: false, // default
-
-            //     // if EMULATOR===local, use the Firestore Emulators
-            //     emulatorPort: env.EMULATOR === 'local' ? 9099 : undefined
-            // },
-            // firestore: {
-            //     // if EMULATOR===local, use the Firestore Emulators
-            //     emulatorPort: env.EMULATOR === 'local' ? 8080 : undefined
-            // },
-            // functions: env.EMULATOR === 'local' ? { emulatorPort: 5001 } : true,
-            storage: true,
-            remoteConfig: true
-        }
-    },
 
     /**
      * Sentry Error Logging
@@ -287,7 +266,7 @@ export default {
      * @url https://axios.nuxtjs.org/options.html
      */
     axios: {
-        baseURL: env.API_URL
+        baseURL: process.env.API_URL
     },
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
