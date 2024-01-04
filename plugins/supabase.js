@@ -11,11 +11,6 @@ export const supabase = createClient(
 
 export const postgrest = new PostgrestClient(process.env.SUPABASE_URL)
 
-export const getToken = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
-    return session?.access_token
-}
-
 export default async function setStore ({ store, route, app: { router } }) {
     const { data: { user } } = await supabase.auth.getUser()
     store.commit('supabaseAuth/setAuthUser', user)

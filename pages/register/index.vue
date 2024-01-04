@@ -170,7 +170,7 @@
 
 <script>
 import { mapMutations, mapActions } from 'vuex'
-import { getToken, supabase } from '~/plugins/supabase'
+import { supabase } from '~/plugins/supabase'
 import { notify } from '~/plugins/sourcery-functions'
 
 export default {
@@ -254,8 +254,7 @@ export default {
                    */
                     const notifystatus = await notify({
                         user_id: user.id,
-                        action: 'signed_up',
-                        token: await getToken()
+                        action: 'signed_up'
                     })
                     console.log('notifystatus', notifystatus)
                 } catch (error) {

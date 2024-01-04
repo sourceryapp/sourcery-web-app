@@ -7,7 +7,6 @@ import { RequestsProspective } from '~/models/RequestsProspective'
 import { IntegrationData } from '~/models/IntegrationData'
 import { PricingSummary } from '~/models/PricingSummary'
 import { notify, prospective } from '~/plugins/sourcery-functions'
-import { getToken } from '~/plugins/supabase'
 import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
 
@@ -175,8 +174,7 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                 // Successful insert
                 let new_rp = new RequestsProspective(r)
                 const prospective_data = {
-                    ...new_rp.toSpreadsheetJSON(),
-                    token: await getToken()
+                    ...new_rp.toSpreadsheetJSON()
                 }
 
                 if ( new_rp && new_rp.id ) {
@@ -185,6 +183,7 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
 
                     if ( prospective_data.id !== null ) {
                         try {
+                            console.log('supabaseCreate prospective_data', prospective_data)
                             await prospective(prospective_data)
                         } catch (e) {
                             // This is a google auth error probably
@@ -196,8 +195,7 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                     const prospective_notify_payload = {
                         user_id: state.client.id,
                         rp_id: new_rp.id,
-                        action: 'npi_request_to_requester',
-                        token: await getToken()
+                        action: 'npi_request_to_requester'
                     }
                     try {
                         await notify(prospective_notify_payload)
@@ -277,8 +275,7 @@ export const actions: ActionTree<SupabaseCreateState, SupabaseCreateState> = {
                     const notify_payload = {
                         user_id: state.client.id,
                         request_id: id,
-                        action: 'request_submitted_to_your_org',
-                        token: await getToken()
+                        action: 'request_submitted_to_your_org'
                     }
                     try {
                         await notify(notify_payload)

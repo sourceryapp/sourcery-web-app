@@ -4,7 +4,7 @@ import { User as SourceryUser } from '~/models/User'
 import { Organization } from '~/models/Organization'
 import { Message } from '~/models/Message'
 import { Commit, GetterTree, MutationTree, ActionTree, Dispatch } from 'vuex'
-import { supabase, getToken } from "~/plugins/supabase"
+import { supabase } from "~/plugins/supabase"
 import { notify } from "~/plugins/sourcery-functions"
 
 
@@ -195,11 +195,9 @@ export const actions: ActionTree<SupabaseState, SupabaseState> = {
             if (message) {
                 return
             }
-            const token = await getToken()
-            const result = await notify({
+            await notify({
                 user_id: state.authUser.id,
-                action: 'signed_up',
-                token: token
+                action: 'signed_up'
             })
         }
     }

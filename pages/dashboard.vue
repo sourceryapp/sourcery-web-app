@@ -48,8 +48,8 @@
         <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
       </sourcery-card> -->
 
-      <h1 v-if="requests.length > 0 && isOrgMember" class="mb-4">
-        Personal Requests
+      <h1 v-if="isOrgMember" class="mb-4">
+        Your Requests
       </h1>
 
       <v-alert
@@ -180,11 +180,13 @@ export default {
         ...mapGetters({
             user: 'supabaseAuth/authUser',
             isOrgMember: 'supabaseAuth/ownsAnOrganization',
-            prospectiveRequestCount: 'supabaseProspective/requestCount'
+            prospectiveRequestCount: 'supabaseProspective/requestCount',
+            userOrganizations: 'supabaseAuth/userOrganizations'
         }),
         pageTitle () {
             if (this.isOrgMember) {
-                return 'Institutional Dashboard'
+                const org_string = this.userOrganizations.map(x => x.name).join(', ')
+                return org_string
             }
             return 'Dashboard'
         },

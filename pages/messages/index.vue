@@ -35,7 +35,7 @@
               icon
               dark
               color="primary"
-              @click="resetSelectedChat"
+              @click="createChat"
             >
               <v-icon dark>
                 mdi-plus
@@ -133,8 +133,11 @@ import { RequestComment } from '~/models/RequestComment'
 import { Repository } from '~/models/Repository'
 
 export default {
-    async asyncData () {
+    async asyncData ({ redirect }) {
         const requests = await Request.getRequestsWithMessages()
+        if (requests.length === 0) {
+            redirect('/messages/select-request')
+        }
         const repositories = [
             ...await Repository.getActive(),
             ...await Repository.getGhost()
@@ -166,9 +169,13 @@ export default {
         }),
         chatTitleName () {
             if (this.selectedChat) {
-                return this.selectedChat.request.citation
+                if (this.isVendor) {
+                    return this.selectedChat.request_vendor.label
+                } else {
+                    return this.selectedChat.request_client.label
+                }
             }
-            return this.createEnabled ? 'Create Chat' : 'Select Chat'
+            return 'Select Chat'
         },
         chatSubtitleText () {
             if (this.selectedChat) {
@@ -249,6 +256,10 @@ export default {
         },
         resetSelectedChat () {
             this.selectedChat = null
+        },
+        createChat () {
+            this.resetSelectedChat()
+            this.$router.push('/messages/select-request')
         },
         scrollToBottom () {
             this.$refs.messagesContainer.scrollTop = 9999999999

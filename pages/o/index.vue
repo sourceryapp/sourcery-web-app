@@ -34,7 +34,6 @@ export default {
     },
     async asyncData () {
         const organizations = await Organization.getAll()
-
         return {
             organizations
         }

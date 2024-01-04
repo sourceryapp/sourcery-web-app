@@ -4,6 +4,18 @@
       <register-to-submit-request
         ref="login_with_link_dialog"
       />
+
+      <v-row v-if="$config.BASE_URL === 'http://localhost:3000'">
+        <v-col>
+          <p>Welcome to Sourcery Local Development!</p>
+          <v-btn @click="logInLocalUser('admin')">
+            Login as Admin
+          </v-btn>
+          <v-btn @click="logInLocalUser('test')">
+            Login as User
+          </v-btn>
+        </v-col>
+      </v-row>
       <v-form @submit.prevent="handleEmailPassLogin">
         <h1 class="text-center mb-2">
           Log In
@@ -147,6 +159,13 @@ export default {
         },
         loginWithOneTimeLink () {
             this.$refs.login_with_link_dialog.openDialog(this.email)
+        },
+        logInLocalUser (username) {
+            this.setRedirectHome(true)
+            supabase.auth.signInWithPassword({
+                email: `${username}@sourceryapp.org`,
+                password: 'password'
+            })
         }
     }
 }

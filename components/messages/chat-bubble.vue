@@ -1,5 +1,13 @@
 <template>
-  <div class="mb-3" :class="{ 'border-bot': showDate }">
+  <div class="mb-3">
+    <div v-if="showDate">
+      <div class="d-flex justify-content-end">
+        <div class="chat-card-message-time">
+          <em>{{ message.created_at | normalDate }}</em>
+        </div>
+      </div>
+      <hr class="mb-4">
+    </div>
     <div :class="chatMessageClass">
       <div v-if="!isUser" class="pa-3 rounded-circle user-bubble">
         <v-icon dark>
@@ -13,11 +21,6 @@
         <v-icon dark>
           mdi-account
         </v-icon>
-      </div>
-    </div>
-    <div v-if="showDate" class="d-flex justify-content-end">
-      <div class="chat-card-message-time">
-        <em>{{ message.created_at | normalDate }}</em>
       </div>
     </div>
   </div>
@@ -68,7 +71,7 @@ export default {
 </script>
 
 <style>
-.border-bot {
-    border-bottom: 1px solid darkgrey;
+.border-top {
+    border-top: 1px solid darkgrey;
 }
 </style>

@@ -1,7 +1,9 @@
+name: Deploy to Production Firebase Hosting
+
 on:
   release:
     types: published
-name: Deploy to Production
+
 jobs:
   production:
     environment: production
@@ -17,15 +19,19 @@ jobs:
 
     - name: Setup Node
       uses: actions/setup-node@v4
-      env:
-        PROJECT: sourcery-prod
-        TARGET: tube-1542818590717
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        NODE_ENV: production
       with:
         node-version: '20'
+
     - run: npm ci
     - run: npm run generate
+      env:
+        NODE_ENV: production
+        BASE_URL: ${{ vars.BASE_URL }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        SOURCERY_ENV: ${{ vars.SOURCERY_ENV }}
+
+
     - name: Deploy to Firebase
       uses: FirebaseExtended/action-hosting-deploy@v0
       with:

@@ -1,9 +1,11 @@
+name: Deploy to Dev Firebase Hosting
+
 on:
   push:
     # Sequence of patterns matched against refs/heads
     branches:
       - master # Only run on pushes to master
-name: Deploy to Dev
+
 jobs:
   development:
     name: Deploy to Dev
@@ -24,13 +26,16 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-      env:
-        PROJECT: sourcery-dev
-        TARGET: sourcery-dev
-        NODE_ENV: development
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
     - run: npm ci
-    - run: NODE_ENV=development npm run generate
+    - run: npm run generate
+      env:
+        NODE_ENV: development
+        BASE_URL: ${{ vars.BASE_URL }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        SOURCERY_ENV: ${{ vars.SOURCERY_ENV }}
+
     - name: Deploy to Firebase
       uses: FirebaseExtended/action-hosting-deploy@v0
       with:

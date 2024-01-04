@@ -248,7 +248,8 @@ export default {
         }),
         devItems () {
             const items = [
-                { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+                { title: 'Organizations', icon: 'mdi-domain', link: '/o' },
+                { title: 'Unregistered Institution Requests', icon: 'mdi-domain', link: '/uri' }
             ]
             return items
         }

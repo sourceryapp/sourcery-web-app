@@ -279,7 +279,7 @@ export default {
                     const { data, error } = await supabase
                         .storage
                         .from('attachments')
-                        .download(attachment.url.replace(`${process.env.SUPABASE_URL}/storage/v1/object/public/attachments/`, ''))
+                        .download(attachment.url.replace(`${this.$config.SUPABASE_URL}/storage/v1/object/public/attachments/`, ''))
 
                     if (error) {
                         this.$toast.error('There has been an issue downloading this file. Please contact our support.')

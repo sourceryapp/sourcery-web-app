@@ -135,24 +135,13 @@ import { mapGetters } from 'vuex'
 
 export default {
     name: 'Header',
-    props: {
-    },
-
     data () {
-        return {
-        }
+        return {}
     },
-
     computed: {
         ...mapGetters({
             user: 'supabaseAuth/authUser'
-        }),
-        isProd () {
-            if (process.env.BASE_URL && process.env.BASE_URL === 'https://sourceryapp.org') {
-                return true
-            }
-            return false
-        }
+        })
     }
 }
 </script>

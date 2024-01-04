@@ -1,4 +1,4 @@
-import { supabase, getToken } from '~/plugins/supabase'
+import { supabase } from '~/plugins/supabase'
 import { get_or_create_user } from '~/plugins/sourcery-functions'
 
 const TABLE_NAME = 'user'

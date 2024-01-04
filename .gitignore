@@ -58,6 +58,7 @@ notes
 # Supabase
 **/supabase/.branches
 **/supabase/.temp
+supabase/functions
 
 # Yarn Cache
 .yarn
