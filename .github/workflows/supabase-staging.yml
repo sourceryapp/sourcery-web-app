@@ -3,7 +3,6 @@ name: Supabase Staging DB Migration
 on:
   push:
     branches:
-      - feature/supabase-local
       - master
   workflow_dispatch:
 
