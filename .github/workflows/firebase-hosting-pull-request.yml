@@ -35,6 +35,7 @@ jobs:
           BASE_URL: ${{ vars.BASE_URL }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          SOURCERY_ENV: ${{ vars.SOURCERY_ENV }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0

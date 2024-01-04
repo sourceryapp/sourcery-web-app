@@ -8,7 +8,7 @@ if ( process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('localhost:')
     functions_base = process.env.SUPABASE_URL + '/functions/v1'
 }
 
-const is_prod = process.env.NODE_ENV === 'production'
+const is_prod = process.env.SOURCERY_ENV === 'production'
 
 export type NotifyParams = {
     action: string,

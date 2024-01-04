@@ -1,24 +1,3 @@
-/**
- * Loads environment vars for the current NODE_ENV
- * Options: production, development
- */
-// import * as env from 'sourcery-env'
-
-/**
- * Uncomment and fillin your local supabase instance information for testing against a local db.
- */
-// const local = {
-//     SUPABASE_URL: 'http://localhost:54321',
-//     SUPABASE_KEY: 'keyhere'
-// }
-// Object.assign(env, local)
-
-/**
- * Don't completely overwrite the
- * existing env vars.
- */
-// Object.assign(env, process.env)
-
 export default {
     target: 'static',
     ssr: false,
@@ -61,13 +40,15 @@ export default {
          */
         BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
         SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
-        SUPABASE_KEY: process.env.SUPABASE_KEY
+        SUPABASE_KEY: process.env.SUPABASE_KEY,
+        SOURCERY_ENV: process.env.SOURCERY_ENV || 'development'
     },
 
     env: {
         BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
         SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
-        SUPABASE_KEY: process.env.SUPABASE_KEY
+        SUPABASE_KEY: process.env.SUPABASE_KEY,
+        SOURCERY_ENV: process.env.SOURCERY_ENV || 'development'
     },
 
     /*
