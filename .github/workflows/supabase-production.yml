@@ -1,17 +1,15 @@
-name: Supabase Staging DB Migration
+name: Supabase Production DB Migration
 
 on:
-  push:
-    branches:
-      - feature/supabase-local
-      - master
+  release:
+    types: published
   workflow_dispatch:
 
 jobs:
   release:
     runs-on: ubuntu-latest
     # Specific to our development version of the web-app and supabase development instance.
-    environment: development
+    environment: production
 
     # Required to pass to supabase commands to set as env, and to pre-authenticate to the supabase instance.
     env:
