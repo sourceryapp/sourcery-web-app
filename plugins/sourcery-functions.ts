@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { supabase } from '~/plugins/supabase'
 
 const supabase_url_base = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace('.supabase.co', '') : ''
@@ -49,7 +48,7 @@ export async function notify({ action, user_id, request_id, message_text, token,
     }
 
     const fname = 'notify'
-    const data = {
+    const function_data = {
         action,
         user_id,
         request_id,
@@ -57,11 +56,9 @@ export async function notify({ action, user_id, request_id, message_text, token,
         rp_id
     }
 
-    const result = await axios.post(`${functions_base}/${fname}`, data, {
-        headers: get_function_headers(token)
-    })
+    const { data } = await supabase.functions.invoke(fname, { body: function_data })
 
-    return result
+    return data
 }
 
 export async function prospective ({ id, user_id, title, description, repository_name, repository_location, created_at, token } : ProspectiveParams) {
@@ -83,9 +80,7 @@ export async function prospective ({ id, user_id, title, description, repository
     const url = `${functions_base}/${fname}`
     console.log(url)
 
-    const result = await axios.post(url, data, {
-        headers: get_function_headers(token)
-    })
+    const { data: result } = await supabase.functions.invoke(fname, { body: data })
 
     return result
 }

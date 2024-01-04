@@ -60,14 +60,12 @@ export default {
          * Define necessary public env vars.
          */
         BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
-        API_URL: process.env.API_URL || 'http://localhost:54321',
         SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
         SUPABASE_KEY: process.env.SUPABASE_KEY
     },
 
     env: {
         BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
-        API_URL: process.env.API_URL || 'http://localhost:54321',
         SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
         SUPABASE_KEY: process.env.SUPABASE_KEY
     },
@@ -187,9 +185,7 @@ export default {
             }
         ],
         // '@nuxtjs/pwa',
-        '@nuxtjs/axios',
         '@nuxtjs/toast',
-        // '@nuxtjs/firebase',
         '@nuxtjs/sentry'
     ],
 
@@ -259,14 +255,6 @@ export default {
         onComplete: null,
         closeOnSwipe: true,
         singleton: false
-    },
-
-    /**
-     * Axios
-     * @url https://axios.nuxtjs.org/options.html
-     */
-    axios: {
-        baseURL: process.env.API_URL
     },
 
     // Auto import components (https://go.nuxtjs.dev/config-components)
