@@ -34,16 +34,9 @@ export type GetOrCreateUserParams = {
     email: string
 }
 
-function get_function_headers(token: string) {
-    return {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    }
-}
-
-export async function notify({ action, user_id, request_id, message_text, token, rp_id } : NotifyParams) {
+export async function notify({ action, user_id, request_id, message_text, rp_id } : NotifyParams) {
     /** Bit clunky at the moment, but toggle this if testing emails. */
-    if (!is_prod || !token) {
+    if (!is_prod) {
         return false
     }
 
@@ -61,8 +54,13 @@ export async function notify({ action, user_id, request_id, message_text, token,
     return data
 }
 
-export async function prospective ({ id, user_id, title, description, repository_name, repository_location, created_at, token } : ProspectiveParams) {
-    if (!is_prod || !token || id === null || created_at === null) {
+/**
+ * Responsible for running the edge function to push a prospective entry to spreadsheet.
+ * @param props id, user_id, title, description, repository_name, repository_location, created_at values for the prospective entry. 
+ * @returns result of the function call, object typically.
+ */
+export async function prospective ({ id, user_id, title, description, repository_name, repository_location, created_at } : ProspectiveParams) {
+    if (!is_prod || id === null || created_at === null) {
         return false
     }
     const fname = 'prospective'
@@ -77,10 +75,7 @@ export async function prospective ({ id, user_id, title, description, repository
         created_at
     }
 
-    const url = `${functions_base}/${fname}`
-    console.log(url)
-
-    const { data: result } = await supabase.functions.invoke(fname, { body: data })
+    const { data: result, error } = await supabase.functions.invoke(fname, { body: data })
 
     return result
 }
@@ -97,7 +92,7 @@ export async function get_or_create_user({ email } : GetOrCreateUserParams) {
     }
 
     const { data, error } = await supabase.functions.invoke(fname, {
-        body: JSON.stringify(request_data)
+        body: request_data
     })
 
     if ( error ) {

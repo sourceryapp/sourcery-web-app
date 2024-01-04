@@ -159,7 +159,7 @@ export default {
             loadingSend: false,
             newChatTextForm: null,
             newChatText: '',
-            createEnabled: true,
+            createEnabled: false,
             messagesOpen: true
         }
     },

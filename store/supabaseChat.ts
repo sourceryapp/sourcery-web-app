@@ -5,7 +5,7 @@ import { RequestClient } from '~/models/RequestClient'
 import { RequestVendor } from '~/models/RequestVendor'
 import { Report } from '~/models/Report'
 import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vuex'
-import { getToken, supabase } from '~/plugins/supabase'
+import { supabase } from '~/plugins/supabase'
 import { notify } from '~/plugins/sourcery-functions'
 
 const initialState = () => {
@@ -172,11 +172,9 @@ export const actions: ActionTree<SupabaseChatState, SupabaseChatState> = {
                     request_id: state.request.id,
                     user_id: user_id
                 })
-                const token = await getToken()
                 const sendNotif = await notify({
                     user_id: user_id,
                     action: vendor ? 'chat_sent_from_vendor' : 'chat_sent_from_client',
-                    token: token,
                     request_id: state.request.id,
                     message_text: messageText
                 })

@@ -4,7 +4,7 @@ import type { Commit, Dispatch, ActionTree, GetterTree, MutationTree } from 'vue
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 import { Attachment } from '~/models/Attachment'
-import { supabase, getToken } from '~/plugins/supabase'
+import { supabase } from '~/plugins/supabase'
 import { notify } from "~/plugins/sourcery-functions"
 
 // https://typescript.nuxtjs.org/cookbook/store/#vanilla <-- Helpful for inheriting other nuxt modules such as firebase into your actions/etc.
@@ -101,8 +101,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
-                    action: 'request_you_submitted_picked_up',
-                    token: await getToken()
+                    action: 'request_you_submitted_picked_up'
                 })
                 return true
             }
@@ -140,8 +139,7 @@ export const actions: ActionTree<SupabaseRequestState, SupabaseRequestState> = {
                 await notify({
                     user_id: rootGetters['supabaseAuth/authUser'].id,
                     request_id: state.request.id,
-                    action: 'request_you_submitted_complete',
-                    token: await getToken()
+                    action: 'request_you_submitted_complete'
                 })
                 return true
             }
