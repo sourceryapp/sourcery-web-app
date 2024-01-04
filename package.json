@@ -62,7 +62,6 @@
     "faker": "^4.1.0",
     "husky": "^6.0.0",
     "prettier-eslint": "^15.0.0",
-    "sourcery-env": "git+ssh://git@github.com/GreenhouseStudios/sourcery-env.git#master",
     "supabase": "^1.127.4",
     "ts-loader": "8"
   },
