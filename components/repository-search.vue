@@ -24,7 +24,7 @@
               Submit New Repository: {{ searchText }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              <em>User Custom Entry</em>
+              <em>Type to Add Repository; Select to Confirm</em>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -36,7 +36,7 @@
               Submit New Repository: {{ searchText }}
             </v-list-item-title>
             <v-list-item-subtitle>
-              <em>User Custom Entry</em>
+              <em>Type to Add Repository; Select to Confirm</em>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
