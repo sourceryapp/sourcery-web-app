@@ -98,11 +98,73 @@ export class RequestsProspective {
     }
 
 
+    async delete() {
+        const { data, error } = await supabase
+            .from(TABLE_NAME)
+            .update({ deleted: true })
+            .eq('id', this.id)
+            .select()
+
+        if ( error ) {
+            console.log(error)
+            return false
+        }
+
+        return true
+    }
+
+
+    async convert(repository_id : string) {
+        console.log('Converting request to real request.');
+
+        const { data, error } = await supabase.rpc('convert_request', {
+            prospective_request_id: this.id,
+            repository_id
+        })
+
+        if ( error ) {
+            console.log(error)
+            return null
+        }
+
+        return data
+
+        // const { data, error } = await supabase
+        //     .from(TABLE_NAME)
+        //     .update({ converted: true, repository_id })
+        //     .eq('id', this.id)
+        //     .select()
+    }
+
+
+    static async getById(id: number) {
+        const { data: request_prospective, error } = await supabase.from(TABLE_NAME)
+            .select(`
+                *,
+                user (*)
+            `)
+            .eq('id', id)
+            .single()
+
+        if ( error ) {
+            console.log(error)
+            return null
+        }
+
+        if ( request_prospective ) {
+            return new RequestsProspective(request_prospective)
+        }
+
+        return null
+    }
+
+
     static async getForUser(user_id: string) {
         const { data: requests, error } = await supabase.from(TABLE_NAME)
             .select(`*`)
             .order('created_at', { ascending: false })
             .eq('user_id', user_id)
+            .eq('deleted', false)
 
         if ( Array.isArray(requests) ) {
             const rp = requests.map(x => new RequestsProspective(x))
@@ -116,6 +178,7 @@ export class RequestsProspective {
         const query = supabase.from(TABLE_NAME)
             .select('user_id', { count: 'exact' })
             .eq('user_id', user_id)
+            .eq('deleted', false)
 
         let { data, error, count } = await query
 
@@ -129,9 +192,13 @@ export class RequestsProspective {
      */
     static async getNonConverted() {
         const { data: requests, error } = await supabase.from(TABLE_NAME)
-            .select(`*`)
+            .select(`
+                *,
+                user (*)
+            `)
             .order('created_at', { ascending: false })
             .eq('converted', false)
+            .eq('deleted', false)
 
         if ( Array.isArray(requests) ) {
             const rp = requests.map(x => new RequestsProspective(x))
