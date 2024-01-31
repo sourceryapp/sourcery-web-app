@@ -114,6 +114,29 @@ export class RequestsProspective {
     }
 
 
+    async convert(repository_id : string) {
+        console.log('Converting request to real request.');
+
+        const { data, error } = await supabase.rpc('convert_request', {
+            prospective_request_id: this.id,
+            repository_id
+        })
+
+        if ( error ) {
+            console.log(error)
+            return null
+        }
+
+        return data
+
+        // const { data, error } = await supabase
+        //     .from(TABLE_NAME)
+        //     .update({ converted: true, repository_id })
+        //     .eq('id', this.id)
+        //     .select()
+    }
+
+
     static async getById(id: number) {
         const { data: request_prospective, error } = await supabase.from(TABLE_NAME)
             .select(`

@@ -18,7 +18,7 @@
       @keyup.13="selectCreateNewRepository"
     >
       <template #prepend-item>
-        <v-list-item @click="selectCreateNewRepository">
+        <v-list-item v-if="custom" @click="selectCreateNewRepository">
           <v-list-item-content>
             <v-list-item-title>
               Submit New Repository: {{ searchText }}
@@ -76,6 +76,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import { Repository } from '~/models/Repository'
 
 export default {
+    props: {
+        custom: {
+            type: Boolean,
+            default: true
+        }
+    },
     data () {
         return {
             repositories: [],
@@ -146,9 +152,11 @@ export default {
             this.$emit('selected', repository)
         },
         selectCreateNewRepository () {
-            this.selectedRepository = this.searchText
-            this.$emit('selected', this.searchText)
-            this.$refs.repository_search_auto.blur()
+            if (this.custom) {
+                this.selectedRepository = this.searchText
+                this.$emit('selected', this.searchText)
+                this.$refs.repository_search_auto.blur()
+            }
         },
         unselect () {
             this.selectedRepository = null

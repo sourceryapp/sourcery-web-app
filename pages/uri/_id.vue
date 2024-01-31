@@ -30,16 +30,25 @@
         </v-card>
       </v-col>
       <v-col cols="12" md="6">
-        <repository-search ref="repository_search" @selected="setRepository" />
+        <repository-search ref="repository_search" :custom="false" @selected="setRepository" />
 
-        <v-btn
-          color="primary"
-          depressed
-          small
-          @click="convertRequest()"
-        >
-          Convert to Request
-        </v-btn>
+        <div class="d-flex align-center">
+          <v-btn
+            color="primary"
+            depressed
+            small
+            :disabled="!canSubmit"
+            class="mr-2"
+            @click="convertRequest()"
+          >
+            Convert to Request
+          </v-btn>
+          <v-progress-circular
+            :class="{ hidden: !isLoading }"
+            indeterminate
+            color="primary"
+          />
+        </div>
       </v-col>
     </v-row>
   </v-flex>
@@ -56,20 +65,36 @@ export default {
     },
     data () {
         return {
-            request: {}
+            request: {},
+            selectedRepository: null,
+            isLoading: false
+        }
+    },
+    computed: {
+        canSubmit () {
+            return this.selectedRepository?.id && !this.isLoading
         }
     },
     methods: {
-        convertRequest () {
-            console.log('convertRequest')
-            console.log(this.request)
+        async convertRequest () {
+            this.isLoading = true
+            if (this.selectedRepository?.id) {
+                const new_request = await this.request.convert(this.selectedRepository.id)
+                if (Array.isArray(new_request) && new_request.length > 0) {
+                    this.$router.push('/uri')
+                }
+            }
+            this.isLoading = false
         },
         setRepository (repository) {
-            // this.request.repository_id = repository.id
-            // this.request.repository_name = repository.name
-            // this.request.repository_location = repository.location
-            console.log(repository)
+            this.selectedRepository = repository
         }
     }
 }
 </script>
+
+<style>
+.hidden {
+    visibility: hidden;
+}
+</style>
