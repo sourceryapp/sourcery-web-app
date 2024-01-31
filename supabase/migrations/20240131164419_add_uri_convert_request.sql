@@ -1,9 +1,3 @@
-drop policy "Allow authenticated users to insert" on "public"."requests_prospective";
-
-drop policy "Allow full access for admin" on "public"."requests_prospective";
-
-drop policy "Allow read for creator" on "public"."requests_prospective";
-
 alter table "public"."requests_prospective" add column "deleted" boolean default false;
 
 set check_function_bodies = off;
