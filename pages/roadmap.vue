@@ -27,19 +27,22 @@
               <v-col class="order-sm-first col-12 col-sm-6">
                 <div class="">
                   <h2 class="date mb-2">
-                    January - February 2022
+                    Winter-Spring 2024
                   </h2>
                   <p>
-                    Transition language and layouts to have a focus on Institutional usage.
+                    Release of Archivesspace plugin.
                   </p>
                   <p>
-                    Design a chat box feature for the request process.
+                    Launch of Sourcery Anywhere (support for requests nationwide).
                   </p>
                   <p>
-                    Meet with our testing partners to discuss feedback, progress, and site usage.
+                    Release of Android App.
                   </p>
                   <p>
-                    Integrate Supabase to our back end code.
+                    Release of "Request with Sourcery" HTML buttons.
+                  </p>
+                  <p>
+                    Support for Line Breaks &amp; Basic Rich Text in Request Details.
                   </p>
                 </div>
               </v-col>
@@ -57,19 +60,16 @@
               <v-col class="col-12 col-sm-6">
                 <div class="">
                   <h2 class="date mb-2">
-                    March - May 2022
+                    Summer-Fall 2024
                   </h2>
                   <p>
-                    Implement ArchiveSpace integration between platforms.
+                    Launch of minimal computing version for users in low-bandwidth areas.
                   </p>
                   <p>
-                    Create scan request workflow documentation.
+                    Release of Tropy plugin.
                   </p>
                   <p>
-                    Design “import” and “export” protocols/APIs.
-                  </p>
-                  <p>
-                    Host design charrette with our Advisory Board and Testing Partners.
+                    Support for institutional analytics.
                   </p>
                 </div>
               </v-col>
@@ -87,76 +87,13 @@
               <v-col class="order-sm-first col-12 col-sm-6">
                 <div class="">
                   <h2 class="date mb-2">
-                    Summer 2022
+                    2025 and Beyond
                   </h2>
                   <p>
-                    Rollout major UI updates.
+                    Launch of in-app payments.
                   </p>
                   <p>
-                    Begin working on Tropy, Omeka, and Fedora integrations.
-                  </p>
-                  <p>
-                    Build “import” and “export” protocols/APIs.
-                  </p>
-                  <p>
-                    Implement new institutional dashboard.
-                  </p>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row class="align-center">
-              <v-col
-                class="col-12 col-sm-6 d-flex justify-center"
-              >
-                <img
-                  class="roadmap-image"
-                  src="../static/img/roadmap-illustrations/4.svg"
-                  alt=""
-                >
-              </v-col>
-              <v-col class="col-12 col-sm-6">
-                <div class="">
-                  <h2 class="date mb-2">
-                    Fall 2022
-                  </h2>
-                  <p>
-                    Implement new analytics tools.
-                  </p>
-                  <p>
-                    Launch Tropy, Omeka, and Fedora integrations.
-                  </p>
-                  <p>
-                    Rollout additional major updates.
-                  </p>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row class="align-center">
-              <v-col
-                class="col-12 col-sm-6 d-flex justify-center"
-              >
-                <img
-                  class="roadmap-image"
-                  src="../static/img/roadmap-illustrations/5.svg"
-                  alt=""
-                >
-              </v-col>
-              <v-col class="order-sm-first col-12 col-sm-6">
-                <div class="">
-                  <h2 class="date mb-2">
-                    2023
-                  </h2>
-                  <p>
-                    Implement “Hire a Researcher” feature.
-                  </p>
-                  <p>
-                    Launch native iOS and Android apps.
-                  </p>
-                  <p>
-                    Launch minimal computing version of the app for users in low-bandwidth areas.
-                  </p>
-                  <p>
-                    Pilot relaunch and integration of third-party, peer-to-peer scanning services.
+                    Pilot launch of third-party, peer-to-peer scanning services.
                   </p>
                 </div>
               </v-col>
