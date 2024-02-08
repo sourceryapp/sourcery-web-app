@@ -36,13 +36,13 @@
                     Launch of Sourcery Anywhere (support for requests nationwide).
                   </p>
                   <p>
-                    Release of Android App.
+                    Release of Android native application.
                   </p>
                   <p>
                     Release of "Request with Sourcery" HTML buttons.
                   </p>
                   <p>
-                    Support for Line Breaks &amp; Basic Rich Text in Request Details.
+                    Support for line breaks &amp; basic rich text in request details.
                   </p>
                 </div>
               </v-col>
