@@ -122,6 +122,12 @@ export default {
                     bio: 'Sara Sikes, MA, is the Associate Director of Greenhouse Studios. She joined the Library staff at the University of Connecticut in 2016, and her career includes positions in museums, academic publishing, public history institutions and research libraries.'
                 },
                 {
+                    name: 'Amanda Breeden',
+                    title: 'Project Lead',
+                    image: 'breeden.jpg',
+                    bio: "Originally trained as an archivist, Amanda (she/her) functions as a project lead for Greenhouse Studios' archival document delivery app, Sourcery. She has a range of experience in archives, libraries, and museums. Hailing from North Carolina, she earned her BA in History from the University of North Carolina at Asheville and her MLS from the University of North Carolina at Chapel Hill with a concentration in Archives and Records Management. Amanda also currently works part-time at the New Haven Free Public Library as a Reference Librarian."
+                },
+                {
                     name: 'Brian Kelleher',
                     title: 'Developer',
                     image: 'kelleher.jpg',
@@ -144,6 +150,12 @@ export default {
                     title: 'Undergraduate Research Assistant',
                     image: 'harland.jpg',
                     bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She’s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
+                },
+                {
+                    name: 'Jailyn Murphy',
+                    title: 'Undergraduate Research Assistant',
+                    image: 'murphy.jpg',
+                    bio: 'Jailyn (she/her) is a digital media enthusiast who has a particular interest in social media data analysis. She has a passion for design that serves a clear purpose and targets its audience successfully. Digital history is another topic of interest for her because of the influence her father, a US History teacher, has on her. She hopes to work in advertising in Boston, MA soon after college. Additionally, she coaches a professional hip-hop competition team and has a love for cooking.'
                 }
             ],
             alumni: [
