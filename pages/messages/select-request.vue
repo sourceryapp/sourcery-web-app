@@ -5,7 +5,7 @@
         <h1>Select a Request</h1>
         <v-text-field label="Request Title" />
 
-        <p v-for="(request, index) in requests" :key="`request-${index}`" @click="selectRequest(request)">
+        <p v-for="(request, index) in requests" @click="selectRequest(request)">
           {{ request }}
         </p>
       </v-col>

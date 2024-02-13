@@ -44,7 +44,7 @@
           outlined
           autocomplete="off"
         />
-        <span v-for="(err, index) in errors.name" :key="index" class="red--text">{{ err }}</span>
+        <span v-for="(err, index) in errors.name" class="red--text">{{ err }}</span>
         <v-text-field
           v-model="email"
           type="email"
@@ -58,7 +58,7 @@
           outlined
           autocomplete="off"
         />
-        <span v-for="(err, index) in errors.email" :key="index" class="red--text">{{ err }}</span>
+        <span v-for="(err, index) in errors.email" class="red--text">{{ err }}</span>
         <v-layout>
           <v-text-field
             v-model="password"

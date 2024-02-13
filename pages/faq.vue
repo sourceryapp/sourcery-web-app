@@ -5,7 +5,6 @@
         <v-expansion-panels flat tile>
           <v-expansion-panel
             v-for="(item,i) in items"
-            :key="i"
             color="transparent"
           >
             <v-expansion-panel-header class="text-h6">

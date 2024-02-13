@@ -22,7 +22,7 @@
       <div class="header-content pt-9 mt-4">
         <img
           class="header__logo"
-          src="../static/img/logo-wordmark-white.svg"
+          src="../public/img/logo-wordmark-white.svg"
           alt=""
         >
         <img
@@ -159,7 +159,7 @@
             <v-col>
               <img
                 class="section-img"
-                src="../static/img/landing-illustrations/undraw_faq_rjoy.svg"
+                src="../public/img/landing-illustrations/undraw_faq_rjoy.svg"
                 alt=""
               >
             </v-col>
@@ -179,7 +179,7 @@
             offering a simple request and fulfillment workflow and a seamless, secure payments system.
           </p>
           <img
-            src="../static/img/sparkle-circle.svg"
+            src="../public/img/sparkle-circle.svg"
             class="sparkle"
             :style="$vuetify.theme.dark ? 'filter: invert(1) hue-rotate(180deg)' : ''"
           >
@@ -190,7 +190,7 @@
             Just provide the document’s citation information, and Sourcery will do the rest.
           </p>
           <img
-            src="../static/img/sparkle-circle.svg"
+            src="../public/img/sparkle-circle.svg"
             class="sparkle"
             :style="$vuetify.theme.dark ? 'filter: invert(1) hue-rotate(180deg)' : ''"
           >
@@ -233,7 +233,7 @@
           <v-row class="align-center">
             <v-col>
               <img
-                src="../static/img/landing-illustrations/undraw_enter_uhqk.svg"
+                src="../public/img/landing-illustrations/undraw_enter_uhqk.svg"
                 alt=""
                 class="section-img ready-img"
               >
@@ -309,7 +309,7 @@
                   >
                     <div class="modal-button-content">
                       <img
-                        src="@/static/img/icons_document.png"
+                        src="@/public/img/icons_document.png"
                         height="180"
                       >
                       <span class="modal-button-text">
@@ -328,7 +328,7 @@
                   >
                     <div class="modal-button-content">
                       <img
-                        src="@/static/img/icons_institution.png"
+                        src="@/public/img/icons_institution.png"
                         height="160"
                       >
                       <span class="modal-button-text">

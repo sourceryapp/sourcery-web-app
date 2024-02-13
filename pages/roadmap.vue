@@ -20,7 +20,7 @@
               >
                 <img
                   class="roadmap-image"
-                  src="../static/img/roadmap-illustrations/1.svg"
+                  src="../public/img/roadmap-illustrations/1.svg"
                   alt=""
                 >
               </v-col>
@@ -53,7 +53,7 @@
               >
                 <img
                   class="roadmap-image"
-                  src="../static/img/roadmap-illustrations/2.svg"
+                  src="../public/img/roadmap-illustrations/2.svg"
                   alt=""
                 >
               </v-col>
@@ -80,7 +80,7 @@
               >
                 <img
                   class="roadmap-image"
-                  src="../static/img/roadmap-illustrations/3.svg"
+                  src="../public/img/roadmap-illustrations/3.svg"
                   alt=""
                 >
               </v-col>
@@ -174,7 +174,7 @@ export default {
 }
 
 #path-bg {
-  background: url('../static/img/roadmap-illustrations/path.svg');
+  background: url('../public/img/roadmap-illustrations/path.svg');
   background-origin: content-box;
   background-position: center;
   background-repeat: no-repeat;

@@ -9,7 +9,6 @@
           </h1>
           <div
             v-for="member in members_sorted"
-            :key="member.name"
           >
             <v-card
 
@@ -52,7 +51,6 @@
           <div class="d-flex flex-wrap mx-sm-n12 justify-center justify-sm-space-between">
             <v-card
               v-for="member in alumni_sorted"
-              :key="member.name"
               color="transparent"
               flat
               class="mb-8 flex-shrink-1 mx-sm-8 pa-3"

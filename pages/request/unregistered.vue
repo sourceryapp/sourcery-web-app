@@ -13,7 +13,7 @@
 
       <div class="requests-prospective-section mt-6">
         <sourcery-card title="Requests" icon="mdi-file-search">
-          <v-card v-for="request in requests" :key="`rp-${request.id}`" class="mt-4 mb-4">
+          <v-card v-for="request in requests" class="mt-4 mb-4">
             <v-card-title>{{ request.title }}</v-card-title>
             <v-card-subtitle>Submitted {{ readableDate(request.created_at) }}</v-card-subtitle>
             <v-card-text>

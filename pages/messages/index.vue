@@ -19,7 +19,6 @@
         >
           <messages-chat-list-item
             v-for="chat in requests"
-            :key="`chat-brief-xs-${chat.request.id}`"
             :chat="chat"
             @selected-chat="chatSelected"
           />
@@ -44,7 +43,6 @@
           </div>
           <messages-chat-list-item
             v-for="chat in requests"
-            :key="`chat-brief-${chat.request.id}`"
             :chat="chat"
             @selected-chat="chatSelected"
           />
@@ -91,7 +89,6 @@
             <div ref="messagesContainer" class="chat-card-messages overflow-y-auto px-4 mh-0">
               <messages-chat-bubble
                 v-for="(message, i) in messages"
-                :key="`messagebubble-${message.id}`"
                 :user-id="user.id"
                 :message="message"
                 :show-date="messages[i - 1] ? $options.filters.normalDate(messages[i + 1]?.created_at) !== $options.filters.normalDate(message.created_at) : true"
@@ -299,11 +296,14 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~vuetify/src/styles/settings/_variables';
+@use "@/assets/src/scss/vuetify-settings" as settings;
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get(settings.$display-breakpoints, 'md-and-up')} {
   .h-md-100 {
     height: 100%;
+  }
+  .mxh-85v {
+    max-height: 85vh;
   }
 }
 
@@ -321,12 +321,6 @@ export default {
 
 .mh-0 {
   min-height: 0;
-}
-
-@media #{map-get($display-breakpoints, 'md-and-up')} {
-  .mxh-85v {
-    max-height: 85vh;
-  }
 }
 
 .pos-r {

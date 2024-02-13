@@ -1,5 +1,5 @@
 <template>
-  <v-hover v-slot="{ hover }" :key="request.id">
+  <v-hover v-slot="{ hover }">
     <v-sheet v-if="request" class="my-4 rounded-lg request-card d-flex align-center" :color="cardColor" @click="cardClickAction">
       <div :class="{ 'bg-teal': isSubmitted, 'bg-blue': isPickedUp, 'bg-purple': isPostAction }" class="color-bar rounded-l-lg" width="20" z-index="2" />
       <div class="request-card-content d-flex align-center justify-space-between w-100">
@@ -66,7 +66,7 @@
                 </v-btn>
               </template>
               <v-list>
-                <v-list-item v-for="(item, index) in requestActionsList" :key="index" @click.prevent.stop="item.action">
+                <v-list-item v-for="(item, index) in requestActionsList" @click.prevent.stop="item.action">
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
                 </v-list-item>
               </v-list>

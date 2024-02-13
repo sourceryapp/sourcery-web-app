@@ -1,13 +1,5 @@
 import { supabase } from '~/plugins/supabase'
 
-const supabase_url_base = process.env.SUPABASE_URL ? process.env.SUPABASE_URL.replace('.supabase.co', '') : ''
-let functions_base = supabase_url_base + '.functions.supabase.co'
-
-// Modifying so we have the ability to test on local supabase
-if ( process.env.SUPABASE_URL && process.env.SUPABASE_URL.includes('localhost:') ) {
-    functions_base = process.env.SUPABASE_URL + '/functions/v1'
-}
-
 const is_prod = process.env.SOURCERY_ENV === 'production'
 
 export type NotifyParams = {
@@ -102,3 +94,16 @@ export async function get_or_create_user({ email } : GetOrCreateUserParams) {
 
     return data
 }
+
+
+export default defineNuxtPlugin(nuxtApp => {
+    return {
+        provide: {
+            sourceryCloudFunctions: {
+                notify,
+                prospective,
+                get_or_create_user
+            }
+        }
+    }
+})

@@ -31,7 +31,7 @@
         </v-form>
       </sourcery-card>
 
-      <sourcery-card v-for="repo in organization.repositories" :key="`org-repo-${repo.id}`" :title="`Change ${repo.name} Image`" icon="mdi-image-multiple">
+      <sourcery-card v-for="repo in organization.repositories" :title="`Change ${repo.name} Image`" icon="mdi-image-multiple">
         <figure v-if="repoHasImage(repo)" class="mb-3">
           <v-img
             :src="repoImageUrl(repo)"

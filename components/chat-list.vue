@@ -3,7 +3,7 @@
     <p v-if="loading">
       Loading...
     </p>
-    <div v-for="chat in chatMessages" :key="`cm-${chat.id}`" :class="messageListItemClass(chat)">
+    <div v-for="chat in chatMessages" :class="messageListItemClass(chat)">
       <strong>{{ messageFrom(chat) }}:</strong> <span>{{ chat.content }}</span>
     </div>
     <p v-if="!chatMessages.length && !loading">

@@ -74,7 +74,7 @@
           <v-card-text v-show="!minimized && hasAgreedToTerms" id="chatScroller" class="overflow-y-scroll cap-height">
             <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.</p>
             <div class="chat-card-messages rounded">
-              <div v-for="message in messages" :key="message.id" :class="chatMessageClass(message)">
+              <div v-for="message in messages" :class="chatMessageClass(message)">
                 <div :class="chatMessageTextClass(message)">
                   {{ message.content }}
                 </div>

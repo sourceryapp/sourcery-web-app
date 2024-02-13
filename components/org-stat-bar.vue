@@ -3,7 +3,7 @@
     <v-card class="pt-1 pb-1 pr-3 pl-2">
       <v-card-text>
         <div class="org-stat-bar-row d-flex align-stretch flex-wrap flex-md-nowrap">
-          <div v-for="label in labels" :key="`l-${label.key}`" class="split-border text-center org-stat-bar-stat pl-4 pr-4">
+          <div v-for="label in labels" class="split-border text-center org-stat-bar-stat pl-4 pr-4">
             <p class="mb-1 stat-label">
               {{ label.name }}
             </p>
@@ -93,16 +93,16 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-@import '~vuetify/src/styles/settings/_variables';
+@use "@/assets/src/scss/vuetify-settings" as settings;
 
-@media #{map-get($display-breakpoints, 'sm-and-down')} {
+@media #{map-get(settings.$display-breakpoints, 'sm-and-down')} {
     .org-stat-bar-stat {
         width: 50%;
         margin-bottom: 16px;
     }
 }
 
-@media #{map-get($display-breakpoints, 'md-and-up')} {
+@media #{map-get(settings.$display-breakpoints, 'md-and-up')} {
     .split-border:not(:first-child) {
         border-left: 2px solid rgba(255, 255, 255, 0.7);
     }

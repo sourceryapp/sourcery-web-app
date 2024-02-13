@@ -44,7 +44,6 @@
       >
         <v-list-item
           v-for="item in items1"
-          :key="item.title"
           :to="item.link"
           nuxt
           exact
@@ -67,7 +66,6 @@
       >
         <v-list-item
           v-for="item in items2"
-          :key="item.title"
           :to="item.link"
           nuxt
           exact
@@ -98,7 +96,6 @@
       >
         <v-list-item
           v-for="item in devItems"
-          :key="item.title"
           :to="item.link"
           nuxt
           exact
@@ -158,7 +155,6 @@
         <v-list-item-group color="primary">
           <v-list-item
             v-for="item in bottomItems"
-            :key="item.title"
             :to="item.link"
             nuxt
             exact

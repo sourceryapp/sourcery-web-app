@@ -44,7 +44,6 @@
             </tr>
             <tr
               v-for="request in requests"
-              :key="request.id"
             >
               <td>{{ request.id }}</td>
               <td>{{ request.created_at | normalDate }}</td>

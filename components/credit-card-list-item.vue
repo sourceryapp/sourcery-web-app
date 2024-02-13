@@ -1,7 +1,6 @@
 <template>
-  <v-list-item :key="`list-item-${index}`" two-line>
+  <v-list-item two-line>
     <v-list-item-avatar
-      :key="`avatar-${index}`"
       :class="$vuetify.theme.dark ? 'secondary' : 'deep-purple lighten-5'"
       height="32px"
       rounded
@@ -9,7 +8,7 @@
       <i :class="$vuetify.theme.dark ? `primary--text text--lighten-2 pf pf-${item.card.brand}` : `primary--text text--darken-2 pf pf-${item.card.brand}`" aria-hidden="true" :title="item.card.brand" />
     </v-list-item-avatar>
 
-    <v-list-item-content :key="`contentcard-${index}`">
+    <v-list-item-content>
       <v-list-item-title
         class="font-weight-medium"
       >

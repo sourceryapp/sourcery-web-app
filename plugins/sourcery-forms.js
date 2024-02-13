@@ -4,7 +4,7 @@
 
 const special_characters = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '_', '-', '+', '=', '`', '|', '(', ')', '{', '}', '[', ']', ':', ';', "'", '<', '>', ',', '.', '?', '/']
 
-export default ({ app }, inject) => {
+export default defineNuxtPlugin(nuxtApp => {
     const sourceryForms = (() => {
         return {
             rules: {
@@ -25,5 +25,9 @@ export default ({ app }, inject) => {
         }
     })()
 
-    inject('sourceryForms', sourceryForms)
-}
+    return {
+        provide: {
+            sourceryForms
+        }
+    }
+})

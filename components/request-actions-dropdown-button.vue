@@ -13,8 +13,7 @@
     </template>
     <v-list>
       <v-list-item
-        v-for="(item, index) in requestActionsList"
-        :key="index"
+        v-for="item in requestActionsList"
         @click.prevent="item.action"
       >
         <v-list-item-title>{{ item.name }}</v-list-item-title>

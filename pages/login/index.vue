@@ -5,7 +5,7 @@
         ref="login_with_link_dialog"
       />
 
-      <v-row v-if="$config.BASE_URL === 'http://localhost:3000'">
+      <v-row v-if="$config.public.BASE_URL === 'http://localhost:3000'">
         <v-col>
           <p>Welcome to Sourcery Local Development!</p>
           <v-btn @click="logInLocalUser('admin')">

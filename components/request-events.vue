@@ -47,7 +47,6 @@
                 <tbody>
                   <tr
                     v-for="(event, index) in eventRows"
-                    :key="`event-row-${index}`"
                   >
                     <td class="py-2">
                       {{ event.text }}

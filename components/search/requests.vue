@@ -36,7 +36,6 @@
               <span class="text-uppercase">Status</span>
               <v-checkbox
                 v-for="status in statuses"
-                :key="`statuscheck-${status.id}`"
                 v-model="filter.status"
                 :label="status.name"
                 color="#644ea2"
@@ -51,7 +50,7 @@
 
     <v-row>
       <v-col>
-        <v-chip v-for="s in filterBadges" :key="`activestatusfilter-${s.id}`" class="ma-2" close @click:close="removeStatusFromFilter(s.id)">
+        <v-chip v-for="s in filterBadges" class="ma-2" close @click:close="removeStatusFromFilter(s.id)">
           {{ s.name }}
         </v-chip>
       </v-col>
@@ -64,7 +63,7 @@
     </v-row>
 
     <v-row v-else-if="filteredRequests.length > 0">
-      <v-col v-for="request in filteredRequests" :key="request.id" cols="12" md="6">
+      <v-col v-for="request in filteredRequests" cols="12" md="6">
         <request-listing :request="request" :client="isClientView" />
       </v-col>
     </v-row>

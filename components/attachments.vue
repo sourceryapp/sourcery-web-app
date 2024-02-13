@@ -31,7 +31,6 @@
         <v-layout v-if="Array.isArray(request.attachments)" wrap>
           <v-flex
             v-for="n in attachmentList"
-            :key="`ra-${n.id}`"
             xs4
             d-flex
           >
@@ -100,7 +99,7 @@
           </div>
         </v-card-title>
         <v-layout v-if="request.attachments.length > 0" wrap>
-          <v-flex v-for="(attachment, index) in request.attachments" :key="index" xs3 class="pa-2">
+          <v-flex v-for="attachment in request.attachments" xs3 class="pa-2">
             <a @click="downloadAttachment(attachment)">
               <v-img :src="!attachment.isPDF() ? attachment.url : '/img/pdf.svg'" :alt="`Attachment #${index+1}`" aspect-ratio="1" />
             </a>
@@ -279,7 +278,7 @@ export default {
                     const { data, error } = await supabase
                         .storage
                         .from('attachments')
-                        .download(attachment.url.replace(`${this.$config.SUPABASE_URL}/storage/v1/object/public/attachments/`, ''))
+                        .download(attachment.url.replace(`${this.$config.public.SUPABASE_URL}/storage/v1/object/public/attachments/`, ''))
 
                     if (error) {
                         this.$toast.error('There has been an issue downloading this file. Please contact our support.')

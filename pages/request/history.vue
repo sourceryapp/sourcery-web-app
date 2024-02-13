@@ -12,13 +12,13 @@
           </v-icon>
         </none-found-card>
         <v-list two-line color="transparent">
-          <request-listing v-for="(request) in requests" :key="`arl-${request.id}`" :request="request" :client="true" />
+          <request-listing v-for="(request) in requests" :request="request" :client="true" />
         </v-list>
       </sourcery-card>
 
       <sourcery-card v-if="userRepositories.length > 0" title="Organization Completed Requests" icon="mdi-archive">
         <none-found-card v-if="jobs.length == 0" text="No past requests found." />
-        <request-listing v-for="job in jobs" :key="`ajl-${job.id}`" :request="job" :client="false" />
+        <request-listing v-for="job in jobs" :request="job" :client="false" />
       </sourcery-card>
     </v-flex>
   </v-layout>

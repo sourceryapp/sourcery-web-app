@@ -2,7 +2,7 @@
   <!-- Active Uploads -->
 
   <v-list v-if="items.length !== 0" three-line>
-    <div v-for="item in items" :key="item.key">
+    <div v-for="item in items">
       <!-- Using "active" as a soft-delete of these queued items -->
       <template v-if="item.active">
         <v-divider />

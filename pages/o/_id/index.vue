@@ -23,7 +23,6 @@
             v-for="(repo, index) in organization.repositories"
           >
             <v-list-item
-              :key="repo.id"
               color="transparent"
             >
               <v-list-item-content>
@@ -44,7 +43,7 @@
               </v-list-item-action>
             </v-list-item>
 
-            <v-divider v-if="index !== organization.repositories.length - 1" :key="repo.id" class="my-2" />
+            <v-divider v-if="index !== organization.repositories.length - 1" class="my-2" />
           </template>
         </v-list>
         <v-list v-else>

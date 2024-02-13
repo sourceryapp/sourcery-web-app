@@ -42,7 +42,6 @@
       <template v-if="request && request.attachments">
         <v-col
           v-for="attachment in request.attachments"
-          :key="attachment.id"
           :class="colClasses"
           cols="12"
           md="6"

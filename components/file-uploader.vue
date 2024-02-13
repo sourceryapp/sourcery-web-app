@@ -50,7 +50,7 @@ export default {
         })
     },
     mounted () {
-        if (this.file.size >= this.$config.maxUploadBytes) {
+        if (this.file.size >= this.$config.public.maxUploadBytes) {
             // File is too large
             this.fileTooLarge()
         } else {

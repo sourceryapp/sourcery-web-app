@@ -21,32 +21,26 @@
       <v-row v-if="isOrgMember">
         <v-col cols="12" lg="6">
           <card-with-action title="Pending" :number-requests="newJobs.length" action="/requests?status=1&o=1">
-            <request-listing v-for="job in newJobsLimited" :key="`njl-${job.id}`" :request="job" :client="false" />
+            <request-listing v-for="job in newJobsLimited" :request="job" :client="false" />
             <span v-if="newJobs.length === 0">Out looking for toadstools.<br>No new requests.</span>
           </card-with-action>
           <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4&o=1">
-            <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
+            <request-listing v-for="job in completedJobsLimited" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
         </v-col>
         <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressJobs.length" action="/requests?status=2&o=1">
-            <request-listing v-for="job in inProgressJobsLimited" :key="`ipjl-${job.id}`" :request="job" :client="false" />
+            <request-listing v-for="job in inProgressJobsLimited" :request="job" :client="false" />
             <span v-if="inProgressJobs.length === 0">All spells have been cast!<br>No requests in-progress.</span>
           </card-with-action>
           <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedJobs.length" action="/requests?status=3,4&o=1">
-            <request-listing v-for="job in completedJobsLimited" :key="`cjl-${job.id}`" :number-requests="completedJobs.length" :request="job" :client="false" />
+            <request-listing v-for="job in completedJobsLimited" :number-requests="completedJobs.length" :request="job" :client="false" />
             <span v-if="completedJobs.length === 0">No recently completed requests.</span>
           </card-with-action>
           <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
         </v-col>
       </v-row>
-
-      <!-- <sourcery-card v-if="user && isOrgMember" title="Requests Needing Service" class="mt-8" icon="mdi-briefcase">
-        <none-found-card v-if="jobs.length == 0" text="This organization has no outstanding requests that need service." />
-
-        <request-listing v-for="job in jobs" :key="`jl-${job.id}`" :request="job" :client="false" />
-      </sourcery-card> -->
 
       <h1 v-if="isOrgMember" class="mb-4">
         Your Requests
@@ -71,21 +65,21 @@
       <v-row>
         <v-col cols="12" lg="6">
           <card-with-action title="Pending" :number-requests="newRequests.length" action="/requests?status=1">
-            <request-listing v-for="request in newRequestsLimited" :key="`njl-${request.id}`" :request="request" :client="true" />
+            <request-listing v-for="request in newRequestsLimited" :request="request" :client="true" />
             <span v-if="newRequests.length === 0">No new requests.</span>
           </card-with-action>
           <card-with-action v-if="!$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
-            <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="request" :client="true" />
+            <request-listing v-for="request in completedRequestsLimited" :number-requests="completedRequests.length" :request="request" :client="true" />
             <span v-if="completedRequests.length === 0">No recently completed requests.</span>
           </card-with-action>
         </v-col>
         <v-col cols="12" lg="6">
           <card-with-action title="In - Progress" :number-requests="inProgressRequests.length" action="/requests?status=2">
-            <request-listing v-for="request in inProgressRequestsLimited" :key="`ipjl-${request.id}`" :request="request" :client="true" />
+            <request-listing v-for="request in inProgressRequestsLimited" :request="request" :client="true" />
             <span v-if="inProgressRequests.length === 0">No requests in-progress.</span>
           </card-with-action>
           <card-with-action v-if="$vuetify.breakpoint.mobile" title="Completed" :number-requests="completedRequests.length" action="/requests?status=3,4">
-            <request-listing v-for="request in completedRequestsLimited" :key="`cjl-${request.id}`" :number-requests="completedRequests.length" :request="request" :client="true" />
+            <request-listing v-for="request in completedRequestsLimited" :number-requests="completedRequests.length" :request="request" :client="true" />
             <span v-if="completedRequests.length === 0">No recently completed requests.</span>
           </card-with-action>
           <button-large :to="`/settings/feedback`" :text="`Report a Bug`" />
@@ -102,16 +96,6 @@
         </v-col>
       </v-row>
 
-      <!-- <sourcery-card v-if="user" title="Requests You Created" icon="mdi-file-search" class="mt-8">
-        <none-found-card v-if="requests.length == 0" text="You have no active requests." to="/request/create">
-          Create<span class="hidden-sm-and-down">&nbsp;Request</span>
-          <v-icon right :class="$vuetify.theme.dark ? 'black--text' : 'white--text'">
-            mdi-open-in-new
-          </v-icon>
-        </none-found-card>
-
-        <request-listing v-for="(request) in requests" :key="`rl-${request.id}`" :request="request" :client="true" />
-      </sourcery-card> -->
       <view-history-button v-if="user" />
     </v-flex>
   </v-layout>

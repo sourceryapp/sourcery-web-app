@@ -11,7 +11,6 @@
       </v-subheader>
       <credit-card-list-item
         v-for="(item, index) in cards.data"
-        :key="`ccli-${index}`"
         :item="item"
         :index="index"
       />

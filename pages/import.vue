@@ -9,7 +9,7 @@
       Importing...
     </h5>
     <ol>
-      <li v-for="(record, index) in records" :key="index">
+      <li v-for="(record, index) in records">
         {{ record }}
       </li>
     </ol>

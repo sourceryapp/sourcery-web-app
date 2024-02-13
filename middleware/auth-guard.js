@@ -10,7 +10,7 @@ export default function ({ store, redirect, route, $config }) {
     // If the user isn't logged in
     if (
         !isSupabaseAuthenticated &&
-        !$config.publicPaths.includes(route.path) &&
+        !$config.public.publicPaths.includes(route.path) &&
         !isOrganizationPage
     ) {
         return redirect('/login')
