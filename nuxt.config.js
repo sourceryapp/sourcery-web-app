@@ -127,7 +127,7 @@ export default defineNuxtConfig({
 
         { src: '~/plugins/vuetify.ts', ssr: false },
 
-        '~/plugins/sourcery-functions.ts',
+        // '~/plugins/sourcery-functions.ts',
 
         '~/plugins/filesize',
 
@@ -207,7 +207,7 @@ export default defineNuxtConfig({
             })
         },
         'nuxt-gtag',
-        'nuxt3-vuex-module',
+        // 'nuxt3-vuex-module',
         '@nuxtjs/supabase',
     ],
 
@@ -252,5 +252,11 @@ export default defineNuxtConfig({
                 transformAssetUrls,
             },
         },
+    },
+
+    // Only included this because of the current issue with vite-plugin-vuetify
+    sourcemap: {
+        server: false,
+        client: false
     }
 })

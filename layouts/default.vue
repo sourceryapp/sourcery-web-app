@@ -42,7 +42,7 @@
         <v-layout
           justify-center
         >
-          <nuxt />
+          <slot />
         </v-layout>
       </v-container>
       <chat-card />

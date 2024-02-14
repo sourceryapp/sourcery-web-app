@@ -9,50 +9,11 @@
           text
           color="white"
           large
-          to="/about"
+          :to="item.to"
           min-width="96px"
+          v-for="item in menuItems"
         >
-          About
-        </v-btn>
-        <v-btn
-          text
-          color="white"
-          class="ml-6"
-          large
-          to="/roadmap"
-          min-width="96px"
-        >
-          Roadmap
-        </v-btn>
-        <v-btn
-          text
-          color="white"
-          class="ml-6"
-          large
-          min-width="96px"
-          to="/team"
-        >
-          Team
-        </v-btn>
-        <v-btn
-          text
-          color="white"
-          class="ml-6"
-          large
-          min-width="96px"
-          href="https://sourceryapp.substack.com/"
-        >
-          Blog
-        </v-btn>
-        <v-btn
-          outlined
-          color="white"
-          class="ml-6"
-          min-width="96px"
-          large
-          to="/dashboard"
-        >
-          {{ user ? 'Dashboard' : 'Login' }}
+          {{ item.title }}
         </v-btn>
       </div>
       <v-menu>
@@ -69,60 +30,14 @@
         </template>
         <v-list dense nav>
           <v-list-item
-            to="/"
+            :to="item.to"
             color="primary"
+            v-for="item in menuItems"
           >
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            to="/about"
-            color="primary"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-information</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>About</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            to="/roadmap"
-            color="primary"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-chart-timeline-variant</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Roadmap</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            to="/team"
-            color="primary"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-account-multiple</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Team</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="user"
-            to="/dashboard"
-            color="primary"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-view-dashboard</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item>
-          <v-list-item
-            v-if="!user"
-            to="/login"
-            color="primary"
-          >
-            <v-list-item-icon>
-              <v-icon>mdi-login</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Login</v-list-item-title>
+            <template v-slot:prepend>
+              <v-icon :icon="item.icon"></v-icon>
+            </template>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -130,20 +45,16 @@
   </header>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-
-export default {
-    name: 'Header',
-    data () {
-        return {}
-    },
-    computed: {
-        ...mapGetters({
-            user: 'supabaseAuth/authUser'
-        })
-    }
-}
+<script setup>
+const menuItems = ref([
+    { title: 'Home', to: '/', icon: 'mdi-home', desktop: false },
+    { title: 'About', to: '/about', icon: 'mdi-information', desktop: true },
+    { title: 'Roadmap', to: '/roadmap', icon: 'mdi-chart-timeline-variant', desktop: true },
+    { title: 'Team', to: '/team', icon: 'mdi-account-multiple', desktop: true },
+    { title: 'Blog', to: 'https://sourceryapp.substack.com/', icon: 'mdi-rss', desktop: true },
+    { title: 'Dashboard', to: '/dashboard', icon: 'mdi-view-dashboard', desktop: true },
+    { title: 'Login', to: '/login', icon: 'mdi-login', desktop: true }
+])
 </script>
 
 <style scoped>
