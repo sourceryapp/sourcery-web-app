@@ -1,5 +1,28 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
+const publicPaths = [
+    '/login',
+    '/login/redirect',
+    '/about',
+    '/',
+    '/register',
+    '/password',
+    '/resetpassword',
+    '/index-new',
+    '/terms',
+    '/privacy',
+    '/cookies-notice',
+    '/team',
+    '/dashboard',
+    '/request/create',
+    '/archiveSpace',
+    '/archiveSpace/',
+    '/join-us',
+    '/roadmap',
+    '/email/reset',
+    '/brand-resources'
+]
+
 export default defineNuxtConfig({
     bridge: {
         typescript: false,
@@ -15,28 +38,7 @@ export default defineNuxtConfig({
             /**
              * Paths that don't require authentication
              */
-            publicPaths: [
-                '/login',
-                '/login/redirect',
-                '/about',
-                '/',
-                '/register',
-                '/password',
-                '/resetpassword',
-                '/index-new',
-                '/terms',
-                '/privacy',
-                '/cookies-notice',
-                '/team',
-                '/dashboard',
-                '/request/create',
-                '/archiveSpace',
-                '/archiveSpace/',
-                '/join-us',
-                '/roadmap',
-                '/email/reset',
-                '/brand-resources'
-            ],
+            publicPaths,
 
             /**
              * Max upload size in bytes
@@ -159,13 +161,13 @@ export default defineNuxtConfig({
     /*
      ** Router
      */
-    router: {
-        middleware: [
-            'reset-password',
-            'auth-guard',
-            'archiveSpace'
-        ]
-    },
+    // router: {
+    //     middleware: [
+    //         'reset-password',
+    //         'auth-guard',
+    //         'archiveSpace'
+    //     ]
+    // },
 
     modules: [
         (_options, nuxt) => {
@@ -207,8 +209,8 @@ export default defineNuxtConfig({
             })
         },
         'nuxt-gtag',
-        // 'nuxt3-vuex-module',
         '@nuxtjs/supabase',
+        '@pinia/nuxt'
     ],
 
     build: {
@@ -258,5 +260,15 @@ export default defineNuxtConfig({
     sourcemap: {
         server: false,
         client: false
+    },
+
+    /**
+     * Supabase Configuration
+     * https://supabase.nuxtjs.org/get-started
+     */
+    supabase: {
+        redirectOptions: {
+            exclude: publicPaths
+        }
     }
 })

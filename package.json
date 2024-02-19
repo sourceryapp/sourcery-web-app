@@ -30,6 +30,7 @@
     "net": "^1.0.2",
     "nuxt3-vuex-module": "^1.1.0",
     "paymentfont": "^1.2.5",
+    "pinia": "^2.1.7",
     "register-service-worker": "^1.7.1",
     "search-insights": "^1.4.0",
     "tls": "^0.0.1",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@nuxtjs/supabase": "^1.1.6",
+    "@pinia/nuxt": "^0.5.1",
     "concurrently": "^6.0.2",
     "cookieparser": "^0.1.0",
     "faker": "^4.1.0",
@@ -61,5 +63,8 @@
     "Brian Daley <brian@uconn.edu>",
     "Samson Weiner <samson.weiner@uconn.edu>",
     "Alex Mueller <alex.mueller@uconn.edu>"
-  ]
+  ],
+  "overrides": {
+    "vue": "latest"
+  }
 }

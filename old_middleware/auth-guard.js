@@ -13,6 +13,7 @@ export default function ({ store, redirect, route, $config }) {
         !$config.public.publicPaths.includes(route.path) &&
         !isOrganizationPage
     ) {
+        console.log('redirecting')
         return redirect('/login')
     }
 }
