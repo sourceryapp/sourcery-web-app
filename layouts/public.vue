@@ -1,12 +1,12 @@
 <template>
     <div id="landing-layout">
         <v-app>
-            <BannersPurpleCallout :show="isHome && !headerIntersectStore.headerIntersect">
+            <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
                 <p class="white--text">Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="white--text" target="_blank">blog</a>!</p>
             </BannersPurpleCallout>
 
             <v-fade-transition>
-                <HeadersPublicNavigation v-if="headerIntersectStore.headerIntersect" />
+                <HeadersPublicNavigation v-if="!headerIntersectStore.headerIntersect" />
             </v-fade-transition>
             
             <v-main>
@@ -20,7 +20,7 @@
 const route = useRoute()
 const isHome = computed(() => route.path === '/')
 const headerIntersectStore = useHeaderIntersectStore()
-headerIntersectStore.setHeaderIntersect(!isHome.value)
+headerIntersectStore.setHeaderIntersect(isHome.value)
 
 useHead({
     link: [
