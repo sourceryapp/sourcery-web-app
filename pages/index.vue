@@ -36,36 +36,36 @@
         <v-container class="padded-section">
             <h1 id="meet" class="mb-9 text-center">How Sourcery Can Work for Your Institution</h1>
 
-            <v-row align="center" justify="center" class="mb-5">
+            <v-row align="center" justify="center" class="mb-5 px-6">
                 <v-col md="2" cols="12" class="text-center">
                     <IconsSvgOptimize />
                 </v-col>
                 <v-col md="6" cols="12">
-                    <h2 class="light-purple">
+                    <h2 class="text-primary">
                     Optimize your Research Requests Workflow
                     </h2>
                     <p>Manage requests for document scans and other researcher requests from a simple, intuitive dashboard. Fulfill requests on any device connected to the internet with the device's camera or by uploading a pdf, jpg, png, or other file.</p>
                 </v-col>
             </v-row>
 
-            <v-row align="center" justify="center" class="mb-5">
+            <v-row align="center" justify="center" class="mb-5 px-6">
                 <v-col md="2" cols="12" class="text-center">
                     <IconsSvgCommunicate />
                 </v-col>
                 <v-col md="6" cols="12">
-                    <h2 class="light-purple">
+                    <h2 class="text-primary">
                     Communicate Directly
                     </h2>
                     <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
                 </v-col>
             </v-row>
 
-            <v-row align="center" justify="center" class="mb-5">
+            <v-row align="center" justify="center" class="mb-5 px-6">
                 <v-col md="2" cols="12" class="text-center">
                     <IconsSvgAnalytics />
                 </v-col>
                 <v-col md="6" cols="12">
-                    <h2 class="light-purple">
+                    <h2 class="text-primary">
                     Access Rich Usage Analytics
                     </h2>
                     <p>See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
@@ -75,7 +75,7 @@
 
         <div class="bg-purple-opacity">
             <v-container class="padded-section">
-                <v-row align="center" class="mb-8" justify="center">
+                <v-row align="center" class="mb-8 px-6" justify="center">
                     <v-col cols="auto">
                         <v-img class="section-img" :width="400" src="/img/landing-illustrations/undraw_faq_rjoy.svg" alt=""></v-img>
                     </v-col>
@@ -84,7 +84,7 @@
                     </v-col>
                 </v-row>
 
-                <v-row>
+                <v-row class="px-6">
                     <v-col md="10" offset-md="1">
                         <p>The Sourcery app allows researchers to request documents directly from our affiliated institutions through a single login and interface, accessible from any device. It aims to streamline the process for both researchers and repositories, offering a simple request and fulfillment workflow and a seamless, secure payments system.</p>
 
@@ -105,7 +105,7 @@
         </div>
 
         <v-container class="padded-section">
-            <v-row align="center" justify="center">
+            <v-row align="center" justify="center" class="px-6">
                 <v-col cols="auto" class="px-5">
                     <v-img src="/img/landing-illustrations/undraw_enter_uhqk.svg" alt="" :width="280"></v-img>
                 </v-col>
@@ -123,63 +123,46 @@
                 </v-col>
             </v-row>
         </v-container>
-        <v-dialog v-model="dialogVisible" width="650">
-            <v-card id="modal-card">
-                <v-card-title>
-                    <h3 id="ready">Ready to try Sourcery?</h3>
-                </v-card-title>
+        <v-dialog v-model="dialogVisible" max-width="650">
+            <v-card id="modal-card" title="Ready to try Sourcery?">
+                <template v-slot:append>
+                    <v-btn rounded="md" @click="dialogVisible = false" icon="mdi-close"></v-btn>
+                </template>
                 <v-card-text>
-                    <v-container class="pb-0">
-                        <v-row>
-                            <v-col cols="12">
-                                <h2 id="modal-subtitle">
-                                    I am looking to...
-                                </h2>
-                            </v-col>
-                        </v-row>
-                        <v-row justify="center">
-                            <v-col cols="auto" class="modal-button-wrap">
-                                <v-btn
+                    <v-container>
+                        <v-row align="stretch">
+                            <v-col cols="6">
+                                <NuxtLink
                                     to="/register"
-                                    x-large
-                                    color="rgb(146, 79, 190)"
-                                    height="300"
-                                    class="modal-button"
+                                    class="bg-primary d-block text-center text-decoration-none"
+                                    style="height: 280px;"
                                 >
-                                    <div class="modal-button-content">
-                                        <img
-                                            src="/img/icons_document.png"
-                                            height="180"
-                                        >
-                                        <span class="modal-button-text">
+                                    <div class="fill-height d-flex flex-column justify-center">
+                                        <v-img src="/img/icons_document.png" max-height="140"></v-img>
+                                        <span class="text-h6 font-weight-bold mt-4">
                                             Request Documents
                                         </span>
                                     </div>
-                                </v-btn>
+                                </NuxtLink>
                             </v-col>
-                            <v-col cols="auto" class="modal-button-wrap">
-                                <v-btn
+                            <v-col cols="6">
+                                <NuxtLink
                                     to="/join-us"
-                                    x-large
-                                    color="rgb(146, 79, 190)"
-                                    height="300"
-                                    class="modal-button"
+                                    class="bg-primary d-block text-center text-decoration-none"
+                                    style="height: 280px;"
                                 >
-                                    <div class="modal-button-content">
-                                        <img
-                                            src="/img/icons_institution.png"
-                                            height="160"
-                                        >
-                                        <span class="modal-button-text">
+                                    <div class="fill-height d-flex flex-column justify-center">
+                                        <v-img src="/img/icons_institution.png" max-height="140"></v-img>
+                                        <span class="text-h6 font-weight-bold mt-4 px-4">
                                             Become a Partner Institution
                                         </span>
                                     </div>
-                                </v-btn>
+                                </NuxtLink>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12">
-                                <span class="login-link-text">
+                                <span>
                                     Have an account?
                                     <NuxtLink to="/login">
                                     Log in.
@@ -189,15 +172,11 @@
                         </v-row>
                     </v-container>
                 </v-card-text>
-                <v-card-actions class="pt-0">
-                    <v-btn variant="rounded" @click="dialogVisible = false" icon="mdi-close"></v-btn>
-                </v-card-actions>
             </v-card>
         </v-dialog>
 
 
-
-        <footer class="padded-section bg-purple-opacity">
+        <footer class="padded-section bg-purple-opacity px-6">
             <v-container>
                 <v-row align="center" justify="center">
                     <v-col cols="auto">

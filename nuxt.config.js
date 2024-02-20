@@ -2,6 +2,7 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 const publicPaths = [
     '/login',
+    '/login/otp',
     '/login/redirect',
     '/about',
     '/',
