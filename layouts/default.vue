@@ -81,7 +81,7 @@
                     </v-list>
                 </template>
             </v-navigation-drawer>
-            <v-app-bar scroll-behavior="elevate">
+            <v-app-bar scroll-behavior="elevate" color="transparent">
                 <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
                 <NuxtLink to="/dashboard" class="d-block">
