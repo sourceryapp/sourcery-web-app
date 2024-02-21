@@ -25,8 +25,6 @@ definePageMeta({
 const supabase = useSupabaseClient()
 const route = useRoute()
 
-console.log(route.query)
-
 if ( !route.query.email ) {
     navigateTo('/login')
 }

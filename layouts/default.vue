@@ -5,9 +5,9 @@
                 <v-list class="bg-purple-gradient-alt py-5">
                     <v-list-item :prepend-avatar="userIcon"></v-list-item>
                     <v-list-item>
-                        <v-list-item-title class="text-h6 mb-2">{{ authUser?.name ?? 'Logged Out' }}</v-list-item-title>
-                        <v-list-item-subtitle v-if="authUser?.email">{{ authUser.email }}</v-list-item-subtitle>
-                        <v-list-item-subtitle v-else>Log in to place &amp; manage requests.</v-list-item-subtitle>
+                        <v-list-item-title class="text-h6 mb-2 text-white">{{ authUser?.name ?? 'Logged Out' }}</v-list-item-title>
+                        <v-list-item-subtitle class="text-white" v-if="authUser?.email">{{ authUser.email }}</v-list-item-subtitle>
+                        <v-list-item-subtitle class="text-white" v-else>Log in to place &amp; manage requests.</v-list-item-subtitle>
                     </v-list-item>
                 </v-list>
 
@@ -29,6 +29,12 @@
                         </template>
                         <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                     </v-list-item>
+                    <v-list-item color="primary" rounded @click="toggleTheme">
+                        <template v-slot:prepend>
+                            <v-icon>mdi-theme-light-dark</v-icon>
+                        </template>
+                        <v-list-item-title class="text-subtitle-2">Toggle Theme</v-list-item-title>
+                    </v-list-item>
                 </v-list>
 
                 <v-divider class="mx-2" v-if="authUser?.admin"></v-divider>
@@ -39,12 +45,6 @@
                             <v-icon>{{ item.icon }}</v-icon>
                         </template>
                         <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item color="primary" rounded @click="toggleTheme">
-                        <template v-slot:prepend>
-                            <v-icon>mdi-theme-light-dark</v-icon>
-                        </template>
-                        <v-list-item-title class="text-subtitle-2">Toggle Theme</v-list-item-title>
                     </v-list-item>
                 </v-list>
 
@@ -99,12 +99,12 @@
 
 <script setup>
 import md5 from 'md5'
-import { useDisplay, useTheme } from 'vuetify'
+import { useDisplay } from 'vuetify'
 
-const authUser = await useAuthUser()
+const { authUser } = await useAuthUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
-const theme = useTheme()
+const { toggleTheme } = useToggleTheme()
 
 // All user related display helpers
 const userIcon = computed(() => {
@@ -137,13 +137,6 @@ const bottomNavigationItems = ref([
 const adminNavigationItems = ref([
     { title: 'Admin', icon: 'mdi-cog', link: '/admin' }
 ])
-
-// Interactivity
-function toggleTheme() {
-    const new_theme = theme.global.current.value.dark ? 'light' : 'dark'
-    theme.global.name.value = new_theme
-    localStorage.setItem('dark_theme', new_theme === 'dark')
-}
 </script>
 
 <style scoped lang="scss">

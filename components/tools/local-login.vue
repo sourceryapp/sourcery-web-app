@@ -23,8 +23,6 @@ async function logInLocalUser(role) {
         password: 'password'
     })
 
-    console.log(data, error)
-
     navigateTo('/dashboard')
 }
 </script>

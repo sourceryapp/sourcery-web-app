@@ -3,7 +3,6 @@
  */
 export const useLogout = () => {
     const supabase = useSupabaseClient()
-    const authUser = useAuthUser()
 
     const logout = async () => {
         await supabase.auth.signOut()

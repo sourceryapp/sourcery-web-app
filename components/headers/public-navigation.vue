@@ -7,7 +7,7 @@
             <div class="d-none d-md-flex">
                 <v-btn
                     :variant="item.variant ? item.variant : 'text'"
-                    class="ms-4"
+                    class="ms-4 text-white"
                     v-for="item in menuItemsDesktop"
                     :to="!item.external ? item.to : null"
                     :href="item.external ? item.to : null"

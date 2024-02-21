@@ -1,6 +1,6 @@
 <template>
     <div id="page-home">
-        <div class="bg-purple-gradient padded-section px-6 px-sm-0" v-intersect="onIntersect">
+        <div class="bg-purple-gradient padded-section px-6 px-sm-0 text-white" v-intersect="onIntersect">
             <v-container>
                 <v-row align="center" justify="center">
                     <v-col cols="auto" class="me-10">
@@ -119,7 +119,7 @@
                             <v-btn to="/login" color="primary" size="x-large" height="76px" block variant="outlined">Log In</v-btn>
                         </v-col>
                     </v-row>
-                    <v-btn to="/about" variant="text" color="white" block>Learn More</v-btn>
+                    <v-btn to="/about" variant="text" block>Learn More</v-btn>
                 </v-col>
             </v-row>
         </v-container>

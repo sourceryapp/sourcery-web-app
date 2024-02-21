@@ -1,8 +1,8 @@
 <template>
-    <div id="landing-layout">
+    <div id="public-layout">
         <v-app>
             <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
-                <p class="white--text">Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="white--text" target="_blank">blog</a>!</p>
+                <p class="text-white">Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="text-white" target="_blank">blog</a>!</p>
             </BannersPurpleCallout>
 
             <v-fade-transition>
@@ -19,6 +19,8 @@
 <script setup>
 const route = useRoute()
 const isHome = computed(() => route.path === '/')
+
+// Set up some show/hide for the header based on section intersect
 const headerIntersectStore = useHeaderIntersectStore()
 headerIntersectStore.setHeaderIntersect(isHome.value)
 
