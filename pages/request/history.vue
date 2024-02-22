@@ -1,5 +1,8 @@
 <template>
     <div id="page-request-history">
-        <h1>Request History</h1>
+        <v-container>
+            <h1>Request History</h1>
+            <RequestList></RequestList>
+        </v-container>
     </div>
 </template>

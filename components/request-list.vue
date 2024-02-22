@@ -1,17 +1,8 @@
 <template>
     <div class="request-list">
         <v-list lines="three">
-            <v-list-item v-for="request in requests" class="bg-grey-darken-3">
-                <template v-slot:subtitle>
-                    <div><span>{{ request.status.name }}</span> - {{ request.citation }}</div>
-                </template>
-                <template v-slot:title>
-                    <div>{{ request.request_clients.label }}</div>
-                </template>
-                <template v-slot:append>
-                    <v-btn icon="mdi-dots-horizontal" border="none"></v-btn>
-                </template>
-            </v-list-item>
+            <RequestListItem v-for="request in requests" :request="request"></RequestListItem>
+            <p v-if="requests.length === 0">No requests.</p>
         </v-list>
     </div>
 </template>

@@ -1,5 +1,7 @@
 <template>
     <div id="page-messages">
-        <p>Messages.</p>
+        <v-container>
+            <h1>Messages</h1>
+        </v-container>
     </div>
 </template>

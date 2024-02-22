@@ -81,7 +81,7 @@
                     </v-list>
                 </template>
             </v-navigation-drawer>
-            <v-app-bar scroll-behavior="elevate" color="transparent">
+            <v-app-bar scroll-behavior="elevate" :color="theme.global.current.value.dark ? '#121212' : 'white'">
                 <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
                 <NuxtLink to="/dashboard" class="d-block">
@@ -99,12 +99,13 @@
 
 <script setup>
 import md5 from 'md5'
-import { useDisplay } from 'vuetify'
+import { useDisplay, useTheme } from 'vuetify'
 
 const { authUser } = await useAuthUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
+const theme = useTheme()
 
 // All user related display helpers
 const userIcon = computed(() => {
@@ -135,7 +136,7 @@ const bottomNavigationItems = ref([
     { title: 'Terms and Conditions', link: '/terms' }
 ])
 const adminNavigationItems = ref([
-    { title: 'Admin', icon: 'mdi-cog', link: '/admin' }
+    { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
 ])
 </script>
 

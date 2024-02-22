@@ -2,7 +2,14 @@
     <div id="page-dashboard">
         <v-container>
             <h1>Your Personal Requests</h1>
-            <RequestList />
+            <v-row>
+                <v-col>
+                    <RequestList />
+                </v-col>
+                <v-col>
+                    <RequestList />
+                </v-col>
+            </v-row>
         </v-container>
     </div>
 </template>

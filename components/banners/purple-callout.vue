@@ -26,11 +26,6 @@ defineProps({
     right:0;
     top:0;
     z-index:1;
-
-    p {
-        margin: 0;
-        margin-bottom: 0;
-    }
 }
 
 @keyframes shimmer {
