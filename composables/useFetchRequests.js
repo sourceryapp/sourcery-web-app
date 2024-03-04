@@ -1,4 +1,4 @@
-export async function useFetchRequests() {
+export function useFetchRequests() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
 
@@ -7,7 +7,7 @@ export async function useFetchRequests() {
     async function fetchRequests() {
         const { data, error } = await supabase.from('requests').select(`
             *,
-            status!requests_status_id_fkey (*),
+            status (*),
             repository:repositories (*),
             request_clients(*),
             request_vendors(*)
@@ -20,7 +20,8 @@ export async function useFetchRequests() {
         }
     }
 
-    fetchRequests()
-
-    return requests
+    return {
+        requests,
+        fetchRequests
+    }
 }

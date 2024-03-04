@@ -1,7 +1,10 @@
 <template>
     <div id="page-dashboard">
         <v-container v-if="authUser">
-            <h1>Your Personal Requests</h1>
+            <h1>Personal Dashboard</h1>
+
+            <RequestsUriAlert></RequestsUriAlert>
+
             <v-row>
                 <v-col>
                     <RequestList />

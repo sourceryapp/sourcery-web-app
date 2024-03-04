@@ -1,5 +1,5 @@
 <template>
-    <v-list-item class="bg-grey-darken-3">
+    <v-list-item>
         <template v-slot:subtitle>
             <div><span>{{ props.request.status.name }}</span> - {{ props.request.citation }}</div>
         </template>

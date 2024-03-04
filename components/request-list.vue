@@ -8,5 +8,7 @@
 </template>
 
 <script setup>
-const requests = await useFetchRequests()
+const { requests, fetchRequests } = useFetchRequests()
+
+await fetchRequests()
 </script>
