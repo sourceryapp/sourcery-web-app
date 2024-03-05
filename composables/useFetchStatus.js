@@ -11,9 +11,24 @@ export function useFetchStatus() {
         }
     }
 
+    function findByName(name) {
+        return statuses.value.find(status => status.name === name)
+    }
+
+    function linkToRequestsByStatusName(name) {
+        const url = '/requests'
+        const status = findByName(name)
+        if ( status ) {
+            return `${url}?status=${status.id}`
+        }
+        return url
+    }
+
     return {
         statuses,
-        fetchStatus
+        fetchStatus,
+        findByName,
+        linkToRequestsByStatusName
     }
 
 }

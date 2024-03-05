@@ -12,8 +12,13 @@ export const useAuthUser = async () => {
             return null
         }
 
-        console.log('fetching new')
-        const { data } = await supabase.from('user').select('*').eq('id', user.value.id).single()
+        const { data } = await supabase.from('user').select(`
+        *,
+        organizations!organizations_owner_id_fkey (
+            *,
+            repositories (*)
+        )
+        `).eq('id', user.value.id).single()
         
         return data
     },

@@ -1,17 +1,36 @@
+/**
+ * Responsible for any functionality around searching/querying for REAL requests.
+ * This does not include the prospective requests (URI).
+ */
 export function useRequestSearch() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
     const route = useRoute()
     const router = useRouter()
 
-    const defaultSort = 'newest'
+    const orderOptions = ref([
+        { value: 'newest', title: 'Newest' },
+        { value: 'oldest', title: 'Oldest' }
+    ])
+
+    const defaultSort = ref('newest')
+    const debounceMilliseconds = ref(500)
+    const limit = ref(30)
+    const organizationId = ref(route.query.organization_id || null)
+    const owned = ref(true)
 
     const requests = ref([])
     const search = ref(route.query.search || '')
 
-    const selectedStatus = ref(route.query.status ? (Array.isArray(route.query.status) ? route.query.status.map(x=>parseInt(x)) : [parseInt(route.query.status)]) : [])
-    const order = ref(route.query.order || defaultSort)
+    // Assign the first UI filters/sorting/input from query parameters.
+    const selectedStatus = ref(route.query.status
+        ? (Array.isArray(route.query.status)
+            ? route.query.status.map(x=>parseInt(x))
+                : [parseInt(route.query.status)])
+            : [])
+    const order = ref(route.query.order || defaultSort.value)
 
+    // Loading & debounce state
     const loading = ref(false)
     const queuedJob = ref(null)
 
@@ -22,12 +41,18 @@ export function useRequestSearch() {
         let query = supabase.from('requests').select(`
             *,
             status (*),
-            repository:repositories (*),
+            repository:repositories (
+                *,
+                organization:organizations (*)
+            ),
             request_clients (*),
             request_vendors (*)
-        `)
-            .eq('user_id', user.value.id)
-            .range(0, 30)
+        `).range(0, limit.value)
+
+        // Only search on requests that are owned by the requesting user.
+        if ( owned.value ) {
+            query = query.eq('user_id', user.value.id)
+        }
 
         // Apply the search query if necessary
         if ( search.value ) {
@@ -36,11 +61,12 @@ export function useRequestSearch() {
                 .ilike('request_vendors.label', `%${search.value}%`)
                 .or(`citation.ilike.%${search.value}%,repository.not.is.null,request_clients.not.is.null,request_vendors.not.is.null`)
         }
-
         if ( selectedStatus.value && selectedStatus.value.length ) {
             query = query.in('status_id', selectedStatus.value)
         }
-
+        if ( organizationId.value ) {
+            query = query.eq('repository.organization_id', organizationId.value)
+        }
         const { data: queryData, error: queryError } = await query
 
         if ( !queryError ) {
@@ -79,16 +105,17 @@ export function useRequestSearch() {
                 }
 
                 // Silently replace this page in the current browser history stack
-                router.replace({
-                    path: '/requests',
-                    query: new_url_params
-                })
+                // router.replace({
+                //     path: '/requests',
+                //     query: new_url_params
+                // })
             }
         }
 
         loading.value = false
     }
 
+    // Create our own fetch wrapper so we can debounce it.
     function onModelChange() {
         if ( queuedJob.value ) {
             clearTimeout(queuedJob.value)
@@ -96,15 +123,21 @@ export function useRequestSearch() {
 
         queuedJob.value = setTimeout(() => {
             fetchRequests()
-        }, 500)
+        }, debounceMilliseconds.value)
     }
 
     return {
         requests,
         search,
+        defaultSort,
+        limit,
+        owned,
         selectedStatus,
+        organizationId,
         order,
+        orderOptions,
         loading,
+        debounceMilliseconds,
         fetchRequests,
         onModelChange
     }
