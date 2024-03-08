@@ -81,11 +81,11 @@
                     </v-list>
                 </template>
             </v-navigation-drawer>
-            <v-app-bar scroll-behavior="elevate" :color="theme.global.current.value.dark ? '#121212' : 'white'">
+            <v-app-bar scroll-behavior="elevate" color="background">
                 <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
                 <v-spacer></v-spacer>
                 <NuxtLink to="/dashboard" class="d-block">
-                    <v-img src="/img/wordmark-beta.svg" alt="Sourcery Logo" width="150"></v-img>
+                    <v-img :src="theme.global.current.value.dark ? '/img/wordmark-beta-dark.svg' : '/img/wordmark-beta.svg'" alt="Sourcery Logo" width="150"></v-img>
                 </NuxtLink>
                 <v-spacer></v-spacer>
             </v-app-bar>

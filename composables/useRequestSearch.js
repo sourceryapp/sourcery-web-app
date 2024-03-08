@@ -41,10 +41,7 @@ export function useRequestSearch() {
         let query = supabase.from('requests').select(`
             *,
             status (*),
-            repository:repositories (
-                *,
-                organization:organizations (*)
-            ),
+            repository:repositories (*),
             request_clients (*),
             request_vendors (*)
         `).range(0, limit.value)
@@ -74,9 +71,12 @@ export function useRequestSearch() {
             let newquery = supabase.from('requests').select(`
                 *,
                 status (*),
-                repository:repositories (*),
-                request_clients (*),
-                request_vendors (*)
+                repository:repositories (
+                    *,
+                    organization:organizations (*)
+                ),
+                request_client:request_clients (*),
+                request_vendor:request_vendors (*)
             `).in('id', queryData.map(request => request.id))
 
             switch(order.value) {
@@ -126,6 +126,11 @@ export function useRequestSearch() {
         }, debounceMilliseconds.value)
     }
 
+
+    const hasQuery = computed(() => {
+        return search.value || selectedStatus.value.length
+    })
+
     return {
         requests,
         search,
@@ -138,6 +143,7 @@ export function useRequestSearch() {
         orderOptions,
         loading,
         debounceMilliseconds,
+        hasQuery,
         fetchRequests,
         onModelChange
     }

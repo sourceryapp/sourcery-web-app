@@ -1,11 +1,11 @@
 <template>
-    <div class="request-cta-alert rounded-lg px-5 py-2 mb-4">
+    <div class="request-cta-alert rounded-lg px-5 py-4 mb-6">
         <v-row align="center">
-            <v-col col="12" md="8">
-                <h3 class="mb-4">Ready to try Sourcery?</h3>
-                <p class="mb-2">Our registered institutions are ready to help you locate the reference scans you seek.  By creating a request, we can get that process started for you.</p>
+            <v-col cols="12" md="8">
+                <h3 class="mb-4 mt-0">Ready to try Sourcery?</h3>
+                <p class="mb-0">Our registered institutions are ready to help you locate the reference scans you seek.  By creating a request, we can get that process started for you.</p>
             </v-col>
-            <v-col col="12" md="4" class="text-right">
+            <v-col cols="12" md="4" class="text-md-right mb-md-0 mb-1">
                 <v-btn color="primary" size="large" to="/request/create" class="justify-end">Create Request</v-btn>
             </v-col>
         </v-row>
