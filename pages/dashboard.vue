@@ -1,5 +1,5 @@
 <template>
-    <div id="page-dashboard">
+    <div id="page-dashboard" class="py-4">
         <v-container>
             <template v-if="authUser">
                 <h1 class="mb-4">Dashboard</h1>

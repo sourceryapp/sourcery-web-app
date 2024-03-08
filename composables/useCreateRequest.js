@@ -38,7 +38,8 @@ export default function useCreateRequest() {
                 repository_id: requestFields.value.repository.id,
                 citation: requestFields.value.details,
                 status_id: 1,
-                user_id: authUser.value.id
+                user_id: authUser.value.id,
+                original_title: requestFields.value.title
             }).select().single()
 
             if ( error ) {

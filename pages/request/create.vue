@@ -28,7 +28,7 @@
                         <v-textarea v-model="requestFields.details" variant="outlined" class="mb-2" label="Request Details" :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]" counter="6000"></v-textarea>
 
                         <div class="d-flex justify-space-between my-3 mb-8">
-                            <v-btn to="/dashboard" color="grey">Back</v-btn>
+                            <v-btn to="/dashboard" color="surface">Back</v-btn>
                             <v-btn type="submit" color="primary" >Submit</v-btn>
                         </div>
                     </v-form>
