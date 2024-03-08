@@ -51,8 +51,6 @@
                                 <p>No requests here.</p>
                             </div>
                         </div>
-
-                        <!-- <RequestListItem v-for="request in requests" :request="request"></RequestListItem> -->
                     </v-col>
                     <v-col md="4" class="d-none d-md-block">
                         <v-card @click="setStatus('Complete')" class="mb-4">

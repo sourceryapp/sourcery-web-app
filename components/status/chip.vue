@@ -12,7 +12,9 @@ const color = computed(() => {
         case 'In Progress':
             return 'orange'
         case 'Complete':
-            return 'green'
+            return 'success'
+        case 'Cancelled':
+            return 'error'
         default:
             return 'grey'
     }

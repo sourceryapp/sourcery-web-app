@@ -16,7 +16,12 @@ export function useFetchRequest() {
                 organization:organizations (*)
             ),
             request_clients(*),
-            request_vendors(*)
+            request_vendors(*),
+            user (*),
+            request_events (
+                *,
+                status (id, name)
+            )
         `).order('created_at', { ascending: false })
             .eq('id', requestId.value)
             .single()
@@ -26,9 +31,54 @@ export function useFetchRequest() {
         }
     }
 
+    const isSubmitted = computed(() => {
+        return request.value.status.name === 'Submitted' ?? false
+    })
+
+    const isCancelled = computed(() => {
+        return request.value.status.name === 'Cancelled' ?? false
+    })
+
+    const isInProgress = computed(() => {
+        return request.value.status.name === 'In Progress' ?? false
+    })
+
+    const isCompleted = computed(() => {
+        return request.value.status.name === 'Complete' ?? false
+    })
+
+    const isArchived = computed(() => {
+        return request.value.status.name === 'Archived' ?? false
+    })
+
+    const confirmedDate = computed(() => {
+        return request.value.request_events.find(event => event.status.name === 'In Progress')?.created_at ?? null 
+    })
+
+    const completedDate = computed(() => {
+        return request.value.request_events.find(event => event.status.name === 'Complete')?.created_at ?? null 
+    })
+
+    const archivedDate = computed(() => {
+        return request.value.request_events.find(event => event.status.name === 'Archived')?.created_at ?? null 
+    })
+
+    const cancelledDate = computed(() => { 
+        return request.value.request_events.find(event => event.status.name === 'Cancelled')?.created_at ?? null 
+    })
+
     return {
         request,
         requestId,
-        fetchRequest
+        fetchRequest,
+        isSubmitted,
+        isInProgress,
+        isCompleted,
+        isArchived,
+        isCancelled,
+        confirmedDate,
+        completedDate,
+        archivedDate,
+        cancelledDate
     }
 }
