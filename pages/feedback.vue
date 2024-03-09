@@ -1,7 +1,14 @@
 <template>
-    <div id="page-faq">
+    <div id="page-profile-feedback" class="py-5">
         <v-container>
-            <h1>FAQ</h1>
+            <h1>Feedback &amp; Support</h1>
+            <p>Please email <a href="mailto:support@sourceryapp.org">support@sourceryapp.org</a> for feedback regarding Sourcery!</p>
+        </v-container>
+    </div>
+
+    <div id="page-faq" class="py-5">
+        <v-container>
+            <h1 class="mb-4">FAQ</h1>
             <v-expansion-panels variant="accordion">
                 <v-expansion-panel v-for="item in questionAnswers" :title="item.question">
                     <v-expansion-panel-text>

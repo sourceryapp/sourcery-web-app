@@ -1,7 +1,7 @@
 <template>
     <div id="default-layout">
         <v-app>
-            <v-navigation-drawer v-model="drawerOpen" mobile-breakpoint="sm" :location="drawerLocation" :temporary="mobile">
+            <v-navigation-drawer v-model="drawerOpen" mobile-breakpoint="sm" :location="drawerLocation" :temporary="mobile" class="d-print-none">
                 <v-list class="bg-purple-gradient-alt py-5">
                     <v-list-item :prepend-avatar="userIcon"></v-list-item>
                     <v-list-item>
@@ -127,8 +127,7 @@ const secondaryNavigationItems = ref([
     { title: 'Messages', icon: 'mdi-message', link: '/messages' },
     { title: 'History', icon: 'mdi-history', link: '/request/history' },
     { title: 'Settings', icon: 'mdi-cog', link: '/profile/settings' },
-    { title: 'FAQ', icon: 'mdi-frequently-asked-questions', link: '/faq' },
-    { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/profile/feedback' }
+    { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/feedback' }
 ])
 const bottomNavigationItems = ref([
     { title: 'Brand Resources', link: '/brand-resources' },

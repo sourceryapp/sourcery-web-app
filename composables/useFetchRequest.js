@@ -21,7 +21,8 @@ export function useFetchRequest() {
             request_events (
                 *,
                 status (id, name)
-            )
+            ),
+            attachments (*)
         `).order('created_at', { ascending: false })
             .eq('id', requestId.value)
             .single()

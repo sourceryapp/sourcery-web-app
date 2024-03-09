@@ -2,9 +2,9 @@
     <div id="page-request-id" class="py-5">
         <v-container>
             <h1 class="mb-6">Request Summary</h1>
-            <v-row>
+            <v-row class="mb-5">
                 <v-col cols="12" md="8">
-                    <v-sheet color="surface-variant" rounded="lg" class="pa-5 fill-height">
+                    <v-sheet color="surface" elevation="4" rounded class="pa-5 fill-height">
                         <v-row>
                             <v-col cols="12" md="3"><h3>Request ID</h3></v-col>
                             <v-col cols="12" md="9"><p class="mb-0">{{ request.id }}</p></v-col>
@@ -36,7 +36,7 @@
                     </v-sheet>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <v-list rounded="lg" class="py-3 pb-4">
+                    <v-list rounded elevation="4" class="py-3 pb-4">
                         <v-list-subheader>Request Progress</v-list-subheader>
 
                         <v-list-item class="py-3 pb-4">
@@ -103,6 +103,17 @@
                     </v-list>
                 </v-col>
             </v-row>
+
+
+            <v-expansion-panels model-value="attachments">
+                <v-expansion-panel :title="`Attachments (${request.attachments.length})`" value="attachments">
+                    <v-expansion-panel-text class="py-4">
+                        <p class="mb-4" v-if="request.attachments.length === 0">No attachments have been uploaded.</p>
+                        <requests-file-manager :request="request"></requests-file-manager>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
 
             <div class="my-6">
                 <pre>{{ request }}</pre>
