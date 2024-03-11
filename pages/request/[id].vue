@@ -11,7 +11,7 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="3"><h3>Title</h3></v-col>
-                            <v-col cols="12" md="9"><p class="mb-0">{{ request.request_clients.label }}</p></v-col>
+                            <v-col cols="12" md="9"><p class="mb-0">{{ requestLabel }}</p></v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="3"><h3>Citation</h3></v-col>
@@ -108,7 +108,6 @@
             <v-expansion-panels model-value="attachments">
                 <v-expansion-panel :title="`Attachments (${request.attachments.length})`" value="attachments">
                     <v-expansion-panel-text class="py-4">
-                        <p class="mb-4" v-if="request.attachments.length === 0">No attachments have been uploaded.</p>
                         <requests-file-manager :request="request"></requests-file-manager>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -124,7 +123,7 @@
 
 <script setup>
 const { 
-    request,
+    request, requestLabel,
     isSubmitted, isInProgress, isCompleted, isArchived, isCancelled,
     confirmedDate, completedDate, archivedDate, cancelledDate,
     fetchRequest

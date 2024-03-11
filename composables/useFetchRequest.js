@@ -2,6 +2,7 @@ export function useFetchRequest() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
     const route = useRoute()
+    const { getAttachmentPreview } = useFileList()
 
     const request = ref(null)
     const requestId = ref(route.params.id ?? null)
@@ -28,6 +29,22 @@ export function useFetchRequest() {
             .single()
 
         if ( !error ) {
+
+            /**
+             * Attachments are protected, so we need to retrieve signed URLs for them.
+             */
+            const attachment_paths = data.attachments.map(attachment => attachment.path)
+            const { data: signedUrlData, error: signedUrlError } = await supabase
+                .storage
+                .from('attachments')
+                .createSignedUrls(attachment_paths, 86400) // Signed for one day.
+            signedUrlData.forEach((signedUrl, index) => {
+                if ( !signedUrl.error ) {
+                    data.attachments[index].url = signedUrl.signedUrl
+                }
+                data.attachments[index].thumbnail = getAttachmentPreview(data.attachments[index])
+            })
+
             request.value = data
         }
     }
@@ -68,9 +85,14 @@ export function useFetchRequest() {
         return request.value.request_events.find(event => event.status.name === 'Cancelled')?.created_at ?? null 
     })
 
+    const requestLabel = computed(() => {
+        return request.value.request_vendors?.label ?? request.value.request_clients?.value ?? request.value.original_title ?? 'Untitled'
+    })
+
     return {
         request,
         requestId,
+        requestLabel,
         fetchRequest,
         isSubmitted,
         isInProgress,
