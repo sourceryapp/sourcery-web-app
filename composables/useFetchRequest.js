@@ -1,5 +1,4 @@
 export function useFetchRequest() {
-    const user = useSupabaseUser()
     const supabase = useSupabaseClient()
     const route = useRoute()
     const { getAttachmentPreview } = useFileList()
@@ -7,8 +6,12 @@ export function useFetchRequest() {
     const request = ref(null)
     const requestId = ref(route.params.id ?? null)
 
+    let userRepos;
+
     // This function defaults to the request ID parameter in the route, but can be called with a different ID.
     async function fetchRequest() {
+        // Waited until we fetched request to ensure we had user.
+        ({ userRepos } = await useAuthUser())
         const { data, error } = await supabase.from('requests').select(`
             *,
             status (*),
@@ -34,16 +37,18 @@ export function useFetchRequest() {
              * Attachments are protected, so we need to retrieve signed URLs for them.
              */
             const attachment_paths = data.attachments.map(attachment => attachment.path)
-            const { data: signedUrlData, error: signedUrlError } = await supabase
-                .storage
-                .from('attachments')
-                .createSignedUrls(attachment_paths, 86400) // Signed for one day.
-            signedUrlData.forEach((signedUrl, index) => {
-                if ( !signedUrl.error ) {
-                    data.attachments[index].url = signedUrl.signedUrl
-                }
-                data.attachments[index].thumbnail = getAttachmentPreview(data.attachments[index])
-            })
+            if ( attachment_paths.length > 0 ) {
+                const { data: signedUrlData, error: signedUrlError } = await supabase
+                    .storage
+                    .from('attachments')
+                    .createSignedUrls(attachment_paths, 86400) // Signed for one day.
+                signedUrlData.forEach((signedUrl, index) => {
+                    if ( !signedUrl.error ) {
+                        data.attachments[index].url = signedUrl.signedUrl
+                    }
+                    data.attachments[index].thumbnail = getAttachmentPreview(data.attachments[index])
+                })
+            }
 
             request.value = data
         }
@@ -89,6 +94,10 @@ export function useFetchRequest() {
         return request.value.request_vendors?.label ?? request.value.request_clients?.value ?? request.value.original_title ?? 'Untitled'
     })
 
+    const canService = computed(() => {
+        return userRepos.value.some(repo => repo.id === request.value.repository.id)
+    })
+
     return {
         request,
         requestId,
@@ -102,6 +111,7 @@ export function useFetchRequest() {
         confirmedDate,
         completedDate,
         archivedDate,
-        cancelledDate
+        cancelledDate,
+        canService
     }
 }

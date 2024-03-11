@@ -41,7 +41,10 @@ export function useRequestSearch() {
         let query = supabase.from('requests').select(`
             *,
             status (*),
-            repository:repositories (*),
+            repository:repositories (
+                *,
+                organization:organizations (*)
+            ),
             request_clients (*),
             request_vendors (*)
         `).range(0, limit.value)

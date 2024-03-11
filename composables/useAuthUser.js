@@ -35,8 +35,19 @@ export const useAuthUser = async () => {
         }
     })
 
+
+    const userOrgs = computed(() => {
+        return authUser.value?.organizations ?? []
+    })
+
+    const userRepos = computed(() => {
+        return authUser.value?.organizations?.flatMap(org => org.repositories) ?? []
+    })
+
     return {
         authUser,
+        userOrgs,
+        userRepos,
         refresh
     }
 }
