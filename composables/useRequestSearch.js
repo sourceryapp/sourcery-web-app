@@ -41,7 +41,7 @@ export function useRequestSearch() {
         let query = supabase.from('requests').select(`
             *,
             status (*),
-            repository:repositories (
+            repository:repositories!inner (
                 *,
                 organization:organizations!inner (*)
             ),
