@@ -95,7 +95,7 @@ export function useFetchRequest() {
     })
 
     const canService = computed(() => {
-        return userRepos.value.some(repo => repo.id === request.value.repository.id)
+        return userRepos?.value.some(repo => repo.id === request.value.repository.id) ?? false
     })
 
     return {

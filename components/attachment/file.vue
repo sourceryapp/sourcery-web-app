@@ -1,7 +1,7 @@
 <template>
     <v-row align="center">
         <v-col>
-            <v-dialog width="80%" v-model="showDetails">
+            <v-dialog width="80%" v-model="showDetails" v-if="canService">
                 <template v-slot:activator="{ props: activatorProps }">
                     <v-avatar size="150" rounded="0" v-bind="activatorProps">
                         <v-img :src="attachment.thumbnail" :height="150">
@@ -53,6 +53,17 @@
                     </v-card>
                 </template>
             </v-dialog>
+
+            <v-avatar size="150" rounded="0" v-else>
+                <a :href="downloadUrl" class="d-none" ref="downloadLink" download></a>
+                <v-img :src="attachment.thumbnail" :height="150" @click="downloadAttachment(attachment.url)">
+                    <v-row class="fill-height ma-0" align="end" justify="end">
+                        <div class="pa-1 bg-primary">
+                            <v-icon dark size="large" role="button" class="bg-primary" aria-label="View Image Details">mdi-download</v-icon>
+                        </div>
+                    </v-row>
+                </v-img>
+            </v-avatar>
         </v-col>
         <v-col>
             <div class="mb-2">{{ attachment.label }}</div>
@@ -62,10 +73,20 @@
 </template>
 
 <script setup>
-const props = defineProps(['attachment'])
+const props = defineProps({
+    attachment: {
+        type: Object,
+        required: true
+    },
+    canService: {
+        type: Boolean,
+        default: false
+    }
+})
 const emit = defineEmits(['delete'])
 
 const { deleteAttachment, deleteLoading } = useDeleteAttachment()
+const { downloadUrl, downloadLink, downloadAttachment } = useDownloadAttachments()
 
 const showDetails = ref(false)
 

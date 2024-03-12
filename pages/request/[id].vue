@@ -108,7 +108,7 @@
             <v-expansion-panels model-value="attachments">
                 <v-expansion-panel :title="`Attachments (${request.attachments.length})`" value="attachments">
                     <v-expansion-panel-text class="py-4">
-                        <requests-file-manager :request="request" v-if="canService || isCompleted || isArchived"></requests-file-manager>
+                        <requests-file-manager :request="request" :can-service="canService" v-if="canService || isCompleted || isArchived"></requests-file-manager>
                         <p class="mb-0" v-else-if="isInProgress">The vendor is working on this request - check back later for attachments.</p>
                         <p class="mb-0" v-else>Nothing here yet.</p>
                     </v-expansion-panel-text>

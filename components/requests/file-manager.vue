@@ -2,13 +2,15 @@
     <v-row align="center">
         <v-col cols="12" md="9">
             <p class="mb-0" v-if="request.attachments.length > 0">
-                Click on any attachment to edit.
+                <span v-if="canService">Click on any attachment to edit.</span>
+                <span v-else>Click on any attachment to download.</span>
             </p>
             <p class="mb-0" v-else>No attachments have been uploaded.</p>
         </v-col>
         <v-col class="d-flex child-flex" cols="12" md="3">
             <!-- File Upload -->
-            <attachment-file-input multiple accept=".jpeg,.jpg,.png,.pdf" text="Upload File" icon="mdi-cloud-upload" v-model="fileList" />
+            <attachment-file-input multiple accept=".jpeg,.jpg,.png,.pdf" text="Upload File" icon="mdi-cloud-upload" v-model="fileList" v-if="canService" />
+            <v-btn v-else color="primary" @click="downloadAttachments(request)" :disabled="!request.attachments.length" :loading="downloadLoading" append-icon="mdi-download">Download All</v-btn>
         </v-col>
     </v-row>
         
@@ -43,7 +45,7 @@
 
     <v-row>
         <v-col v-for="attachment in request.attachments" cols="12" sm="6" md="4">
-            <attachment-file :attachment="attachment" @delete="removeFromRequest"></attachment-file>
+            <attachment-file :attachment="attachment" :can-service="canService" @delete="removeFromRequest"></attachment-file>
         </v-col>
     </v-row>
 
@@ -64,8 +66,10 @@
 </template>
 
 <script setup>
-const props = defineProps(['request'])
+const props = defineProps(['request', 'canService'])
 const { fileList, files, remove, setRequest } = useFileList()
+const { downloadLoading, downloadAttachments } = useDownloadAttachments()
+
 setRequest(props.request)
 
 const showDeletedSnackbar = ref(false)

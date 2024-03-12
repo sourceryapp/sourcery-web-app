@@ -8,6 +8,7 @@
         variant="outlined"
         multiple
         clearable
+        hide-details
         placeholder="Filter by Status"
         density="compact"
     ></v-select>

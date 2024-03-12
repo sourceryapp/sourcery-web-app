@@ -2,17 +2,16 @@
     <div>
         <v-row>
             <v-col cols="12" md="4">
-                <v-text-field label="Search" variant="outlined" v-model="search" @update:model-value="onModelChange" density="compact" prepend-inner-icon="mdi-magnify" hide-details>
-                    <template v-slot:loader>
-                        <v-progress-linear :active="loading" color="primary" height="7" indeterminate></v-progress-linear>
-                    </template>
-                </v-text-field>
+                <v-text-field label="Search" variant="outlined" v-model="search" @update:model-value="onModelChange" density="compact" prepend-inner-icon="mdi-magnify" hide-details></v-text-field>
             </v-col>
             <v-col md="4">
                 <StatusSelect v-model="selectedStatus" @update:model-value="onModelChange"></StatusSelect>
             </v-col>
             <v-col md="4">
-                <v-select v-model="order" :items="orderOptions" variant="outlined" clearable placeholder="Sort Order" label="Sort Order" @update:model-value="onModelChange" density="compact"></v-select>
+                <v-select v-model="order" :items="orderOptions" variant="outlined" clearable placeholder="Sort Order" label="Sort Order" @update:model-value="onModelChange" density="compact" hide-details></v-select>
+            </v-col>
+            <v-col cols="12">
+                <v-progress-linear :active="loading" color="primary" height="10" indeterminate class="mb-4"></v-progress-linear>
             </v-col>
         </v-row>
 
