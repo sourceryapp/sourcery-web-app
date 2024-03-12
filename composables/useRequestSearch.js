@@ -43,7 +43,7 @@ export function useRequestSearch() {
             status (*),
             repository:repositories (
                 *,
-                organization:organizations (*)
+                organization:organizations!inner (*)
             ),
             request_clients (*),
             request_vendors (*)
