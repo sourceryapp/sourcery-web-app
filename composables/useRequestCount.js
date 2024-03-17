@@ -18,8 +18,8 @@ export function useRequestCount() {
         const select = `
             *,
             status!inner (name),
-            repositories (
-                organizations (*)
+            repositories!inner (
+                organizations!inner (*)
             )
         `
 
@@ -31,9 +31,9 @@ export function useRequestCount() {
         // If an organization is selected, we need to filter by that organization
         // Otherwise, filter for the logged in user as the requester.
         if (organization.value) {
-            submitQuery.eq('repositories.organization_id', organization.value.id)
-            inProgressQuery.eq('repositories.organization_id', organization.value.id)
-            completedQuery.eq('repositories.organization_id', organization.value.id)
+            submitQuery.eq('repositories.organizations.id', organization.value.id)
+            inProgressQuery.eq('repositories.organizations.id', organization.value.id)
+            completedQuery.eq('repositories.organizations.id', organization.value.id)
         } else {
             submitQuery.eq('user_id', user.value.id)
             inProgressQuery.eq('user_id', user.value.id)
@@ -44,7 +44,9 @@ export function useRequestCount() {
         const { count: inProgressCount, error: inProgressError } = await inProgressQuery
         const { count: completedCount, error: completedError } = await completedQuery
 
-        if ( !submittedError || !inProgressError || !completedError) {
+        console.log(submittedError, inProgressError, completedError, submittedCount, inProgressCount, completedCount)
+
+        if ( !submittedError && !inProgressError && !completedError) {
             countSubmitted.value = submittedCount
             countInProgress.value = inProgressCount
             countCompleted.value = completedCount
