@@ -1,9 +1,9 @@
-export function useFetchRequest() {
+export function useFetchRequest(req = null) {
     const supabase = useSupabaseClient()
     const route = useRoute()
     const { getAttachmentPreview } = useFileList()
 
-    const request = ref(null)
+    const request = ref(req)
     const requestId = ref(route.params.id ?? null)
 
     let userRepos;
