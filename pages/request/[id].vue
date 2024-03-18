@@ -55,7 +55,7 @@
             <v-expansion-panels>
                 <v-expansion-panel title="Messages" value="messages">
                     <v-expansion-panel-text class="py-4">
-                        <requests-messenger :request="request" v-model="messengerAlertAgree"></requests-messenger>
+                        <requests-messenger :request="request" v-model="messengerAlertAgree" :can-service="canService"></requests-messenger>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
