@@ -1,5 +1,6 @@
 export default function useCreateRequest() {
     const supabase = useSupabaseClient()
+    const { authUser } = useAuthUser()
 
     const requestFormValid = ref(false)
     const requestFormLoading = ref(false)
@@ -17,7 +18,6 @@ export default function useCreateRequest() {
     const createdRequest = ref()
 
     async function requestFormPopulateCurrentUser() {
-        const { authUser } = await useAuthUser()
         requestFields.value.user.name = authUser.value.name
         requestFields.value.user.email = authUser.value.email
     }
@@ -29,8 +29,6 @@ export default function useCreateRequest() {
         // So, we have to await the event for requestFormValid.value to be true.
         // Can also access the formSubmitEvent.valid property from this awaited prop.
         if ( formSubmitEvent ) await formSubmitEvent
-
-        const { authUser } = await useAuthUser()
 
         if ( requestFormValid.value ) {
             requestCreatedSubmitDialog.value = true

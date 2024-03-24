@@ -14,7 +14,7 @@ export default function useUpdateProfile() {
             }
         }
 
-        const { refresh } = await useAuthUser()
+        const { fetchUserMetadata } = useAuthUser()
 
         const { data, error } = await supabase.from('user').update(profile)
             .eq('id', user.value.id)
@@ -24,7 +24,7 @@ export default function useUpdateProfile() {
             throw error
         }
 
-        await refresh()
+        await fetchUserMetadata()
     }
 
     return { updateProfile }

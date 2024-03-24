@@ -3,9 +3,9 @@
         <v-container>
             <h1 class="mb-4">{{ organization.name }}</h1>
 
-            <v-row>
+            <v-row class="mb-4">
                 <v-col cols="12" md="4">
-                    <v-card @click="setStatus('Submitted')" class="mb-4">
+                    <v-card @click="setStatus('Submitted')" class="mb-4 fill-height">
                         <v-card-title>New Requests</v-card-title>
                         <v-card-text class="py-0">
                             <p>These requests were newly submitted, and are waiting to be picked up by your organization.</p>
@@ -16,7 +16,7 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <v-card @click="setStatus('In Progress')" class="mb-4">
+                    <v-card @click="setStatus('In Progress')" class="mb-4 fill-height">
                         <v-card-title>In Progress</v-card-title>
                         <v-card-text class="py-0">
                             <p>Requests that have been picked up by your organization, and are currently being serviced.</p>
@@ -27,7 +27,7 @@
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <v-card @click="setStatus('Complete')" class="mb-4">
+                    <v-card @click="setStatus('Complete')" class="mb-4 fill-height">
                         <v-card-title>Completed</v-card-title>
                         <v-card-text class="py-0">
                             <p>These requests are recently completed and ready to be archived.</p>

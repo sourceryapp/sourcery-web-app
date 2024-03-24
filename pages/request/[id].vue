@@ -53,7 +53,11 @@
 
 
             <v-expansion-panels>
-                <v-expansion-panel title="Messages" value="messages">
+                <v-expansion-panel value="messages">
+                    <v-expansion-panel-title class="position-relative">
+                        <v-badge color="error" floating dot v-if="hasUnread">Messages</v-badge>
+                        <span v-else>Messages</span>
+                    </v-expansion-panel-title>
                     <v-expansion-panel-text class="py-4">
                         <requests-messenger :request="request" v-model="messengerAlertAgree" :can-service="canService"></requests-messenger>
                     </v-expansion-panel-text>
@@ -77,6 +81,8 @@ const {
 } = useFetchRequest()
 
 await fetchRequest()
+
+const { hasUnread, clearUnread } = useRequestMessenger(request.value)
 
 const messengerAlertAgree = ref(true)
 </script>

@@ -4,7 +4,7 @@ export default function ({ store, redirect, route, $config }) {
     const isSupabaseAuthenticated = store.getters['supabaseAuth/isAuthenticated']
 
     if (isSupabaseAuthenticated && route.path === '/login') {
-        return redirect('/dashboard')
+        return redirect1('/dashboard')
     }
 
     // If the user isn't logged in

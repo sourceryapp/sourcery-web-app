@@ -67,7 +67,7 @@
 </template>
 
 <script setup>
-const { authUser, userOrgs } = await useAuthUser()
+const { authUser, userOrgs } = useAuthUser()
 const { requestCount, countUriRequests } = useFetchUriRequests()
 const { countSubmitted, countInProgress, countCompleted, fetchRequestCount } = useRequestCount()
 

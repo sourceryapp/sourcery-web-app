@@ -69,5 +69,5 @@
 </template>
 
 <script setup>
-const { authUser } = await useAuthUser()
+const { authUser } = useAuthUser()
 </script>

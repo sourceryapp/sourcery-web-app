@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-const { authUser } = await useAuthUser()
+const { authUser } = useAuthUser()
 const { updateProfile } = useUpdateProfile()
 
 const dialog = ref(false)

@@ -1,5 +1,6 @@
 export function useRequestMessenger(req = null) {
     const supabase = useSupabaseClient()
+    const { canService } = useFetchRequest(req)
 
     const request = ref(req)
     const messages = ref([])
@@ -19,11 +20,35 @@ export function useRequestMessenger(req = null) {
         }
     }
 
+    async function clearUnread() {
+        if ( canService.value ) {
+            request.value.request_vendors.has_unread = false
+            await supabase.from('request_vendors')
+                .update({ has_unread: false })
+                .eq('request_id', request.value.id)
+        } else {
+            request.value.request_clients.has_unread = false
+            await supabase.from('request_clients')
+                .update({ has_unread: false })
+                .eq('request_id', request.value.id)
+        }
+    }
+
+    const hasUnread = computed(() => {
+        console.log(request.value)
+        if ( canService.value ) {
+            return request.value.request_vendors.has_unread ?? false
+        }
+        return request.value.request_clients.has_unread ?? false
+    })
+
     return {
         request,
         messages,
         getMessages,
-        sendMessage
+        sendMessage,
+        hasUnread,
+        clearUnread
     }
 
 }

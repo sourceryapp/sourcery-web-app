@@ -2,16 +2,13 @@ export function useFetchRequest(req = null) {
     const supabase = useSupabaseClient()
     const route = useRoute()
     const { getAttachmentPreview } = useFileList()
+    const { userRepos } = useAuthUser()
 
     const request = ref(req)
     const requestId = ref(route.params.id ?? null)
 
-    let userRepos;
-
     // This function defaults to the request ID parameter in the route, but can be called with a different ID.
     async function fetchRequest() {
-        // Waited until we fetched request to ensure we had user.
-        ({ userRepos } = await useAuthUser())
         const { data, error } = await supabase.from('requests').select(`
             *,
             status (*),
@@ -97,6 +94,7 @@ export function useFetchRequest(req = null) {
     const canService = computed(() => {
         return userRepos?.value.some(repo => repo.id === request.value.repository.id) ?? false
     })
+
 
     return {
         request,

@@ -10,8 +10,8 @@
                         <v-list-item-subtitle class="text-white" v-else>Log in to place &amp; manage requests.</v-list-item-subtitle>
                     </v-list-item>
                 </v-list>
-
                 <v-list class="px-2">
+
                     <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
                     <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded>
                         <template v-slot:prepend>
@@ -19,11 +19,9 @@
                         </template>
                         <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                     </v-list-item>
-                </v-list>
 
-                <template v-if="organizationNavigationItems.length > 0">
-                    <v-divider class="mx-2"></v-divider>
-                    <v-list class="px-2">
+                    <template v-if="organizationNavigationItems.length > 0">
+                        <v-divider class="ma-2"></v-divider>
                         <v-list-subheader>Organizations</v-list-subheader>
                         <v-list-item v-for="item in organizationNavigationItems" :to="item.link" color="primary" rounded>
                             <template v-slot:prepend>
@@ -31,13 +29,11 @@
                             </template>
                             <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                         </v-list-item>
-                    </v-list>
-                </template>
+                    </template>
 
-                <template v-if="authUser">
-                    <v-divider class="mx-2"></v-divider>
+                    <template v-if="authUser">
+                        <v-divider class="ma-2"></v-divider>
 
-                    <v-list class="px-2">
                         <v-list-item v-for="item in secondaryNavigationItems" :to="item.link" color="primary" rounded>
                             <template v-slot:prepend>
                                 <v-icon>{{ item.icon }}</v-icon>
@@ -50,26 +46,21 @@
                             </template>
                             <v-list-item-title class="text-subtitle-2">Toggle Theme</v-list-item-title>
                         </v-list-item>
-                    </v-list>
 
-                    <template v-if="authUser?.admin">
-                        <v-divider class="mx-2"></v-divider>
+                        <template v-if="authUser?.admin">
+                            <v-divider class="ma-2"></v-divider>
 
-                        <v-list class="px-2">
                             <v-list-item v-for="item in adminNavigationItems" :to="item.link" color="primary" rounded>
                                 <template v-slot:prepend>
                                     <v-icon>{{ item.icon }}</v-icon>
                                 </template>
                                 <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                             </v-list-item>
-                        </v-list>
+                        </template>
                     </template>
-                </template>
 
+                    <v-divider class="ma-2"></v-divider>
 
-                <v-divider class="mx-2"></v-divider>
-
-                <v-list class="px-2">
                     <v-list-item @click="logout" color="primary" rounded v-if="authUser">
                         <template v-slot:prepend>
                             <v-icon>mdi-logout</v-icon>
@@ -82,12 +73,9 @@
                         </template>
                         <v-list-item-title class="text-subtitle-2">Login</v-list-item-title>
                     </v-list-item>
-                </v-list>
 
-
-                <v-divider class="mx-2" v-if="mobile"></v-divider>
-                <v-list class="px-2" density="compact" v-if="mobile">
-                    <v-list-item v-for="item in bottomNavigationItems" :to="item.link" color="primary" rounded density="compact">
+                    <v-divider class="ma-2" v-if="mobile"></v-divider>
+                    <v-list-item v-for="item in bottomNavigationItems" :to="item.link" color="primary" rounded density="compact" v-if="mobile">
                         <v-list-item-title class="text-caption">{{ item.title }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
@@ -120,11 +108,13 @@
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
-const { authUser, userOrgs } = await useAuthUser()
+const { authUser, userOrgs, fetchUserMetadata } = useAuthUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
 const theme = useTheme()
+
+await callOnce(fetchUserMetadata)
 
 // All user related display helpers
 const userIcon = computed(() => {
@@ -144,7 +134,6 @@ const primaryNavigationItems = ref([
 ])
 const secondaryNavigationItems = ref([
     { title: 'Messages', icon: 'mdi-message', link: '/messages' },
-    { title: 'History', icon: 'mdi-history', link: '/request/history' },
     { title: 'Settings', icon: 'mdi-cog', link: '/profile/settings' },
     { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/feedback' }
 ])
@@ -162,6 +151,19 @@ const organizationNavigationItems = computed(() => {
         return { title: org.name, icon: 'mdi-domain', link: `/o/${org.id}` }
     })
 })
+
+// Since these are all 
+const primaryMenu = ref([])
+const secondaryMenu = ref([])
+const bottomMenu = ref([])
+const adminMenu = ref([])
+const organizationMenu = ref([])
+
+function onListItemSelected() {
+    console.log('thing')
+    primaryMenu.value = []
+    console.log(orgList.value)
+}
 </script>
 
 <style scoped lang="scss">

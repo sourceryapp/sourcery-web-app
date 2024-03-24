@@ -34,7 +34,7 @@
 <script setup>
 const props = defineProps(['title'])
 const emit = defineEmits(['cancelled', 'clear'])
-const { authUser } = await useAuthUser()
+const { authUser } = useAuthUser()
 
 const {
     step,

@@ -1,40 +1,46 @@
 /**
  * Allows the use of useAuthUser() in nuxt files, accessing the metadata of the current logged in user.
  * Returns a reactive ref of the user's metadata.
+ * 
+ * This is intended to be accessed in a synchronous context, and use a global store to cache the user's metadata.
+ * It also watches the current supabase state and reacts accordingly to fetch new or clear data.
  */
-export const useAuthUser = async () => {
+export function useAuthUser() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
 
-    // Attach to useAsyncData so we can leverage caching
-    const { data: authUser, error, execute, pending, refresh, status } = await useAsyncData('authUser', async () => {
-        if (!user.value) {
+    // Establish the global state that will be reused across all instances of this composable.
+    const authUser = useState('authUser')
+
+    // Fetches the current user metadata and their organization access.
+    async function fetchUserMetadata() {
+        console.log('using onload')
+        if (!user.value || authUser.value?.id === user.value?.id) {
             return null
         }
 
-        const { data } = await supabase.from('user').select(`
+        console.log('requesting onload')
+
+        const { data, error } = await supabase.from('user').select(`
         *,
         organizations!organizations_owner_id_fkey (
             *,
             repositories (*)
         )
         `).eq('id', user.value.id).single()
-        
-        return data
-    },
-    // AsyncDataOptions, watcher is necessary to update the result reactively to templates.
-    // getCachedData is necessary to get the data from the cache if it exists.
-    {
-        watch: [user],
-        getCachedData: key => {
-            const cachedUser = useNuxtData(key).data
-            if ( cachedUser.value ) {
-                console.log('returning from cache')
-                return cachedUser
-            }
-        }
-    })
 
+        if (error) {
+            console.error('Error fetching user', error)
+            return user.value = null
+        }
+        
+        authUser.value = data
+    }
+
+    // Responsible for clearing the global authUser state, and any other cleanup when supabase state changes.
+    function clear() {
+        clearNuxtState('authUser')
+    }
 
     const userOrgs = computed(() => {
         return authUser.value?.organizations ?? []
@@ -44,10 +50,15 @@ export const useAuthUser = async () => {
         return authUser.value?.organizations?.flatMap(org => org.repositories) ?? []
     })
 
+    watch(user, async () => {
+        clear()
+        await fetchUserMetadata()
+    })
+
     return {
         authUser,
         userOrgs,
         userRepos,
-        refresh
+        fetchUserMetadata
     }
 }

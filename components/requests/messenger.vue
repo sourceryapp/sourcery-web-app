@@ -26,7 +26,7 @@
 const props = defineProps(['request', 'canService'])
 const { messages, getMessages, sendMessage } = useRequestMessenger(props.request)
 const civilAlert = defineModel({ type: Boolean, default: true })
-const { authUser } = await useAuthUser()
+const { authUser } = useAuthUser()
 
 function messageIsMine(message) {
     return message.user_id === authUser.value.id || (message.vendor && props.canService)
