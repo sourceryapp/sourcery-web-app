@@ -53,7 +53,7 @@
 
 
             <v-expansion-panels>
-                <v-expansion-panel value="messages">
+                <v-expansion-panel value="messages" @click="clearUnread">
                     <v-expansion-panel-title class="position-relative">
                         <v-badge color="error" floating dot v-if="hasUnread">Messages</v-badge>
                         <span v-else>Messages</span>

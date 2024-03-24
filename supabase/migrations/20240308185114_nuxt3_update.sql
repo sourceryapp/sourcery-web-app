@@ -23,3 +23,38 @@ create trigger create_client_vendor_on_request_create
 
 
 alter table "public"."attachments" add column if not exists "path" text;
+
+-- Alter the sent_chat function to also update request_vendor/request_client with has_unread
+CREATE OR REPLACE FUNCTION "public"."sent_chat"(request_id bigint, user_id uuid) RETURNS bigint
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    AS $_$
+DECLARE
+  created_id int8;
+  request public.requests%rowtype;
+BEGIN
+    SELECT * FROM public.requests INTO request WHERE id = $1;
+
+    if request.user_id = $2 then
+        UPDATE public.request_vendors pv
+        SET has_unread = true
+        WHERE pv.request_id = $1;
+    else
+        UPDATE public.request_clients pc
+        SET has_unread = TRUE
+        WHERE pc.request_id = $1;
+    end if;
+
+    INSERT INTO public.request_events (request_id, user_id, status_id, description)
+    SELECT $1, $2, request.status_id, '%u initiated a chat.'
+    WHERE NOT EXISTS(
+        SELECT 1
+        FROM public.request_events
+        WHERE request_events.request_id = $1
+        AND request_events.user_id = $2
+        AND request_events.status_id = request.status_id
+        AND request_events.description = '%u initiated a chat.'
+        AND request_events.created_at >= NOW() - INTERVAL '5 minutes'
+    ) RETURNING id into created_id;
+    RETURN created_id;
+END;
+$_$;

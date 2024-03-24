@@ -7,24 +7,45 @@
         </v-alert>
         
         <div class="messenger-scroller position-relative">
-            <pre>{{ messages }}</pre>
-            <div v-for="message in messages" :class="{
-                'request-message mb-2': true,
-                'text-right': messageIsMine(message),
-                'float-right': messageIsMine(message)
-            }">
-                <v-sheet class="py-3 px-5 d-inline-block" rounded="lg" elevation="1" :color="messageIsMine(message) ? 'primary' : 'surface-light'" width="auto">
-                    <p class="text-caption mb-1"><em>{{ $filters.normalDate(message.created_at) }}</em></p>
-                    {{ message.content }}
-                </v-sheet>
-            </div>
+            <v-row v-for="message in messages" no-gutters class="request-message mb-4">
+                <v-col>
+                    <v-sheet :class="{
+                        'request-message-sheet py-3 px-5 d-inline-block': true,
+                        'float-right': messageIsMine(message)
+                    }" rounded="lg" elevation="1" :color="messageIsMine(message) ? 'primary' : 'surface-light'" width="auto">
+                        <p class="text-caption mb-1"><em>{{ $filters.normalDate(message.created_at) }}</em></p>
+                        {{ message.content }}
+                    </v-sheet>
+                </v-col>
+            </v-row>
         </div>
+
+        <v-form class="new-message-form" @submit.prevent="sendMessage" v-model="messageFormValid" validate-on="submit" :disabled="messageFormLoading">
+            <v-textarea
+                v-model="message"
+                label="New Message"
+                placeholder="Type your message here..."
+                variant="outlined"
+                rows="3"
+                class="mb-3"
+                :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]"
+                counter="6000"
+            ></v-textarea>
+
+            <v-btn
+                color="primary"
+                type="submit"
+            >Send</v-btn>
+        </v-form>
     </div>
 </template>
 
 <script setup>
 const props = defineProps(['request', 'canService'])
-const { messages, getMessages, sendMessage } = useRequestMessenger(props.request)
+const {
+    messageFormValid, messageFormLoading, messageFormError, message,
+    messages, getMessages, sendMessage
+} = useRequestMessenger(props.request)
 const civilAlert = defineModel({ type: Boolean, default: true })
 const { authUser } = useAuthUser()
 
@@ -41,9 +62,10 @@ await getMessages()
     max-height: 70vh;
     overflow-y: auto;
     .request-message {
-        max-width: 70%;
-        width: auto;
-        // align-self: flex-start;
+        .request-message-sheet {
+            max-width: 80%;
+            width: auto;
+        }
     }
 }
 </style>

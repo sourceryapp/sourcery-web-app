@@ -1,9 +1,16 @@
 export function useRequestMessenger(req = null) {
     const supabase = useSupabaseClient()
+    const user = useSupabaseUser()
     const { canService } = useFetchRequest(req)
 
     const request = ref(req)
     const messages = ref([])
+
+    // Fields for the message form
+    const message = ref('')
+    const messageFormValid = ref(false)
+    const messageFormLoading = ref(false)
+    const messageFormError = ref()
 
     function sendMessage() {
         console.log('Sending message...')
@@ -13,7 +20,7 @@ export function useRequestMessenger(req = null) {
         const { data, error } = await supabase.from('request_comments')
             .select('*')
             .eq('request_id', request.value.id)
-            .order('created_at', { ascending: false })
+            .order('created_at', { ascending: true })
 
         if ( !error ) {
             messages.value = data
@@ -34,8 +41,47 @@ export function useRequestMessenger(req = null) {
         }
     }
 
+    async function sendMessage(formSubmitEvent) {
+        messageFormLoading.value = true
+        if ( message.value.trim() === '' ) {
+            return false
+        }
+
+        // Need to wait for form validation to resolve
+        if ( formSubmitEvent ) await formSubmitEvent
+        if ( !messageFormValid.value ) {
+            messageFormLoading.value = false
+            return false
+        }
+
+        const newMessage = {
+            request_id: request.value.id,
+            content: message.value,
+            user_id: user.value.id,
+            created_at: new Date().toISOString(),
+            vendor: canService.value
+        }
+
+        const { data, error } = await supabase.from('request_comments').insert(newMessage).select()
+        console.log(data, error)
+
+        messageFormLoading.value = false
+        if ( !error ) {
+            messages.value.push(data[0])
+            message.value = ''
+
+            const { data: insert_id, error } = await supabase.rpc('sent_chat', {
+                request_id: request.value.id,
+                user_id: user.value.id
+            })
+
+            return true
+        }
+        messageFormError.value = error
+        return false
+    }
+
     const hasUnread = computed(() => {
-        console.log(request.value)
         if ( canService.value ) {
             return request.value.request_vendors.has_unread ?? false
         }
@@ -48,7 +94,11 @@ export function useRequestMessenger(req = null) {
         getMessages,
         sendMessage,
         hasUnread,
-        clearUnread
+        clearUnread,
+        messageFormValid,
+        messageFormLoading,
+        messageFormError,
+        message
     }
 
 }
