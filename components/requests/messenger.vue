@@ -44,7 +44,7 @@
             <div class="d-flex">
                 <v-btn color="primary" type="submit">Send</v-btn>
                 <v-spacer></v-spacer>
-                <requests-report :request="request"></requests-report>
+                <requests-report :request="request" v-if="canService"></requests-report>
             </div>
             
         </v-form>

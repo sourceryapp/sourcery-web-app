@@ -21,7 +21,8 @@ export function useFetchRequest(req = null) {
             user (*),
             request_events (
                 *,
-                status (id, name)
+                status (id, name),
+                user (*)
             ),
             attachments (*),
             reports (*)

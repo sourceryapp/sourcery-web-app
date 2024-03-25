@@ -52,7 +52,7 @@
             </v-expansion-panels>
 
 
-            <v-expansion-panels>
+            <v-expansion-panels class="mb-6">
                 <v-expansion-panel value="messages" @click="clearUnread">
                     <v-expansion-panel-title class="position-relative">
                         <v-badge color="error" floating dot v-if="hasUnread">Messages</v-badge>
@@ -61,6 +61,16 @@
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="py-4">
                         <requests-messenger :request="request" v-model="messengerAlertAgree"></requests-messenger>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
+
+            <v-expansion-panels class="mb-6" v-if="canService">
+                <v-expansion-panel value="eventLog">
+                    <v-expansion-panel-title>Event History</v-expansion-panel-title>
+                    <v-expansion-panel-text class="py-4">
+                        <p>The event log is only viewable by users who have permission to service this request.</p>
+                        <requests-event-log :request="request"></requests-event-log>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
