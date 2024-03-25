@@ -12,7 +12,7 @@
 
         <v-dialog v-model="newLogDialog" max-width="600">
             <template v-slot:activator="{ props: activatorProps }">
-                <v-btn prepend-icon="mdi-plus" color="primary" v-bind="activatorProps">Add Log Entry</v-btn>
+                <v-btn prepend-icon="mdi-plus" color="primary" v-bind="activatorProps" :disabled="newLogMessageLoading" v-if="!isArchived && !isCancelled">Add Log Entry</v-btn>
             </template>
             <template v-slot:default>
                 <v-form @submit.prevent="addMessage" v-model="newLogMessageValid" :disabled="newLogMessageLoading">
@@ -60,4 +60,6 @@ const {
     addMessage,
     getEventDescription
 } = useEventLog(props.request)
+
+const { isCompleted, isCancelled, isArchived } = useFetchRequest(props.request)
 </script>

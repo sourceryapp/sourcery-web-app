@@ -97,9 +97,9 @@ export function useRequestMessenger(req = null) {
 
     const hasUnread = computed(() => {
         if ( canService.value ) {
-            return request.value.request_vendors.has_unread ?? false
+            return request.value?.request_vendors?.has_unread ?? false
         }
-        return request.value.request_clients.has_unread ?? false
+        return request.value?.request_clients?.has_unread ?? false
     })
 
     const isReported = computed(() => {

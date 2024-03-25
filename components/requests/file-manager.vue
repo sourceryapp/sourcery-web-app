@@ -9,7 +9,7 @@
         </v-col>
         <v-col class="d-flex child-flex" cols="12" md="3">
             <!-- File Upload -->
-            <attachment-file-input multiple accept=".jpeg,.jpg,.png,.pdf" text="Upload File" icon="mdi-cloud-upload" v-model="fileList" v-if="canService" />
+            <attachment-file-input multiple accept=".jpeg,.jpg,.png,.pdf" text="Upload File" icon="mdi-cloud-upload" v-model="fileList" v-if="canService && !isCancelled && !isArchived && !isCompleted" />
             <v-btn v-else color="primary" @click="downloadAttachments(request)" :disabled="!request.attachments.length" :loading="downloadLoading" append-icon="mdi-download">Download All</v-btn>
         </v-col>
     </v-row>
@@ -66,11 +66,10 @@
 </template>
 
 <script setup>
-const props = defineProps(['request', 'canService'])
-const { fileList, files, remove, setRequest } = useFileList()
+const props = defineProps(['request'])
+const { fileList, files, remove } = useFileList(props.request)
 const { downloadLoading, downloadAttachments } = useDownloadAttachments()
-
-setRequest(props.request)
+const { canService, isCompleted, isCancelled, isArchived } = useFetchRequest(props.request)
 
 const showDeletedSnackbar = ref(false)
 

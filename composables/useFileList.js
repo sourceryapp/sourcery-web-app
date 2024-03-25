@@ -1,21 +1,17 @@
 import { v4 as uuidv4 } from 'uuid'
 import mime from 'mime-types'
 
-export function useFileList() {
+export function useFileList(req) {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
     const fileList = ref()
     const files = ref([])
     const config = useRuntimeConfig()
-    const request = ref()
+    const request = ref(req)
 
     const thumbnails = {
         'image/tiff': '/img/tiff.svg',
         'application/pdf': '/img/pdf.svg'
-    }
-
-    function setRequest(req) {
-        request.value = req
     }
 
     function add(file) {
@@ -154,7 +150,6 @@ export function useFileList() {
         addAll,
         remove,
         reset,
-        setRequest,
         getAttachmentPreview
     }
 }

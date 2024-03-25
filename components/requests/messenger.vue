@@ -1,6 +1,6 @@
 <template>
     <div class="request-messenger">
-        <v-alert title="Keep it Civil!" type="warning" variant="tonal" class="mb-3" v-if="civilAlert && !isReported">
+        <v-alert title="Keep it Civil!" type="warning" variant="tonal" class="mb-3" v-if="civilAlert && !isReported && !isCancelled && !isArchived && !isCompleted">
             <p>Remember, there are real, hard working people behind the scenes.  This chat is not a 24/7, highly available chat, but rather a convenient channel for communication when fulfillment experts become available.  By messaging with experts, you understand that you will not get an immediate response, and agree to treat experts with respect or subject your account to ban.</p>
 
             <v-btn variant="text" color="warning" @click="civilAlert = false">I agree</v-btn>
@@ -21,6 +21,7 @@
                     </v-sheet>
                 </v-col>
             </v-row>
+            <p v-if="messages.length === 0">There are no messages here yet.</p>
         </div>
 
         <v-form
@@ -29,7 +30,7 @@
             v-model="messageFormValid"
             validate-on="submit"
             :disabled="messageFormLoading"
-            v-if="!isReported">
+            v-if="!isReported && !isArchived && !isCancelled">
             <v-textarea
                 v-model="message"
                 label="New Message"
@@ -42,14 +43,14 @@
             ></v-textarea>
 
             <div class="d-flex">
-                <v-btn color="primary" type="submit">Send</v-btn>
+                <v-btn color="primary" type="submit" :disabled="messageFormLoading">Send</v-btn>
                 <v-spacer></v-spacer>
-                <requests-report :request="request" v-if="canService"></requests-report>
+                <requests-report :request="request" v-if="canService && !isArchived && !isCancelled"></requests-report>
             </div>
             
         </v-form>
 
-        <v-alert title="Reported" type="error" variant="tonal" class="mb-3" v-else>This chat has been reported.  If you believe this is an error, please contact <NuxtLink to="/feedback">Sourcery support</NuxtLink>.</v-alert>
+        <v-alert title="Reported" type="error" variant="tonal" class="mb-3" v-if="isReported">This chat has been reported.  If you believe this is an error, please contact <NuxtLink to="/feedback">Sourcery support</NuxtLink>.</v-alert>
     </div>
 </template>
 
@@ -61,7 +62,7 @@ const {
 } = useRequestMessenger(props.request)
 const civilAlert = defineModel({ type: Boolean, default: true })
 const { authUser } = useAuthUser()
-const { isReported, canService } = useFetchRequest(props.request)
+const { isReported, canService, isArchived, isCancelled, isCompleted } = useFetchRequest(props.request)
 
 function messageIsMine(message) {
     return message.user_id === authUser.value.id || (message.vendor && canService.value)
