@@ -5,6 +5,7 @@ export function useRequestMessenger(req = null) {
 
     const request = ref(req)
     const messages = ref([])
+    const reports = ref([])
 
     // Fields for the message form
     const message = ref('')
@@ -24,6 +25,19 @@ export function useRequestMessenger(req = null) {
 
         if ( !error ) {
             messages.value = data
+
+            await getReports()
+        }
+    }
+
+    async function getReports() {
+        const { data, error } = await supabase.from('reports')
+            .select('*')
+            .eq('request_id', request.value.id)
+            .order('created_at', { ascending: true })
+
+        if ( !error ) {
+            reports.value = data
         }
     }
 
@@ -88,13 +102,19 @@ export function useRequestMessenger(req = null) {
         return request.value.request_clients.has_unread ?? false
     })
 
+    const isReported = computed(() => {
+        return reports.value.length > 0
+    })
+
     return {
         request,
+        reports,
         messages,
         getMessages,
         sendMessage,
         hasUnread,
         clearUnread,
+        isReported,
         messageFormValid,
         messageFormLoading,
         messageFormError,

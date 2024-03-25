@@ -57,9 +57,10 @@
                     <v-expansion-panel-title class="position-relative">
                         <v-badge color="error" floating dot v-if="hasUnread">Messages</v-badge>
                         <span v-else>Messages</span>
+                        <v-chip v-if="isReported" color="error" class="ms-4">Reported</v-chip>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text class="py-4">
-                        <requests-messenger :request="request" v-model="messengerAlertAgree" :can-service="canService"></requests-messenger>
+                        <requests-messenger :request="request" v-model="messengerAlertAgree"></requests-messenger>
                     </v-expansion-panel-text>
                 </v-expansion-panel>
             </v-expansion-panels>
@@ -75,7 +76,7 @@
 <script setup>
 const { 
     request, requestLabel,
-    isInProgress, isCompleted, isArchived,
+    isInProgress, isCompleted, isArchived, isReported,
     canService,
     fetchRequest
 } = useFetchRequest()

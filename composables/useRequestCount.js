@@ -44,8 +44,6 @@ export function useRequestCount() {
         const { count: inProgressCount, error: inProgressError } = await inProgressQuery
         const { count: completedCount, error: completedError } = await completedQuery
 
-        console.log(submittedError, inProgressError, completedError, submittedCount, inProgressCount, completedCount)
-
         if ( !submittedError && !inProgressError && !completedError) {
             countSubmitted.value = submittedCount
             countInProgress.value = inProgressCount

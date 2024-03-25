@@ -23,7 +23,8 @@ export function useFetchRequest(req = null) {
                 *,
                 status (id, name)
             ),
-            attachments (*)
+            attachments (*),
+            reports (*)
         `).order('created_at', { ascending: false })
             .eq('id', requestId.value)
             .single()
@@ -95,6 +96,10 @@ export function useFetchRequest(req = null) {
         return userRepos?.value.some(repo => repo.id === request.value.repository.id) ?? false
     })
 
+    const isReported = computed(() => {
+        return request.value.reports.length > 0
+    })
+
 
     return {
         request,
@@ -106,6 +111,7 @@ export function useFetchRequest(req = null) {
         isCompleted,
         isArchived,
         isCancelled,
+        isReported,
         confirmedDate,
         completedDate,
         archivedDate,
