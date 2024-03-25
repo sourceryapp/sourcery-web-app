@@ -89,7 +89,7 @@
                     <v-divider class="mb-4"></v-divider>
                     <p v-if="canService">Is this request not serviceable by your insitution, or contain spam/harmful content? In any similar case, a request can be cancelled.  This will notify the requesting user as well.</p>
                     <p v-else>A request can be cancelled at any time.  This will make the request unserviceable, and change the status to "Cancelled".</p>
-                    <v-btn size="large" variant="tonal" color="error">Cancel Request</v-btn>
+                    <requests-cancel-button :request="request"></requests-cancel-button>
                 </v-card-text>
                 <v-card-text v-if="isCompleted">
                     <v-divider class="mb-4"></v-divider>
