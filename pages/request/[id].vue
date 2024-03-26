@@ -91,11 +91,16 @@
                     <p v-else>A request can be cancelled at any time.  This will make the request unserviceable, and change the status to "Cancelled".</p>
                     <requests-cancel-button :request="request"></requests-cancel-button>
                 </v-card-text>
+                <v-card-text v-if="isInProgress && canService">
+                    <v-divider class="mb-4"></v-divider>
+                    <p>When ready, this request can be marked as completed.</p>
+                    <requests-complete-button :request="request"></requests-complete-button>
+                </v-card-text>
                 <v-card-text v-if="isCompleted">
                     <v-divider class="mb-4"></v-divider>
                     <template v-if="canService">
                         <p>This request has been completed.  Sourcery provides an option to archive requests, which will prevent changes and signal to us that documents can be moved to cold storage (they are still available for download).</p>
-                        <v-btn size="large" variant="tonal" color="primary">Archive Request</v-btn>
+                        <requests-archive-button :request="request"></requests-archive-button>
                     </template>
                     <v-alert v-else type="success" class="mb-0">This request has been completed and is available for download.</v-alert>
                 </v-card-text>
