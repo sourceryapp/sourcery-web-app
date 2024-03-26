@@ -81,7 +81,7 @@
                     <v-divider class="mb-4"></v-divider>
                     <template v-if="canService">
                         <p>This request requires action by your institution.  Claiming the request will notify the requesting user and move the status to "In-Progress".</p>
-                        <v-btn v-if="canService" size="large" variant="tonal" color="primary">Claim Request</v-btn>
+                        <requests-claim-button :request="request" v-if="canService"></requests-claim-button>
                     </template>
                     <v-alert v-else type="info" class="mb-0">Your request has been submitted and is awaiting review.</v-alert>
                 </v-card-text>
