@@ -143,6 +143,7 @@ const bottomNavigationItems = ref([
     { title: 'Terms and Conditions', link: '/terms' }
 ])
 const adminNavigationItems = ref([
+    { title: 'Admin', icon: 'mdi-cog', link: '/admin' },
     { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
 ])
 
@@ -151,19 +152,6 @@ const organizationNavigationItems = computed(() => {
         return { title: org.name, icon: 'mdi-domain', link: `/o/${org.id}` }
     })
 })
-
-// Since these are all 
-const primaryMenu = ref([])
-const secondaryMenu = ref([])
-const bottomMenu = ref([])
-const adminMenu = ref([])
-const organizationMenu = ref([])
-
-function onListItemSelected() {
-    console.log('thing')
-    primaryMenu.value = []
-    console.log(orgList.value)
-}
 </script>
 
 <style scoped lang="scss">

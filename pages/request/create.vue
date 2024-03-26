@@ -10,11 +10,7 @@
 
                         <v-img max-height="200" rounded="lg" :src="bannerImage" class="mb-4"></v-img>
 
-                        <v-autocomplete variant="outlined" label="Search for or Enter New Repository" v-model="repository" :items="repositories" item-title="name" return-object clearable :rules="[$sourceryForms.rules.required]">
-                            <template v-slot:item="{ props, item }">
-                                <v-list-item v-bind="props" :title="item.raw.organization.name" :subtitle="item.raw.name"></v-list-item>
-                            </template>
-                        </v-autocomplete>
+                        <repository-select v-model="repository"></repository-select>
 
                         <v-alert color="primary" icon="$info" v-if="repository" class="mb-4">You have selected the {{ repository.name }} at {{ repository.organization.name }}.</v-alert>
 
@@ -61,7 +57,6 @@
 
 <script setup>
 const { repository, bannerImage } = useSelectRepository()
-const { repositories, fetchRepositories } = useFetchRepositories()
 const { $sourceryForms } = useNuxtApp()
 const {
     requestFields,
@@ -79,7 +74,6 @@ watch(repository, () => {
     requestFields.value.repository = repository.value
 })
 
-await fetchRepositories()
 await requestFormPopulateCurrentUser()
 </script>
 

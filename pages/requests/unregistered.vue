@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-const { requests, fetchUriRequests } = useFetchUriRequests()
+const { requests, fetchUserUriRequests } = useFetchUriRequests()
 
-await fetchUriRequests()
+await fetchUserUriRequests()
 </script>
