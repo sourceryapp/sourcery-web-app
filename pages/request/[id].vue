@@ -74,6 +74,27 @@
                         </v-expansion-panel-text>
                     </v-expansion-panel>
                 </v-expansion-panels>
+
+                <v-expansion-panels class="mb-6">
+                    <v-expansion-panel value="archiveNotes">
+                        <v-expansion-panel-title>Additional Notes &amp; Citations</v-expansion-panel-title>
+                        <v-expansion-panel-text class="py-4">
+                            <p v-if="!canService && isInProgress">Additional notes and citations provided by the servicing provider will be displayed here when completed.</p>
+                            <p v-if="canService">This section gives an opportunity to fulfill a request via description, links, or other, as well as provide a corrected or suggested citation for the documents requested.  Requesting users will see this information once the request is considered "Complete".</p>
+                            <requests-edit-archive-notes :request="request" v-if="canService && !isArchived && !isCancelled"></requests-edit-archive-notes>
+                            <v-container v-if="isArchived || isCancelled || (!canService && isCompleted)">
+                                <v-row>
+                                    <v-col cols="12" md="3"><h3>Fulfillment Notes</h3></v-col>
+                                    <v-col cols="12" md="9"><p class="mb-0">{{ request.archive_notes ?? 'None Provided' }}</p></v-col>
+                                </v-row>
+                                <v-row>
+                                    <v-col cols="12" md="3"><h3>Suggested Citation</h3></v-col>
+                                    <v-col cols="12" md="9"><p class="mb-0">{{ request.archive_citation ?? 'None Provided' }}</p></v-col>
+                                </v-row>
+                            </v-container>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                </v-expansion-panels>
             </template>
 
             <v-card title="Pending Actions" class="pa-2">
