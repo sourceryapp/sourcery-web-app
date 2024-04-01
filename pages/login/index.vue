@@ -28,6 +28,7 @@ definePageMeta({
 })
 
 const supabase = useSupabaseClient()
+const route = useRoute()
 
 const formLoading = ref(false)
 const formEmail = ref('')
@@ -44,7 +45,8 @@ async function submitEmailOtpLogin() {
     navigateTo({
         path: '/login/otp',
         query: {
-            email: formEmail.value
+            email: formEmail.value,
+            redirectTo: route.query.redirectTo ?? null
         }
     })
 }

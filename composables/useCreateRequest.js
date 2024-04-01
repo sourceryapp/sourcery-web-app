@@ -9,7 +9,8 @@ export default function useCreateRequest() {
     const requestFields = ref({
         user: {
             name: '',
-            email: ''
+            email: '',
+            id: null
         },
         title: '',
         details: '',
@@ -17,9 +18,17 @@ export default function useCreateRequest() {
     })
     const createdRequest = ref()
 
-    async function requestFormPopulateCurrentUser() {
-        requestFields.value.user.name = authUser.value.name
-        requestFields.value.user.email = authUser.value.email
+    populateFromSession()
+    requestFormPopulateCurrentUser(authUser.value)
+
+    function requestFormPopulateCurrentUser() {
+        setClient(authUser.value)
+    }
+
+    function setClient(user) {
+        requestFields.value.user.name = '',
+        requestFields.value.user.email = user?.email ?? '',
+        requestFields.value.user.id = user?.id ?? null
     }
 
     async function createRequest(formSubmitEvent) {
@@ -36,13 +45,14 @@ export default function useCreateRequest() {
                 repository_id: requestFields.value.repository.id,
                 citation: requestFields.value.details,
                 status_id: 1,
-                user_id: authUser.value.id,
+                user_id: requestFields.value.user.id,
                 original_title: requestFields.value.title
             }).select().single()
 
             if ( error ) {
                 requestFormError.value = error
             } else {
+                localStorage.removeItem('sourceryInProgressRequest')
                 createdRequest.value = data
             }
         }
@@ -52,6 +62,37 @@ export default function useCreateRequest() {
         return null
     }
 
+    function populateFromSession() {
+        const requestFromSession = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
+        if ( requestFromSession ) {
+            requestFields.value.title = requestFromSession.title,
+            requestFields.value.details = requestFromSession.details,
+            requestFields.value.repository = requestFromSession.repository
+            clearSessionDraft()
+            return true
+        }
+        return false
+    }
+
+    function setSessionDraft() {
+        localStorage.setItem('sourceryInProgressRequest', JSON.stringify({
+            title: requestFields.value.title,
+            details: requestFields.value.details,
+            repository: requestFields.value.repository
+        }))
+    }
+
+    function clearSessionDraft() {
+        localStorage.removeItem('sourceryInProgressRequest')
+    }
+
+    const clientIsUser = computed(() => {
+        if ( authUser.value ) {
+            return requestFields.value.user.id === authUser.value.id
+        }
+        return true
+    })
+
     return {
         requestFields,
         requestFormValid,
@@ -59,8 +100,12 @@ export default function useCreateRequest() {
         requestFormError,
         createdRequest,
         requestCreatedSubmitDialog,
+        clientIsUser,
+        setClient,
         requestFormPopulateCurrentUser,
-        createRequest
+        createRequest,
+        setSessionDraft,
+        clearSessionDraft
     }
 
 }

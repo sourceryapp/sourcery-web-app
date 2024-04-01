@@ -1,5 +1,5 @@
 <template>
-    <div id="page-request-create">
+    <div id="page-request-create" class="pb-5">
         <v-container>
             <v-row justify="center">
                 <v-col sm="10" md="8">
@@ -16,16 +16,29 @@
 
 
                         <h2 class="mb-4 mt-10">Document Information</h2>
-                        <v-text-field v-model="requestFields.user.name" variant="outlined" class="mb-2" label="Your Name" :rules="[$sourceryForms.rules.required]" counter="100"></v-text-field>
-                        <v-text-field v-model="requestFields.user.email" variant="outlined" class="mb-2" disabled readonly label="Your Email" :rules="[$sourceryForms.rules.email]"></v-text-field>
+
+                        <div class="mb-4" v-if="isOrgOwner">
+                            <user-invite @invite-user="invitedUser" v-if="clientIsUser"></user-invite>
+                            <v-btn v-else color="warning" @click="requestFormPopulateCurrentUser">Reset User</v-btn>
+                        </div>
+                        
+                        <v-text-field v-model="requestFields.user.name" variant="outlined" class="mb-2" :label="clientIsUser ? 'Your Name' : 'Client Name'" :rules="[$sourceryForms.rules.required]" counter="100"></v-text-field>
+                        <v-text-field v-model="requestFields.user.email" variant="outlined" class="mb-2" disabled readonly :label="clientIsUser ? 'Your Email' : 'Client Email'" :rules="[$sourceryForms.rules.email]"></v-text-field>
                         <v-text-field v-model="requestFields.title" variant="outlined" class="mb-2" label="Request Title" :rules="[$sourceryForms.rules.required, $sourceryForms.rules.characterCount100]" counter="100"></v-text-field>
 
                         <p>Help the folks on the other end locate your document(s) by providing as much relevant information as you have (e.g. page numbers, box or folder numbers, collections, links, citations).</p>
                         <v-textarea v-model="requestFields.details" variant="outlined" class="mb-2" label="Request Details" :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]" counter="6000"></v-textarea>
 
-                        <div class="d-flex justify-space-between my-3 mb-8">
+                        <div class="d-flex justify-space-between my-3 mb-8" v-if="authUser">
                             <v-btn to="/dashboard" color="surface">Back</v-btn>
                             <v-btn type="submit" color="primary" >Submit</v-btn>
+                        </div>
+                        <div v-else>
+                            <v-alert type="warning" variant="outlined" class="mb-3">You will need to register before submitting this request. The request will be saved as a draft on this device as you complete your login/registration.</v-alert>
+                            <div class="d-flex">
+                                <v-btn @click="unregisteredNavigate('/register')" color="primary" class="mr-3">Register</v-btn>
+                                <v-btn @click="unregisteredNavigate('/login')" color="surface">Login</v-btn>
+                            </div>
                         </div>
                     </v-form>
                 </v-col>
@@ -57,6 +70,7 @@
 
 <script setup>
 const { repository, bannerImage } = useSelectRepository()
+const { authUser, isOrgOwner } = useAuthUser()
 const { $sourceryForms } = useNuxtApp()
 const {
     requestFields,
@@ -65,8 +79,11 @@ const {
     requestFormError,
     createdRequest,
     requestCreatedSubmitDialog,
+    clientIsUser,
+    setClient,
     requestFormPopulateCurrentUser,
-    createRequest
+    createRequest,
+    setSessionDraft,
 } = useCreateRequest()
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
@@ -74,7 +91,19 @@ watch(repository, () => {
     requestFields.value.repository = repository.value
 })
 
-await requestFormPopulateCurrentUser()
+function invitedUser(user) {
+    setClient(user)
+}
+
+function unregisteredNavigate(to) {
+    setSessionDraft()
+    navigateTo({
+        path: to,
+        query: {
+            redirectTo: '/request/create'
+        }
+    })
+}
 </script>
 
 <style scoped lang="scss">

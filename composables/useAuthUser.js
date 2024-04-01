@@ -14,12 +14,9 @@ export function useAuthUser() {
 
     // Fetches the current user metadata and their organization access.
     async function fetchUserMetadata() {
-        console.log('using onload')
         if (!user.value || authUser.value?.id === user.value?.id) {
             return null
         }
-
-        console.log('requesting onload')
 
         const { data, error } = await supabase.from('user').select(`
         *,
@@ -50,6 +47,10 @@ export function useAuthUser() {
         return authUser.value?.organizations?.flatMap(org => org.repositories) ?? []
     })
 
+    const isOrgOwner = computed(() => {
+        return userOrgs.value.length > 0
+    })
+
     watch(user, async () => {
         clear()
         await fetchUserMetadata()
@@ -59,6 +60,7 @@ export function useAuthUser() {
         authUser,
         userOrgs,
         userRepos,
+        isOrgOwner,
         fetchUserMetadata
     }
 }

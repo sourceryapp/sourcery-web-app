@@ -144,7 +144,8 @@ const bottomNavigationItems = ref([
 ])
 const adminNavigationItems = ref([
     { title: 'Admin', icon: 'mdi-cog', link: '/admin' },
-    { title: 'Organizations', icon: 'mdi-domain', link: '/o' }
+    { title: 'Organizations', icon: 'mdi-domain', link: '/o' },
+    { title: 'NPI Requests', icon: 'mdi-earth', link: '/admin/npi' }
 ])
 
 const organizationNavigationItems = computed(() => {
