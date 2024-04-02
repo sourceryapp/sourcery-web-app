@@ -40,12 +40,6 @@
                             </template>
                             <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                         </v-list-item>
-                        <v-list-item color="primary" rounded @click="toggleTheme">
-                            <template v-slot:prepend>
-                                <v-icon>mdi-theme-light-dark</v-icon>
-                            </template>
-                            <v-list-item-title class="text-subtitle-2">Toggle Theme</v-list-item-title>
-                        </v-list-item>
 
                         <template v-if="authUser?.admin">
                             <v-divider class="ma-2"></v-divider>
@@ -60,6 +54,13 @@
                     </template>
 
                     <v-divider class="ma-2"></v-divider>
+
+                    <v-list-item color="primary" rounded @click="toggleTheme" :active="false">
+                        <template v-slot:prepend>
+                            <v-icon>mdi-theme-light-dark</v-icon>
+                        </template>
+                        <v-list-item-title class="text-subtitle-2">Toggle Theme</v-list-item-title>
+                    </v-list-item>
 
                     <v-list-item @click="logout" color="primary" rounded v-if="authUser">
                         <template v-slot:prepend>

@@ -67,6 +67,7 @@
 </template>
 
 <script setup>
+const user = useSupabaseUser()
 const { authUser, userOrgs } = useAuthUser()
 const { requestCount, countUriRequests } = useFetchUriRequests()
 const { countSubmitted, countInProgress, countCompleted, fetchRequestCount } = useRequestCount()
@@ -77,6 +78,8 @@ function setStatus(statusName) {
     search.value.setStatus(statusName)
 }
 
-await countUriRequests()
-await fetchRequestCount()
+if ( user.value ) {
+    await countUriRequests()
+    await fetchRequestCount()
+}
 </script>
