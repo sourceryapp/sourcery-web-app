@@ -52,8 +52,8 @@
                 </v-expansion-panels>
 
 
-                <v-expansion-panels class="mb-6">
-                    <v-expansion-panel value="messages" @click="clearUnread">
+                <v-expansion-panels class="mb-6" id="messages" :model-value="route.hash">
+                    <v-expansion-panel value="#messages" @click="clearUnread">
                         <v-expansion-panel-title class="position-relative">
                             <v-badge color="error" floating dot v-if="hasUnread">Messages</v-badge>
                             <span v-else>Messages</span>
@@ -65,8 +65,8 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
 
-                <v-expansion-panels class="mb-6" v-if="canService">
-                    <v-expansion-panel value="eventLog">
+                <v-expansion-panels class="mb-6" v-if="canService" id="eventLog" :model-value="route.hash">
+                    <v-expansion-panel value="#eventLog">
                         <v-expansion-panel-title>Event History</v-expansion-panel-title>
                         <v-expansion-panel-text class="py-4">
                             <p>The event log is only viewable by users who have permission to service this request.</p>
@@ -75,8 +75,8 @@
                     </v-expansion-panel>
                 </v-expansion-panels>
 
-                <v-expansion-panels class="mb-6">
-                    <v-expansion-panel value="archiveNotes">
+                <v-expansion-panels class="mb-6" id="archiveNotes" :model-value="route.hash">
+                    <v-expansion-panel value="#archiveNotes">
                         <v-expansion-panel-title>Additional Notes &amp; Citations</v-expansion-panel-title>
                         <v-expansion-panel-text class="py-4">
                             <p v-if="!canService && isInProgress">Additional notes and citations provided by the servicing provider will be displayed here when completed.</p>
@@ -134,7 +134,7 @@
             </v-card>
 
             <div class="my-6" v-if="config.public.SOURCERY_ENV === 'local'">
-                <pre>{{ request }}</pre>
+                {{request}}
             </div>
         </v-container>
     </div>
@@ -148,6 +148,9 @@ const {
     canService,
     fetchRequest
 } = useFetchRequest()
+const route = useRoute()
+
+console.log(route.hash)
 
 await fetchRequest()
 

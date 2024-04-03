@@ -30,7 +30,7 @@
             <v-divider class="mb-4"></v-divider>
             <div class="d-flex align-center justify-start">
                 <v-btn color="primary" variant="text" border="0" :to="`/request/${request.id}`" class="mb-2 me-2">View Request</v-btn>
-                <v-btn color="primary" variant="text" border="0" class="mb-2">Open Discussion</v-btn>
+                <v-btn color="primary" variant="text" border="0" class="mb-2" :to="`/request/${request.id}#messages`" v-if="request.status.name === 'In Progress' || request.status.name === 'Complete'">Open Discussion</v-btn>
             </div>
         </v-sheet>
 

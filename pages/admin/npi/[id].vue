@@ -35,7 +35,7 @@
                 </v-col>
                 <v-col>
                     <h2 class="mb-2">Convert to Sourcery Request</h2>
-                    <repository-select v-model="repository"></repository-select>
+                    <repository-select v-model="repository" disable-custom></repository-select>
                     <v-btn color="primary" class="me-2" @click="convert">Convert to Sourcery Request</v-btn>
                     <v-divider class="my-4"></v-divider>
                     <p>This action will not notify users of any change.</p>

@@ -14,7 +14,9 @@ export default function useCreateRequest() {
         },
         title: '',
         details: '',
-        repository: {}
+        repository: {},
+        customRepository: '',
+        customRepositoryLocation: '',
     })
     const createdRequest = ref()
 
@@ -26,9 +28,13 @@ export default function useCreateRequest() {
     }
 
     function setClient(user) {
-        requestFields.value.user.name = '',
+        requestFields.value.user.name = user?.name ?? '',
         requestFields.value.user.email = user?.email ?? '',
         requestFields.value.user.id = user?.id ?? null
+    }
+
+    function setCustomRepository(name) {
+        requestFields.value.customRepository = name
     }
 
     async function createRequest(formSubmitEvent) {
@@ -39,26 +45,54 @@ export default function useCreateRequest() {
         // Can also access the formSubmitEvent.valid property from this awaited prop.
         if ( formSubmitEvent ) await formSubmitEvent
 
-        if ( requestFormValid.value ) {
-            requestCreatedSubmitDialog.value = true
-            const { data, error } = await supabase.from('requests').insert({
-                repository_id: requestFields.value.repository.id,
-                citation: requestFields.value.details,
-                status_id: 1,
-                user_id: requestFields.value.user.id,
-                original_title: requestFields.value.title
-            }).select().single()
-
-            if ( error ) {
-                requestFormError.value = error
-            } else {
-                localStorage.removeItem('sourceryInProgressRequest')
-                createdRequest.value = data
-            }
+        if ( !hasValidRepository.value ) {
+            requestFormError.value = 'Please select a repository or provide a custom repository name and location.'
+            requestFormLoading.value = false
+            return null
         }
 
-        requestFormLoading.value = false
-        console.log(createdRequest.value)
+        if ( requestFormValid.value ) {
+            requestCreatedSubmitDialog.value = true
+
+            if ( !requestFields.value.customRepository ) {
+                const { data, error } = await supabase.from('requests').insert({
+                    repository_id: requestFields.value.repository.id,
+                    citation: requestFields.value.details,
+                    status_id: 1,
+                    user_id: requestFields.value.user.id,
+                    original_title: requestFields.value.title
+                }).select().single()
+
+                requestFormLoading.value = false
+
+                if ( error ) {
+                    requestFormError.value = error
+                } else {
+                    localStorage.removeItem('sourceryInProgressRequest')
+                    createdRequest.value = data
+                    navigateTo(`/request/${data.id}`)
+                }
+            } else {
+
+                const { data, error } = await supabase.from('requests_prospective').insert({
+                    user_id: requestFields.value.user.id,
+                    title: requestFields.value.title,
+                    description: requestFields.value.details,
+                    repository_name: requestFields.value.customRepository,
+                    repository_location: requestFields.value.customRepositoryLocation
+                }).select().single()
+
+                requestFormLoading.value = false
+
+                if ( error ) {
+                    requestFormError.value = error
+                } else {
+                    localStorage.removeItem('sourceryInProgressRequest')
+                    createdRequest.value = data
+                    navigateTo(`/requests/unregistered`)
+                }
+            }
+        }
         return null
     }
 
@@ -93,6 +127,10 @@ export default function useCreateRequest() {
         return true
     })
 
+    const hasValidRepository = computed(() => {
+        return requestFields.value.repository?.id || !!(requestFields.value.customRepository && requestFields.value.customRepositoryLocation)
+    })
+
     return {
         requestFields,
         requestFormValid,
@@ -102,6 +140,7 @@ export default function useCreateRequest() {
         requestCreatedSubmitDialog,
         clientIsUser,
         setClient,
+        setCustomRepository,
         requestFormPopulateCurrentUser,
         createRequest,
         setSessionDraft,

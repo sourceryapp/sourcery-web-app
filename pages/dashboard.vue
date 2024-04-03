@@ -59,8 +59,13 @@
             </template>
 
             <template v-else>
-                <h1>Welcome to Sourcery!</h1>
-                <p>We recommend that you first <NuxtLink to="/login">Login</NuxtLink> if you have an account, or <NuxtLink to="/register">Register</NuxtLink> to create one before making a request!</p>
+                <v-row>
+                    <v-col>
+                        <h1>Welcome to Sourcery!</h1>
+                        <p>We recommend that you first <NuxtLink to="/login">Login</NuxtLink> if you have an account, or <NuxtLink to="/register">Register</NuxtLink> to create one before making a request!</p>
+                    </v-col>
+                </v-row>
+                
             </template>
         </v-container>
     </div>
