@@ -73,7 +73,7 @@
             </v-row>
         </v-container>
 
-        <div class="bg-purple-opacity">
+        <div class="bg-surface-variant">
             <v-container class="padded-section">
                 <v-row align="center" class="mb-8 px-6" justify="center">
                     <v-col cols="auto">
@@ -174,27 +174,6 @@
                 </v-card-text>
             </v-card>
         </v-dialog>
-
-
-        <footer class="padded-section bg-purple-opacity px-6">
-            <v-container>
-                <v-row align="center" justify="center">
-                    <v-col cols="auto">
-                        <NuxtLink to="/" class="text-center">
-                            <img :width="300" :src="theme.global.current.value.dark ? '/img/logo-wordmark-dark.svg' : '/img/logo-wordmark.svg'" alt="">
-                        </NuxtLink>
-                    </v-col>
-                </v-row>
-
-                <div class="d-flex justify-center align-center my-3">
-                    <v-btn href="https://www.instagram.com/sourcery_app/" size="x-large" variant="text" color="primary" icon="mdi-instagram" border="none" class="mx-2"></v-btn>
-                    <v-btn href="https://www.facebook.com/SourceryApp" size="x-large" variant="text" color="primary" icon="mdi-facebook" border="none" class="mx-2"></v-btn>
-                    <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" border="none" class="mx-2"></v-btn>
-                </div>
-
-                <p class="text-center">Sourcery is a project of the Corporation for Digital Scholarship, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with Greenhouse Studios | Scholarly Communications Design at UConn</p>
-            </v-container>
-        </footer>
     </div>
 </template>
 
@@ -230,9 +209,6 @@ function showDialog() {
     background: linear-gradient(112deg,#a66dab,#6851a4);
 }
 
-.bg-purple-opacity {
-    background: rgba(175,143,239,.05);
-}
 
 .padded-section {
     padding-top: 5rem;
