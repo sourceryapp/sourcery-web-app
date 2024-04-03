@@ -33,7 +33,7 @@
 
                     <template v-if="authUser">
                         <v-divider class="ma-2"></v-divider>
-
+                        <v-list-subheader>Account</v-list-subheader>
                         <v-list-item v-for="item in secondaryNavigationItems" :to="item.link" color="primary" rounded>
                             <template v-slot:prepend>
                                 <v-icon>{{ item.icon }}</v-icon>
@@ -43,7 +43,7 @@
 
                         <template v-if="authUser?.admin">
                             <v-divider class="ma-2"></v-divider>
-
+                            <v-list-subheader>Admin</v-list-subheader>
                             <v-list-item v-for="item in adminNavigationItems" :to="item.link" color="primary" rounded>
                                 <template v-slot:prepend>
                                     <v-icon>{{ item.icon }}</v-icon>
@@ -54,6 +54,13 @@
                     </template>
 
                     <v-divider class="ma-2"></v-divider>
+
+                    <v-list-item color="primary" rounded to="/feedback">
+                        <template v-slot:prepend>
+                            <v-icon>mdi-comment-quote</v-icon>
+                        </template>
+                        <v-list-item-title class="text-subtitle-2">Feedback &amp; Support</v-list-item-title>
+                    </v-list-item>
 
                     <v-list-item color="primary" rounded @click="toggleTheme" :active="false">
                         <template v-slot:prepend>
@@ -134,9 +141,8 @@ const primaryNavigationItems = ref([
     { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
 ])
 const secondaryNavigationItems = ref([
-    { title: 'Messages', icon: 'mdi-message', link: '/messages' },
+    { title: 'Notifications', icon: 'mdi-message', link: '/notifications' },
     { title: 'Settings', icon: 'mdi-cog', link: '/profile/settings' },
-    { title: 'Feedback & Support', icon: 'mdi-comment-quote', link: '/feedback' }
 ])
 const bottomNavigationItems = ref([
     { title: 'Brand Resources', link: '/brand-resources' },
@@ -144,7 +150,7 @@ const bottomNavigationItems = ref([
     { title: 'Terms and Conditions', link: '/terms' }
 ])
 const adminNavigationItems = ref([
-    { title: 'Admin', icon: 'mdi-cog', link: '/admin' },
+    { title: 'Admin Home', icon: 'mdi-cog', link: '/admin' },
     { title: 'Organizations', icon: 'mdi-domain', link: '/o' },
     { title: 'NPI Requests', icon: 'mdi-earth', link: '/admin/npi' }
 ])

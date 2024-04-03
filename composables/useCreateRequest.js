@@ -70,6 +70,17 @@ export default function useCreateRequest() {
                 } else {
                     localStorage.removeItem('sourceryInProgressRequest')
                     createdRequest.value = data
+
+                    // Notifies team of NPI request.
+                    await supabase.functions.invoke('notify', {
+                        body: {
+                            user_id: createdRequest.value.user_id,
+                            request_id: createdRequest.value.id,
+                            action: 'request_submitted_to_your_org'
+                        }
+                    })
+
+
                     navigateTo(`/request/${data.id}`)
                 }
             } else {
@@ -89,6 +100,24 @@ export default function useCreateRequest() {
                 } else {
                     localStorage.removeItem('sourceryInProgressRequest')
                     createdRequest.value = data
+
+                    // Optional / Can Fails after this comment.
+                    // Populates spreadsheet with NPI request.
+                    await supabase.functions.invoke('prospective', {
+                        body: createdRequest.value
+                    })
+
+                    // Notifies team of NPI request.
+                    await supabase.functions.invoke('notify', {
+                        body: {
+                            user_id: createdRequest.value.user_id,
+                            rp_id: createdRequest.value.id,
+                            action: 'npi_request_to_requester'
+                        }
+                    })
+
+
+
                     navigateTo(`/requests/unregistered`)
                 }
             }
