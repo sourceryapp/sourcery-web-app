@@ -88,3 +88,23 @@ BEGIN
 END
 $function$
 ;
+
+
+
+
+DROP POLICY IF EXISTS "Allow read for creator" ON "public"."requests_prospective";
+create policy "Allow read for creator"
+on "public"."requests_prospective"
+as permissive
+for select
+to authenticated
+using ((auth.uid() = user_id));
+
+DROP POLICY IF EXISTS "Allow update for creator" ON "public"."requests_prospective";
+create policy "Allow update for creator"
+on "public"."requests_prospective"
+as permissive
+for update
+to authenticated
+using ((auth.uid() = user_id));
+

@@ -46,6 +46,8 @@ export function useManageUriRequest(req = null) {
                 .eq('id', request.value.id)
                 .select()
 
+            console.log(data)
+
             if ( error ) {
                 console.error(error)
             } else {
