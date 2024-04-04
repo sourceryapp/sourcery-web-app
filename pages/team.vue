@@ -22,7 +22,7 @@
 
             <v-row>
                 <v-col cols="12" md="8" offset-md="2">
-                    <h2 class="text-h4 mb-8">Alumni</h2>
+                    <h2 class="text-h4 mb-8">Consulting Partners</h2>
                     <v-row>
                         <v-col cols="6" md="4" v-for="member in alumni">
                             <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" />
