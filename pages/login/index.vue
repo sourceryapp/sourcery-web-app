@@ -12,7 +12,7 @@
 
                         <v-text-field v-model="formEmail" type="email" label="Email" prepend-icon="mdi-email" autofocus variant="outlined" :rules="[$sourceryForms.rules.email]" class="mb-3"></v-text-field>
 
-                        <v-text-field v-model="formPassword" type="password" label="Optional Password" prepend-icon="mdi-lock" required variant="outlined" class="mb-3"></v-text-field>
+                        <v-text-field v-model="formPassword" type="password" label="Optional Password" prepend-icon="mdi-lock" variant="outlined" class="mb-3"></v-text-field>
 
                         <v-alert type="error" variant="tonal" v-if="formError" class="mb-3 text-left">{{ formError }}</v-alert>
 
@@ -51,9 +51,9 @@ const loginButtonText = computed(() => {
 
 function submitLogin(submitEvent) {
     if ( formPassword.value ) {
-        submitPasswordLogin()
+        submitPasswordLogin(submitEvent)
     } else {
-        submitEmailOtpLogin()
+        submitEmailOtpLogin(submitEvent)
     }
 }
 
@@ -113,7 +113,7 @@ async function submitEmailOtpLogin(submitEvent) {
         path: '/login/otp',
         query: {
             email: formEmail.value,
-            redirectTo: route.query.redirectTo ?? null
+            redirectTo: route.query.redirectTo ?? undefined
         }
     })
 }
