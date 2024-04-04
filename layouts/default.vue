@@ -106,9 +106,9 @@
             </v-app-bar>
             <v-main>
                 <slot />
+                <banners-cookie></banners-cookie>
             </v-main>
         </v-app>
-        
     </div>
 </template>
 

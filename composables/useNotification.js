@@ -14,6 +14,18 @@ export function useNotification(notif) {
         }
     })
 
+    const title = computed(() => {
+        switch (notification.value.type) {
+            case 'new_message':
+                return 'New Message Received'
+            case 'new_request':
+                return 'New Request Submitted - ' + notification.value.data.request.original_title
+            default:
+                return 'New Notification'
+        }
+
+    })
+
     async function clickAction() {
         await markAsRead()
         switch (notification.value.type) {
@@ -46,6 +58,7 @@ export function useNotification(notif) {
     return {
         notification,
         icon,
+        title,
         clickAction,
         markAsRead
     }

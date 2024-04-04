@@ -11,6 +11,7 @@
             
             <v-main>
                 <slot />
+                <banners-cookie></banners-cookie>
             </v-main>
 
             <footer class="padded-section bg-surface-variant py-6">
