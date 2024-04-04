@@ -49,6 +49,7 @@ async function submitChange(output) {
     const { user, error } = await supabase.auth.updateUser({password: password.value, nonce: otpAuthGuard.value.$.exposed.otpCode.value})
     if ( error ) {
         console.error('error', error)
+        savePasswordLoading.value = false
         savePasswordError.value = error.message
         return
     }

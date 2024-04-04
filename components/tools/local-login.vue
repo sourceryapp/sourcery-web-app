@@ -1,5 +1,5 @@
 <template>
-    <div class="tool-local-login mb-6">
+    <div class="tool-local-login mb-6" v-if="config.public.SOURCERY_ENV === 'local'">
         <v-card class="mx-auto" prepend-icon="mdi-cog">
             <template v-slot:title>
                 Welcome to Sourcery Local Development
@@ -16,6 +16,7 @@
 
 <script setup>
 const supabase = useSupabaseClient()
+const config = useRuntimeConfig()
 
 async function logInLocalUser(role) {
     const { data, error } = await supabase.auth.signInWithPassword({
