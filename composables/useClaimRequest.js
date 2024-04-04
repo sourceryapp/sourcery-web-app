@@ -25,6 +25,14 @@ export function useClaimRequest(req) {
                 request_id: request.value.id,
                 user_id: user.value.id
             })
+
+            const { data: notifyData, error: notifyError } = await supabase.functions.invoke('notify', {
+                body: {
+                    user_id: user.value.id,
+                    request_id: request.value.id,
+                    action: 'request_you_submitted_picked_up'
+                }
+            })
             
             request.value.status = status
             dialogActive.value = false

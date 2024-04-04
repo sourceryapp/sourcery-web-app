@@ -76,17 +76,26 @@ export function useRequestMessenger(req = null) {
             vendor: canService.value
         }
 
-        const { data, error } = await supabase.from('request_comments').insert(newMessage).select()
+        const { data, error } = await supabase.from('request_comments').insert(newMessage).select().single()
         console.log(data, error)
 
         messageFormLoading.value = false
         if ( !error ) {
-            messages.value.push(data[0])
+            messages.value.push(data)
             message.value = ''
 
             const { data: insert_id, error } = await supabase.rpc('sent_chat', {
                 request_id: request.value.id,
                 user_id: user.value.id
+            })
+
+            const { data: notifyData, error: notifyError } = await supabase.functions.invoke('notify', {
+                body: {
+                    user_id: user.value.id,
+                    request_id: request.value.id,
+                    action: canService.value ? 'chat_sent_from_vendor' : 'chat_sent_from_client',
+                    message_text: data.content
+                }
             })
 
             return true
