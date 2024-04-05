@@ -1,172 +1,120 @@
 <template>
-  <v-layout fill-height align-center>
-    <v-flex xs12 sm6 offset-sm3>
-      <register-to-submit-request
-        ref="login_with_link_dialog"
-      />
+    <div id="page-login" class="py-5">
+        <v-container class="mt-10 text-center">
+            <v-row justify="center" align="center">
+                <v-col md="6">
+                    <ToolsLocalLogin />
+                    
+                    <v-form @submit.prevent="submitLogin" v-model="formValid" validate-on="submit">
+                        <h1 class="mb-4">Log In</h1>
 
-      <v-row v-if="$config.BASE_URL === 'http://localhost:3000'">
-        <v-col>
-          <p>Welcome to Sourcery Local Development!</p>
-          <v-btn @click="logInLocalUser('admin')">
-            Login as Admin
-          </v-btn>
-          <v-btn @click="logInLocalUser('test')">
-            Login as User
-          </v-btn>
-        </v-col>
-      </v-row>
-      <v-form @submit.prevent="handleEmailPassLogin">
-        <h1 class="text-center mb-2">
-          Log In
-        </h1>
-        <v-alert
-          :value="loginError"
-          type="error"
-          transition="slide-y-transition"
-          text
-        >
-          {{ messagePass || 'Username or password is incorrect' }}
-        </v-alert>
-        <v-text-field
-          v-model="passEmail"
-          type="email"
-          name="email"
-          label="Email"
-          :rules="[$sourceryForms.rules.required, $sourceryForms.rules.email]"
-          required
-          validate-on-blur
-          prepend-icon="mdi-email"
-          autofocus
-          outlined
-        />
-        <v-text-field
-          v-model="passPass"
-          name="password"
-          label="Password"
-          required
-          :type="showPass ? 'text' : 'password'"
-          :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-          :rules="[$sourceryForms.rules.required]"
-          prepend-icon="mdi-security"
-          validate-on-blur
-          outlined
-          @click:append="showPass = !showPass"
-        />
-        <v-btn
-          block
-          depressed
-          x-large
-          type="submit"
-          color="primary"
-          :loading="loadingPass"
-          :disabled="loadingPass"
-          style="font-weight: 800"
-          class="mb-1"
-        >
-          Log In
-        </v-btn>
-        <v-btn
-          block
-          depressed
-          x-large
-          color="primary"
-          style="font-weight: 800"
-          class="mb-1"
-          @click="loginWithOneTimeLink()"
-        >
-          Log In With One-Time Link
-        </v-btn>
-        <v-btn
-          block
-          text
-          large
-          to="/password"
-        >
-          Forgot password?
-        </v-btn>
+                        <p class="mb-6">Provide an email to receive a 6-digit verification code, or use a password to log in.</p>
 
-        <v-divider class="my-3" />
+                        <v-text-field v-model="formEmail" type="email" label="Email" prepend-icon="mdi-email" autofocus variant="outlined" :rules="[$sourceryForms.rules.email]" class="mb-3"></v-text-field>
 
-        <h2 class="text-center mb-2">
-          Don't have an account?
-        </h2>
-        <v-btn
-          block
-          outlined
-          x-large
-          color="primary"
-          to="/register"
-          style="border-color: #dad4ea; font-weight: 800"
-        >
-          Register
-        </v-btn>
+                        <v-text-field v-model="formPassword" type="password" label="Optional Password" prepend-icon="mdi-lock" variant="outlined" class="mb-3"></v-text-field>
 
-        <p class="mt-2">
-          Interested in working with Sourcery as an institution? <nuxt-link to="/join-us">
-            Let us know.
-          </nuxt-link>
-        </p>
-      </v-form>
-    </v-flex>
-  </v-layout>
+                        <v-alert type="error" variant="tonal" v-if="formError" class="mb-3 text-left">{{ formError }}</v-alert>
+
+                        <v-btn block size="x-large" color="primary" class="font-weight-bold mb-4" type="submit" :loading="formLoading">{{ loginButtonText }}</v-btn>
+
+                        <v-divider class="my-5"></v-divider>
+
+                        <h2 class="text-center mb-2">Don't have an account?</h2>
+
+                        <v-btn block color="primary" to="/register" size="x-large" variant="outlined" class="font-weight-bold">Register</v-btn>
+                        <p class="mt-2">Interested in working with Sourcery as an institution? <nuxt-link to="/join-us"> Let us know.</nuxt-link></p>
+                    </v-form>
+                </v-col>
+            </v-row>
+        </v-container>
+    </div>
 </template>
 
-<script>
-import { mapMutations } from 'vuex'
-import { supabase } from '~/plugins/supabase'
-import RegisterToSubmitRequest from '~/components/register-to-submit-request.vue'
+<script setup>
+definePageMeta({
+    middleware: ['guest']
+})
 
-export default {
-    components: { RegisterToSubmitRequest },
-    data () {
-        return {
-            email: '',
-            messagePass: '',
-            passPass: '',
-            passEmail: '',
-            showPass: false,
-            loading: false,
-            loadingPass: false,
-            loginError: false
-        }
-    },
-    methods: {
-        ...mapMutations({
-            setRedirectHome: 'supabaseAuth/setRedirectHome'
-        }),
-        async handleEmailPassLogin () {
-            this.loadingPass = true
-            this.loginError = false
-            this.setRedirectHome(true)
-            try {
-                const { error } = await supabase.auth.signInWithPassword({
-                    email: this.passEmail,
-                    password: this.passPass
-                })
-                if (error) {
-                    this.loginError = true
-                    throw error
-                }
-                this.$toast.success('Logged in Successfully!')
-            } catch (e) {
-                console.log(e)
-                this.loginError = true
-                this.messagePass = e.message
-            } finally {
-                this.loadingPass = false
-            }
-        },
-        loginWithOneTimeLink () {
-            this.$refs.login_with_link_dialog.openDialog(this.email)
-        },
-        logInLocalUser (username) {
-            this.setRedirectHome(true)
-            supabase.auth.signInWithPassword({
-                email: `${username}@sourceryapp.org`,
-                password: 'password'
-            })
-        }
+const supabase = useSupabaseClient()
+const route = useRoute()
+
+const formValid = ref()
+const formLoading = ref(false)
+const formEmail = ref('')
+const formPassword = ref('')
+const formError = ref('')
+
+const loginButtonText = computed(() => {
+    return formPassword.value ? 'Log In' : 'Get Code'
+})
+
+function submitLogin(submitEvent) {
+    if ( formPassword.value ) {
+        submitPasswordLogin(submitEvent)
+    } else {
+        submitEmailOtpLogin(submitEvent)
     }
+}
+
+async function submitPasswordLogin() {
+    formLoading.value = true
+    formError.value = ''
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: formEmail.value,
+        password: formPassword.value
+    })
+
+    formLoading.value = false
+
+    if ( error ) {
+        formError.value = error.message
+        return
+    }
+
+    navigateTo({
+        path: route.query.redirectTo ?? '/dashboard'
+    })
+}
+
+async function submitEmailOtpLogin(submitEvent) {
+    formLoading.value = true
+    formError.value = ''
+
+    if ( !submitEvent ) {
+        formLoading.value = false
+        return
+    }
+
+    await submitEvent
+
+    if ( !formValid.value ) {
+        formLoading.value = false
+        formError.value = 'Email not valid.'
+        return
+    }
+
+    const { data, error } = await supabase.auth.signInWithOtp({
+        email: formEmail.value,
+        options: {
+            shouldCreateUser: false,
+            emailRedirectTo: `${window.location.protocol}://${window.location.host}/dashboard`
+        }
+    })
+
+    formLoading.value = false
+
+    if ( error ) {
+        formError.value = error.message
+        return
+    }
+
+    navigateTo({
+        path: '/login/otp',
+        query: {
+            email: formEmail.value,
+            redirectTo: route.query.redirectTo ?? undefined
+        }
+    })
 }
 </script>

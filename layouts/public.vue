@@ -1,0 +1,63 @@
+<template>
+    <div id="public-layout">
+        <v-app>
+            <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
+                <p class="text-white mb-0">Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="text-white" target="_blank">blog</a>!</p>
+            </BannersPurpleCallout>
+
+            <v-fade-transition>
+                <HeadersPublicNavigation v-if="!headerIntersectStore.headerIntersect" />
+            </v-fade-transition>
+            
+            <v-main>
+                <slot />
+                <banners-cookie></banners-cookie>
+            </v-main>
+
+            <footer class="padded-section bg-surface-variant py-6">
+                <v-container>
+                    <v-row align="center" justify="center">
+                        <v-col cols="auto">
+                            <NuxtLink to="/" class="text-center">
+                                <img :width="300" :src="theme.global.current.value.dark ? '/img/logo-wordmark-dark.svg' : '/img/logo-wordmark.svg'" alt="">
+                            </NuxtLink>
+                        </v-col>
+                    </v-row>
+
+                    <div class="d-flex justify-center align-center my-3">
+                        <v-btn href="https://www.instagram.com/sourcery_app/" size="x-large" variant="text" color="primary" icon="mdi-instagram" border="none" class="mx-2"></v-btn>
+                        <v-btn href="https://www.facebook.com/SourceryApp" size="x-large" variant="text" color="primary" icon="mdi-facebook" border="none" class="mx-2"></v-btn>
+                        <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" border="none" class="mx-2"></v-btn>
+                    </div>
+
+                    <p>Sourcery is a project of the <a href="https://digitalscholar.org/">Corporation for Digital Scholarship</a>, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with <a href="https://greenhousestudios.uconn.edu/">Greenhouse Studios | Scholarly Communications Design</a> at UConn</p>
+                </v-container>
+            </footer>
+        </v-app>
+    </div>
+</template>
+
+<script setup>
+import { useTheme } from 'vuetify'
+
+const route = useRoute()
+const theme = useTheme()
+const isHome = computed(() => route.path === '/')
+
+// Set up some show/hide for the header based on section intersect
+const headerIntersectStore = useHeaderIntersectStore()
+headerIntersectStore.setHeaderIntersect(isHome.value)
+
+useHead({
+    link: [
+        {
+            href: 'https://fonts.googleapis.com/css?family=Fira+Sans&display=swap',
+            rel: 'stylesheet'
+        },
+        {
+            href: 'https://fonts.googleapis.com/css?family=Barlow:100,200,300,400,500,600,700,800,900&display=swap',
+            rel: 'stylesheet'
+        }
+    ]
+})
+</script>

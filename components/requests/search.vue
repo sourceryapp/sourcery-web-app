@@ -1,0 +1,59 @@
+<template>
+    <div>
+        <v-row>
+            <v-col cols="12" md="4">
+                <v-text-field label="Search" variant="outlined" v-model="search" @update:model-value="onModelChange" density="compact" prepend-inner-icon="mdi-magnify" hide-details></v-text-field>
+            </v-col>
+            <v-col md="4">
+                <StatusSelect v-model="selectedStatus" @update:model-value="onModelChange"></StatusSelect>
+            </v-col>
+            <v-col md="4">
+                <v-select v-model="order" :items="orderOptions" variant="outlined" clearable placeholder="Sort Order" label="Sort Order" @update:model-value="onModelChange" density="compact" hide-details></v-select>
+            </v-col>
+            <v-col cols="12">
+                <v-progress-linear :active="loading" color="primary" height="10" indeterminate class="mb-4"></v-progress-linear>
+            </v-col>
+        </v-row>
+
+        <requests-card :request="request" v-for="request in requests"></requests-card>
+
+        <div v-if="requests.length === 0">
+            <div v-if="hasQuery">
+                <p>No requests found for your search.</p>
+            </div>
+            <div v-else>
+                <p>No requests here.</p>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+const { findByName, fetchStatus } = useFetchStatus()
+const { requests, organizationId, owned, search, selectedStatus, order, loading, orderOptions, hasQuery, fetchRequests, onModelChange } = useRequestSearch()
+
+const props = defineProps({
+    organizationId: {
+        type: Number,
+        default: null
+    }
+})
+
+// Required so parent can call this
+defineExpose({
+    setStatus
+})
+
+function setStatus(statusName) {
+    selectedStatus.value = [findByName(statusName).id]
+    onModelChange()
+}
+
+if ( props.organizationId ) {
+    organizationId.value = props.organizationId
+    owned.value = false
+}
+
+await fetchStatus()
+await fetchRequests()
+</script>

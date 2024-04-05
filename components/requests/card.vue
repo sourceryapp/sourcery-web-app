@@ -1,0 +1,24 @@
+<template>
+    <v-sheet elevation="1" class="bg-surface-variant mb-6 py-4 px-6">
+        <v-row justify="start" align="center" class="mb-4">
+            <v-col cols="12" md="auto">
+                <StatusChip :status="request.status"></StatusChip>
+            </v-col>
+            <v-col cols="12" md="auto">
+                <span class="text-body-2 d-block">{{ request.repository.name }} - {{ request.repository.organization.name }}</span>
+                <span class="text-body-2 d-block text-muted"><em>Created: {{ $filters.normalDate(request.created_at) }}, Last Updated: {{ $filters.normalDate(request.updated_at) }}</em></span>
+            </v-col>
+        </v-row>
+        <h3>{{ request.request_vendor?.label ?? request.request_client?.label ?? request.original_title ?? 'Untitled' }}</h3>
+        <p>{{ request.citation }}</p>
+        <v-divider class="mb-4"></v-divider>
+        <div class="d-flex align-center justify-start">
+            <v-btn color="primary" variant="text" border="0" :to="`/request/${request.id}`" class="mb-2 me-2">View Request</v-btn>
+            <v-btn color="primary" variant="text" border="0" class="mb-2" :to="`/request/${request.id}#messages`" v-if="request.status.name === 'In Progress' || request.status.name === 'Complete'">Open Discussion</v-btn>
+        </div>
+    </v-sheet>
+</template>
+
+<script setup>
+const props = defineProps(['request'])
+</script>
