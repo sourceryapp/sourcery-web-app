@@ -7,9 +7,6 @@ const publicPaths = [
     '/about',
     '/',
     '/register',
-    '/password',
-    '/resetpassword',
-    '/index-new',
     '/terms',
     '/privacy',
     '/cookies-notice',
@@ -21,7 +18,8 @@ const publicPaths = [
     '/join-us',
     '/roadmap',
     '/email/reset',
-    '/brand-resources'
+    '/brand-resources',
+    '/feedback'
 ]
 
 export default defineNuxtConfig({

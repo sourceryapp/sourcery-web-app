@@ -1,7 +1,7 @@
 export default function useFetchRepositories() {
     const supabase = useSupabaseClient()
 
-    const repositories = ref([])
+    const repositories = useState('repositories', () => [])
     const fetchRepositoriesError = ref()
 
     async function fetchRepositories() {

@@ -6,7 +6,7 @@
             </BannersPurpleCallout>
 
             <v-fade-transition>
-                <HeadersPublicNavigation v-if="!headerIntersectStore.headerIntersect" />
+                <HeadersPublicNavigation v-if="!headerIntersectStore.headerIntersect || !isHome" />
             </v-fade-transition>
             
             <v-main>

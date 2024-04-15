@@ -85,6 +85,7 @@
 
 <script setup>
 const { repository, bannerImage } = useSelectRepository()
+const { repositories, fetchRepositories } = useFetchRepositories()
 const { authUser, isOrgOwner } = useAuthUser()
 const { $sourceryForms } = useNuxtApp()
 const {
@@ -99,8 +100,12 @@ const {
     setCustomRepository,
     requestFormPopulateCurrentUser,
     createRequest,
-    setSessionDraft,
+    setSessionDraft
 } = useCreateRequest()
+const route = useRoute()
+
+await fetchRepositories()
+populateFromQuery()
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
 watch(repository, () => {
@@ -122,6 +127,28 @@ function unregisteredNavigate(to) {
             redirectTo: '/request/create'
         }
     })
+}
+
+/**
+ * Integrations depend on this:
+ * - ArchivesSpace
+ */
+function populateFromQuery() {
+    if ( route.query ) {
+        if ( route.query.title ) {
+            requestFields.value.title = route.query.title
+        }
+        if ( route.query.message ) {
+            requestFields.value.details = route.query.message
+        }
+        if ( route.query.repo_id ) {
+            const matchingRepo = repositories.value.find(repo => String(repo.id) === route.query.repo_id)
+            if ( matchingRepo ) {
+                requestFields.value.repository = matchingRepo
+                repository.value = matchingRepo
+            }
+        }
+    }
 }
 </script>
 
