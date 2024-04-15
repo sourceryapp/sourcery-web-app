@@ -18,6 +18,8 @@
 
                         <v-btn block size="x-large" color="primary" class="font-weight-bold mb-4" type="submit" :loading="formLoading">{{ loginButtonText }}</v-btn>
 
+                        <p class="mb-4">Forgot your password? Log in using just your email - we will send you a code.</p>
+
                         <v-divider class="my-5"></v-divider>
 
                         <h2 class="text-center mb-2">Don't have an account?</h2>
