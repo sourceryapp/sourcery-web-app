@@ -20,7 +20,7 @@ export default function useCreateRequest() {
     })
     const createdRequest = ref()
 
-    populateFromSession()
+    populateFromSession()  // For Future Developers - this is the 'draft mode' feature used for unregistered users
     requestFormPopulateCurrentUser(authUser.value)
 
     function requestFormPopulateCurrentUser() {
