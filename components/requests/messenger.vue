@@ -45,7 +45,7 @@
             <div class="d-flex">
                 <v-btn color="primary" type="submit" :disabled="messageFormLoading">Send</v-btn>
                 <v-spacer></v-spacer>
-                <requests-report :request="request" v-if="canService && !isArchived && !isCancelled"></requests-report>
+                <requests-report :request="request" v-if="!isArchived && !isCancelled"></requests-report>
             </div>
             
         </v-form>

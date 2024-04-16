@@ -5,6 +5,9 @@ export default function useFetchRepositories() {
     const fetchRepositoriesError = ref()
 
     async function fetchRepositories() {
+        if ( repositories.value.length > 0 ) {
+            return
+        }
         const { data, error } = await supabase.from('repositories').select(`
             *,
             organization:organizations (*),

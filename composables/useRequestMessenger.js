@@ -13,10 +13,6 @@ export function useRequestMessenger(req = null) {
     const messageFormLoading = ref(false)
     const messageFormError = ref()
 
-    function sendMessage() {
-        console.log('Sending message...')
-    }
-
     async function getMessages() {
         const { data, error } = await supabase.from('request_comments')
             .select('*')
