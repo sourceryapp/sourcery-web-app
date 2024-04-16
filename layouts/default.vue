@@ -1,7 +1,7 @@
 <template>
     <div id="default-layout">
         <v-app>
-            <v-navigation-drawer v-model="drawerOpen" mobile-breakpoint="sm" :location="drawerLocation" :temporary="mobile" class="d-print-none">
+            <v-navigation-drawer v-model="drawerOpen" mobile-breakpoint="sm" :location="drawerLocation" class="d-print-none" :temporary="mobile" touchless>
                 <v-list class="bg-purple-gradient-alt py-5">
                     <v-list-item :prepend-avatar="userIcon"></v-list-item>
                     <v-list-item>
