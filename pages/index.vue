@@ -88,7 +88,7 @@
                     <h2 class="text-primary">
                     Optimize your Research Requests Workflow
                     </h2>
-                    <p>Manage requests for document scans and other researcher requests from a simple, intuitive dashboard. Fulfill requests on any device connected to the internet with the device's camera or by uploading a pdf, jpg, png, or other file.</p>
+                    <p>Manage requests for document scans and other researcher requests on any device from a simple, intuitive dashboard. Fulfill requests directly from your phone or tablet or by snapping a photo in the stacks or upload a pdf, jpg, TIFF, or other file from your computer.</p>
                 </v-col>
             </v-row>
 
@@ -100,7 +100,7 @@
                     <h2 class="text-primary">
                     Communicate Directly
                     </h2>
-                    <p>Ask and answer questions, make clarifications, and more through the in-app, per-request message feature. Declutter your inbox and streamline correspondance right in the app.</p>
+                    <p>Ask and answer questions and make clarifications through the in-app, per-request Messaging feature. Declutter your email inbox and streamline correspondence right in the app.</p>
                 </v-col>
             </v-row>
 
@@ -112,7 +112,7 @@
                     <h2 class="text-primary">
                     Access Rich Usage Analytics
                     </h2>
-                    <p>See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
+                    <p>Share and allocate research requests among appropriate staff and keep track of who's doing what. See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
                 </v-col>
             </v-row>
         </v-container>

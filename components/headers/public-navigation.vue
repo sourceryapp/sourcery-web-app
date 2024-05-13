@@ -2,7 +2,7 @@
     <header class="pa-4 px-md-16">
         <div class="d-flex justify-space-between align-center">
             <NuxtLink id="wordmark-link" to="/">
-                <img id="logo" src="/img/logo-wordmark-beta-white.svg" alt="Sourcery Logo">
+                <img id="logo" src="/img/logo-wordmark-white.svg" alt="Sourcery Logo">
             </NuxtLink>
             <div class="d-none d-md-flex">
                 <v-btn
