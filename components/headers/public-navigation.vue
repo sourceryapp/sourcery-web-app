@@ -76,12 +76,13 @@ const menuItemsMobile = computed(() => menuItems.value.filter(item => {
 
 <style scoped lang="scss">
 header {
-    background: rgb(146, 79, 190);
-    background: linear-gradient(
-        135deg,
-        rgba(146, 79, 190, 1) 0%,
-        rgba(111, 77, 170, 1) 50%
-    );
+    // background: rgb(146, 79, 190);
+    // background: linear-gradient(
+    //     135deg,
+    //     rgba(146, 79, 190, 1) 0%,
+    //     rgba(111, 77, 170, 1) 50%
+    // );
+    background: linear-gradient(29deg,#a66dab,#6851a4);
     position: sticky;
     top:0;
     left:0;

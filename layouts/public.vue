@@ -1,12 +1,12 @@
 <template>
     <div id="public-layout">
         <v-app>
-            <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
+            <!-- <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
                 <p class="text-white mb-0">Something's brewing...stay tuned to our new <a href="https://sourceryapp.substack.com/" class="text-white" target="_blank">blog</a>!</p>
-            </BannersPurpleCallout>
+            </BannersPurpleCallout> -->
 
             <v-fade-transition>
-                <HeadersPublicNavigation v-if="!headerIntersectStore.headerIntersect || !isHome" />
+                <HeadersPublicNavigation />
             </v-fade-transition>
             
             <v-main>
