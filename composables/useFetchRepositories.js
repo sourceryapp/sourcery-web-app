@@ -24,7 +24,7 @@ export default function useFetchRepositories() {
                 featured_image:featured_images (*)
             `)
             .order('name')
-            .eq('name', 'Sourcery U')
+            .eq('name', 'Sourcery Archives')
             .single()
             if ( devData ) {
                 data.push(devData)
