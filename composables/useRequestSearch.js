@@ -66,6 +66,15 @@ export function useRequestSearch() {
         if ( organizationId.value ) {
             query = query.eq('repository.organization_id', organizationId.value)
         }
+
+        switch(order.value) {
+            case 'oldest':
+                query = query.order('created_at', { ascending: true })
+                break
+            default:
+                query = query.order('created_at', { ascending: false })
+                break
+        }
         const { data: queryData, error: queryError } = await query
 
         if ( !queryError ) {
