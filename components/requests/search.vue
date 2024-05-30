@@ -15,7 +15,7 @@
             </v-col>
         </v-row>
 
-        <requests-card :request="request" v-for="request in requests"></requests-card>
+        <requests-card :request="request" v-for="request in requests" :key="request.id"></requests-card>
 
         <div v-if="requests.length === 0">
             <div v-if="hasQuery">

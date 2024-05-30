@@ -6,7 +6,6 @@ export function useRequestSearch() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
     const route = useRoute()
-    const router = useRouter()
 
     const orderOptions = ref([
         { value: 'newest', title: 'Newest' },
