@@ -1,21 +1,46 @@
 <template>
-    <div id="page-about" class="py-8">
-        <img src="~/assets/sourcery-tubes.png" class="accent-image">
+    <div id="page-about">
+      <div class="pb-10">
         <v-container>
-            <v-row>
-                <v-col>
-                    <h1 class="text-h3 font-weight-bold mb-8 text-primary">About Sourcery</h1>
-                    <p class="mb-8">Sourcery—an open source, not-for-profit, web-based application for providing remote access to archival documents—aims to improve how researchers request document scans from archivists and how archivists fulfill those requests.</p>
-                    <h2 class="text-h4 font-weight-bold mb-3 text-primary">For Repositories &amp; Archivists</h2>
-                    <p class="mb-8">For archivists, Sourcery provides archivists a streamlined, cross-platform (mobile, tablet, or laptop) reference scanning workflow, including tools to: help clarify, categorize, staff, and track outstanding requests; manage researcher communication; set and easily collect fees (for institutions that charge for these services); assess the true costs of their labor; and report these costs to decision makers in advocating for additional resources and staff.</p>
-
-                    <h2 class="text-h4 font-weight-bold mb-3 text-primary">For Researchers &amp; Requesters</h2>
-                    <p>For researchers, Sourcery aims to provide a single, simple interface for requesting remote access to not-yet digitized documents at repositories around the world. With Sourcery on a phone or laptop, a researcher seeking a document can simply enter the document's location and citation information and receive a scan directly from within the app. It aims to provide better tools for communicating with archivists, provide easier payment options, allow for tracking requests placed at multiple archives within a single interface, and integrate with popular research tools like Zotero and Tropy.</p>
-
-                    <p>Existing means of providing remote access to non-digitized sources create confusion for researchers and extra work for already stretched archivists. Sourcery aims to remedy these problems, creating new and more efficient pathways of computer-mediated research and systems to facilitate and properly account for and fund the often unaccounted and under-resourced labor of archivists in providing reference scans. At the same time, Sourcery recognizes that much archival research depends on close contact between researchers and archivists. By providing more effective online access, Sourcery ultimately aims to free up both researchers and archivists to focus on the sustained, mutual journeys of intellectual discovery at the heart of archival research.</p>
-                </v-col>
-            </v-row>
+          <div>
+            <h1 class="text-h3 font-weight-medium text-center my-16">About Sourcery</h1>
+            <p class="my-16 readable-text-width mx-auto">Sourcery—an open source, not-for-profit, web-based application for providing remote access to archival documents—aims to improve how researchers request document scans from archivists and how archivists fulfill those requests. Existing means of providing remote access to non-digitized sources create confusion for researchers and extra work for already stretched archivists. Sourcery aims to remedy these problems, creating new and more efficient pathways of computer-mediated research and systems to facilitate and properly account for and fund the often unaccounted and under-resourced labor of archivists in providing reference scans. At the same time, Sourcery recognizes that much archival research depends on close contact between researchers and archivists. By providing more effective online access, Sourcery ultimately aims to free up both researchers and archivists to focus on the sustained, mutual journeys of intellectual discovery at the heart of archival research.</p>
+          </div>
         </v-container>
+
+        <div class="py-10 bg-surface-variant">
+          <v-container>
+            <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">For Researchers</h2>
+            <div class="readable-text-width mx-auto">
+              <h3 class="text-primary readable-text-width mx-auto mb-2">All Your Requests in One Place</h3>
+              <p class="mb-8">A single source for requesting reference scans from any archive.</p>
+
+              <h3 class="text-primary mb-2">Streamlined Workflow</h3>
+              <p class="mb-8">Keep trafck of your research requests and communicate with archivists through the in-app chat feature.</p>
+
+              <h3 class="text-primary mb-2">Better for Your Wallet and the Environment</h3>
+              <p class="mb-8">Reduce your travel costs and carbon footprint by doing research, even with undigitized collections, digitally.</p>
+            </div>
+          </v-container>
+        </div>
+
+
+        <div class="py-10">
+          <v-container>
+            <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">For Archivists</h2>
+            <div class="readable-text-width mx-auto">
+              <h3 class="text-primary mb-2">Optimize your Research Requests Workflow</h3>
+              <p class="mb-8">Manage requests for document scans and other researcher requests on any device from a simple, intuitive dashboard. Fulfill requests directly from your phone or tablet or by snapping a photo in the stacks or upload a pdf, jpg, TIFF, or other file from your computer.</p>
+
+              <h3 class="text-primary mb-2">Communicate Directly</h3>
+              <p class="mb-8">Ask and answer questions and make clarifications through the in-app, per-request Messaging feature. Declutter your email inbox and streamline correspondence right in the app.</p>
+
+              <h3 class="text-primary mb-2">Access Rich Usage Analytics</h3>
+              <p class="mb-8">Share and allocate research requests among appropriate staff and keep track of who's doing what. See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
+            </div>
+          </v-container>
+        </div>
+      </div>
     </div>
 </template>
 
@@ -26,15 +51,12 @@ definePageMeta({
 </script>
 
 <style>
-.accent-image {
-  float: right;
-  display: inline;
-  max-width: 40%;
+.padded-section {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
 }
 
-@media (max-width: 800px) {
-  .accent-image {
-    max-width: 20%;
-  }
+.readable-text-width {
+    max-width: 764px;
 }
 </style>

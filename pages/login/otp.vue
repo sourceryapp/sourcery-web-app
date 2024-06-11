@@ -19,7 +19,7 @@
 
 <script setup>
 definePageMeta({
-    middleware: ['guest']
+    middleware: ['guest-redirect']
 })
 
 const supabase = useSupabaseClient()

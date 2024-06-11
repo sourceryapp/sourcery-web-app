@@ -1,7 +1,7 @@
 <template>
-    <div id="page-team" class="py-10">
+    <div id="page-team">
         <v-container>
-            <h1 class="text-center my-14 text-h2 font-weight-medium">Meet the Team</h1>
+            <h1 class="text-center my-16 text-h3 font-weight-medium">Meet the Team</h1>
             <v-row>
                 <v-col cols="12" md="8" offset-md="2">
                     <template v-for="member in members">
@@ -77,6 +77,16 @@ const members = ref([
         title: 'Lead Designer',
         image: 'gemmell.jpg',
         bio: 'Brooke Foti Gemmell is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. With a background in visual arts and design, Brooke is a creative producer and visual problem solver on Greenhouse Studios projects, and also works on the branding and outreach of Greenhouse Studios at large. She holds a B.F.A in Studio Arts and is an M.A. candidate in Digital Media & Design at the University of Connecticut. Her areas of specialty include communications design, branding, photography, and book arts.'
+    }
+])
+
+
+const alumni = ref([
+    {
+        name: 'Carly Wanner-Hyde',
+        title: 'Project Lead / Head Designer',
+        image: 'wanner-hyde.jpg',
+        bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
     },
     {
         name: 'Raven Morris',
@@ -95,16 +105,6 @@ const members = ref([
         title: 'Undergraduate Research Assistant',
         image: 'murphy.jpg',
         bio: 'Jailyn (she/her) is a digital media enthusiast who has a particular interest in social media data analysis. She has a passion for design that serves a clear purpose and targets its audience successfully. Digital history is another topic of interest for her because of the influence her father, a US History teacher, has on her. She hopes to work in advertising in Boston, MA soon after college. Additionally, she coaches a professional hip-hop competition team and has a love for cooking.'
-    }
-])
-
-
-const alumni = ref([
-    {
-        name: 'Carly Wanner-Hyde',
-        title: 'Project Lead / Head Designer',
-        image: 'wanner-hyde.jpg',
-        bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
     },
     {
         name: 'Lauren Ciulla',

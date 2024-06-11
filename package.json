@@ -1,6 +1,6 @@
 {
   "name": "sourcery-web-app",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -48,12 +48,13 @@
     "vuetify": "^3.5.3"
   },
   "description": "Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them.",
-  "author": "Greenhouse Studios <greenhousestudios@uconn.edu>",
+  "author": "Sourcery <sourceryapp@gmail.com>",
   "contributors": [
     "Tim Morris <timthewebguy@gmail.com>",
     "Brian Daley <brian@uconn.edu>",
     "Samson Weiner <samson.weiner@uconn.edu>",
-    "Alex Mueller <alex.mueller@uconn.edu>"
+    "Alex Mueller <alex.mueller@uconn.edu>",
+    "Brian Kelleher <brian.kelleher@uconn.edu>"
   ],
   "overrides": {
     "vue": "latest"

@@ -50,7 +50,6 @@
 
 <script setup>
 definePageMeta({
-    middleware: ['guest'],
     layout: 'public'
 })
 

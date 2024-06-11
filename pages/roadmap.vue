@@ -1,7 +1,7 @@
 <template>
     <div id="page-roadmap">
         <v-container>
-            <h1 class="text-center my-24 page-title">Sourcery's Roadmap</h1>
+            <h2 class="text-h3 font-weight-medium text-center my-16">Sourcery's Roadmap</h2>
             <v-row>
                 <v-col cols="12" md="8" offset-md="2">
                     <div id="path-bg">

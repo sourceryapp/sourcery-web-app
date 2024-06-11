@@ -12,7 +12,8 @@
                     :to="!item.external ? item.to : null"
                     :href="item.external ? item.to : null"
                     size="large"
-                    :border="item.variant ? false : 'none'">
+                    :border="item.variant ? false : 'none'"
+                    :target="item.external ? '_blank' : null">
                     {{ item.title }}
                 </v-btn>
             </div>

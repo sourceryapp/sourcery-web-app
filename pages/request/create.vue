@@ -8,8 +8,6 @@
                     <v-form v-model="requestFormValid" validate-on="submit" @submit.prevent="createRequest">
                         <h2 class="mb-4">Select Repository</h2>
 
-                        <v-img max-height="200" rounded="lg" :src="bannerImage" class="mb-4"></v-img>
-
                         <repository-select v-model="repository" @custom-selected="setCustomRepository"></repository-select>
 
                         <v-alert color="primary" icon="$info" v-if="repository" class="mb-4">You have selected the {{ repository.name }} at {{ repository.organization.name }}.</v-alert>

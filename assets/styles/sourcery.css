@@ -56,6 +56,11 @@ body {
     margin-bottom: 96px !important;
 }
 
+.my-16 {
+    margin-top: 64px !important;
+    margin-bottom: 64px !important;
+}
+
 .page-title {
     text-transform: uppercase;
     letter-spacing: .3rem;
