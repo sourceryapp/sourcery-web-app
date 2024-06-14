@@ -22,16 +22,18 @@
 </template>
 
 <script setup>
-const { authUser } = useAuthUser()
+const { authUser, fetchUserMetadata } = useAuthUser()
 const { updateProfile } = useUpdateProfile()
 
 const dialog = ref(false)
 const name = ref(authUser.value.name)
 
-async function submitChange(output) {
+async function submitChange() {
     await updateProfile({
         name: name.value
     })
     dialog.value = false
+    console.log('time to call fetch')
+    // await fetchUserMetadata()
 }
 </script>

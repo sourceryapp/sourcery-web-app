@@ -5,6 +5,7 @@
 export default function useUpdateProfile() {
     const user = useSupabaseUser()
     const supabase = useSupabaseClient()
+    const { authUser, fetchUserMetadata } = useAuthUser()
 
     const updateProfile = async (profile) => {
         const allowedKeys = ['name', 'phone']
@@ -14,8 +15,6 @@ export default function useUpdateProfile() {
             }
         }
 
-        const { fetchUserMetadata } = useAuthUser()
-
         const { data, error } = await supabase.from('user').update(profile)
             .eq('id', user.value.id)
             .select()
@@ -24,7 +23,7 @@ export default function useUpdateProfile() {
             throw error
         }
 
-        await fetchUserMetadata()
+        fetchUserMetadata()
     }
 
     return { updateProfile }

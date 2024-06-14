@@ -23,7 +23,7 @@
                         <v-icon>mdi-account</v-icon>
                     </template>
                     <v-list-item-title>Name</v-list-item-title>
-                    <v-list-item-subtitle>{{ authUser.name }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ authUser?.name }}</v-list-item-subtitle>
                     <template v-slot:append>
                         <v-list-item-action end>
                             <ProfileChangeName />
@@ -36,7 +36,7 @@
                         <v-icon>mdi-email</v-icon>
                     </template>
                     <v-list-item-title>Email</v-list-item-title>
-                    <v-list-item-subtitle>{{ authUser.email }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ authUser?.email }}</v-list-item-subtitle>
                 </v-list-item>
 
                 <v-list-item lines="two">
@@ -44,7 +44,7 @@
                         <v-icon>mdi-phone</v-icon>
                     </template>
                     <v-list-item-title>Phone</v-list-item-title>
-                    <v-list-item-subtitle>{{ authUser.phone ?? 'No data.' }}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ authUser?.phone ?? 'No data.' }}</v-list-item-subtitle>
                     <template v-slot:append>
                         <v-list-item-action end>
                             <ProfileChangePhone />

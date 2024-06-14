@@ -5,7 +5,9 @@
                 <v-list class="bg-purple-gradient-alt py-5">
                     <v-list-item :prepend-avatar="userIcon"></v-list-item>
                     <v-list-item>
-                        <v-list-item-title class="text-h6 mb-2 text-white">{{ authUser?.name ?? 'Logged Out' }}</v-list-item-title>
+                        <v-list-item-title class="text-h6 mb-2 text-white" v-if="authUser?.id && authUser?.name">{{ authUser.name }}</v-list-item-title>
+                        <v-list-item-title class="text-h6 mb-2 text-white" v-else>Guest</v-list-item-title>
+
                         <v-list-item-subtitle class="text-white" v-if="authUser?.email">{{ authUser.email }}</v-list-item-subtitle>
                         <v-list-item-subtitle class="text-white" v-else>Log in to place &amp; manage requests.</v-list-item-subtitle>
                     </v-list-item>
@@ -122,7 +124,9 @@ const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
 const theme = useTheme()
 
-await callOnce(fetchUserMetadata)
+await callOnce(async () => {
+    await fetchUserMetadata()
+})
 
 // All user related display helpers
 const userIcon = computed(() => {

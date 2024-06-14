@@ -14,7 +14,7 @@ export function useAuthUser() {
 
     // Fetches the current user metadata and their organization access.
     async function fetchUserMetadata() {
-        if (!user.value || authUser.value?.id === user.value?.id) {
+        if (!user.value) {
             return null
         }
 
@@ -39,6 +39,11 @@ export function useAuthUser() {
         clearNuxtState('authUser')
     }
 
+    function clearAndRefetch() {
+        clear()
+        fetchUserMetadata()
+    }
+
     const userOrgs = computed(() => {
         return authUser.value?.organizations ?? []
     })
@@ -51,16 +56,12 @@ export function useAuthUser() {
         return userOrgs.value.length > 0
     })
 
-    watch(user, async () => {
-        clear()
-        await fetchUserMetadata()
-    })
-
     return {
         authUser,
         userOrgs,
         userRepos,
         isOrgOwner,
-        fetchUserMetadata
+        fetchUserMetadata,
+        clearAndRefetch
     }
 }
