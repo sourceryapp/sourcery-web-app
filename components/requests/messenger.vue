@@ -30,7 +30,7 @@
             v-model="messageFormValid"
             validate-on="submit"
             :disabled="messageFormLoading"
-            v-if="!isReported && !isArchived && !isCancelled">
+            v-if="!isReported && !isArchived">
             <v-textarea
                 v-model="message"
                 label="New Message"
@@ -45,7 +45,7 @@
             <div class="d-flex">
                 <v-btn color="primary" type="submit" :disabled="messageFormLoading">Send</v-btn>
                 <v-spacer></v-spacer>
-                <requests-report :request="request" v-if="!isArchived && !isCancelled"></requests-report>
+                <requests-report :request="request" v-if="!isArchived"></requests-report>
             </div>
             
         </v-form>
