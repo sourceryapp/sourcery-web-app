@@ -118,15 +118,15 @@
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
-const { authUser, userOrgs, fetchUserMetadata } = useAuthUser()
+const { authUser, userOrgs, fetchUserMetadata, clearAndRefetch } = useAuthUser()
+const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
 const theme = useTheme()
 
-await callOnce(async () => {
-    await fetchUserMetadata()
-})
+await callOnce(fetchUserMetadata)
+watch(user, clearAndRefetch)
 
 // All user related display helpers
 const userIcon = computed(() => {

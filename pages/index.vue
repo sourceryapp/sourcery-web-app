@@ -38,7 +38,7 @@
                         <!-- <v-img src="/img/landing-illustrations/undraw_researching_22gp.svg" :width="300" class="ma-4"></v-img> -->
                     </v-col>
                     <v-col md="8">
-                        <p>Sourcery allows researchers to request scans of not-yet digitized documents from any archive through a single login and interface, accessible from any device. With Sourcery on a phone or laptop, you can simply enter the document's location and citation information and receive a scan directly within the app. It aims to provide better tools for communicating with archivists, easier payment options, tracking of requests placed at multiple institutions, and integration with popular research tools like <a href="https://www.zotero.org/">Zotero</a> and <a href="https://tropy.org/">Tropy</a>.</p>
+                        <p>Sourcery allows researchers to request scans of not-yet digitized documents from any archive through a single login interface, accessible from any device. With Sourcery on a phone or laptop, you can simply enter the document's location and citation information and receive a scan directly within the app. It aims to provide better tools for communicating with archivists, easier payment options, tracking of requests placed at multiple institutions, and integration with popular research tools like <a href="https://www.zotero.org/">Zotero</a> and <a href="https://tropy.org/">Tropy</a>.</p>
                         <v-btn color="primary" size="x-large" to="/register" variant="outlined" class="mt-6">Try Now <i class="mdi mdi-arrow-right-thin"></i></v-btn>
                     </v-col>
                 </v-row>
@@ -67,7 +67,7 @@
                 <v-row>
                     <v-col cols="12" md="9">
                         <h1 class="mb-9">Who is behind Sourcery?</h1>
-                        <p>Sourcery emerges from the design process of <a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a>, a digital scholarship incubator a the <a href="https://uconn.edu">University of Connecticut</a>, and from the project team's past work and ongoing interests in open source research software for the humanities. Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a not-for-profit organization.</p>
+                        <p>Sourcery emerges from the design process of <a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a>, a digital scholarship incubator a the <a href="https://uconn.edu">University of Connecticut</a>, and from the project team's past work and ongoing interests in open-source research software for the humanities. Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a not-for-profit organization.</p>
                     </v-col>
                     <v-col cols="12" md="3" align="center"><v-img src="/img/landing-illustrations/undraw_absorbed_in_xahs.svg" alt="" :width="280"></v-img></v-col>
                 </v-row>
