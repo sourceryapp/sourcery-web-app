@@ -17,12 +17,13 @@
 
         <requests-card :request="request" v-for="request in requests" :key="request.id"></requests-card>
 
-        <div v-if="requests.length === 0">
+        <div v-if="requests.length === 0" class="text-center">
             <div v-if="hasQuery">
                 <p>No requests found for your search.</p>
             </div>
             <div v-else>
-                <p>No requests here.</p>
+                <p v-if="props.organizationId">No requests here yet!</p>
+                <p v-else>No requests here yet - let's <NuxtLink to="/request/create">create one</NuxtLink>!</p>
             </div>
         </div>
     </div>

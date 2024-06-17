@@ -40,6 +40,7 @@ definePageMeta({
 
 const supabase = useSupabaseClient()
 const route = useRoute()
+const { authUser } = useAuthUser()
 
 const formValid = ref()
 const formLoading = ref(false)
@@ -75,7 +76,7 @@ async function submitPasswordLogin() {
     }
 
     navigateTo({
-        path: route.query.redirectTo ?? '/dashboard'
+        path: route.query.redirectTo ?? '/post-login'
     })
 }
 
@@ -100,7 +101,7 @@ async function submitEmailOtpLogin(submitEvent) {
         email: formEmail.value,
         options: {
             shouldCreateUser: false,
-            emailRedirectTo: `${window.location.protocol}://${window.location.host}/dashboard`
+            emailRedirectTo: `${window.location.protocol}://${window.location.host}/post-login`
         }
     })
 

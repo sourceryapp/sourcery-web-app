@@ -9,6 +9,12 @@ export function useNotification(notif) {
                 return 'mdi-email-plus'
             case 'new_request':
                 return 'mdi-invoice-plus'
+            case 'request_picked_up':
+                return 'mdi-truck-check'
+            case 'request_completed':
+                return 'mdi-truck-check'
+            case 'request_cancelled':
+                return 'mdi-truck-alert'
             default:
                 return 'mdi-information'
         }
@@ -20,6 +26,12 @@ export function useNotification(notif) {
                 return 'New Message Received'
             case 'new_request':
                 return 'New Request Submitted - ' + notification.value.data.request.original_title
+            case 'request_picked_up':
+                return 'Request Picked Up - ' + notification.value.data.request.original_title
+            case 'request_completed':
+                return 'Request Completed - ' + notification.value.data.request.original_title
+            case 'request_cancelled':
+                return 'Request Cancelled - ' + notification.value.data.request.original_title
             default:
                 return 'New Notification'
         }
@@ -33,6 +45,12 @@ export function useNotification(notif) {
                 navigateTo(`/request/${notification.value.data.request.id}#messages`)
                 break
             case 'new_request':
+                navigateTo(`/request/${notification.value.data.request.id}`)
+                break
+            case 'request_picked_up':
+                navigateTo(`/request/${notification.value.data.request.id}`)
+                break
+            case 'request_completed':
                 navigateTo(`/request/${notification.value.data.request.id}`)
                 break
             default:

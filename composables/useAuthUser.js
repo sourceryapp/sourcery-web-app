@@ -39,9 +39,12 @@ export function useAuthUser() {
         clearNuxtState('authUser')
     }
 
-    function clearAndRefetch() {
+    async function possiblyRefetch() {
+        if ( user?.value?.id && (user?.value.id === authUser.value?.id) ) {
+            return
+        }
         clear()
-        fetchUserMetadata()
+        await fetchUserMetadata()
     }
 
     const userOrgs = computed(() => {
@@ -62,6 +65,6 @@ export function useAuthUser() {
         userRepos,
         isOrgOwner,
         fetchUserMetadata,
-        clearAndRefetch
+        possiblyRefetch
     }
 }

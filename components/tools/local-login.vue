@@ -24,6 +24,6 @@ async function logInLocalUser(role) {
         password: 'password'
     })
 
-    navigateTo('/dashboard')
+    navigateTo('/post-login')
 }
 </script>

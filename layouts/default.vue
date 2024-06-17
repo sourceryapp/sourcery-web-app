@@ -14,16 +14,7 @@
                 </v-list>
                 <v-list class="px-2">
 
-                    <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
-                    <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded>
-                        <template v-slot:prepend>
-                            <v-icon>{{ item.icon }}</v-icon>
-                        </template>
-                        <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
-                    </v-list-item>
-
                     <template v-if="organizationNavigationItems.length > 0">
-                        <v-divider class="ma-2"></v-divider>
                         <v-list-subheader>Organizations</v-list-subheader>
                         <v-list-item v-for="item in organizationNavigationItems" :to="item.link" color="primary" rounded>
                             <template v-slot:prepend>
@@ -31,7 +22,16 @@
                             </template>
                             <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                         </v-list-item>
+                        <v-divider class="ma-2"></v-divider>
                     </template>
+
+                    <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
+                    <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded>
+                        <template v-slot:prepend>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </template>
+                        <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
+                    </v-list-item>
 
                     <template v-if="authUser">
                         <v-divider class="ma-2"></v-divider>
@@ -118,15 +118,17 @@
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
-const { authUser, userOrgs, fetchUserMetadata, clearAndRefetch } = useAuthUser()
+const { authUser, userOrgs, fetchUserMetadata, possiblyRefetch } = useAuthUser()
 const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
 const theme = useTheme()
 
+// Fetch user metadata only once on initial load/refresh from tab out
+// Observe the supabase user object for changes and sync user metadata
 await callOnce(fetchUserMetadata)
-watch(user, clearAndRefetch)
+watch(user, possiblyRefetch)
 
 // All user related display helpers
 const userIcon = computed(() => {

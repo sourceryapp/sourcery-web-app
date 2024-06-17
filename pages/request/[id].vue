@@ -85,11 +85,11 @@
                             <v-container v-if="isArchived || isCancelled || (!canService && isCompleted)">
                                 <v-row>
                                     <v-col cols="12" md="3"><h3>Fulfillment Notes</h3></v-col>
-                                    <v-col cols="12" md="9"><p class="mb-0">{{ request.archive_notes ?? 'None Provided' }}</p></v-col>
+                                    <v-col cols="12" md="9"><p class="mb-0" style="white-space: pre-wrap;" v-html="request.archive_notes ? textToAnchors(request.archive_notes) : 'None Provided'"></p></v-col>
                                 </v-row>
                                 <v-row>
                                     <v-col cols="12" md="3"><h3>Suggested Citation</h3></v-col>
-                                    <v-col cols="12" md="9"><p class="mb-0">{{ request.archive_citation ?? 'None Provided' }}</p></v-col>
+                                    <v-col cols="12" md="9"><p class="mb-0" style="white-space: pre-wrap;" v-html="request.archive_citation ? textToAnchors(request.archive_citation) : 'None Provided'"></p></v-col>
                                 </v-row>
                             </v-container>
                         </v-expansion-panel-text>
@@ -149,6 +149,7 @@ const {
     fetchRequest
 } = useFetchRequest()
 const route = useRoute()
+const { textToAnchors } = useHtmlFilters()
 
 console.log(route.hash)
 

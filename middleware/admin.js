@@ -7,6 +7,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     await callOnce(fetchUserMetadata)
 
     if (authUser.value?.admin !== true) {
-        return abortNavigation()
+        return navigateTo('/post-login')
     }
 })

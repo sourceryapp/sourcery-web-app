@@ -94,7 +94,7 @@ async function register(submitEvent) {
     if ( route.query.redirectTo ) {
         navigateTo(route.query.redirectTo)
     } else {
-        navigateTo('/dashboard')
+        navigateTo('/post-login')
     }
 
     formLoading.value = false

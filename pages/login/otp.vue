@@ -48,6 +48,6 @@ async function confirmOtpCode() {
     }
 
     formLoading.value = false
-    navigateTo(route.query.redirectTo ?? '/dashboard')
+    navigateTo(route.query.redirectTo ?? '/post-login')
 }
 </script>
