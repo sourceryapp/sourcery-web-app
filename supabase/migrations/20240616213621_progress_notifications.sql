@@ -24,8 +24,10 @@ BEGIN
 
     if new.status_id = 2 then
         INSERT INTO public.notifications (user_id, text, type, data) VALUES (new.user_id, 'Request Picked Up', 'request_picked_up', notification_json);
+        INSERT INTO public.notifications (user_id, text, type, data) VALUES (organization_user_id, 'Request Picked Up', 'request_picked_up', notification_json);
     ELSIF new.status_id = 3 then
         INSERT INTO public.notifications (user_id, text, type, data) VALUES (new.user_id, 'Request Completed', 'request_completed', notification_json);
+        INSERT INTO public.notifications (user_id, text, type, data) VALUES (organization_user_id, 'Request Completed', 'request_completed', notification_json);
     ELSIF new.status_id = 5 then
         INSERT INTO public.notifications (user_id, text, type, data) VALUES (new.user_id, 'Request Cancelled', 'request_cancelled', notification_json);
         INSERT INTO public.notifications (user_id, text, type, data) VALUES (organization_user_id, 'Request Cancelled', 'request_cancelled', notification_json);

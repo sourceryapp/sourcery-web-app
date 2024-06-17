@@ -55,10 +55,7 @@ export function useRequestSearch() {
 
         // Apply the search query if necessary
         if ( search.value ) {
-            query = query.ilike('repository.name', `%${search.value}%`)
-                .ilike('request_clients.label', `%${search.value}%`)
-                .ilike('request_vendors.label', `%${search.value}%`)
-                .or(`citation.ilike.%${search.value}%,repository.not.is.null,request_clients.not.is.null,request_vendors.not.is.null`)
+            query = query.or(`citation.ilike.%${search.value}%,original_title.ilike.%${search.value}%`)
         }
         if ( selectedStatus.value && selectedStatus.value.length ) {
             query = query.in('status_id', selectedStatus.value)
