@@ -25,13 +25,13 @@ export function useNotification(notif) {
             case 'new_message':
                 return 'New Message Received'
             case 'new_request':
-                return 'New Request Submitted - ' + notification.value.data.request.original_title
+                return 'New Request Submitted - ' + notification.value.data.request.original_title ?? 'Untitled'
             case 'request_picked_up':
-                return 'Request Picked Up - ' + notification.value.data.request.original_title
+                return 'Request Picked Up - ' + notification.value.data.request.original_title ?? 'Untitled'
             case 'request_completed':
-                return 'Request Completed - ' + notification.value.data.request.original_title
+                return 'Request Completed - ' + notification.value.data.request.original_title ?? 'Untitled'
             case 'request_cancelled':
-                return 'Request Cancelled - ' + notification.value.data.request.original_title
+                return 'Request Cancelled - ' + notification.value.data.request.original_title ?? 'Untitled'
             default:
                 return 'New Notification'
         }
