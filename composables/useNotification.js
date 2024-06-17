@@ -21,17 +21,18 @@ export function useNotification(notif) {
     })
 
     const title = computed(() => {
+        const notif_request_title = notification.value.data?.request?.original_title ? notification.value.data.request.original_title : 'Untitled'
         switch (notification.value.type) {
             case 'new_message':
                 return 'New Message Received'
             case 'new_request':
-                return 'New Request Submitted - ' + notification.value.data.request.original_title ?? 'Untitled'
+                return 'New Request Submitted - ' + notif_request_title
             case 'request_picked_up':
-                return 'Request Picked Up - ' + notification.value.data.request.original_title ?? 'Untitled'
+                return 'Request Picked Up - ' + notif_request_title
             case 'request_completed':
-                return 'Request Completed - ' + notification.value.data.request.original_title ?? 'Untitled'
+                return 'Request Completed - ' + notif_request_title
             case 'request_cancelled':
-                return 'Request Cancelled - ' + notification.value.data.request.original_title ?? 'Untitled'
+                return 'Request Cancelled - ' + notif_request_title
             default:
                 return 'New Notification'
         }
