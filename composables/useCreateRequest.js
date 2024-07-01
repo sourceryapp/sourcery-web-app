@@ -1,6 +1,7 @@
 export default function useCreateRequest() {
     const supabase = useSupabaseClient()
     const { authUser } = useAuthUser()
+    const route = useRoute()
 
     const requestFormValid = ref(false)
     const requestFormLoading = ref(false)
@@ -17,6 +18,8 @@ export default function useCreateRequest() {
         repository: {},
         customRepository: '',
         customRepositoryLocation: '',
+        referrer: null,
+        referrer_data: null
     })
     const createdRequest = ref()
 
@@ -60,7 +63,9 @@ export default function useCreateRequest() {
                     citation: requestFields.value.details,
                     status_id: 1,
                     user_id: requestFields.value.user.id,
-                    original_title: requestFields.value.title
+                    original_title: requestFields.value.title,
+                    referrer: requestFields.value.referrer,
+                    referrer_data: requestFields.value.referrer_data
                 }).select().single()
 
                 requestFormLoading.value = false
@@ -90,7 +95,9 @@ export default function useCreateRequest() {
                     title: requestFields.value.title,
                     description: requestFields.value.details,
                     repository_name: requestFields.value.customRepository,
-                    repository_location: requestFields.value.customRepositoryLocation
+                    repository_location: requestFields.value.customRepositoryLocation,
+                    referrer: requestFields.value.referrer,
+                    referrer_data: requestFields.value.referrer_data
                 }).select().single()
 
                 requestFormLoading.value = false
@@ -125,6 +132,9 @@ export default function useCreateRequest() {
         return null
     }
 
+    /**
+     * Draft Mode
+     */
     function populateFromSession() {
         const requestFromSession = JSON.parse(localStorage.getItem('sourceryInProgressRequest'))
         if ( requestFromSession ) {
@@ -148,6 +158,83 @@ export default function useCreateRequest() {
     function clearSessionDraft() {
         localStorage.removeItem('sourceryInProgressRequest')
     }
+
+
+    /**
+     * Populating from query
+     * Integrations depend on this:
+     * - ArchivesSpace
+     * - Translation Server
+     */
+    function populateFromQuery() {
+        if ( route.query ) {
+            if ( route.query.title ) {
+                requestFields.value.title = route.query.title
+            }
+
+            if ( route.query.source ) {
+                requestFields.value.referrer = route.query.source
+            }
+
+            if ( route.query.message ) {
+                try{
+                    const json_message = JSON.parse(route.query.message)
+                    // Message is of type JSON
+                    // Let's parse it correctly
+                    if ( typeof json_message === "object") {
+                        console.log('parsing json source')
+                        processQueryMessage(json_message)
+                    } else {
+                        requestFields.value.details = route.query.message
+                    }
+                } catch (e) {
+                    // Not a JSON message so let's just fill the message with the query contents.
+                    requestFields.value.details = route.query.message
+                }
+            }
+
+
+            if ( route.query.repo_id ) {
+                const matchingRepo = repositories.value.find(repo => String(repo.id) === route.query.repo_id)
+                if ( matchingRepo ) {
+                    requestFields.value.repository = matchingRepo
+                    repository.value = matchingRepo
+                }
+            }
+        }
+    }
+
+    function processQueryMessage(message) {
+        requestFields.value.referrer_data = message
+        console.log(message)
+        let details = ''
+        if ( message.title ) {
+            details += `Title: ${message.title}\n`
+        }
+
+        if ( message.publicationTitle ) {
+            details += `Publication Title: ${message.publicationTitle}\n`
+        }
+
+        if ( message.libraryCatalog ) {
+            details += `Library Catalog: ${message.libraryCatalog}\n`
+        }
+
+        if ( message.url ) {
+            details += `URL: ${message.url}\n`
+        }
+
+        if ( message.date ) {
+            details += `Date: ${message.date}\n`
+        }
+
+        if ( Array.isArray(message.creators) && message.creators.length > 0 ) {
+            details += `Creators: ${message.creators[0].firstName} ${message.creators[0].lastName}\n`
+        }
+
+        requestFields.value.details = details
+    }
+
 
     const clientIsUser = computed(() => {
         if ( authUser.value ) {
@@ -173,7 +260,8 @@ export default function useCreateRequest() {
         requestFormPopulateCurrentUser,
         createRequest,
         setSessionDraft,
-        clearSessionDraft
+        clearSessionDraft,
+        populateFromQuery
     }
 
 }

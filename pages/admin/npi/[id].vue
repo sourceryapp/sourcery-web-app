@@ -31,6 +31,15 @@
                             <v-col cols="12" md="3"><h3>Description</h3></v-col>
                             <v-col cols="12" md="9"><p class="mb-0">{{ request.description }}</p></v-col>
                         </v-row>
+                        <v-row>
+                            <v-col cols="12" md="3"><h3>Referrer Information</h3></v-col>
+                            <v-col cols="12" md="9">
+                                <p class="mb-0">{{ request.referrer }}</p>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col>{{ request.referrer_data }}</v-col>
+                        </v-row>
                     </v-sheet>
                 </v-col>
                 <v-col>

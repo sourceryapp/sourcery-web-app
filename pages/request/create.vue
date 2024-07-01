@@ -6,22 +6,24 @@
                     <h1 class="mb-4">Create a Request</h1>
 
                     <v-form v-model="requestFormValid" validate-on="submit" @submit.prevent="createRequest">
-                        <h2 class="mb-4">Select Repository</h2>
+                        <h2 class="mb-4">Repository Location</h2>
 
-                        <repository-select v-model="repository" @custom-selected="setCustomRepository"></repository-select>
+                        <!-- <repository-select v-model="repository" @custom-selected="setCustomRepository"></repository-select> -->
+
+                        <v-text-field v-model="requestFields.customRepository" variant="outlined" class="mb-2" label="Repository Name" :rules="[$sourceryForms.rules.required]"></v-text-field>
 
                         <v-alert color="primary" icon="$info" v-if="repository" class="mb-4">You have selected the {{ repository.name }} at {{ repository.organization.name }}.</v-alert>
 
-                        <v-alert type="warning" variant="tonal" icon="$info" v-if="requestFields.customRepository" class="mb-4">
+                        <!-- <v-alert type="warning" variant="tonal" icon="$info" v-if="requestFields.customRepository" class="mb-4">
                             <strong class="text-h6 font-weight-bold">{{ requestFields.customRepository }}</strong>
                             <p class="mb-1">You have selected an institution that is not yet registered with Sourcery.</p>
                             <v-btn @click="requestFields.customRepository = ''">Remove</v-btn>
-                        </v-alert>
+                        </v-alert> -->
 
-                        <div v-if="requestFields.customRepository">
+                        <div >
                             <h3 class="mb-3">Let's make sure we have enough information to locate this repository.</h3>
                             <p>Please provide any relevant contact or location information that would help the Sourcery team track down this repository.</p>
-                            <v-textarea v-model="requestFields.customRepositoryLocation" label="Location and Contact Details" variant="outlined" class="mb-4" hide-details rows="3"></v-textarea>
+                            <v-textarea v-model="requestFields.customRepositoryLocation" label="Location and Contact Details" variant="outlined" class="mb-4" rows="3" :rules="[$sourceryForms.rules.required]"></v-textarea>
                         </div>
 
 
@@ -82,8 +84,8 @@
 </template>
 
 <script setup>
-const { repository, bannerImage } = useSelectRepository()
-const { repositories, fetchRepositories } = useFetchRepositories()
+const { repository } = useSelectRepository()
+// const { fetchRepositories } = useFetchRepositories()
 const { authUser, isOrgOwner } = useAuthUser()
 const { $sourceryForms } = useNuxtApp()
 const {
@@ -98,11 +100,12 @@ const {
     setCustomRepository,
     requestFormPopulateCurrentUser,
     createRequest,
-    setSessionDraft
+    setSessionDraft,
+    populateFromQuery
 } = useCreateRequest()
-const route = useRoute()
+// const route = useRoute()
 
-await fetchRepositories()
+// await fetchRepositories()
 populateFromQuery()
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
@@ -125,28 +128,6 @@ function unregisteredNavigate(to) {
             redirectTo: '/request/create'
         }
     })
-}
-
-/**
- * Integrations depend on this:
- * - ArchivesSpace
- */
-function populateFromQuery() {
-    if ( route.query ) {
-        if ( route.query.title ) {
-            requestFields.value.title = route.query.title
-        }
-        if ( route.query.message ) {
-            requestFields.value.details = route.query.message
-        }
-        if ( route.query.repo_id ) {
-            const matchingRepo = repositories.value.find(repo => String(repo.id) === route.query.repo_id)
-            if ( matchingRepo ) {
-                requestFields.value.repository = matchingRepo
-                repository.value = matchingRepo
-            }
-        }
-    }
 }
 </script>
 

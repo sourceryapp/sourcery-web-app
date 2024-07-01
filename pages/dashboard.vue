@@ -15,6 +15,16 @@
                         <requests-search ref="search"></requests-search>
                     </v-col>
                     <v-col md="4" class="d-none d-md-block">
+                        <v-card to="/requests/unregistered" class="mb-4">
+                            <v-card-title>Unregistered</v-card-title>
+                            <v-card-text class="py-0">
+                                <p>Requests that have been submitted to unregistered institutions.</p>
+                            </v-card-text>
+                            <v-card-text class="py-0">
+                                <p class="text-h4">{{ requestCount }}</p>
+                            </v-card-text>
+                        </v-card>
+
                         <v-card @click="setStatus('Complete')" class="mb-4">
                             <v-card-title>Completed</v-card-title>
                             <v-card-text class="py-0">
@@ -42,16 +52,6 @@
                             </v-card-text>
                             <v-card-text class="py-0">
                                 <p class="text-h4">{{ countInProgress }}</p>
-                            </v-card-text>
-                        </v-card>
-
-                        <v-card to="/requests/unregistered" class="mb-4">
-                            <v-card-title>Unregistered</v-card-title>
-                            <v-card-text class="py-0">
-                                <p>Requests that have been submitted to unregistered institutions.</p>
-                            </v-card-text>
-                            <v-card-text class="py-0">
-                                <p class="text-h4">{{ requestCount }}</p>
                             </v-card-text>
                         </v-card>
                     </v-col>
