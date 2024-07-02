@@ -141,6 +141,10 @@ export default function useCreateRequest() {
             requestFields.value.title = requestFromSession.title,
             requestFields.value.details = requestFromSession.details,
             requestFields.value.repository = requestFromSession.repository
+            requestFields.value.referrer = requestFromSession.referrer
+            requestFields.value.referrer_data = requestFromSession.referrer_data
+            requestFields.value.customRepository = requestFromSession.customRepository
+            requestFields.value.customRepositoryLocation = requestFromSession.customRepositoryLocation
             clearSessionDraft()
             return true
         }
@@ -151,7 +155,11 @@ export default function useCreateRequest() {
         localStorage.setItem('sourceryInProgressRequest', JSON.stringify({
             title: requestFields.value.title,
             details: requestFields.value.details,
-            repository: requestFields.value.repository
+            repository: requestFields.value.repository,
+            referrer: requestFields.value.referrer,
+            referrer_data: requestFields.value.referrer_data,
+            customRepository: requestFields.value.customRepository,
+            customRepositoryLocation: requestFields.value.customRepositoryLocation
         }))
     }
 
