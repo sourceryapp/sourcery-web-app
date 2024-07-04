@@ -5,27 +5,30 @@
                 <v-col sm="10" md="8">
                     <h1 class="mb-4">Create a Request</h1>
 
+                    <template v-if="isOrgOwner">
+                        <v-radio-group v-model="requestType">
+                            <v-radio v-for="(repo, ind) in userRepos" :label="`Submit directly to ${repo.name}`" :value="ind" class="mb-2"></v-radio>
+                            <v-radio value="normal" label="Submit a General Sourcery Request" class="mb-2"></v-radio>
+                        </v-radio-group>
+                    </template>
+
                     <v-form v-model="requestFormValid" validate-on="submit" @submit.prevent="createRequest">
                         <h2 class="mb-4">Repository Location</h2>
 
-                        <!-- <repository-select v-model="repository" @custom-selected="setCustomRepository"></repository-select> -->
+                        <template v-if="requestType === 'normal'">
+                            <v-text-field v-model="requestFields.customRepository" variant="outlined" class="mb-2" label="Repository Name" :rules="[$sourceryForms.rules.required || requestType !== 'normal']"></v-text-field>
 
-                        <v-text-field v-model="requestFields.customRepository" variant="outlined" class="mb-2" label="Repository Name" :rules="[$sourceryForms.rules.required]"></v-text-field>
+                            <div>
+                                <h3 class="mb-3">Let's make sure we have enough information to locate this repository.</h3>
+                                <p>Please provide any relevant contact or location information that would help the Sourcery team track down this repository.</p>
+                                <v-textarea v-model="requestFields.customRepositoryLocation" label="Location and Contact Details" variant="outlined" class="mb-4" rows="3" :rules="[$sourceryForms.rules.required || requestType !== 'normal']"></v-textarea>
+                            </div>
+                        </template>
 
-                        <v-alert color="primary" icon="$info" v-if="repository" class="mb-4">You have selected the {{ repository.name }} at {{ repository.organization.name }}.</v-alert>
-
-                        <!-- <v-alert type="warning" variant="tonal" icon="$info" v-if="requestFields.customRepository" class="mb-4">
-                            <strong class="text-h6 font-weight-bold">{{ requestFields.customRepository }}</strong>
-                            <p class="mb-1">You have selected an institution that is not yet registered with Sourcery.</p>
-                            <v-btn @click="requestFields.customRepository = ''">Remove</v-btn>
-                        </v-alert> -->
-
-                        <div >
-                            <h3 class="mb-3">Let's make sure we have enough information to locate this repository.</h3>
-                            <p>Please provide any relevant contact or location information that would help the Sourcery team track down this repository.</p>
-                            <v-textarea v-model="requestFields.customRepositoryLocation" label="Location and Contact Details" variant="outlined" class="mb-4" rows="3" :rules="[$sourceryForms.rules.required]"></v-textarea>
-                        </div>
-
+                        <template v-else>
+                            <v-alert color="primary" icon="$info" v-if="requestFields.repository" class="mb-4">You are requesting directly to {{ requestFields.repository.name }} at {{ requestFields.repository.organization.name }}.</v-alert>
+                        </template>
+                        
 
                         <h2 class="mb-4 mt-10">Document Information</h2>
 
@@ -86,7 +89,7 @@
 <script setup>
 const { repository } = useSelectRepository()
 // const { fetchRepositories } = useFetchRepositories()
-const { authUser, isOrgOwner } = useAuthUser()
+const { authUser, isOrgOwner, userRepos } = useAuthUser()
 const { $sourceryForms } = useNuxtApp()
 const {
     requestFields,
@@ -105,14 +108,21 @@ const {
 } = useCreateRequest()
 // const route = useRoute()
 
+const requestType = ref('normal');
+
 // await fetchRepositories()
 populateFromQuery()
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
-watch(repository, () => {
-    requestFields.value.repository = repository.value
-    if ( repository.value ) {
+watch(requestType, () => {
+    // requestFields.value.repository = repository.value
+    if ( requestType.value !== 'normal' ) {
+        // console.log(requestType.value, userRepos.value[requestType.value])
+        requestFields.value.repository = userRepos.value[requestType.value]
         requestFields.value.customRepository = ''
+        requestFields.value.customRepositoryLocation = ''
+    } else {
+        setCustomRepository(null)
     }
 })
 

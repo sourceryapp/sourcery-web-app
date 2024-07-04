@@ -15,7 +15,15 @@
             </v-col>
         </v-row>
 
-        <requests-card :request="request" v-for="request in requests" :key="request.id"></requests-card>
+        <template v-if="selectedStatus.includes(0)">
+            <p>These requests were submitted to a location not yet registered with Sourcery. Not to worry - we're reaching out for you, but a response is not guaranteed.</p>
+            <npi-card v-for="request in npiRequests" :request="request" :key="request.id"></npi-card>
+        </template>
+
+        <template v-else>
+            <requests-card :request="request" v-for="request in requests" :key="request.id"></requests-card>
+        </template>
+        
 
         <div v-if="requests.length === 0" class="text-center">
             <div v-if="hasQuery">

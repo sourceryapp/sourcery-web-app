@@ -42,6 +42,7 @@ export default function useCreateRequest() {
 
     async function createRequest(formSubmitEvent) {
         requestFormLoading.value = true
+        requestFormError.value = null
 
         // This is a weird one, vuetify3 form events are async and the validation is not done until the promise resolves.
         // So, we have to await the event for requestFormValid.value to be true.

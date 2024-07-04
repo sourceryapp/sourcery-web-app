@@ -7,7 +7,7 @@
                 <RequestsCreateAlert v-if="userOrgs.length === 0"></RequestsCreateAlert>
 
                 <template v-else>
-                    <organization-view-alert :organization="org" v-for="org in userOrgs"></organization-view-alert>
+                    <organization-view-alert :organization="userOrgs[0]"></organization-view-alert>
                 </template>
 
                 <v-row>
@@ -16,9 +16,9 @@
                     </v-col>
                     <v-col md="4" class="d-none d-md-block">
                         <v-card to="/requests/unregistered" class="mb-4">
-                            <v-card-title>Unregistered</v-card-title>
+                            <v-card-title>Unassigned</v-card-title>
                             <v-card-text class="py-0">
-                                <p>Requests that have been submitted to unregistered institutions.</p>
+                                <p>Requests that have been submitted to Sourcery and have yet to be assigned.</p>
                             </v-card-text>
                             <v-card-text class="py-0">
                                 <p class="text-h4">{{ requestCount }}</p>

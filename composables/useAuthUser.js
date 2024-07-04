@@ -52,7 +52,18 @@ export function useAuthUser() {
     })
 
     const userRepos = computed(() => {
-        return authUser.value?.organizations?.flatMap(org => org.repositories) ?? []
+        let orgs = authUser.value?.organizations ?? []
+        let repos = orgs.flatMap(org => {
+            for (let repo of org.repositories) {
+                repo.organization = {
+                    id: org.id,
+                    name: org.name,
+                    slug: org.slug
+                }
+            }
+            return org.repositories
+        })
+        return repos
     })
 
     const isOrgOwner = computed(() => {
