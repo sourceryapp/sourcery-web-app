@@ -54,6 +54,7 @@ export function useRequestMessenger(req = null) {
     async function sendMessage(formSubmitEvent) {
         messageFormLoading.value = true
         if ( message.value.trim() === '' ) {
+            messageFormLoading.value = false
             return false
         }
 
