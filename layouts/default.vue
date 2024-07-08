@@ -1,7 +1,7 @@
 <template>
     <div id="default-layout">
         <v-app>
-            <v-navigation-drawer v-model="drawerOpen" mobile-breakpoint="sm" :location="drawerLocation" class="d-print-none" :temporary="mobile" touchless>
+            <v-navigation-drawer v-model="drawerOpen" :location="drawerLocation" :class="navigationDrawerClasses" :temporary="mobile">
                 <v-list class="bg-purple-gradient-alt py-5">
                     <v-list-item :prepend-avatar="userIcon"></v-list-item>
                     <v-list-item>
@@ -166,11 +166,24 @@ const organizationNavigationItems = computed(() => {
         return { title: org.name, icon: 'mdi-domain', link: `/o/${org.id}` }
     })
 })
+
+const navigationDrawerClasses = computed(() => {
+    return {
+        'd-print-none': true,
+        'mobile-limit-height': mobile.value
+    }
+})
 </script>
 
 <style scoped lang="scss">
+@use '../assets/src/scss/vuetify-settings';
+
 .bg-purple-gradient-alt {
     background: rgb(146, 79, 190);
     background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);
+}
+
+.mobile-limit-height {
+    max-height: 70vh;
 }
 </style>
