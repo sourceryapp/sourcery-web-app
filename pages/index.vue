@@ -67,7 +67,7 @@
                 <v-row>
                     <v-col cols="12" md="9">
                         <h1 class="mb-9">Who is behind Sourcery?</h1>
-                        <p>Sourcery emerges from the design process of <a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a>, a digital scholarship incubator a the <a href="https://uconn.edu">University of Connecticut</a>, and from the project team's past work and ongoing interests in open-source research software for the humanities. Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a not-for-profit organization.</p>
+                        <p>Sourcery emerges from the design process of <a href="https://greenhousestudios.uconn.edu/" class="partnerlink">Greenhouse Studios</a>, a digital scholarship incubator at the <a href="https://uconn.edu">University of Connecticut</a>, and from the project team's past work and ongoing interests in open-source research software for the humanities. Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a not-for-profit organization.</p>
                     </v-col>
                     <v-col cols="12" md="3" align="center"><v-img src="/img/landing-illustrations/undraw_absorbed_in_xahs.svg" alt="" :width="280"></v-img></v-col>
                 </v-row>
