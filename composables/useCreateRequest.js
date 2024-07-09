@@ -91,14 +91,15 @@ export default function useCreateRequest() {
                 }
             } else {
 
-                const { data, error } = await supabase.from('requests_prospective').insert({
+                const { data, error } = await supabase.from('requests').insert({
                     user_id: requestFields.value.user.id,
-                    title: requestFields.value.title,
-                    description: requestFields.value.details,
+                    original_title: requestFields.value.title,
+                    citation: requestFields.value.details,
                     repository_name: requestFields.value.customRepository,
                     repository_location: requestFields.value.customRepositoryLocation,
                     referrer: requestFields.value.referrer,
-                    referrer_data: requestFields.value.referrer_data
+                    referrer_data: requestFields.value.referrer_data,
+                    status_id: 6
                 }).select().single()
 
                 requestFormLoading.value = false
@@ -126,7 +127,7 @@ export default function useCreateRequest() {
 
 
 
-                    navigateTo(`/requests/unregistered`)
+                    navigateTo(`/dashboard`)
                 }
             }
         }

@@ -1,5 +1,5 @@
 <template>
-    <v-sheet elevation="1" class="bg-surface-variant mb-6 py-4 px-6">
+    <v-sheet elevation="1" class="bg-surface-variant mb-6 py-4 px-6 request-card">
         <v-row justify="start" align="center" class="mb-4">
             <v-col cols="12" md="auto">
                 <StatusChip :status="request.status"></StatusChip>
@@ -10,7 +10,7 @@
             </v-col>
         </v-row>
         <h3>{{ request.request_vendor?.label ?? request.request_client?.label ?? request.original_title ?? 'Untitled' }}</h3>
-        <p>{{ request.citation }}</p>
+        <p>{{ citation }}</p>
         <v-divider class="mb-4"></v-divider>
         <div class="d-flex align-center justify-start">
             <v-btn color="primary" variant="text" border="0" :to="`/request/${request.id}`" class="mb-2 me-2">View Request</v-btn>
@@ -20,5 +20,19 @@
 </template>
 
 <script setup>
+import { useDisplay } from 'vuetify'
+const { mobile } = useDisplay()
 const props = defineProps(['request'])
+
+const citation = computed(() => {
+    let max = mobile ? 100 : 300
+    let c = props.request.citation.substring(0, max)
+    return props.request.citation.length > max ? c + '...' : c
+})
 </script>
+
+<style lang="scss" scoped>
+.request-card {
+    word-wrap: break-word;
+}
+</style>

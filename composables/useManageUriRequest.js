@@ -8,7 +8,7 @@ export function useManageUriRequest(req = null) {
     const repository = ref(null)
 
     async function fetchUriRequest() {
-        const { data, error } = await supabase.from('requests_prospective').select(`
+        const { data, error } = await supabase.from('requests').select(`
             *,
             user (*)
         `).eq('id', uriId.value).single()
@@ -23,15 +23,25 @@ export function useManageUriRequest(req = null) {
     async function convert() {
         console.log({ request: request.value, repository: repository.value })
         if ( request.value && repository.value ) {
-            const { data, error } = await supabase.rpc('convert_request', {
-                prospective_request_id: request.value.id,
-                repository_id: repository.value.id
-            }).single()
+            const { data, error } = await supabase.from('requests').update({
+                repository_id: repository.value.id,
+                status_id: 1
+            }).eq('id', request.value.id).select().single()
 
             if ( error ) {
                 console.error(error)
             } else {
                 request.value = data
+
+                // Notify organization they have a request.
+                await supabase.functions.invoke('notify', {
+                    body: {
+                        user_id: request.value.user_id,
+                        request_id: request.value.id,
+                        action: 'request_submitted_to_your_org'
+                    }
+                })
+
                 navigateTo('/request/' + request.value.id)
                 return true
             }
@@ -41,12 +51,10 @@ export function useManageUriRequest(req = null) {
 
     async function deleteRequest() {
         if ( request.value ) {
-            const { data, error } = await supabase.from('requests_prospective')
+            const { data, error } = await supabase.from('requests')
                 .update({ deleted: true })
                 .eq('id', request.value.id)
                 .select()
-
-            console.log(data)
 
             if ( error ) {
                 console.error(error)
