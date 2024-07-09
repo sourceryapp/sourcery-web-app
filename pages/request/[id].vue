@@ -4,7 +4,7 @@
             <h1 class="mb-6">Request Summary</h1>
             <v-row class="mb-5">
                 <v-col cols="12" md="8">
-                    <v-sheet color="surface" elevation="4" rounded class="pa-5 fill-height">
+                    <v-sheet color="surface" elevation="4" rounded class="pa-5 fill-height text-break">
                         <v-row>
                             <v-col cols="12" md="3"><h3>Request ID</h3></v-col>
                             <v-col cols="12" md="9"><p class="mb-0">{{ request.id }}</p></v-col>

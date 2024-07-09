@@ -1,41 +1,41 @@
 <template>
     <div id="page-occupation-id" class="py-6">
         <v-container>
-            <h1 class="mb-4">{{ organization.name }}</h1>
-
-            <v-row class="mb-4">
-                <v-col cols="12" md="4">
-                    <v-card @click="setStatus('Submitted')" class="mb-4 fill-height">
-                        <v-card-title>New Requests</v-card-title>
-                        <v-card-text class="py-0">
-                            <p>These requests were newly submitted, and are waiting to be picked up by your organization.</p>
-                        </v-card-text>
-                        <v-card-text class="py-0">
-                            <p class="text-h4">{{ countSubmitted }}</p>
+            <v-row class="mb-2">
+                <v-col cols="12" md="6">
+                    <v-card width="100%" class="fill-height" variant="outlined">
+                        <v-card-text>
+                            <h1 class="mb-0">{{ organization.name }}</h1>
+                            <p class="text-muted mb-1">{{ organization.address || 'No Address Set' }}</p>
                         </v-card-text>
                     </v-card>
                 </v-col>
-                <v-col cols="12" md="4">
-                    <v-card @click="setStatus('In Progress')" class="mb-4 fill-height">
-                        <v-card-title>In Progress</v-card-title>
-                        <v-card-text class="py-0">
-                            <p>Requests that have been picked up by your organization, and are currently being serviced.</p>
-                        </v-card-text>
-                        <v-card-text class="py-0">
-                            <p class="text-h4">{{ countInProgress }}</p>
-                        </v-card-text>
-                    </v-card>
-                </v-col>
-                <v-col cols="12" md="4">
-                    <v-card @click="setStatus('Complete')" class="mb-4 fill-height">
-                        <v-card-title>Completed</v-card-title>
-                        <v-card-text class="py-0">
-                            <p>These requests are recently completed and ready to be archived.</p>
-                        </v-card-text>
-                        <v-card-text class="py-0">
-                            <p class="text-h4">{{ countCompleted }}</p>
-                        </v-card-text>
-                    </v-card>
+                <v-col cols="12" md="6">
+                    <v-item-group class="d-flex justify-space-between ga-3 fill-height">
+                        <v-item>
+                            <v-card width="100%" @click="setStatus('Submitted')" link class="fill-height">
+                                <!-- <v-card-title class="text-overline">New</v-card-title> -->
+                                <v-card-text>
+                                    <p class="my-1 fw-bold"><strong>New</strong></p>
+                                    <p class="mobile-callout-text mb-0">{{ countSubmitted }}</p>
+                                </v-card-text>
+                            </v-card>
+                            <v-card width="100%" @click="setStatus('In Progress')" link class="fill-height">
+                                <!-- <v-card-title class="text-overline">In Progress</v-card-title> -->
+                                <v-card-text>
+                                    <p class="my-1 fw-bold"><strong>In Progress</strong></p>
+                                    <p class="mobile-callout-text mb-0">{{ countInProgress }}</p>
+                                </v-card-text>
+                            </v-card>
+                            <v-card width="100%" @click="setStatus('Complete')" link class="fill-height">
+                                <!-- <v-card-title class="text-overline">Complete</v-card-title> -->
+                                <v-card-text>
+                                    <p class="my-1"><strong>Complete</strong></p>
+                                    <p class="mobile-callout-text mb-0">{{ countCompleted }}</p>
+                                </v-card-text>
+                            </v-card>
+                        </v-item>
+                    </v-item-group>
                 </v-col>
             </v-row>
 
@@ -60,3 +60,9 @@ await getOrganization(route.params.id)
 countOrganization.value = organization.value
 await fetchRequestCount()
 </script>
+
+<style lang="scss" scoped>
+.mobile-callout-text {
+    font-size: 1.45rem;
+}
+</style>
