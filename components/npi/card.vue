@@ -9,8 +9,8 @@
                 <span class="text-body-2 d-block text-muted"><em>Created: {{ $filters.normalDate(request.created_at) }}</em></span>
             </v-col>
         </v-row>
-        <h3>{{ request.title }}</h3>
-        <p>{{ request.description }}</p>
+        <h3>{{ request.title ?? request.original_title }}</h3>
+        <p>{{ request.description ?? request.citation }}</p>
         <v-divider class="mb-4"></v-divider>
         <div class="d-flex align-center justify-start">
             <v-dialog v-model="deleteRequestDialog" max-width="500">
@@ -37,6 +37,8 @@
 
 <script setup>
 const props = defineProps(['request'])
+const emit = defineEmits(['deleted'])
+
 const { request: managedRequest, deleteRequest } = useManageUriRequest()
 
 const deleteRequestDialog = ref(false)
@@ -60,5 +62,6 @@ async function deleteNpi() {
     managedRequest.value = props.request
     await deleteRequest()
     deleteRequestDialog.value = false
+    emit('deleted')
 }
 </script>

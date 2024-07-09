@@ -8,11 +8,11 @@ export function useFetchUriRequests() {
     const limit = ref(30)
 
     async function fetchUserUriRequests() {
-        const { data, error } = await supabase.from('requests_prospective')
+        const { data, error } = await supabase.from('requests')
             .select(`*`)
             .order('created_at', { ascending: false })
             .eq('user_id', user.value.id)
-            .eq('converted', false)
+            .is('repository_id', null)
             .eq('deleted', false)
             .range((page.value - 1) * 30, limit.value)
 
@@ -24,13 +24,13 @@ export function useFetchUriRequests() {
     }
 
     async function fetchAllUriRequests() {
-        const { data, error } = await supabase.from('requests_prospective')
+        const { data, error } = await supabase.from('requests')
             .select(`
                 *,
                 user (*)
             `)
             .order('created_at', { ascending: false })
-            .eq('converted', false)
+            .is('repository_id', null)
             .eq('deleted', false)
             .range((page.value - 1) * 30, limit.value)
 
@@ -43,11 +43,11 @@ export function useFetchUriRequests() {
 
 
     async function countUriRequests() {
-        const { count, error } = await supabase.from('requests_prospective')
+        const { count, error } = await supabase.from('requests')
             .select('*', { count: 'exact', head: true })
             .eq('user_id', user.value.id)
             .eq('deleted', false)
-            .eq('converted', false)
+            .is('repository_id', null)
 
         if ( !error ) {
             requestCount.value = count

@@ -21,7 +21,10 @@
         </template>
 
         <template v-else>
-            <requests-card :request="request" v-for="request in requests" :key="request.id"></requests-card>
+            <template v-for="request in requests" :key="request.id">
+                <requests-card :request="request" v-if="request.repository"></requests-card>
+                <npi-card :request="request" v-else @deleted="onModelChange"></npi-card>
+            </template>
         </template>
         
 

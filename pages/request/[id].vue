@@ -26,11 +26,15 @@
                         </v-row>
                         <v-row>
                             <v-col cols="12" md="3"><h3>Requested To</h3></v-col>
-                            <v-col cols="12" md="9">
+                            <v-col cols="12" md="9" v-if="request.repository">
                                 <p class="mb-0"><strong>{{ request.repository.name }} - {{ request.repository.organization.name }}</strong></p>
                                 <p class="mb-0">{{ request.repository.address1 }}</p>
                                 <p class="mb-0">{{ request.repository.address2 }}</p>
                                 <p class="mb-0">{{ request.repository.city }}, {{ request.repository.state }} {{ request.repository.zip }} {{ request.repository.country_code }}</p>
+                            </v-col>
+                            <v-col cols="12" md="9" v-else>
+                                <p class="mb-0"><strong>{{ request.repository_name }}</strong></p>
+                                <p class="mb-0">{{ request.repository_location }}</p>
                             </v-col>
                         </v-row>
                     </v-sheet>
@@ -131,6 +135,9 @@
                 <v-card-text v-if="isCancelled">
                     <p>This request has been cancelled. No further actions will be available.</p>
                 </v-card-text>
+                <v-card-text v-if="isUnassigned">
+                    <p>This request is awaiting an assignment from the Sourcery team.</p>
+                </v-card-text>
             </v-card>
 
             <div class="my-6" v-if="config.public.SOURCERY_ENV === 'local'">
@@ -144,7 +151,7 @@
 const config = useRuntimeConfig()
 const { 
     request, requestLabel,
-    isSubmitted, isInProgress, isCompleted, isArchived, isReported, isCancelled,
+    isSubmitted, isInProgress, isCompleted, isArchived, isReported, isCancelled, isUnassigned,
     canService,
     fetchRequest
 } = useFetchRequest()

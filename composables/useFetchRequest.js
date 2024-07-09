@@ -73,6 +73,14 @@ export function useFetchRequest(req = null) {
         return request.value.status.name === 'Archived' ?? false
     })
 
+    const isUnassigned = computed(() => {
+        return request.value.status.name === 'Unassigned' ?? false
+    })
+
+    const submittedDate = computed(() => {
+        return request.value.request_events.find(event => event.status.name === 'Submitted')?.created_at ?? null
+    })
+
     const confirmedDate = computed(() => {
         return request.value.request_events.find(event => event.status.name === 'In Progress')?.created_at ?? null 
     })
@@ -94,7 +102,7 @@ export function useFetchRequest(req = null) {
     })
 
     const canService = computed(() => {
-        return userRepos?.value.some(repo => repo.id === request.value.repository.id) ?? false
+        return userRepos?.value.some(repo => repo.id === request.value.repository?.id) ?? false
     })
 
     const isReported = computed(() => {
@@ -112,6 +120,7 @@ export function useFetchRequest(req = null) {
         isCompleted,
         isArchived,
         isCancelled,
+        isUnassigned,
         isReported,
         confirmedDate,
         completedDate,

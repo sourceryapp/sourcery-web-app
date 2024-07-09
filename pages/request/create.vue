@@ -46,10 +46,10 @@
 
                         <v-alert color="error" icon="$error" :text="requestFormError" class="mb-4" v-if="requestFormError"></v-alert>
 
-                        <v-card v-if="requestFields.customRepository" title="Requesting from Unregistered Institution" class="mb-5">
+                        <v-card v-if="requestFields.customRepository" title="A Note on Requests" class="mb-5">
                             <v-card-text>
-                                <p>If the institution you're looking for is not already a registered user of Sourcery, our team will reach out to the institution to let them know that they have a request waiting. If they choose to fulfill the request through Sourcery, they will create an account and you will see your request status go to “in-progress”. Once the repository has fulfilled the request, you will receive your documents through the app.</p>
-                                <p>If an institution prefers not to fulfill the request through Sourcery, your request will not be fulfilled and will remain as “pending” on your dashboard. There is also a chance the repository will contact you directly via email.</p>
+                                <p>If the institution you're looking for is not already a registered user of Sourcery, our team will reach out to the institution to let them know that they have a request waiting. If they choose to fulfill the request through Sourcery, they will create an account and you will see your request status go to "In Progress". Once the repository has fulfilled the request, you will receive your documents through the app.</p>
+                                <p>If an institution prefers to not fulfill the request through Sourcery, your request will not be fulfilled and will remain as "pending" on your dashboard. There is also a chance the repository will contact you directly via email.</p>
                             </v-card-text>
                         </v-card>
 

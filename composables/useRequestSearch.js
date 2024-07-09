@@ -29,6 +29,12 @@ export function useRequestSearch() {
             : [])
     const order = ref(route.query.order || defaultSort.value)
 
+    let requests_query = `
+            *,
+            request_clients (*),
+            request_vendors (*)
+        `;
+
     // Loading & debounce state
     const loading = ref(false)
     const queuedJob = ref(null)
@@ -37,16 +43,9 @@ export function useRequestSearch() {
         loading.value = true
 
         // Chaining multiple OR statements from referenced/joined postgres is tricky (and hard to accomplish with supabase-js) so instead we filter the joined results and then OR the existence of them or not, with any core table search filters.
-        let query = supabase.from('requests').select(`
-            *,
-            status (*),
-            repository:repositories!inner (
-                *,
-                organization:organizations!inner (*)
-            ),
-            request_clients (*),
-            request_vendors (*)
-        `).range(0, limit.value)
+        let query = supabase.from('requests').select(getRequestsQuery())
+            .range(0, limit.value)
+            .neq('deleted', true)
 
         // Only search on requests that are owned by the requesting user.
         if ( owned.value ) {
@@ -132,6 +131,25 @@ export function useRequestSearch() {
         queuedJob.value = setTimeout(() => {
             fetchRequests()
         }, debounceMilliseconds.value)
+    }
+
+
+    // In the case of an org dashboard - we need an inner join.
+    // Otherwise, we can ignore the inner join in order to show 'unassigned' requests.
+    function getRequestsQuery() {
+        let requests_query = '*, request_clients (*),request_vendors (*)'
+
+        if ( selectedStatus.value && selectedStatus.value.length ) {
+            requests_query += ',status!inner (*)'
+        } else {
+            requests_query += ',status (*)'
+        }
+
+        if ( organizationId.value ) {
+            return requests_query + ',repository:repositories!inner (*, organization:organizations!inner (*))'
+        } else {
+            return requests_query + `repository:repositories (*, organization:organizations (*))`
+        }
     }
 
 
