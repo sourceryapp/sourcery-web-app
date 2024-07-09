@@ -24,7 +24,7 @@
                         <td>{{ $filters.normalDate(req.created_at) }}</td>
                         <td>{{ req.user.name || req.user.email }}</td>
                         <td>{{ req.repository_location }}</td>
-                        <td>{{ req.title }}</td>
+                        <td>{{ req.original_title }}</td>
                         <td>
                             <v-btn color="primary" size="small" class="me-2" :to="`/admin/npi/${req.id}`" >View</v-btn>
                             <v-btn color="error" size="small" variant="outlined" @click="deleteUri(req)">Delete</v-btn>
