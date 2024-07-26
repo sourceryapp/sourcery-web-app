@@ -44,7 +44,9 @@
                         <p class="text-muted text-subtitle mb-6"><em>A Plugin to Generate Sourcery Requests from Resources</em></p>
                     </v-col>
                     <v-col cols="12" md="6">
-                        <v-img src="~/assets/ArchivesSpace-Logo.png" width="80%"></v-img>
+                        <div class="pa-2 bg-white">
+                            <v-img src="~/assets/ArchivesSpace-Logo.png" width="80%" class="bg-white"></v-img>
+                        </div>
                     </v-col>
                 </v-row>
                 

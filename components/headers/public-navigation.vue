@@ -19,7 +19,7 @@
             </div>
             <v-menu>
                 <template v-slot:activator="{ props }">
-                    <v-btn color="primary" v-bind="props" variant="text" icon="mdi-menu" class="d-flex d-md-none"></v-btn>
+                    <v-btn color="white" v-bind="props" variant="text" icon="mdi-menu" class="d-flex d-md-none"></v-btn>
                 </template>
                 <v-list dense nav>
                     <v-list-item
