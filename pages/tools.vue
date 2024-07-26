@@ -9,22 +9,34 @@
 
         <div class="bg-surface-variant py-12">
             <v-container>
+                <h2 class="text-h4 mb-2">Mobile App</h2>
+                <p class="text-muted text-subtitle mb-6"><em>Find us in the Google Play Store</em></p>
+                <p>
+                The Sourcery mobile app allows you to request scans of archival materials from your phone or tablet, and can be found on the Google Play Store for Android today. <em>Sourcery will be available on iOS in the future.</em></p>
+                <div class="">
+                    <IconsGooglePlay />
+                </div>
+            </v-container>
+        </div>
+
+        <div class="py-12">
+            <v-container>
                 <h2 class="text-h4 mb-2">Bookmarklet</h2>
                 <p class="text-muted text-subtitle mb-6"><em>Convert Any Site to a Request</em></p>
                 <p class="mb-6">
                     Sourcery's bookmarklet allows you to request a scan of any page you're viewing with a single click. Just drag the Sourcery bookmarklet to your browser's bookmarks bar, navigate to the page you want to request a scan of, and click the bookmarklet. Sourcery will automatically scaffold a request for the page you're viewing and get you one click away from submission.
                 </p>
 
-                <div class="d-flex align-items-center">
-                    <v-btn href="javascript:!function(t,n){let o=new URL(&quot;https://gvhzhuifsgdcpwmkjboy.supabase.co/functions/v1/translate&quot;);o.searchParams.append(&quot;url&quot;,n),/^https?:\/\//.test(n)?window.open(o.toString(),&quot;_blank&quot;):alert(&quot;The Sourcery Bookmarklet currently only works on http and https URLs.&quot;)}(0,window.location.href);" color="primary">Request with Sourcery!</v-btn>
-                    <span class="text-h5 ms-4"><v-icon class="me-2">mdi-arrow-left</v-icon>Drag me to your Bookmarks Bar</span>
+                <div class="d-flex flex-column flex-md-row align-items-center">
+                    <v-btn class="mb-2" href="javascript:!function(t,n){let o=new URL(&quot;https://gvhzhuifsgdcpwmkjboy.supabase.co/functions/v1/translate&quot;);o.searchParams.append(&quot;url&quot;,n),/^https?:\/\//.test(n)?window.open(o.toString(),&quot;_blank&quot;):alert(&quot;The Sourcery Bookmarklet currently only works on http and https URLs.&quot;)}(0,window.location.href);" color="primary">Request with Sourcery!</v-btn>
+                    <span class="text-h5 ms-4"><v-icon class="me-2 d-none d-md-inline">mdi-arrow-left</v-icon><v-icon class="me-2 d-md-none">mdi-arrow-up</v-icon>Drag me to your Bookmarks Bar</span>
                 </div>
                 
             </v-container>
         </div>
 
 
-        <div class="py-12">
+        <div class="bg-surface-variant py-12">
             <v-container>
                 <h2 class="text-h4 mb-2">ArchivesSpace</h2>
                 <p class="text-muted text-subtitle mb-6"><em>A Plugin to Generate Sourcery Requests from Resources</em></p>
@@ -38,7 +50,7 @@
             </v-container>
         </div>
 
-        <div class="bg-surface-variant py-12">
+        <div class="py-12">
             <v-container>
                 <h2 class="text-h4 mb-2">HTML Buttons</h2>
                 <p class="text-muted text-subtitle mb-6"><em>The Easiest Way to Link Users to Sourcery</em></p>
@@ -66,7 +78,7 @@
             </v-container>
         </div>
 
-        <div class="py-12">
+        <div class="bg-surface-variant py-12">
             <v-container>
                 <h2 class="text-h4 mb-2">Tropy<v-badge content="BETA" inline></v-badge></h2>
                 <p class="text-muted text-subtitle mb-6"><em>Import Records to Your Local Tropy Install</em></p>

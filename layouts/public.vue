@@ -25,8 +25,7 @@
                     </v-row>
 
                     <div class="d-flex justify-center align-center my-3">
-                        <v-btn href="https://www.instagram.com/sourcery_app/" size="x-large" variant="text" color="primary" icon="mdi-instagram" border="none" class="mx-2"></v-btn>
-                        <v-btn href="https://www.facebook.com/SourceryApp" size="x-large" variant="text" color="primary" icon="mdi-facebook" border="none" class="mx-2"></v-btn>
+                        <IconsGooglePlay :width="150" />
                         <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" border="none" class="mx-2"></v-btn>
                     </div>
 
