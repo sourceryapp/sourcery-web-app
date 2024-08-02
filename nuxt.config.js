@@ -18,7 +18,6 @@ const publicPaths = [
     '/join-us',
     '/roadmap',
     '/email/reset',
-    '/brand-resources',
     '/tools',
     '/feedback'
 ]

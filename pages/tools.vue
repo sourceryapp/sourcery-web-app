@@ -24,7 +24,7 @@
                 <h2 class="text-h4 mb-2">Bookmarklet</h2>
                 <p class="text-muted text-subtitle mb-6"><em>Convert Any Site to a Request</em></p>
                 <p class="mb-6">
-                    Sourcery's bookmarklet allows you to request a scan of any page you're viewing with a single click. Just drag the Sourcery bookmarklet to your browser's bookmarks bar, navigate to the page you want to request a scan of, and click the bookmarklet. Sourcery will automatically scaffold a request for the page you're viewing and get you one click away from submission.
+                    Sourcery's bookmarklet allows you to request a scan of anything you find online with a single click. Just drag the Sourcery bookmarklet to your browser's bookmarks bar, navigate to the page describing the thing you want (e.g. a finding aid entry or catalog record for an undigitized document), and click the bookmarklet. Sourcery will automatically create a request for the page you're viewing, complete with catalog information. All you need to do is click "submit" to send your request to an archivist.
                 </p>
 
                 <div class="d-flex flex-column flex-md-row align-items-center">

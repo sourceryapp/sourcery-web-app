@@ -151,7 +151,7 @@ const secondaryNavigationItems = ref([
     { title: 'Settings', icon: 'mdi-cog', link: '/profile/settings' },
 ])
 const bottomNavigationItems = ref([
-    { title: 'Brand Resources', link: '/brand-resources' },
+    { title: 'Tools & Integrations', link: '/tools' },
     { title: 'Privacy Policy', link: '/privacy' },
     { title: 'Terms and Conditions', link: '/terms' }
 ])

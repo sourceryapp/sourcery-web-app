@@ -46,6 +46,7 @@ const menuItems = ref([
     { title: 'Home', to: '/', icon: 'mdi-home', desktop: false },
     { title: 'About', to: '/about', icon: 'mdi-information', desktop: true },
     { title: 'Roadmap', to: '/roadmap', icon: 'mdi-chart-timeline-variant', desktop: true },
+    { title: 'Tools', to: '/tools', icon: 'mdi-wrench', desktop: true },
     { title: 'Team', to: '/team', icon: 'mdi-account-multiple', desktop: true },
     { title: 'Blog', to: 'https://sourceryapp.substack.com/', icon: 'mdi-rss', desktop: true, external: true },
     { title: 'Dashboard', to: '/dashboard', icon: 'mdi-view-dashboard', desktop: true, auth: true, variant: 'outlined' },
