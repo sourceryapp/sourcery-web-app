@@ -4,23 +4,29 @@
         <v-container>
           <div>
             <h1 class="text-h3 font-weight-medium text-center my-16">About Sourcery</h1>
-            <p class="my-16 readable-text-width mx-auto">Sourcery—an open source, not-for-profit, web-based application for providing remote access to archival documents—aims to improve how researchers request document scans from archivists and how archivists fulfill those requests. Existing means of providing remote access to non-digitized sources create confusion for researchers and extra work for already stretched archivists. Sourcery aims to remedy these problems, creating new and more efficient pathways of computer-mediated research and systems to facilitate and properly account for and fund the often unaccounted and under-resourced labor of archivists in providing reference scans. At the same time, Sourcery recognizes that much archival research depends on close contact between researchers and archivists. By providing more effective online access, Sourcery ultimately aims to free up both researchers and archivists to focus on the sustained, mutual journeys of intellectual discovery at the heart of archival research.</p>
+            <v-img src="/img/landing-illustrations/undraw_faq_rjoy.svg" alt="" :width="280" class="mx-auto"></v-img>
+            <p class="my-16 readable-text-width mx-auto">Sourcery—an open source, not-for-profit, web-based application for providing remote access to archival documents—aims to improve how researchers request document scans from archivists and how archivists fulfill those requests. Existing means of providing remote access to non-digitized sources create confusion for researchers and extra work for already stretched archivists. Sourcery aims to remedy these problems, creating new and more efficient pathways of computer-mediated research and systems to facilitate and properly account for and fund the often unaccounted and under-resourced labor of archivists in providing reference scans.<br><br>At the same time, Sourcery recognizes that much archival research depends on close contact between researchers and archivists. By providing more effective online access, Sourcery ultimately aims to free up both researchers and archivists to focus on the sustained, mutual journeys of intellectual discovery at the heart of archival research.</p>
           </div>
         </v-container>
 
         <div class="py-10 bg-surface-variant">
           <v-container>
             <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">For Researchers</h2>
-            <div class="readable-text-width mx-auto">
-              <h3 class="text-primary readable-text-width mx-auto mb-2">All Your Requests in One Place</h3>
-              <p class="mb-8">A single source for requesting reference scans from any archive.</p>
+            <v-row align="center">
+                <v-col cols="12" md="7">
+                    <h3 class="text-primary  mb-2">All Your Requests in One Place</h3>
+                    <p class="mb-8">A single source for requesting reference scans from any archive.</p>
 
-              <h3 class="text-primary mb-2">Streamlined Workflow</h3>
-              <p class="mb-8">Keep trafck of your research requests and communicate with archivists through the in-app chat feature.</p>
+                    <h3 class="text-primary mb-2">Streamlined Workflow</h3>
+                    <p class="mb-8">Keep trafck of your research requests and communicate with archivists through the in-app chat feature.</p>
 
-              <h3 class="text-primary mb-2">Better for Your Wallet and the Environment</h3>
-              <p class="mb-8">Reduce your travel costs and carbon footprint by doing research, even with undigitized collections, digitally.</p>
-            </div>
+                    <h3 class="text-primary mb-2">Better for Your Wallet and the Environment</h3>
+                    <p class="mb-8">Reduce your travel costs and carbon footprint by doing research, even with undigitized collections, digitally.</p>
+                </v-col>
+                <v-col cols="12" md="5">
+                    <v-img src="/img/landing-illustrations/undraw_researching_22gp.svg" alt="" :width="280" class="mx-auto"></v-img>
+                </v-col>
+            </v-row>
           </v-container>
         </div>
 
@@ -28,31 +34,36 @@
         <div class="py-10">
           <v-container>
             <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">For Archivists</h2>
-            <div class="readable-text-width mx-auto">
-              <h3 class="text-primary mb-2">Optimize your Research Requests Workflow</h3>
-              <p class="mb-8">Manage requests for document scans and other researcher requests on any device from a simple, intuitive dashboard. Fulfill requests directly from your phone or tablet or by snapping a photo in the stacks or upload a pdf, jpg, TIFF, or other file from your computer.</p>
+            <v-row align="center">
+                <v-col cols="12" md="7" order-md="2">
+                    <h3 class="text-primary mb-2">Optimize your Research Requests Workflow</h3>
+                    <p class="mb-8">Manage requests for document scans and other researcher requests on any device from a simple, intuitive dashboard. Fulfill requests directly from your phone or tablet or by snapping a photo in the stacks or upload a pdf, jpg, TIFF, or other file from your computer.</p>
 
-              <h3 class="text-primary mb-2">Communicate Directly</h3>
-              <p class="mb-8">Ask and answer questions and make clarifications through the in-app, per-request Messaging feature. Declutter your email inbox and streamline correspondence right in the app.</p>
+                    <h3 class="text-primary mb-2">Communicate Directly</h3>
+                    <p class="mb-8">Ask and answer questions and make clarifications through the in-app, per-request Messaging feature. Declutter your email inbox and streamline correspondence right in the app.</p>
 
-              <h3 class="text-primary mb-2">Access Rich Usage Analytics</h3>
-              <p class="mb-8">Share and allocate research requests among appropriate staff and keep track of who's doing what. See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
-            </div>
+                    <h3 class="text-primary mb-2">Access Rich Usage Analytics</h3>
+                    <p class="mb-8">Share and allocate research requests among appropriate staff and keep track of who's doing what. See your institution's average turnaround time, most common file type requests, geographical areas of requests, new and repeat requesters, average file size, and more from the Institutional Analytics feature.</p>
+                </v-col>
+                <v-col cols="12" md="5" order-md="1">
+                    <v-img src="/img/landing-illustrations/undraw_folder_39kl.svg" alt="" :width="280" class="mx-auto"></v-img>
+                </v-col>
+            </v-row>
           </v-container>
         </div>
 
 
         <div class="py-10 bg-surface-variant">
           <v-container>
-            <h1 class="text-h3 font-weight-medium text-center mb-10">Meet the Team</h1>
+            <h1 class="text-h3 font-weight-medium text-center mb-16">Meet the Team</h1>
             <v-row>
-                <v-col cols="12" md="8" offset-md="2">
+                <v-col cols="12" sm="10" offset-sm="1">
                     <template v-for="member in members">
-                        <v-row align="center">
-                            <v-col cols="6" md="3">
+                        <v-row>
+                            <v-col cols="6" sm="3">
                                 <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" />
                             </v-col>
-                            <v-col cols="12" md="9">
+                            <v-col cols="12" sm="9">
                                 <h2 class="text-h4">{{ member.name }}</h2>
                                 <p class="text-h6 text-primary">{{ member.title }}</p>
                                 <p>{{ member.bio }}</p>
@@ -63,11 +74,11 @@
                 </v-col>
             </v-row>
 
-            <v-row>
-                <v-col cols="12" md="8" offset-md="2">
+            <v-row class="pb-10">
+                <v-col cols="12" sm="10" offset-sm="1">
                     <h2 class="text-h4 mb-8">Consulting Partners</h2>
                     <v-row>
-                        <v-col cols="6" md="4" v-for="member in alumni">
+                        <v-col cols="12" sm="6" md="4" v-for="member in alumni">
                             <h2 class="text-h6">{{ member.name }}</h2>
                             <p class="text-primary">{{ member.title }}</p>
                         </v-col>
