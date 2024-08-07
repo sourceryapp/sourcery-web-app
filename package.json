@@ -1,6 +1,6 @@
 {
   "name": "sourcery-web-app",
-  "version": "1.0.5",
+  "version": "1.0.11",
   "private": true,
   "scripts": {
     "dev": "nuxi dev",
@@ -45,7 +45,7 @@
     "typescript": "^5.3.3",
     "vite-plugin-vuetify": "^2.0.1",
     "vue-tsc": "^1.8.27",
-    "vuetify": "^3.5.3"
+    "vuetify": "^3.6.0"
   },
   "description": "Sourcery is a not-for-profit service that gives researchers access to documents that can't be found online by paying other researchers to find them.",
   "author": "Sourcery <sourceryapp@gmail.com>",

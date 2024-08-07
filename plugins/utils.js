@@ -72,7 +72,7 @@ export default defineNuxtPlugin(nuxtApp => {
              * Assumes USD
              */
             currencyFormat: (cents, curr = 'USD') => {
-                console.log(__filename, cents)
+                // console.log(__filename, cents)
                 const currency = new Intl.NumberFormat('en-US', {
                     style: 'currency',
                     currency: curr
