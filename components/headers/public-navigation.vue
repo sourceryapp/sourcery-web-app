@@ -44,7 +44,7 @@ const user = useSupabaseUser()
 
 const menuItems = ref([
     { title: 'Home', to: '/', icon: 'mdi-home', desktop: false },
-    { title: 'About & Team', to: '/about', icon: 'mdi-information', desktop: true },
+    { title: 'About', to: '/about', icon: 'mdi-information', desktop: true },
     { title: 'Roadmap', to: '/roadmap', icon: 'mdi-chart-timeline-variant', desktop: true },
     { title: 'Tools', to: '/tools', icon: 'mdi-wrench', desktop: true },
     { title: 'Blog', to: 'https://sourceryapp.substack.com/', icon: 'mdi-rss', desktop: true, external: true },
