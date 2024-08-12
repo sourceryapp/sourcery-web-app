@@ -154,6 +154,17 @@ export default defineNuxtConfig({
       height: '5px'
   },
 
+  /*
+   ** Router
+   */
+  // router: {
+  //     middleware: [
+  //         'reset-password',
+  //         'auth-guard',
+  //         'archiveSpace'
+  //     ]
+  // },
+
   modules: [
       (_options, nuxt) => {
           nuxt.hooks.hook('vite:extendConfig', (config) => {
@@ -257,5 +268,5 @@ export default defineNuxtConfig({
       }
   },
 
-  compatibilityDate: '2024-08-06'
+  compatibilityDate: '2024-08-12'
 })
