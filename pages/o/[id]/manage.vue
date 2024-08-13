@@ -1,51 +1,40 @@
 <template>
     <div id="page-occupation-id">
         <v-container>
-            <h1>Organization Settings</h1>
-            <div>{{ organization }}</div>
-            <p>Requests Bar Graph</p>
-            <p>Time for Request Completion Average?</p>
+            <h1 class="mb-10">Organization Settings</h1>
 
             <v-row class="mb-5">
-                <v-col cols="12" md="7">
-                    <v-sparkline
-                        type="bar"
-                        :value="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-                        :fill="true"
-                        :gradient="['red']"
-                        :auto-line-width="true"
-                        :height="100"
-                        :line-width="2"
-                        auto-draw
-                    ></v-sparkline>
+                <v-col cols="12" lg="8">
+                    <h3 class="mb-4">Requests Created This Year</h3>
+                    <div id="orgPlot"></div>
                 </v-col>
-                <v-col cols="12" md="5">
+                <v-col cols="12" lg="4">
                     <v-card title="Request Summary">
                         <v-table>
                             <tbody>
                                 <tr>
                                     <th scope="row">Total Requests</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalRequests }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total Submitted</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalSubmitted }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total Picked-Up</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalPickedUp }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total Completed</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalCompleted }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total Archived</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalArchived }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total Cancelled</th>
-                                    <td>###</td>
+                                    <td>{{ organizationStats.totalCancelled }}</td>
                                 </tr>
                             </tbody>
                         </v-table>
@@ -55,7 +44,7 @@
 
             <v-card title="Manage Appearance" class="pa-2">
                 <v-card-text>
-                    <v-form @submit="saveAddress">
+                    <v-form @submit="updateOrganization">
                         <v-row>
                             <v-col cols="12" sm="6"><v-text-field v-model="organization.name" label="Name"></v-text-field></v-col>
                             <v-col cols="12" sm="6"><v-text-field v-model="organization.address" label="Address"></v-text-field></v-col>
@@ -71,12 +60,91 @@
 </template>
 
 <script setup>
+import * as Plotly from 'plotly.js-dist'
 const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
+const supabase = useSupabaseClient()
 
 await getOrganization(route.params.id)
 
-function saveAddress() {
-    console.log('saving')
+const organizationStats = ref({
+    totalRequests: 0,
+    totalSubmitted: 0,
+    totalPickedUp: 0,
+    totalCompleted: 0,
+    totalArchived: 0,
+    totalCancelled: 0,
+})
+
+const organizationRequestGraphStats = ref([])
+
+function plotGraph() {
+    const x_axis = organizationRequestGraphStats.value.map(data => data.month)
+    const y_axis = organizationRequestGraphStats.value.map(data => data.count)
+    Plotly.newPlot( document.getElementById('orgPlot'), [{
+            x: x_axis,
+            y: y_axis,
+            'type': 'bar'
+        }],
+        {   
+            paper_bgcolor: 'transparent',
+            plot_bgcolor: 'transparent',
+            margin: { t: 0 },
+            autosize: true,
+            showlegend: false,
+            colorway: ['#654EA3'],
+        },
+        {
+            displayModeBar: false
+        }
+    );
 }
+
+function getBaseCountQuery() {
+    return supabase
+        .from('requests')
+        .select('id', { count: 'exact', head: true })
+        .in('repository_id', organization.value.repositories.map(repo => repo.id));
+}
+
+async function fetchOrganizationStats() {
+    const { count: totalRequests, error: totalRequestsError } = await getBaseCountQuery();
+    const { count: totalSubmitted, error: totalSubmittedError } = await getBaseCountQuery().eq('status_id', 1);
+    const { count: totalPickedUp, error: totalPickedUpError } = await getBaseCountQuery().eq('status_id', 2);
+    const { count: totalCompleted, error: totalCompletedError } = await getBaseCountQuery().eq('status_id', 3);
+    const { count: totalArchived, error: totalArchivedError } = await getBaseCountQuery().eq('status_id', 4);
+    const { count: totalCancelled, error: totalCancelledError } = await getBaseCountQuery().eq('status_id', 5);
+
+    organizationStats.value = {
+        totalRequests,
+        totalSubmitted,
+        totalPickedUp,
+        totalCompleted,
+        totalArchived,
+        totalCancelled,
+    }
+}
+
+
+async function fetchGraphStats() {
+    const { data, error } = await supabase
+        .rpc("graph_organization_requests_by_month", { org_id: organization.value.id });
+
+    organizationRequestGraphStats.value = data;
+}
+
+async function updateOrganization() {
+    const { data, error } = await supabase
+        .from('organizations')
+        .update({
+            address: organization.value.address,
+            name: organization.value.name,
+        })
+        .eq('id', organization.value.id);
+}
+
+await fetchOrganizationStats()
+await fetchGraphStats()
+
+onMounted(plotGraph)
 </script>

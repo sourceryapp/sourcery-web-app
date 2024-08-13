@@ -15,7 +15,7 @@ export default function useOrganizations() {
 
     const organization = ref()
     async function getOrganization(id) {
-        const { data, error } = await supabase.from('organizations').select('*')
+        const { data, error } = await supabase.from('organizations').select('*, repositories (*)')
             .eq('id', id)
             .single()
 
