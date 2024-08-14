@@ -116,6 +116,9 @@ function plotGraph() {
             autosize: true,
             showlegend: false,
             colorway: ['#654EA3'],
+            yaxis: {
+                minallowed: 0
+            }
         },
         {
             displayModeBar: false
