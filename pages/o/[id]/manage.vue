@@ -3,47 +3,49 @@
         <v-container>
             <h1 class="mb-10">Organization Settings</h1>
 
-            <v-row class="mb-5">
-                <v-col cols="12" lg="8">
-                    <h3>Requests Submitted This Year</h3>
-                    <p class="mb-4"><em>by Date Created</em></p>
-                    <div id="orgPlot"></div>
-                </v-col>
-                <v-col cols="12" lg="4">
-                    <v-card title="Request Summary">
-                        <v-table>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Total Requests</th>
-                                    <td>{{ organizationStats.totalRequests }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Total Submitted</th>
-                                    <td>{{ organizationStats.totalSubmitted }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Total Picked-Up</th>
-                                    <td>{{ organizationStats.totalPickedUp }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Total Completed</th>
-                                    <td>{{ organizationStats.totalCompleted }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Total Archived</th>
-                                    <td>{{ organizationStats.totalArchived }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Total Cancelled</th>
-                                    <td>{{ organizationStats.totalCancelled }}</td>
-                                </tr>
-                            </tbody>
-                        </v-table>
-                    </v-card>
-                </v-col>
-            </v-row>
+            <v-card title="Request Summary" class="pa-2 mb-15">
+                <v-card-text>
+                    <v-row class="mb-5">
+                        <v-col cols="12" lg="8">
+                            <div id="orgPlot" class="mt-5"></div>
+                        </v-col>
+                        <v-col cols="12" lg="4">
+                            <v-card variant="text">
+                                <v-table>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Total Requests</th>
+                                            <td>{{ organizationStats.totalRequests }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Submitted</th>
+                                            <td>{{ organizationStats.totalSubmitted }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Picked-Up</th>
+                                            <td>{{ organizationStats.totalPickedUp }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Completed</th>
+                                            <td>{{ organizationStats.totalCompleted }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Archived</th>
+                                            <td>{{ organizationStats.totalArchived }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Total Cancelled</th>
+                                            <td>{{ organizationStats.totalCancelled }}</td>
+                                        </tr>
+                                    </tbody>
+                                </v-table>
+                            </v-card>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
 
-            <v-card title="Manage Appearance" class="pa-2">
+            <v-card title="Manage Appearance" class="pa-2 mb-15">
                 <v-card-text>
                     <v-form @submit="updateOrganization">
                         <v-row>
@@ -56,15 +58,34 @@
                     </v-form>
                 </v-card-text>
             </v-card>
+
+
+            <v-card title="Active Users">
+                <v-card-text>
+                    <v-table>
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Total Requests</th>
+                                <th>Last Request Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </v-table>
+                </v-card-text>
+            </v-card>
         </v-container>
     </div>
 </template>
 
 <script setup>
 import * as Plotly from 'plotly.js-dist'
+import { useTheme } from 'vuetify'
 const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
 const supabase = useSupabaseClient()
+const theme = useTheme()
 
 await getOrganization(route.params.id)
 
@@ -83,13 +104,17 @@ function plotGraph() {
     const currentDate = new Date()
     const months = []
     const y_axis = []
+
+    // First create a set of usable months, starting with now, go back 12.
     for (let i = 0; i < 12; i++) {
         const month = currentDate.getMonth() + 1
         const year = currentDate.getFullYear()
         const date_string = `${year}-${month}`
         months.unshift(date_string)
         currentDate.setMonth(currentDate.getMonth() - 1)
-        let y_value = 0;
+
+        // Next go through the graph data from server and assign the counts to correct months, or 0 if none.
+        let y_value = 0
         for ( let j = 0; j < organizationRequestGraphStats.value.length; j++) {
             let d = new Date(organizationRequestGraphStats.value[j].month)
             let d_string = `${d.getFullYear()}-${d.getMonth() + 1}`
@@ -99,11 +124,6 @@ function plotGraph() {
         }
         y_axis.unshift(y_value)
     }
-    console.log({
-        organizationRequestGraphStats: organizationRequestGraphStats.value,
-        months,
-        y_axis
-    })
     Plotly.newPlot( document.getElementById('orgPlot'), [{
             x: months,
             y: y_axis,
@@ -118,6 +138,26 @@ function plotGraph() {
             colorway: ['#654EA3'],
             yaxis: {
                 minallowed: 0
+            },
+            title: {
+                text: 'Submitted This Year',
+                font: {
+                    size: 18,
+                    weight: 700
+                },
+                automargin: true,
+                subtitle: {
+                    text: 'by Date Created',
+                    font: {
+                        size: 14,
+                        style: 'italic'
+                    },
+                    automargin: true
+                }
+            },
+            font: {
+                color: theme.global.current.value.dark ? 'white' : 'black',
+                family: 'Barlow, Roboto, Arial, Helvetica, sans-serif'
             }
         },
         {
@@ -168,6 +208,8 @@ async function updateOrganization() {
         })
         .eq('id', organization.value.id);
 }
+
+watch(theme.global.current, plotGraph)
 
 await fetchOrganizationStats()
 await fetchGraphStats()
