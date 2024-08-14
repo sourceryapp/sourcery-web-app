@@ -5,7 +5,8 @@
 
             <v-row class="mb-5">
                 <v-col cols="12" lg="8">
-                    <h3 class="mb-4">Requests Created This Year</h3>
+                    <h3>Requests Submitted This Year</h3>
+                    <p class="mb-4"><em>by Date Created</em></p>
                     <div id="orgPlot"></div>
                 </v-col>
                 <v-col cols="12" lg="4">
@@ -79,10 +80,32 @@ const organizationStats = ref({
 const organizationRequestGraphStats = ref([])
 
 function plotGraph() {
-    const x_axis = organizationRequestGraphStats.value.map(data => data.month)
-    const y_axis = organizationRequestGraphStats.value.map(data => data.count)
+    const currentDate = new Date()
+    const months = []
+    const y_axis = []
+    for (let i = 0; i < 12; i++) {
+        const month = currentDate.getMonth() + 1
+        const year = currentDate.getFullYear()
+        const date_string = `${year}-${month}`
+        months.unshift(date_string)
+        currentDate.setMonth(currentDate.getMonth() - 1)
+        let y_value = 0;
+        for ( let j = 0; j < organizationRequestGraphStats.value.length; j++) {
+            let d = new Date(organizationRequestGraphStats.value[j].month)
+            let d_string = `${d.getFullYear()}-${d.getMonth() + 1}`
+            if (d_string === date_string) {
+                y_value = organizationRequestGraphStats.value[j].count
+            }
+        }
+        y_axis.unshift(y_value)
+    }
+    console.log({
+        organizationRequestGraphStats: organizationRequestGraphStats.value,
+        months,
+        y_axis
+    })
     Plotly.newPlot( document.getElementById('orgPlot'), [{
-            x: x_axis,
+            x: months,
             y: y_axis,
             'type': 'bar'
         }],
