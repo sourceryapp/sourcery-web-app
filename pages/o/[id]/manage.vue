@@ -60,7 +60,7 @@
             </v-card>
 
 
-            <v-card title="Active Users">
+            <v-card title="User Summary" class="pa-2 mb-15">
                 <v-card-text>
                     <v-table>
                         <thead>
@@ -68,6 +68,28 @@
                                 <th>Email</th>
                                 <th>Total Requests</th>
                                 <th>Last Request Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in organizationUserSummary">
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.total_requests }}</td>
+                                <td>{{ $filters.normalDate(user.last_request_date) }}</td>
+                            </tr>
+                        </tbody>
+                    </v-table>
+                </v-card-text>
+            </v-card>
+
+            <v-card title="Attachments Summary" class="pa-2 mb-15">
+                <v-card-text>
+                    <v-table>
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>File Size</th>
+                                <th>Uploaded By</th>
+                                <th>Uploaded Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,6 +121,7 @@ const organizationStats = ref({
 })
 
 const organizationRequestGraphStats = ref([])
+const organizationUserSummary = ref([])
 
 function plotGraph() {
     const currentDate = new Date()
@@ -199,6 +222,14 @@ async function fetchGraphStats() {
     organizationRequestGraphStats.value = data;
 }
 
+
+async function fetchUserSummary() {
+    const { data, error } = await supabase
+        .rpc("organization_user_summary", { org_id: organization.value.id });
+
+    organizationUserSummary.value = data;
+}
+
 async function updateOrganization() {
     const { data, error } = await supabase
         .from('organizations')
@@ -213,6 +244,7 @@ watch(theme.global.current, plotGraph)
 
 await fetchOrganizationStats()
 await fetchGraphStats()
+await fetchUserSummary()
 
 onMounted(plotGraph)
 </script>
