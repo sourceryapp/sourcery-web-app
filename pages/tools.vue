@@ -55,7 +55,7 @@
                 </p>
                 <p class="text-subtitle-2">*If you are a registered institution with Sourcery, you can configure this plugin to make requests directly to your management dashboard.  Contact the Sourcery team for details.</p>
                 <div class="d-flex align-items-center">
-                    <v-btn href="https://github.com/greenhousestudios/sourcery-for-archivesspace" target="_blank">Visit the Github <v-icon class="ms-2">mdi-open-in-new</v-icon></v-btn>
+                    <v-btn href="https://github.com/sourceryapp/sourcery-for-archivesspace" target="_blank">Visit the Github <v-icon class="ms-2">mdi-open-in-new</v-icon></v-btn>
                 </div>
             </v-container>
         </div>
@@ -102,7 +102,7 @@
                             Sourcery maintains a simple plugin for Tropy to help import records from completed requests.  This integration is in active development, but can be tested via the Github repository.
                         </p>
                         <div class="d-flex align-items-center">
-                            <v-btn href="https://github.com/GreenhouseStudios/sourcery-web-app/tree/master/tropy/sourcery" target="_blank">Visit the Github <v-icon class="ms-2">mdi-open-in-new</v-icon></v-btn>
+                            <v-btn href="https://github.com/sourceryapp/sourcery-web-app/tree/master/tropy/sourcery" target="_blank">Visit the Github <v-icon class="ms-2">mdi-open-in-new</v-icon></v-btn>
                         </div>
                     </v-col>
                 </v-row>
