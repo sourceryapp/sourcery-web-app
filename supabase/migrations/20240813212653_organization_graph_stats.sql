@@ -23,6 +23,7 @@ begin
   WHERE r.repository_id IN (
     SELECT repositories.id from repositories where organization_id = org_id
   )
-  GROUP BY u.id,u.email;
+  GROUP BY u.id,u.email
+  ORDER BY total_requests DESC;
 END;
 $$ LANGUAGE plpgsql security invoker;
