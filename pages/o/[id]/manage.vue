@@ -71,7 +71,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="user in organizationUserSummary">
+                            <tr v-for="(user, index) in organizationUserSummary" :key="index">
                                 <td>{{ user.email }}</td>
                                 <td>{{ user.total_requests }}</td>
                                 <td>{{ $filters.normalDate(user.last_request_date) }}</td>
@@ -86,13 +86,25 @@
                     <v-table>
                         <thead>
                             <tr>
+                                <th>Preview</th>
                                 <th>File Name</th>
                                 <th>File Size</th>
-                                <th>Uploaded By</th>
+                                <th>Uploaded To</th>
                                 <th>Uploaded Date</th>
                             </tr>
                         </thead>
                         <tbody>
+                            <tr v-for="(attachment, index) in organizationAttachmentsSummary" :key="index">
+                                <td>
+                                    <v-avatar size="80" rounded="0" :to="'/request/' + attachment.request_id">
+                                        <v-img :src="attachment.thumbnail" height="70"></v-img>
+                                    </v-avatar>
+                                </td>
+                                <td>{{ attachment.label }}</td>
+                                <td>{{ $filesize(attachment.size) }}</td>
+                                <td><NuxtLink :to="'/request/' + attachment.request_id" >{{ attachment.request_id }}</NuxtLink></td>
+                                <td>{{ $filters.normalDate(attachment.created_at) }}</td>
+                            </tr>
                         </tbody>
                     </v-table>
                 </v-card-text>
@@ -108,6 +120,7 @@ const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
 const supabase = useSupabaseClient()
 const theme = useTheme()
+const { getAttachmentPreview } = useFileList()
 
 await getOrganization(route.params.id)
 
@@ -122,6 +135,7 @@ const organizationStats = ref({
 
 const organizationRequestGraphStats = ref([])
 const organizationUserSummary = ref([])
+const organizationAttachmentsSummary = ref([])
 
 function plotGraph() {
     const currentDate = new Date()
@@ -230,6 +244,44 @@ async function fetchUserSummary() {
     organizationUserSummary.value = data;
 }
 
+async function fetchAttachmentsSummary() {
+    const { data, error } = await supabase
+        .from('attachments')
+        .select(`id, label, size, created_at, user_id, path, mime, 
+        request_id,
+        requests (
+            id,
+            repository_id,
+            repositories (
+                id,
+                organization_id,
+                organizations!inner (id)
+            )
+        ),
+        user (
+            id,
+            email
+        )`)
+        .eq('requests.repositories.organization_id', organization.value.id);
+
+    const attachment_paths = data.map(attachment => attachment.path)
+    console.log(data)
+    if ( attachment_paths.length > 0 ) {
+        const { data: signedUrlData, error: signedUrlError } = await supabase
+            .storage
+            .from('attachments')
+            .createSignedUrls(attachment_paths, 86400) // Signed for one day.
+        signedUrlData.forEach((signedUrl, index) => {
+            if ( !signedUrl.error ) {
+                data[index].url = signedUrl.signedUrl
+            }
+            data[index].thumbnail = getAttachmentPreview(data[index])
+        })
+    }
+
+    organizationAttachmentsSummary.value = data;
+}
+
 async function updateOrganization() {
     const { data, error } = await supabase
         .from('organizations')
@@ -245,6 +297,7 @@ watch(theme.global.current, plotGraph)
 await fetchOrganizationStats()
 await fetchGraphStats()
 await fetchUserSummary()
+await fetchAttachmentsSummary()
 
 onMounted(plotGraph)
 </script>
