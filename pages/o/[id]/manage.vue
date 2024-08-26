@@ -105,6 +105,9 @@
                                 <td><NuxtLink :to="'/request/' + attachment.request_id" >{{ attachment.request_id }}</NuxtLink></td>
                                 <td>{{ $filters.normalDate(attachment.created_at) }}</td>
                             </tr>
+                            <tr v-if="organizationAttachmentsSummary.length === 0">
+                                <td colspan="5" class="text-center">No Attachments Found</td>
+                            </tr>
                         </tbody>
                     </v-table>
                 </v-card-text>
@@ -249,21 +252,20 @@ async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
         .from('attachments')
         .select(`id, label, size, created_at, user_id, path, mime, 
         request_id,
-        requests (
+        requests!inner (
             id,
             repository_id,
-            repositories (
+            repositories!inner (
                 id,
-                organization_id,
-                organizations!inner (id)
+                organization_id
             )
         ),
         user (
             id,
             email
         )`)
-        .eq('requests.repositories.organization_id', organization.value.id)
         .gt('size', 0)
+        .eq('requests.repositories.organization_id', organization.value.id)
         .order('created_at', { ascending: false });
 
     const attachment_paths = data.map(attachment => attachment.path)
