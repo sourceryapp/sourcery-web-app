@@ -244,7 +244,7 @@ async function fetchUserSummary() {
     organizationUserSummary.value = data;
 }
 
-async function fetchAttachmentsSummary() {
+async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
     const { data, error } = await supabase
         .from('attachments')
         .select(`id, label, size, created_at, user_id, path, mime, 
@@ -262,10 +262,11 @@ async function fetchAttachmentsSummary() {
             id,
             email
         )`)
-        .eq('requests.repositories.organization_id', organization.value.id);
+        .eq('requests.repositories.organization_id', organization.value.id)
+        .gt('size', 0)
+        .order('created_at', { ascending: false });
 
     const attachment_paths = data.map(attachment => attachment.path)
-    console.log(data)
     if ( attachment_paths.length > 0 ) {
         const { data: signedUrlData, error: signedUrlError } = await supabase
             .storage
@@ -297,7 +298,7 @@ watch(theme.global.current, plotGraph)
 await fetchOrganizationStats()
 await fetchGraphStats()
 await fetchUserSummary()
-await fetchAttachmentsSummary()
+await fetchAttachmentsSummary({})
 
 onMounted(plotGraph)
 </script>
