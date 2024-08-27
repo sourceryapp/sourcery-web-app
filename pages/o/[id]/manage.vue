@@ -260,7 +260,7 @@ async function fetchUserSummary() {
 }
 
 async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
-    const attachment_query = `id, label, size, created_at, user_id, path, mime, 
+    const attachment_query = `id, label, size, created_at, user_id, path, mime, url,
         request_id,
         requests!inner (
             id,
@@ -298,7 +298,7 @@ async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
             .from('attachments')
             .createSignedUrls(attachment_paths, 86400) // Signed for one day.
         signedUrlData.forEach((signedUrl, index) => {
-            if ( !signedUrlError ) {
+            if ( !signedUrl.error ) {
                 data[index].url = signedUrl.signedUrl
             }
             data[index].thumbnail = getAttachmentPreview(data[index])
