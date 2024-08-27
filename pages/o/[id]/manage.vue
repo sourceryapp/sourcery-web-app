@@ -119,11 +119,18 @@
 <script setup>
 import * as Plotly from 'plotly.js-dist'
 import { useTheme } from 'vuetify'
+
+definePageMeta({
+    middleware: ['organization-owner']
+})
+
 const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
 const supabase = useSupabaseClient()
 const theme = useTheme()
 const { getAttachmentPreview } = useFileList()
+
+
 
 await getOrganization(route.params.id)
 

@@ -51,6 +51,10 @@ export function useAuthUser() {
         return authUser.value?.organizations ?? []
     })
 
+    function ownsOrg(orgId) {
+        return userOrgs.value.some(org => org.id === orgId)
+    }
+
     const userRepos = computed(() => {
         let orgs = authUser.value?.organizations ?? []
         let repos = orgs.flatMap(org => {
@@ -76,6 +80,7 @@ export function useAuthUser() {
         userRepos,
         isOrgOwner,
         fetchUserMetadata,
-        possiblyRefetch
+        possiblyRefetch,
+        ownsOrg
     }
 }

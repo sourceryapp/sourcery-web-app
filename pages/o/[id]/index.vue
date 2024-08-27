@@ -46,6 +46,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+    middleware: ['organization-owner']
+})
+
 const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
 const { organization: countOrganization, countSubmitted, countInProgress, countCompleted, fetchRequestCount } = useRequestCount()
