@@ -298,7 +298,7 @@ async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
             .from('attachments')
             .createSignedUrls(attachment_paths, 86400) // Signed for one day.
         signedUrlData.forEach((signedUrl, index) => {
-            if ( !signedUrl.error ) {
+            if ( !signedUrlError ) {
                 data[index].url = signedUrl.signedUrl
             }
             data[index].thumbnail = getAttachmentPreview(data[index])
