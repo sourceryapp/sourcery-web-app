@@ -52,7 +52,7 @@ export function useAuthUser() {
     })
 
     function ownsOrg(orgId) {
-        return userOrgs.value.some(org => org.id === orgId)
+        return userOrgs.value.some(org => `${org.id}` === `${orgId}`)
     }
 
     const userRepos = computed(() => {
