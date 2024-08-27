@@ -81,7 +81,7 @@
                 </v-card-text>
             </v-card>
 
-            <v-card title="Attachments Summary" class="pa-2 mb-15">
+            <v-card :title="organizationAttachmentsCardTitle" class="pa-2 mb-15">
                 <v-card-text>
                     <v-table>
                         <thead>
@@ -139,6 +139,11 @@ const organizationStats = ref({
 const organizationRequestGraphStats = ref([])
 const organizationUserSummary = ref([])
 const organizationAttachmentsSummary = ref([])
+const organizationAttachmentsCount = ref(0)
+
+const organizationAttachmentsCardTitle = computed(() => {
+    return `Attachments Summary (${organizationAttachmentsCount.value})`
+})
 
 function plotGraph() {
     const currentDate = new Date()
@@ -248,9 +253,7 @@ async function fetchUserSummary() {
 }
 
 async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
-    const { data, error } = await supabase
-        .from('attachments')
-        .select(`id, label, size, created_at, user_id, path, mime, 
+    const attachment_query = `id, label, size, created_at, user_id, path, mime, 
         request_id,
         requests!inner (
             id,
@@ -263,10 +266,23 @@ async function fetchAttachmentsSummary({ page, itemsPerPage, sortBy }) {
         user (
             id,
             email
-        )`)
+        )`;
+
+    const { count, error: countError } = await supabase
+        .from('attachments')
+        .select(attachment_query, { count: 'exact', head: true })
+        .eq('requests.repositories.organization_id', organization.value.id);
+    
+    organizationAttachmentsCount.value = count;
+
+    let query = supabase
+        .from('attachments')
+        .select(attachment_query)
         .gt('size', 0)
         .eq('requests.repositories.organization_id', organization.value.id)
         .order('created_at', { ascending: false });
+
+    const { data, error } = await query;
 
     const attachment_paths = data.map(attachment => attachment.path)
     if ( attachment_paths.length > 0 ) {
