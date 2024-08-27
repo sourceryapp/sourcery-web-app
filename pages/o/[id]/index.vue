@@ -7,6 +7,7 @@
                         <v-card-text>
                             <h1 class="mb-0">{{ organization.name }}</h1>
                             <p class="text-muted mb-1">{{ organization.address || 'No Address Set' }}</p>
+                            <v-btn type="primary" :to="'/o/' + organization.id  + '/manage'">Manage</v-btn>
                         </v-card-text>
                     </v-card>
                 </v-col>
@@ -45,6 +46,10 @@
 </template>
 
 <script setup>
+definePageMeta({
+    middleware: ['organization-owner']
+})
+
 const route = useRoute()
 const { organization, getOrganization } = useOrganizations()
 const { organization: countOrganization, countSubmitted, countInProgress, countCompleted, fetchRequestCount } = useRequestCount()

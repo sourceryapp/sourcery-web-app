@@ -16,6 +16,7 @@
                         <h2 class="mb-4">Repository Location</h2>
 
                         <template v-if="requestType === 'normal'">
+                            <p>Location must be in US or Canada.</p>
                             <v-text-field v-model="requestFields.customRepository" variant="outlined" class="mb-2" label="Repository Name" :rules="[$sourceryForms.rules.required || requestType !== 'normal']"></v-text-field>
 
                             <div>
