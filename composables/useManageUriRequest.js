@@ -94,16 +94,15 @@ export function useManageUriRequest(req = null) {
 
     async function claimRequest() {
         if ( request.value ) {
-            const { data, error } = await supabase.from('requests').update({
-                servicer_id: user.value.id,
-                servicer_claimed_at: new Date(),
-                status_id: 2
-            }).eq('id', request.value.id).select().single()
+            const { data, error } = await supabase.rpc('claim_request', {
+                input_request_id: request.value.id,
+                input_user_id: user.value.id
+            })
 
             if ( error ) {
                 console.error(error)
             } else {
-                request.value = data
+                await fetchUriRequest()
                 return true
             }
         }

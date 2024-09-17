@@ -8,6 +8,12 @@
                 </v-row>
                 <v-divider></v-divider>
             </template>
+
+            <v-row class="py-2" v-if="request.request_events.length === 0">
+                <v-col cols="12" md="4"><em>{{ $filters.normalDate(request.created_at) }}</em></v-col>
+                <v-col cols="12" md="8">Submitted</v-col>
+            </v-row>
+            <v-divider></v-divider>
         </div>
 
         <v-dialog v-model="newLogDialog" max-width="600">

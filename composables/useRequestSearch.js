@@ -49,7 +49,7 @@ export function useRequestSearch() {
 
         // Only search on requests that are owned by the requesting user.
         if ( owned.value ) {
-            query = query.eq('user_id', user.value.id)
+            query = query.or('user_id.eq.' + user.value.id + ',servicer_id.eq.' + user.value.id)
         }
 
         // Apply the search query if necessary

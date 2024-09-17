@@ -38,9 +38,9 @@
                 </v-list-item-subtitle>
             </v-list-item>
 
-            <v-list-item class="py-3 pb-4" :active="isSubmitted" :disabled="isUnassigned || (isPublic && !isClaimed)">
+            <v-list-item class="py-3 pb-4" :active="isPublic ? isClaimed && isSubmitted : isSubmitted" :disabled="isUnassigned || (isPublic && !isClaimed)">
                 <template v-slot:prepend>
-                    <v-icon size="large" color="orange" v-if="isSubmitted">mdi-clock-outline</v-icon>
+                    <v-icon size="large" color="orange" v-if="isPublic ? isClaimed && isSubmitted : isSubmitted">mdi-clock-outline</v-icon>
                     <v-icon size="large"  v-else-if="isUnassigned || (isPublic && !isClaimed)">mdi-dots-horizontal</v-icon>
                     <v-icon size="large" color="success" v-else>mdi-check</v-icon>
                 </template>
@@ -49,9 +49,9 @@
                     <span v-else>Confirmed</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                    <em v-if="isSubmitted">Currently Here</em>
+                    <em v-if="isPublic ? isClaimed && isSubmitted : isSubmitted">Currently Here</em>
                     <em v-else-if="isUnassigned || (isPublic && !isClaimed)">Awaiting Assignment</em>
-                    <em v-else>{{ $filters.normalDate(confirmedDate) }}</em>
+                    <em v-else>{{ $filters.normalDate(isClaimed ? request.servicer_claimed_at : confirmedDate) }}</em>
                 </v-list-item-subtitle>
             </v-list-item>
 
