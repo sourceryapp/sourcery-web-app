@@ -21,34 +21,36 @@
         </template>
 
         <template v-else>
-            <v-list-item class="py-3 pb-4" :active="isUnassigned">
+            <v-list-item class="py-3 pb-4" :active="isUnassigned || (isPublic && !isClaimed)">
                 <template v-slot:prepend>
-                    <v-icon size="large" color="orange" v-if="isUnassigned">mdi-clock-outline</v-icon>
+                    <v-icon size="large" color="orange" v-if="isUnassigned || (isPublic && !isClaimed)">mdi-clock-outline</v-icon>
                     <v-icon size="large" color="success" v-else>mdi-check</v-icon>
                 </template>
                 <v-list-item-title>
                     <span v-if="isUnassigned">Waiting for Assignment</span>
-                    <span v-else>Assigned</span>
+                    <span v-else-if="isPublic && !isClaimed">Waiting for Claim</span>
+                    <span v-else>{{ isClaimed ? 'Claimed' : 'Assigned'}}</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
                     <em v-if="isUnassigned">Currently Here</em>
-                    <em v-else>{{ $filters.normalDate(submittedDate) }}</em>
+                    <em v-else-if="(isPublic && !isClaimed)">This request is publicly listed for claim.</em>
+                    <em v-else>{{ $filters.normalDate(isClaimed ? request.servicer_claimed_at : submittedDate) }}</em>
                 </v-list-item-subtitle>
             </v-list-item>
 
-            <v-list-item class="py-3 pb-4" :active="isSubmitted" :disabled="isUnassigned">
+            <v-list-item class="py-3 pb-4" :active="isSubmitted" :disabled="isUnassigned || (isPublic && !isClaimed)">
                 <template v-slot:prepend>
                     <v-icon size="large" color="orange" v-if="isSubmitted">mdi-clock-outline</v-icon>
-                    <v-icon size="large"  v-else-if="isUnassigned">mdi-dots-horizontal</v-icon>
+                    <v-icon size="large"  v-else-if="isUnassigned || (isPublic && !isClaimed)">mdi-dots-horizontal</v-icon>
                     <v-icon size="large" color="success" v-else>mdi-check</v-icon>
                 </template>
                 <v-list-item-title>
-                    <span v-if="isSubmitted">Waiting for Confirmation</span>
+                    <span v-if="isSubmitted">{{ isClaimed ? 'Servicing' : 'Waiting for Confirmation' }}</span>
                     <span v-else>Confirmed</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
                     <em v-if="isSubmitted">Currently Here</em>
-                    <em v-else-if="isUnassigned">Awaiting Assignment</em>
+                    <em v-else-if="isUnassigned || (isPublic && !isClaimed)">Awaiting Assignment</em>
                     <em v-else>{{ $filters.normalDate(confirmedDate) }}</em>
                 </v-list-item-subtitle>
             </v-list-item>
@@ -88,7 +90,7 @@ const props = defineProps(['request'])
 
 const { 
     request,
-    isSubmitted, isInProgress, isCompleted, isArchived, isCancelled, isUnassigned,
+    isSubmitted, isInProgress, isCompleted, isArchived, isCancelled, isUnassigned, isPublic, isClaimed,
     confirmedDate, completedDate, archivedDate, cancelledDate, submittedDate
 } = useFetchRequest(props.request)
 </script>

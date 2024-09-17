@@ -44,7 +44,10 @@
                 </v-col>
                 <v-col>
                     <h2 class="mb-2">Convert to Sourcery Request</h2>
-                    <repository-select v-model="repository" disable-custom></repository-select>
+                    <repository-select v-model="repository" :disable-custom="true"></repository-select>
+
+                    <v-checkbox label="OR Enable Public Access" v-model="publicAccess"></v-checkbox>
+
                     <v-btn color="primary" class="me-2" @click="convert">Convert to Sourcery Request</v-btn>
                     <v-divider class="my-4"></v-divider>
                     <p>This action will not notify users of any change.</p>
@@ -56,8 +59,7 @@
 </template>
 
 <script setup>
-const { request, repository, fetchUriRequest, convert, deleteRequest } = useManageUriRequest()
-
+const { request, repository, publicAccess, fetchUriRequest, convert, deleteRequest } = useManageUriRequest()
 await fetchUriRequest()
 
 async function deleteUri() {

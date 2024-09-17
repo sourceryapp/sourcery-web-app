@@ -28,7 +28,10 @@
                     <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
                     <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded>
                         <template v-slot:prepend>
-                            <v-icon>{{ item.icon }}</v-icon>
+                            <v-icon v-if="!item.new">{{ item.icon }}</v-icon>
+                            <v-badge v-else color="primary" content="NEW">
+                                <v-icon>{{ item.icon }}</v-icon>
+                            </v-badge>
                         </template>
                         <v-list-item-title class="text-subtitle-2">{{ item.title }}</v-list-item-title>
                     </v-list-item>
@@ -144,6 +147,7 @@ const drawerOpen = ref(!mobile.value)
 // Navigation Trees
 const primaryNavigationItems = ref([
     { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard' },
+    { title: 'Claim Requests', icon: 'mdi-file-document', link: '/requests', new: true },
     { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create' }
 ])
 const secondaryNavigationItems = ref([

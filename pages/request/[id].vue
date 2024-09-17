@@ -37,6 +37,10 @@
                                 <p class="mb-0">{{ request.repository_location }}</p>
                             </v-col>
                         </v-row>
+                        <v-row v-if="request.public_can_claim">
+                            <v-col cols="12" md="3"><h3>Claimed By</h3></v-col>
+                            <v-col cols="12" md="9">{{ request.servicer ? request.servicer.name ? request.servicer.name : 'Sourcery User' : 'Not Yet Claimed'}}</v-col>
+                        </v-row>
                     </v-sheet>
                 </v-col>
                 <v-col cols="12" md="4">

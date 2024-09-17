@@ -18,7 +18,8 @@ export function useFetchRequest(req = null) {
             ),
             request_clients(*),
             request_vendors(*),
-            user (*),
+            user!requests_user_id_fkey (*),
+            servicer:user!requests_servicer_id_fkey (*),
             request_events (
                 *,
                 status (id, name),
@@ -54,27 +55,35 @@ export function useFetchRequest(req = null) {
     }
 
     const isSubmitted = computed(() => {
-        return request.value.status.name === 'Submitted' ?? false
+        return request.value?.status.name === 'Submitted'
     })
 
     const isCancelled = computed(() => {
-        return request.value.status.name === 'Cancelled' ?? false
+        return request.value?.status.name === 'Cancelled'
     })
 
     const isInProgress = computed(() => {
-        return request.value.status.name === 'In Progress' ?? false
+        return request.value?.status.name === 'In Progress'
     })
 
     const isCompleted = computed(() => {
-        return request.value.status.name === 'Complete' ?? false
+        return request.value?.status.name === 'Complete'
     })
 
     const isArchived = computed(() => {
-        return request.value.status.name === 'Archived' ?? false
+        return request.value?.status.name === 'Archived'
     })
 
     const isUnassigned = computed(() => {
-        return request.value.status.name === 'Unassigned' ?? false
+        return request.value?.status.name === 'Unassigned'
+    })
+
+    const isPublic = computed(() => {
+        return !!request.value?.public_can_claim
+    })
+
+    const isClaimed = computed(() => {
+        return !!request.value?.servicer_id
     })
 
     const submittedDate = computed(() => {
@@ -102,11 +111,11 @@ export function useFetchRequest(req = null) {
     })
 
     const canService = computed(() => {
-        return userRepos?.value.some(repo => repo.id === request.value.repository?.id) ?? false
+        return userRepos?.value.some(repo => repo.id === request.value?.repository?.id) ?? false
     })
 
     const isReported = computed(() => {
-        return request.value.reports.length > 0
+        return request.value?.reports.length > 0
     })
 
 
@@ -121,6 +130,8 @@ export function useFetchRequest(req = null) {
         isArchived,
         isCancelled,
         isUnassigned,
+        isPublic,
+        isClaimed,
         isReported,
         confirmedDate,
         completedDate,

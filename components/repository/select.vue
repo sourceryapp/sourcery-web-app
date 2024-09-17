@@ -14,8 +14,8 @@
         <template v-slot:item="{ props, item }">
             <v-list-item v-bind="props" :title="item.raw.organization.name" :subtitle="item.raw.name"></v-list-item>
         </template>
-        <template v-slot:prepend-item v-if="!disableCustom">
-            <v-list-item @click="initializeNonPartnerInstitution">
+        <template v-slot:prepend-item>
+            <v-list-item @click="initializeNonPartnerInstitution" v-if="!disableCustom">
                 <v-list-item-title>Create New Repository: {{ search }}</v-list-item-title>
                 <v-list-item-subtitle><em>Type to Add Repository; Select to Confirm</em></v-list-item-subtitle>
             </v-list-item>
@@ -36,10 +36,6 @@ function initializeNonPartnerInstitution() {
         repository.value = null
         emit('customSelected', search.value)
     }
-}
-
-function isValid() {
-
 }
 
 await fetchRepositories()

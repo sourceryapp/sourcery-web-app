@@ -27,7 +27,7 @@ export function useFetchUriRequests() {
         const { data, error } = await supabase.from('requests')
             .select(`
                 *,
-                user (*)
+                user!requests_user_id_fkey (*)
             `)
             .order('created_at', { ascending: false })
             .is('repository_id', null)
