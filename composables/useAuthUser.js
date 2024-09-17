@@ -74,11 +74,20 @@ export function useAuthUser() {
         return userOrgs.value.length > 0
     })
 
+    const canClaim = computed(() => {
+        return authUser.value?.admin || (
+            user.value.email_confirmed_at !== null && // User has confirmed their email
+            authUser.value.phone && // User has a phone number listed
+            authUser.value.name // User has a name listed
+        )
+    })
+
     return {
         authUser,
         userOrgs,
         userRepos,
         isOrgOwner,
+        canClaim,
         fetchUserMetadata,
         possiblyRefetch,
         ownsOrg

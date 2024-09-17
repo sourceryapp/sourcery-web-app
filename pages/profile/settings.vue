@@ -64,10 +64,39 @@
                     </template>
                 </v-list-item>
             </v-list>
+            
+
+            <h2>Claim Eligibility</h2>
+            <p>See if you have passed the requirements in order to claim public requests.</p>
+
+            <v-list density="compact">
+                <v-list-item>
+                    <template v-slot:prepend>
+                        <v-icon :icon="user.email_confirmed_at ? 'mdi-check' : 'mdi-close'"
+                            :color="user.email_confirmed_at ? 'success' : 'error'"></v-icon>
+                    </template>
+                    <v-list-item-title>{{ user.email_confirmed_at ? 'Email has been confirmed.' : 'Must confirm your email.' }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                    <template v-slot:prepend>
+                        <v-icon :icon="authUser.phone ? 'mdi-check' : 'mdi-close'"
+                            :color="authUser.phone ? 'success' : 'error'"></v-icon>
+                    </template>
+                    <v-list-item-title>{{ authUser.phone ? 'Phone number has been supplied.' : 'Must provide a phone number.' }}</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                    <template v-slot:prepend>
+                        <v-icon :icon="authUser.name ? 'mdi-check' : 'mdi-close'"
+                            :color="authUser.name ? 'success' : 'error'"></v-icon>
+                    </template>
+                    <v-list-item-title>{{ authUser.name ? 'Name has been supplied.' : 'Must provide a name.' }}</v-list-item-title>
+                </v-list-item>
+            </v-list>
         </v-container>
     </div>
 </template>
 
 <script setup>
 const { authUser } = useAuthUser()
+const user = useSupabaseUser()
 </script>

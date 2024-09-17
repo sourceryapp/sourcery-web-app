@@ -26,7 +26,7 @@
                     </template>
 
                     <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
-                    <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded v-show="authUser ? true : item.public">
+                    <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded v-show="item.show">
                         <template v-slot:prepend>
                             <v-icon v-if="!item.new">{{ item.icon }}</v-icon>
                             <v-badge v-else color="primary" content="NEW">
@@ -121,7 +121,7 @@
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
-const { authUser, userOrgs, fetchUserMetadata, possiblyRefetch } = useAuthUser()
+const { authUser, userOrgs, fetchUserMetadata, possiblyRefetch, canClaim } = useAuthUser()
 const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
@@ -146,9 +146,9 @@ const drawerOpen = ref(!mobile.value)
 
 // Navigation Trees
 const primaryNavigationItems = ref([
-    { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard', public: true },
-    { title: 'Claim Requests', icon: 'mdi-file-document', link: '/requests', new: true, public: false },
-    { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create', public: true }
+    { title: 'Dashboard', icon: 'mdi-view-dashboard', link: '/dashboard', show: true },
+    { title: 'Claim Requests', icon: 'mdi-file-document', link: '/requests', new: true, show: authUser.value? canClaim.value : false },
+    { title: 'Create Request', icon: 'mdi-plus-circle', link: '/request/create', show: true }
 ])
 const secondaryNavigationItems = ref([
     { title: 'Notifications', icon: 'mdi-message', link: '/notifications' },
