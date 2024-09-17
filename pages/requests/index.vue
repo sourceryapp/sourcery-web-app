@@ -21,6 +21,8 @@ const { data: requests, error } = await supabase.from('requests')
 
             <div class="mb-4">
                 <npi-card v-for="request in requests" :request="request" :key="request.id"></npi-card>
+
+                <v-alert v-if="requests.length === 0" type="info">No requests available to claim.</v-alert>
             </div>
         </v-container>
     </div>

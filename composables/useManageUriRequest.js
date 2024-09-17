@@ -16,7 +16,7 @@ export function useManageUriRequest(req = null) {
     })
 
     const canClaim = computed(() => {
-        return authUser.value.admin || (request.value.public_can_claim && !request.value.repository_id && !request.value.deleted && request.value.servicer_id === null)
+        return authUser.value.admin || (request.value.public_can_claim && !request.value.repository_id && !request.value.deleted && request.value.servicer_id === null && request.value.user_id !== user.value.id)
     })
 
     async function fetchUriRequest() {
