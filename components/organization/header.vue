@@ -1,4 +1,5 @@
 <script setup>
+const { ownsOrg } = useAuthUser()
 const props = defineProps(['organization'])
 </script>
 
@@ -7,7 +8,7 @@ const props = defineProps(['organization'])
         <v-card-text>
             <h1 class="mb-0">{{ organization.name }}</h1>
             <p class="text-muted mb-2">{{ organization.address || 'No Address Set' }}</p>
-            <div class="d-flex justify-end">
+            <div class="d-flex justify-end" v-if="ownsOrg(organization.id)">
                 <v-menu transition="slide-y-transition">
                     <template v-slot:activator="{ props }">
                         <v-btn size="small" color="secondary" v-bind="props">Manage <v-icon>mdi-chevron-down</v-icon></v-btn>

@@ -52,6 +52,17 @@ export default function useOrganizations() {
         return data
     }
 
+
+    async function removeUser(organizationId, userId) {
+        const { data, error } = await supabase.from('organization_users').delete().eq('organization_id', organizationId).eq('user_id', userId)
+
+        if ( error ) {
+            throw error
+        }
+
+        return data
+    }
+
     return {
         email,
         organizations,
@@ -60,6 +71,7 @@ export default function useOrganizations() {
         getOrganizations,
         getOrganization,
         getOrganizationUsers,
-        inviteUser
+        inviteUser,
+        removeUser
     }
 }

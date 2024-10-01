@@ -23,6 +23,10 @@ export function useAuthUser() {
         organizations!organizations_owner_id_fkey (
             *,
             repositories (*)
+        ),
+        organization_users (
+            *,
+            organizations (*)
         )
         `).eq('id', user.value.id).single()
 
@@ -70,6 +74,14 @@ export function useAuthUser() {
         return repos
     })
 
+    const userOrgInvites = computed(() => {
+        return authUser.value?.organization_users.filter(ou => !ou.confirmed)
+    })
+
+    const userOrgMember = computed(() => {
+        return authUser.value?.organization_users.filter(ou => ou.confirmed)
+    })
+
     const isOrgOwner = computed(() => {
         return userOrgs.value.length > 0
     })
@@ -82,14 +94,39 @@ export function useAuthUser() {
         )
     })
 
+
+    async function acceptInvite(organizationId) {
+        const { data, error } = await supabase.from('organization_users').update({ confirmed: true }).eq('organization_id', organizationId).eq('user_id', user.value.id)
+        if (error) {
+            console.error('Error accepting invite', error)
+            return null
+        }
+        await fetchUserMetadata()
+        return data
+    }
+
+    async function declineInvite(organizationId) {
+        const { data, error } = await supabase.from('organization_users').delete().eq('organization_id', organizationId).eq('user_id', user.value.id)
+        if (error) {
+            console.error('Error declining invite', error)
+            return null
+        }
+        await fetchUserMetadata()
+        return data
+    }
+
     return {
         authUser,
         userOrgs,
         userRepos,
+        userOrgInvites,
+        userOrgMember,
         isOrgOwner,
         canClaim,
         fetchUserMetadata,
         possiblyRefetch,
-        ownsOrg
+        ownsOrg,
+        acceptInvite,
+        declineInvite
     }
 }

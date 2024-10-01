@@ -138,3 +138,14 @@ DROP POLICY IF EXISTS "Allow User Read" ON "public"."organization_users";
 CREATE POLICY "Allow Users Read" ON "public"."organization_users"
 AS permissive FOR select TO authenticated
 USING (true);
+
+CREATE POLICY "Allow Users Update" ON "public"."organization_users"
+AS permissive FOR update TO authenticated
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Allow Users Delete" ON "public"."organization_users"
+AS permissive FOR delete TO authenticated
+USING (auth.uid() = user_id OR auth.uid() IN (
+    SELECT owner_id FROM public.organizations
+    WHERE organizations.id = organization_users.organization_id
+));

@@ -3,7 +3,7 @@ definePageMeta({
     middleware: ['organization-owner']
 })
 const route = useRoute()
-const { organization, organizationUsers, email, getOrganization, getOrganizationUsers, inviteUser } = useOrganizations()
+const { organization, organizationUsers, email, getOrganization, getOrganizationUsers, inviteUser,removeUser } = useOrganizations()
 await getOrganization(route.params.id)
 await getOrganizationUsers(route.params.id)
 const errorMessage = ref('')
@@ -18,6 +18,18 @@ async function addUser() {
         await getOrganizationUsers(route.params.id)
     } catch (err) {
         errorMessage.value = 'There was an error adding the user.  The user must already have an account and not already exist as a member.'
+    }
+    loading.value = false
+}
+
+async function deleteUser(userId) {
+    errorMessage.value = ''
+    loading.value = true
+    try {
+        await removeUser(route.params.id, userId)
+        await getOrganizationUsers(route.params.id)
+    } catch (err) {
+        errorMessage.value = 'There was an error removing the user.'
     }
     loading.value = false
 }
@@ -54,6 +66,7 @@ async function addUser() {
                             <th>Email</th>
                             <th>Role</th>
                             <th>Status</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,6 +76,7 @@ async function addUser() {
                             <td>
                                 <v-chip color="success">Confimed</v-chip>
                             </td>
+                            <td></td>
                         </tr>
                         <tr v-for="userpivot in organizationUsers" :key="userpivot.user.id">
                             <td>{{ userpivot.user.email }}</td>
@@ -70,6 +84,16 @@ async function addUser() {
                             <td>
                                 <v-chip color="success" v-if="userpivot.confirmed">Confirmed</v-chip>
                                 <v-chip color="warning" v-else>Invited</v-chip>
+                            </td>
+                            <td>
+                                <v-menu transition="slide-y-transition">
+                                    <template v-slot:activator="{ props }">
+                                        <v-btn size="small" color="secondary" v-bind="props">Actions <v-icon>mdi-chevron-down</v-icon></v-btn>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item color="error" title="Remove" @click="deleteUser(userpivot.user_id)"></v-list-item>
+                                    </v-list>
+                                </v-menu>
                             </td>
                         </tr>
                     </tbody>

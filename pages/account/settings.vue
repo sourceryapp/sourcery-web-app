@@ -66,7 +66,7 @@
             </v-list>
             
 
-            <h2>Claim Eligibility</h2>
+            <h2 class="mt-5">Claim Eligibility</h2>
             <p>See if you have passed the requirements in order to claim public requests.</p>
 
             <v-list density="compact">
@@ -92,11 +92,64 @@
                     <v-list-item-title>{{ authUser.name ? 'Name has been supplied.' : 'Must provide a name.' }}</v-list-item-title>
                 </v-list-item>
             </v-list>
+
+
+            <h2 class="mt-5">Organizations &amp; Invitations</h2>
+            <p>Manage your organizations and invitations.</p>
+
+
+            <v-list class="bg-transparent mb-10">
+
+                <v-list-item v-for="invite in userOrgInvites" :key="invite.organizations.id" lines="two">
+                    <template v-slot:prepend>
+                        <v-icon>mdi-email-alert</v-icon>
+                    </template>
+                    <v-list-item-title>{{ invite.organizations.name }}</v-list-item-title>
+                    <v-list-item-subtitle>Invitation</v-list-item-subtitle>
+                    <template v-slot:append>
+                        <v-list-item-action end>
+                            <v-btn color="success" variant="outlined" size="small" class="me-2" @click="acceptInvite(invite.organizations.id)">Accept</v-btn>
+                            <v-btn color="error" variant="outlined" size="small" @click="declineInvite(invite.organizations.id)">Deny</v-btn>
+                        </v-list-item-action>
+                    </template>
+                </v-list-item>
+
+                <v-list-item v-for="organization in userOrgs" :key="organization.id" lines="two">
+                    <template v-slot:prepend>
+                        <v-icon>mdi-domain</v-icon>
+                    </template>
+                    <v-list-item-title>{{ organization.name }}</v-list-item-title>
+                    <v-list-item-subtitle>Owner</v-list-item-subtitle>
+                    <template v-slot:append>
+                        <v-list-item-action end>
+                            <NuxtLink :to="`/o/${organization.id}`">Manage</NuxtLink>
+                        </v-list-item-action>
+                    </template>
+                </v-list-item>
+
+                <v-list-item v-for="membership in userOrgMember" :key="membership.organizations.id" lines="two">
+                    <template v-slot:prepend>
+                        <v-icon>mdi-domain</v-icon>
+                    </template>
+                    <v-list-item-title>{{ membership.organizations.name }}</v-list-item-title>
+                    <v-list-item-subtitle>Member</v-list-item-subtitle>
+                    <template v-slot:append>
+                        <v-list-item-action end>
+                            <NuxtLink :to="`/o/${membership.organizations.id}`">Manage</NuxtLink>
+                        </v-list-item-action>
+                    </template>
+                </v-list-item>
+
+                <v-list-item v-if="userOrgInvites.length === 0 && userOrgs.length === 0 && userOrgMember.length === 0" lines="two">
+                    <v-list-item-title>You are not part of any organizations.</v-list-item-title>
+                    <v-list-item-subtitle>You do not have any organization invites.</v-list-item-subtitle>
+                </v-list-item>
+            </v-list>
         </v-container>
     </div>
 </template>
 
 <script setup>
-const { authUser } = useAuthUser()
+const { authUser, userOrgs, userOrgInvites, userOrgMember, acceptInvite, declineInvite } = useAuthUser()
 const user = useSupabaseUser()
 </script>
