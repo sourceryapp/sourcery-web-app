@@ -3,13 +3,7 @@
         <v-container>
             <v-row class="mb-2">
                 <v-col cols="12" md="6">
-                    <v-card width="100%" class="fill-height" variant="outlined">
-                        <v-card-text>
-                            <h1 class="mb-0">{{ organization.name }}</h1>
-                            <p class="text-muted mb-1">{{ organization.address || 'No Address Set' }}</p>
-                            <v-btn type="primary" :to="'/o/' + organization.id  + '/manage'">Manage</v-btn>
-                        </v-card-text>
-                    </v-card>
+                    <organization-header :organization="organization"></organization-header>
                 </v-col>
                 <v-col cols="12" md="6">
                     <v-item-group class="d-flex justify-space-between ga-3 fill-height">

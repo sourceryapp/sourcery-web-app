@@ -1,7 +1,10 @@
 <template>
-    <div id="page-occupation-id">
+    <div id="page-organization-id-manage">
         <v-container>
-            <h1 class="mb-10">Organization Settings</h1>
+            <div class="mb-4">
+                <organization-header :organization="organization"></organization-header>
+            </div>
+            
 
             <v-card title="Request Summary" class="pa-2 mb-15">
                 <v-card-text>

@@ -1,5 +1,6 @@
 export default function useOrganizations() {
     const supabase = useSupabaseClient()
+    const email = ref('')
 
     const organizations = ref([])
     async function getOrganizations() {
@@ -15,7 +16,7 @@ export default function useOrganizations() {
 
     const organization = ref()
     async function getOrganization(id) {
-        const { data, error } = await supabase.from('organizations').select('*, repositories (*)')
+        const { data, error } = await supabase.from('organizations').select('*, repositories (*), owner:owner_id(*)')
             .eq('id', id)
             .single()
 
@@ -24,10 +25,41 @@ export default function useOrganizations() {
         }
     }
 
+
+    const organizationUsers = ref([])
+    async function getOrganizationUsers(organizationId) {
+        const { data, error } = await supabase.from('organization_users').select('*, user:user_id(*)')
+            .eq('organization_id', organizationId)
+
+        if ( !error ) {
+            organizationUsers.value = data
+        }
+    }
+
+
+    async function inviteUser(organizationId) {
+        const { data, error } = await supabase.functions.invoke('organization', {
+            body: {
+                action: 'invite_user',
+                email: email.value,
+                organization_id: organizationId
+            }
+        })
+
+        if ( error ) {
+            throw error
+        }
+        return data
+    }
+
     return {
+        email,
         organizations,
         organization,
+        organizationUsers,
         getOrganizations,
-        getOrganization
+        getOrganization,
+        getOrganizationUsers,
+        inviteUser
     }
 }

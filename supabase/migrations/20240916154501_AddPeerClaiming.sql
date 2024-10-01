@@ -113,3 +113,28 @@ WITH CHECK (auth.uid() IN (
     SELECT servicer_id FROM requests
     WHERE (requests.id = request_id)
 ));
+
+
+-- Drop the trigger and function related to create_pricing_summary_on_request
+DROP TRIGGER IF EXISTS create_pricing_summary_on_request_create ON public.requests;
+DROP FUNCTION IF EXISTS public.create_pricing_summary_on_request;
+
+-- Drop policies related to payment_associations and pricing_summaries
+DROP POLICY IF EXISTS "Allow read for owner" ON "public"."payment_associations";
+DROP POLICY IF EXISTS "Allow update for owner" ON "public"."payment_associations";
+
+-- Drop tables payment_associations and pricing_summaries
+DROP TABLE IF EXISTS "public"."payment_associations" CASCADE;
+DROP TABLE IF EXISTS "public"."pricing_summaries" CASCADE;
+
+-- Drop references to payment_associations and pricing_summaries
+ALTER TABLE "public"."requests" DROP CONSTRAINT IF EXISTS "requests_payment_association_id_fkey";
+ALTER TABLE "public"."requests" DROP CONSTRAINT IF EXISTS "requests_pricing_summary_id_fkey";
+
+
+ALTER TABLE "public"."organization_users" ADD COLUMN "confirmed" boolean DEFAULT FALSE;
+
+DROP POLICY IF EXISTS "Allow User Read" ON "public"."organization_users";
+CREATE POLICY "Allow Users Read" ON "public"."organization_users"
+AS permissive FOR select TO authenticated
+USING (true);
