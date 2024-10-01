@@ -94,7 +94,7 @@
             </v-list>
 
 
-            <h2 class="mt-5">Organizations &amp; Invitations</h2>
+            <h2 class="mt-5" id="organizations">Organizations &amp; Invitations</h2>
             <p>Manage your organizations and invitations.</p>
 
 

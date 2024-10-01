@@ -149,3 +149,28 @@ USING (auth.uid() = user_id OR auth.uid() IN (
     SELECT owner_id FROM public.organizations
     WHERE organizations.id = organization_users.organization_id
 ));
+
+CREATE OR REPLACE FUNCTION public.create_organization_invite_notification()
+RETURNS trigger LANGUAGE plpgsql AS $$
+DECLARE
+    organization_data json;
+BEGIN
+    SELECT row_to_json(org)
+    INTO organization_data
+    FROM (
+        SELECT *
+        FROM public.organizations
+        WHERE id = NEW.organization_id
+    ) org;
+
+    INSERT INTO public.notifications (user_id, text, type, data)
+    VALUES (NEW.user_id, 'You have been invited to an organization.', 'organization_invite', organization_data);
+    RETURN NEW;
+END;
+$$;
+
+drop trigger if exists create_organization_invite_notification on public.organization_users;
+CREATE TRIGGER organization_invite_notification_trigger
+AFTER INSERT ON public.organization_users
+FOR EACH ROW
+EXECUTE FUNCTION public.create_organization_invite_notification();

@@ -15,6 +15,8 @@ export function useNotification(notif) {
                 return 'mdi-truck-check'
             case 'request_cancelled':
                 return 'mdi-truck-alert'
+            case 'organization_invite':
+                return 'mdi-email-alert'
             default:
                 return 'mdi-information'
         }
@@ -33,6 +35,8 @@ export function useNotification(notif) {
                 return 'Request Completed - ' + notif_request_title
             case 'request_cancelled':
                 return 'Request Cancelled - ' + notif_request_title
+            case 'organization_invite':
+                return notification.value.text
             default:
                 return 'New Notification'
         }
@@ -53,6 +57,9 @@ export function useNotification(notif) {
                 break
             case 'request_completed':
                 navigateTo(`/request/${notification.value.data.request.id}`)
+                break
+            case 'organization_invite':
+                navigateTo('/account/settings#organizations')
                 break
             default:
                 break
