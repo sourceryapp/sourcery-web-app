@@ -10,13 +10,20 @@ export function useManageUriRequest(req = null) {
     const publicAccess = ref(false)
 
     const canManage = computed(() => {
-        return authUser.value.admin || request.value && (request.value.user_id === user.value.id ||
-            userRepos?.value.some(repo => repo.id === request.value?.repository?.id)
+        return authUser.value.admin
+            || request.value
+            && (request.value.user_id === user.value.id
+                || userRepos?.value.some(repo => repo.id === request.value?.repository?.id)
         )
     })
 
     const canClaim = computed(() => {
-        return authUser.value.admin || (request.value.public_can_claim && !request.value.repository_id && !request.value.deleted && request.value.servicer_id === null && request.value.user_id !== user.value.id)
+        return authUser.value.admin
+            || (request.value.public_can_claim
+                && !request.value.repository_id
+                && !request.value.deleted
+                && request.value.servicer_id === null
+                && request.value.user_id !== user.value.id)
     })
 
     async function fetchUriRequest() {

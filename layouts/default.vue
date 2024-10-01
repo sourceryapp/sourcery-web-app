@@ -25,7 +25,7 @@
                         <v-divider class="ma-2"></v-divider>
                     </template>
 
-                    <v-list-subheader v-if="userOrgs.length > 0">Personal</v-list-subheader>
+                    <v-list-subheader v-if="userOrgsAndMembers.length > 0">Personal</v-list-subheader>
                     <v-list-item v-for="item in primaryNavigationItems" :to="item.link" color="primary" rounded v-show="item.show">
                         <template v-slot:prepend>
                             <v-icon v-if="!item.new">{{ item.icon }}</v-icon>
@@ -121,7 +121,7 @@
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
-const { authUser, userOrgs, fetchUserMetadata, possiblyRefetch, canClaim } = useAuthUser()
+const { authUser, userOrgsAndMembers, fetchUserMetadata, possiblyRefetch, canClaim } = useAuthUser()
 const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
@@ -166,7 +166,7 @@ const adminNavigationItems = ref([
 ])
 
 const organizationNavigationItems = computed(() => {
-    return userOrgs.value.map(org => {
+    return userOrgsAndMembers.value.map(org => {
         return { title: org.name, icon: 'mdi-domain', link: `/o/${org.id}` }
     })
 })

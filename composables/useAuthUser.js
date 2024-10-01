@@ -55,6 +55,12 @@ export function useAuthUser() {
         return authUser.value?.organizations ?? []
     })
 
+    const userOrgsAndMembers = computed(() => { 
+        let orgs = authUser.value?.organizations ?? []
+        let orgsAndMembers = userOrgMember.value.map(ou => ou.organizations)
+        return orgs.concat(orgsAndMembers)
+    })
+
     function ownsOrg(orgId) {
         return userOrgs.value.some(org => `${org.id}` === `${orgId}`)
     }
@@ -118,6 +124,7 @@ export function useAuthUser() {
     return {
         authUser,
         userOrgs,
+        userOrgsAndMembers,
         userRepos,
         userOrgInvites,
         userOrgMember,

@@ -41,7 +41,7 @@
 
 <script setup>
 definePageMeta({
-    middleware: ['organization-owner']
+    middleware: ['organization-member']
 })
 
 const route = useRoute()
