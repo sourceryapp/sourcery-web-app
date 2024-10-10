@@ -122,6 +122,7 @@ import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
 
 const { authUser, userOrgsAndMembers, fetchUserMetadata, possiblyRefetch, canClaim } = useAuthUser()
+const { loadStripe } = useStripe()
 const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
@@ -131,6 +132,7 @@ const theme = useTheme()
 // Fetch user metadata only once on initial load/refresh from tab out
 // Observe the supabase user object for changes and sync user metadata
 await callOnce(fetchUserMetadata)
+await callOnce(loadStripe)
 watch(user, possiblyRefetch)
 
 // All user related display helpers

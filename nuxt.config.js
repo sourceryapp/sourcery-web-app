@@ -51,7 +51,9 @@ export default defineNuxtConfig({
           BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
           SUPABASE_URL: process.env.SUPABASE_URL || 'http://localhost:54321',
           SUPABASE_KEY: process.env.SUPABASE_KEY,
-          SOURCERY_ENV: process.env.SOURCERY_ENV || 'development'
+          SOURCERY_ENV: process.env.SOURCERY_ENV || 'development',
+          STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+          STRIPE_OPTIONS: process.env.STRIPE_OPTIONS
       },
   },
 
@@ -250,6 +252,13 @@ export default defineNuxtConfig({
               transformAssetUrls,
           },
       },
+      css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler'
+            }
+        }
+      }
   },
 
   // Only included this because of the current issue with vite-plugin-vuetify
@@ -268,5 +277,8 @@ export default defineNuxtConfig({
       }
   },
 
-  compatibilityDate: '2024-08-12'
+  compatibilityDate: '2024-08-12',
+  ignore: [
+    'tropy/**/*'
+  ]
 })

@@ -1,5 +1,3 @@
-import cookieParser from 'cookieparser'
-import jwt_decode from 'jwt-decode'
 import { formatMoney, unformat } from 'accounting-js'
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -39,23 +37,6 @@ export default defineNuxtPlugin(nuxtApp => {
                 Object.keys(params)
                     .map(key => key + '=' + encodeURIComponent(params[key]))
                     .join('&'),
-
-            getUserFromCookie: (cookie) => {
-                const parsed = cookieParser.parse(cookie)
-
-                if (parsed.token) {
-                    const { name, picture, user_id, email } = jwt_decode(
-                        parsed.token
-                    )
-
-                    return {
-                        email,
-                        uid: user_id,
-                        displayName: name,
-                        photoURL: picture
-                    }
-                }
-            },
 
             addressToEncodedString: (repository) => {
                 return repository.address1.concat(
