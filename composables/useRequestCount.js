@@ -17,16 +17,15 @@ export function useRequestCount() {
         // Organizations needs to be attached if we are filtering by organization
         const select = `
             *,
-            status!inner (name),
             repositories!inner (
                 organizations!inner (*)
             )
         `
 
         // Create 3 different queries because this is not yet an RPC/cannot be chained onto a query
-        const submitQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).eq('status.name', 'Submitted')
-        const inProgressQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).eq('status.name', 'In Progress')
-        const completedQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).eq('status.name', 'Complete')
+        const submitQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).eq('status', 'STATUS_CREATED')
+        const inProgressQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).in('status', ['STATUS_UNPAID', 'STATUS_PAID'])
+        const completedQuery = supabase.from('requests').select(select, { count: 'exact', head: true }).eq('status', 'STATUS_COMPLETE')
 
         // If an organization is selected, we need to filter by that organization
         // Otherwise, filter for the logged in user as the requester.

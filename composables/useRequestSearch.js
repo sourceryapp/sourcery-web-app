@@ -29,12 +29,6 @@ export function useRequestSearch() {
             : [])
     const order = ref(route.query.order || defaultSort.value)
 
-    let requests_query = `
-            *,
-            request_clients (*),
-            request_vendors (*)
-        `;
-
     // Loading & debounce state
     const loading = ref(false)
     const queuedJob = ref(null)
@@ -57,7 +51,7 @@ export function useRequestSearch() {
             query = query.or(`citation.ilike.%${search.value}%,original_title.ilike.%${search.value}%`)
         }
         if ( selectedStatus.value && selectedStatus.value.length ) {
-            query = query.in('status_id', selectedStatus.value)
+            query = query.in('status', selectedStatus.value)
         }
         if ( organizationId.value ) {
             query = query.eq('repository.organization_id', organizationId.value)
@@ -73,51 +67,35 @@ export function useRequestSearch() {
         }
         const { data: queryData, error: queryError } = await query
 
-        if ( !queryError ) {
-
-            let newquery = supabase.from('requests').select(`
-                *,
-                status (*),
-                repository:repositories (
-                    *,
-                    organization:organizations (*)
-                ),
-                request_client:request_clients (*),
-                request_vendor:request_vendors (*)
-            `).in('id', queryData.map(request => request.id))
-
-            switch(order.value) {
-                case 'oldest':
-                    newquery = newquery.order('created_at', { ascending: true })
-                    break
-                default:
-                    newquery = newquery.order('created_at', { ascending: false })
-                    break
-            }
-
-            const { data, error } = await newquery;
-
-            if ( !error ) {
-                requests.value = data;
-
-                const new_url_params = {}
-                if ( search.value ) {
-                    new_url_params.search = search.value
-                }
-                if ( selectedStatus.value.length ) {
-                    new_url_params.status = selectedStatus.value
-                }
-                if ( order.value && order.value !== defaultSort ) {
-                    new_url_params.order = order.value
-                }
-
-                // Silently replace this page in the current browser history stack
-                // router.replace({
-                //     path: '/requests',
-                //     query: new_url_params
-                // })
-            }
+        if ( !queryError) {
+            requests.value = queryData
         }
+
+        // if ( !queryError ) {
+
+        //     let newquery = supabase.from('requests').select(`
+        //         *,
+        //         repository:repositories (
+        //             *,
+        //             organization:organizations (*)
+        //         )
+        //     `).in('id', queryData.map(request => request.id))
+
+        //     switch(order.value) {
+        //         case 'oldest':
+        //             newquery = newquery.order('created_at', { ascending: true })
+        //             break
+        //         default:
+        //             newquery = newquery.order('created_at', { ascending: false })
+        //             break
+        //     }
+
+        //     const { data, error } = await newquery;
+
+        //     if ( !error ) {
+        //         requests.value = data;
+        //     }
+        // }
 
         loading.value = false
     }
@@ -137,18 +115,12 @@ export function useRequestSearch() {
     // In the case of an org dashboard - we need an inner join.
     // Otherwise, we can ignore the inner join in order to show 'unassigned' requests.
     function getRequestsQuery() {
-        let requests_query = '*, request_clients (*),request_vendors (*)'
-
-        if ( selectedStatus.value && selectedStatus.value.length ) {
-            requests_query += ',status!inner (*)'
-        } else {
-            requests_query += ',status (*)'
-        }
+        let requests_query = '*'
 
         if ( organizationId.value ) {
             return requests_query + ',repository:repositories!inner (*, organization:organizations!inner (*))'
         } else {
-            return requests_query + `repository:repositories (*, organization:organizations (*))`
+            return requests_query + `,repository:repositories (*, organization:organizations (*))`
         }
     }
 

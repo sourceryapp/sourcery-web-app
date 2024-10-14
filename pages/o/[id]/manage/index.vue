@@ -230,11 +230,11 @@ function getBaseCountQuery() {
 
 async function fetchOrganizationStats() {
     const { count: totalRequests, error: totalRequestsError } = await getBaseCountQuery();
-    const { count: totalSubmitted, error: totalSubmittedError } = await getBaseCountQuery().eq('status_id', 1);
-    const { count: totalPickedUp, error: totalPickedUpError } = await getBaseCountQuery().eq('status_id', 2);
-    const { count: totalCompleted, error: totalCompletedError } = await getBaseCountQuery().eq('status_id', 3);
-    const { count: totalArchived, error: totalArchivedError } = await getBaseCountQuery().eq('status_id', 4);
-    const { count: totalCancelled, error: totalCancelledError } = await getBaseCountQuery().eq('status_id', 5);
+    const { count: totalSubmitted, error: totalSubmittedError } = await getBaseCountQuery().eq('status', 'STATUS_CREATED');
+    const { count: totalPickedUp, error: totalPickedUpError } = await getBaseCountQuery().in('status', ['STATUS_UNPAID', 'STATUS_PAID']);
+    const { count: totalCompleted, error: totalCompletedError } = await getBaseCountQuery().eq('status', 'STATUS_COMPLETE');
+    const { count: totalArchived, error: totalArchivedError } = await getBaseCountQuery().eq('status', 'STATUS_ARCHIVED');
+    const { count: totalCancelled, error: totalCancelledError } = await getBaseCountQuery().eq('status', 'STATUS_CANCELLED');
 
     organizationStats.value = {
         totalRequests,

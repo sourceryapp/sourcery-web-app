@@ -45,7 +45,7 @@ export function useManageUriRequest(req = null) {
         // This request is being marked as public so it will go into public access for sourcery users to claim.
         if ( publicAccess.value ) {
             const { data, error } = await supabase.from('requests').update({
-                status_id: 1,
+                status: 'STATUS_CREATED',
                 public_can_claim: true
             }).eq('id', request.value.id).select().single()
 
@@ -72,7 +72,7 @@ export function useManageUriRequest(req = null) {
         else if ( request.value && repository.value ) {
             const { data, error } = await supabase.from('requests').update({
                 repository_id: repository.value.id,
-                status_id: 1
+                status: 'STATUS_CREATED',
             }).eq('id', request.value.id).select().single()
 
             if ( error ) {

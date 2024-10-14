@@ -2,13 +2,11 @@
 const supabase = useSupabaseClient()
 
 const { data: requests, error } = await supabase.from('requests')
-    .select(`
-        *,
-        status!inner (*)
-    `)
+    .select('*')
     .is('servicer_id', null)
     .eq('public_can_claim', true)
-    .eq('status.name', 'Submitted')
+    .is('repository_id', null)
+    .eq('status', 'STATUS_CREATED')
     .eq('deleted', false)
     .order('created_at', { ascending: true })
 </script>

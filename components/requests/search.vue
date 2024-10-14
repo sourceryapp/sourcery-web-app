@@ -41,7 +41,6 @@
 </template>
 
 <script setup>
-const { findByName, fetchStatus } = useFetchStatus()
 const { requests, organizationId, owned, search, selectedStatus, order, loading, orderOptions, hasQuery, fetchRequests, onModelChange } = useRequestSearch()
 
 const props = defineProps({
@@ -57,7 +56,7 @@ defineExpose({
 })
 
 function setStatus(statusName) {
-    selectedStatus.value = [findByName(statusName).id]
+    selectedStatus.value = [statusName]
     onModelChange()
 }
 
@@ -66,6 +65,5 @@ if ( props.organizationId ) {
     owned.value = false
 }
 
-await fetchStatus()
 await fetchRequests()
 </script>

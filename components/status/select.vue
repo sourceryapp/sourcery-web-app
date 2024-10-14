@@ -15,9 +15,13 @@
 </template>
 
 <script setup>
-const { statuses, fetchStatus } = useFetchStatus()
-
 const selected = defineModel()
 
-await fetchStatus()
+const statuses = [
+    { id: 'STATUS_CREATED', name: 'New' },
+    { id: 'STATUS_PAID', name: 'In Progress (Unpaid)' },
+    { id: 'STATUS_UNPAID', name: 'In Progress' },
+    { id: 'STATUS_COMPLETE', name: 'Complete' },
+    { id: 'STATUS_CANCELLED', name: 'Cancelled' },
+]
 </script>

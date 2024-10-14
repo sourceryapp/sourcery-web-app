@@ -32,7 +32,7 @@ export function useJsonLdExport() {
                 {
                     '@type': 'Item',
                     template: 'https://tropy.org/v1/templates/generic',
-                    title: request.request_vendors?.label ?? request.request_clients?.label ?? 'Untitled Sourcery Request',
+                    title: request.vendor_label ?? request.client_label ?? request.original_title ?? 'Untitled Sourcery Request',
                     creator: request.repository.organization.name,
                     date: request.updated_at,
                     photo: []

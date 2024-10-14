@@ -32,7 +32,7 @@ export default defineNuxtPlugin(nuxtApp => {
                 {
                     '@type': 'Item',
                     template: 'https://tropy.org/v1/templates/generic',
-                    title: request.request_client.label,
+                    title: request.client_label,
                     creator: request.repository.organization.name,
                     date: request.updated_at,
                     photo: []

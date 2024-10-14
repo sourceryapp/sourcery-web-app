@@ -38,17 +38,15 @@ export function useRequestMessenger(req = null) {
     }
 
     async function clearUnread() {
+        const updates = {}
         if ( canService.value ) {
-            request.value.request_vendors.has_unread = false
-            await supabase.from('request_vendors')
-                .update({ has_unread: false })
-                .eq('request_id', request.value.id)
+            request.value.vendor_has_unread = false
+            updates.vendor_has_unread = false
         } else {
-            request.value.request_clients.has_unread = false
-            await supabase.from('request_clients')
-                .update({ has_unread: false })
-                .eq('request_id', request.value.id)
+            request.value.client_has_unread = false
+            updates.client_has_unread = false
         }
+        await supabase.from('requests').update(updates).eq('id', request.value.id)
     }
 
     async function sendMessage(formSubmitEvent) {
@@ -103,9 +101,9 @@ export function useRequestMessenger(req = null) {
 
     const hasUnread = computed(() => {
         if ( canService.value ) {
-            return request.value?.request_vendors?.has_unread ?? false
+            return request.value?.vendor_has_unread ?? false
         }
-        return request.value?.request_clients?.has_unread ?? false
+        return request.value?.client_has_unread ?? false
     })
 
     const isReported = computed(() => {

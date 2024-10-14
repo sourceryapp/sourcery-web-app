@@ -63,18 +63,6 @@ const claimRequestDialog = ref(false)
 
 managedRequest.value = props.request
 
-const status = computed(() => {
-    if ( props.request.deleted ) {
-        return { name: 'Cancelled' }
-    }
-
-    if ( props.request.converted ) {
-        return { name: 'Converted' }
-    }
-
-    return { name: 'Unassigned' }
-})
-
 
 async function deleteNpi() {
     managedRequest.value = props.request

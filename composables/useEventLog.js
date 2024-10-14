@@ -23,14 +23,13 @@ export function useEventLog(req) {
 
         const { data, error } = await supabase.from('request_events').insert({
             request_id: request.value.id,
-            status_id: request.value.status.id,
+            status: request.value.status,
             user_id: user.value.id,
             description: newLogMessage.value,
             auto: false
         }).select(`
             *,
-            user (*),
-            status (name)
+            user (*)
         `)
 
         if ( error ) {
@@ -44,7 +43,7 @@ export function useEventLog(req) {
     }
 
     function getEventDescription(event) {
-        return event.description.replace('%u', event.user.name ?? 'User').replace('%s', event.status.name)
+        return event.description.replace('%u', event.user.name ?? 'User').replace('%s', event.status)
     }
 
     return {

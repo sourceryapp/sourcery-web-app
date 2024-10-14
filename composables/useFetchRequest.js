@@ -12,18 +12,14 @@ export function useFetchRequest(req = null) {
     async function fetchRequest() {
         const { data, error } = await supabase.from('requests').select(`
             *,
-            status (*),
             repository:repositories (
                 *,
                 organization:organizations (*)
             ),
-            request_clients(*),
-            request_vendors(*),
             user!requests_user_id_fkey (*),
             servicer:user!requests_servicer_id_fkey (*),
             request_events (
                 *,
-                status (id, name),
                 user (*)
             ),
             attachments (*),
@@ -56,27 +52,27 @@ export function useFetchRequest(req = null) {
     }
 
     const isSubmitted = computed(() => {
-        return request.value?.status.name === 'Submitted'
+        return request.value?.status === 'STATUS_CREATED'
     })
 
     const isCancelled = computed(() => {
-        return request.value?.status.name === 'Cancelled'
+        return request.value?.status === 'STATUS_CANCELLED'
     })
 
     const isInProgress = computed(() => {
-        return request.value?.status.name === 'In Progress'
+        return ['STATUS_UNPAID', 'STATUS_PAID'].includes(request.value?.status)
     })
 
     const isCompleted = computed(() => {
-        return request.value?.status.name === 'Complete'
+        return request.value?.status === 'STATUS_COMPLETE'
     })
 
     const isArchived = computed(() => {
-        return request.value?.status.name === 'Archived'
+        return request.value?.status === 'STATUS_ARCHIVED'
     })
 
     const isUnassigned = computed(() => {
-        return request.value?.status.name === 'Unassigned'
+        return isInProgress.value && !request.value?.servicer_id && request.value.public_can_claim
     })
 
     const isPublic = computed(() => {
@@ -88,27 +84,27 @@ export function useFetchRequest(req = null) {
     })
 
     const submittedDate = computed(() => {
-        return request.value.request_events.find(event => event.status.name === 'Submitted')?.created_at ?? null
+        return request.value.request_events.find(event => event.status === 'STATUS_CREATED')?.created_at ?? null
     })
 
     const confirmedDate = computed(() => {
-        return request.value.request_events.find(event => event.status.name === 'In Progress')?.created_at ?? null 
+        return request.value.request_events.find(event => ['STATUS_UNPAID', 'STATUS_PAID'].includes(event.status))?.created_at ?? null 
     })
 
     const completedDate = computed(() => {
-        return request.value.request_events.find(event => event.status.name === 'Complete')?.created_at ?? null 
+        return request.value.request_events.find(event => event.status === 'STATUS_COMPLETE')?.created_at ?? null 
     })
 
     const archivedDate = computed(() => {
-        return request.value.request_events.find(event => event.status.name === 'Archived')?.created_at ?? null 
+        return request.value.request_events.find(event => event.status === 'STATUS_ARCHIVED')?.created_at ?? null 
     })
 
     const cancelledDate = computed(() => { 
-        return request.value.request_events.find(event => event.status.name === 'Cancelled')?.created_at ?? null 
+        return request.value.request_events.find(event => event.status === 'STATUS_CANCELLED')?.created_at ?? null 
     })
 
     const requestLabel = computed(() => {
-        return request.value.request_vendors?.label ?? request.value.request_clients?.value ?? request.value.original_title ?? 'Untitled'
+        return request.value.vendor_label ?? request.value.client_label ?? request.value.original_title ?? 'Untitled'
     })
 
     const canService = computed(() => {
