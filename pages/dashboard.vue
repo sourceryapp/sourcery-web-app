@@ -45,7 +45,7 @@
                             </v-card-text>
                         </v-card>
 
-                        <v-card @click="setStatus('STATUS_PAID')" class="mb-4" link>
+                        <v-card @click="setStatus(['STATUS_UNPAID', 'STATUS_PAID'])" class="mb-4" link>
                             <v-card-title>In Progress</v-card-title>
                             <v-card-text class="py-0">
                                 <p>Requests that have been picked up by an organization, and are in progress.</p>

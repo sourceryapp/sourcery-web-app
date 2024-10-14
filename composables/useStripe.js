@@ -1,6 +1,5 @@
 import { loadStripe } from "@stripe/stripe-js";
 
-
 export default function useStripe() {
     const config = useRuntimeConfig();
     const stripe = useState("stripe-client", () => null);

@@ -45,6 +45,7 @@ export function useFetchUriRequests() {
     async function countUriRequests() {
         const { count, error } = await supabase.from('requests')
             .select('*', { count: 'exact', head: true })
+            .in('status', ['STATUS_CREATED'])
             .eq('user_id', user.value.id)
             .eq('deleted', false)
             .is('repository_id', null)

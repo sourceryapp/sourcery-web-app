@@ -62,7 +62,7 @@ export default function useCreateRequest() {
                 const { data, error } = await supabase.from('requests').insert({
                     repository_id: requestFields.value.repository.id,
                     citation: requestFields.value.details,
-                    status_id: 1,
+                    status: 'STATUS_CREATED',
                     user_id: requestFields.value.user.id,
                     original_title: requestFields.value.title,
                     referrer: requestFields.value.referrer,
@@ -99,7 +99,7 @@ export default function useCreateRequest() {
                     repository_location: requestFields.value.customRepositoryLocation,
                     referrer: requestFields.value.referrer,
                     referrer_data: requestFields.value.referrer_data,
-                    status_id: 6
+                    status: 'STATUS_CREATED'
                 }).select().single()
 
                 requestFormLoading.value = false

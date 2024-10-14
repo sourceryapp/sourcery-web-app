@@ -1,13 +1,13 @@
 <template>
     <div>
         <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" lg="4">
                 <v-text-field label="Search" variant="outlined" v-model="search" @update:model-value="onModelChange" density="compact" prepend-inner-icon="mdi-magnify" hide-details></v-text-field>
             </v-col>
-            <v-col md="4">
+            <v-col cols="6" lg="4">
                 <StatusSelect v-model="selectedStatus" @update:model-value="onModelChange"></StatusSelect>
             </v-col>
-            <v-col md="4">
+            <v-col cols="6" lg="4">
                 <v-select v-model="order" :items="orderOptions" variant="outlined" clearable placeholder="Sort Order" label="Sort Order" @update:model-value="onModelChange" density="compact" hide-details></v-select>
             </v-col>
             <v-col cols="12">
@@ -56,7 +56,7 @@ defineExpose({
 })
 
 function setStatus(statusName) {
-    selectedStatus.value = [statusName]
+    selectedStatus.value = Array.isArray(statusName) ? statusName : [statusName]
     onModelChange()
 }
 

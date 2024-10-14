@@ -64,9 +64,14 @@
                     </template>
                 </v-list-item>
             </v-list>
+
+
+            <h2 class="mt-5 mb-2">Billing Address</h2>
+            <p>Add a billing address to become eligible for paid services.</p>
+            <user-billing-address />
             
 
-            <h2 class="mt-5">Claim Eligibility</h2>
+            <h2 class="mt-5 mb-2">Claim Eligibility</h2>
             <p>See if you have passed the requirements in order to claim public requests.</p>
 
             <v-list density="compact">
@@ -94,7 +99,7 @@
             </v-list>
 
 
-            <h2 class="mt-5" id="organizations">Organizations &amp; Invitations</h2>
+            <h2 class="mt-5 mb-2" id="organizations">Organizations &amp; Invitations</h2>
             <p>Manage your organizations and invitations.</p>
 
 

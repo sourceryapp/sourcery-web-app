@@ -6,7 +6,6 @@
 const props = defineProps(['status'])
 
 const color = computed(() => {
-    console.log(props.status)
     switch (props.status) {
         case 'STATUS_CREATED':
             return 'blue-lighten-1'
