@@ -81,11 +81,11 @@ export function useAuthUser() {
     })
 
     const userOrgInvites = computed(() => {
-        return authUser.value?.organization_users.filter(ou => !ou.confirmed)
+        return authUser.value?.organization_users.filter(ou => !ou.confirmed) || []
     })
 
     const userOrgMember = computed(() => {
-        return authUser.value?.organization_users.filter(ou => ou.confirmed)
+        return authUser.value?.organization_users.filter(ou => ou.confirmed) || []
     })
 
     const isOrgOwner = computed(() => {
