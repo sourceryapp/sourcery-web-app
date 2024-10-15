@@ -27,7 +27,8 @@ export function useAuthUser() {
         organization_users (
             *,
             organizations (*)
-        )
+        ),
+        payment_details(*)
         `).eq('id', user.value.id).single()
 
         if (error) {

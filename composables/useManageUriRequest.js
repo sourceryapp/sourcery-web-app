@@ -8,6 +8,7 @@ export function useManageUriRequest(req = null) {
     const uriId = ref(req?.id ?? route.params.id ?? null)
     const repository = ref(null)
     const publicAccess = ref(false)
+    const pricing = ref('PRICING_FREE')
 
     const canManage = computed(() => {
         return authUser.value.admin
@@ -36,6 +37,7 @@ export function useManageUriRequest(req = null) {
             console.error(error)
         } else {
             request.value = data
+            pricing.value = request.value.pricing
         }
     }
 
@@ -103,7 +105,7 @@ export function useManageUriRequest(req = null) {
         if ( request.value ) {
             const { data, error } = await supabase.rpc('claim_request', {
                 input_request_id: request.value.id,
-                input_user_id: user.value.id
+                input_pricing: pricing.value
             })
 
             if ( error ) {
@@ -133,9 +135,14 @@ export function useManageUriRequest(req = null) {
         return false
     }
 
+    watch(request, (value) => {
+        pricing.value = value?.pricing ?? 'PRICING_FREE'
+    })
+
     return {
         uriId,
         request,
+        pricing,
         repository,
         publicAccess,
         canManage,

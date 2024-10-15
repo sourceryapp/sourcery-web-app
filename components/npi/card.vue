@@ -31,23 +31,7 @@
                     </v-card>
                 </template>
             </v-dialog>
-            <v-dialog v-model="claimRequestDialog" max-width="500" v-if="canClaim">
-                <template v-slot:activator="{ props }">
-                    <v-btn color="info" variant="text" v-bind="props" class="me-2 mb-2">Claim Request</v-btn>
-                </template>
-                <template v-slot:default="{ isActive }">
-                    <v-card>
-                        <v-card-title>Claim Request</v-card-title>
-                        <v-card-text>
-                            <p>Are you sure you want to claim this request? You will have 48 hours to service this request before it will be returned to the claim pool.</p>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-btn color="info" @click="claimNpi">Claim</v-btn>
-                            <v-btn @click="isActive.value = false" text>Cancel</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </template>
-            </v-dialog>
+            <v-btn color="info" variant="text" :to="`/request/${request.id}#actions`" class="me-2 mb-2">Claim Request</v-btn>
         </div>
     </v-sheet>
 </template>
@@ -56,28 +40,16 @@
 const props = defineProps(['request'])
 const emit = defineEmits(['deleted', 'claimed'])
 
-const { request: managedRequest, claimRequest, deleteRequest, canManage, canClaim } = useManageUriRequest()
+const { request: managedRequest, claimRequest, deleteRequest, canManage } = useManageUriRequest()
 
 const deleteRequestDialog = ref(false)
-const claimRequestDialog = ref(false)
 
 managedRequest.value = props.request
-
 
 async function deleteNpi() {
     managedRequest.value = props.request
     await deleteRequest()
     deleteRequestDialog.value = false
     emit('deleted')
-}
-
-async function claimNpi() {
-    console.log('Claiming request', props.request)
-    const result = await claimRequest()
-    if ( result ) {
-        claimRequestDialog.value = false
-        emit('claimed')
-        navigateTo('/request/' + props.request.id)
-    }
 }
 </script>

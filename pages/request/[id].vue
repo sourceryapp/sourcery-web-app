@@ -48,6 +48,7 @@
                 </v-col>
             </v-row>
 
+
             <template v-if="!isSubmitted">
                 <v-expansion-panels model-value="attachments" class="mb-6">
                     <v-expansion-panel :title="`Attachments (${request.attachments.length})`" value="attachments">
@@ -105,16 +106,41 @@
                 </v-expansion-panels>
             </template>
 
-            <v-card title="Pending Actions" class="pa-2">
-                <v-card-text v-if="isSubmitted">
-                    <v-divider class="mb-4"></v-divider>
-                    <template v-if="canService">
-                        <p>This request requires action by your institution.  Claiming the request will notify the requesting user and move the status to "In-Progress".</p>
-                        <requests-claim-button :request="request" v-if="canService"></requests-claim-button>
-                    </template>
-                    <v-alert v-else type="info" class="mb-0">Your request has been submitted and is awaiting review.</v-alert>
+
+            <v-card title="Service Details" class="pa-2 mb-4" id="service">
+                <v-card-text>
+                    <p>Pricing: {{ request.pricing }}</p>
                 </v-card-text>
-                <v-card-text v-if="isSubmitted || isInProgress">
+            </v-card>
+
+
+            <v-card title="Pending Actions" class="pa-2" id="actions">
+
+                <v-card-text v-if="canClaim || canService">
+                    <template v-if="isSubmitted">
+                        <v-divider class="mb-4"></v-divider>
+                        <p>This request is yet to be claimed. Claiming a request will notify the user that you intend to facilitate and produce reference documents for the requesting user.  If the request is not progressed within 48 hours, it will be returned to a queue for others to claim.</p>
+
+                        <requests-claim-quote :request="request"></requests-claim-quote>
+                    </template>
+                    <template v-if="isInProgress">
+                        <v-divider class="mb-4"></v-divider>
+                        <p>This request is currently in progress.  If you need to update the pricing or other details, you can do so here.</p>
+                    </template>
+                </v-card-text>
+
+                <v-card-text v-if="isSubmitted">
+                    <template v-if="canService">
+                        <v-divider class="mb-4"></v-divider>
+                        <p>This request can be claimed by your institution.  Claiming the request will notify the requesting user and move the status to "In-Progress".</p>
+                        <requests-organization-claim-button :request="request" v-if="canService"></requests-organization-claim-button>
+                    </template>
+                    <template v-if="isOwner">
+                        <v-divider class="mb-4"></v-divider>
+                        <v-alert type="info" class="mb-0">Your request has been submitted and is awaiting review.</v-alert>
+                    </template>
+                </v-card-text>
+                <v-card-text v-if="(isSubmitted || isInProgress) && canService">
                     <v-divider class="mb-4"></v-divider>
                     <p v-if="canService">Is this request not serviceable by your insitution, or contain spam/harmful content? In any similar case, a request can be cancelled.  This will notify the requesting user as well.</p>
                     <p v-else>A request can be cancelled at any time.  This will make the request unserviceable, and change the status to "Cancelled".</p>
@@ -156,13 +182,11 @@ const config = useRuntimeConfig()
 const { 
     request, requestLabel,
     isSubmitted, isInProgress, isCompleted, isArchived, isReported, isCancelled, isUnassigned,
-    canService,
+    canService, isOwner, canClaim, isClaimed,
     fetchRequest
 } = useFetchRequest()
 const route = useRoute()
 const { textToAnchors } = useHtmlFilters()
-
-console.log(route.hash)
 
 await fetchRequest()
 

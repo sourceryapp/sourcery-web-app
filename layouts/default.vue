@@ -132,7 +132,7 @@ const theme = useTheme()
 // Fetch user metadata only once on initial load/refresh from tab out
 // Observe the supabase user object for changes and sync user metadata
 await callOnce(fetchUserMetadata)
-await callOnce(loadStripe)
+callOnce(loadStripe)
 watch(user, possiblyRefetch)
 
 // All user related display helpers
