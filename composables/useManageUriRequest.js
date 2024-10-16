@@ -118,6 +118,21 @@ export function useManageUriRequest(req = null) {
         return false
     }
 
+    async function releaseRequest() {
+        if ( request.value ) {
+            const { data, error } = await supabase.rpc('release_request', {
+                input_request_id: request.value.id
+            })
+
+            if ( error ) {
+                console.error(error)
+            } else {
+                await fetchUriRequest()
+                return true
+            }
+        }
+    }
+
     async function deleteRequest() {
         if ( request.value ) {
             const { data, error } = await supabase.from('requests')
@@ -150,6 +165,7 @@ export function useManageUriRequest(req = null) {
         fetchUriRequest,
         convert,
         claimRequest,
+        releaseRequest,
         deleteRequest
     }
 

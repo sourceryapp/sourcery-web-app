@@ -87,6 +87,10 @@ export function useFetchRequest(req = null) {
         return request.value?.user_id === user.value?.id
     })
 
+    const isServicer = computed(() => {
+        return request.value?.servicer_id === user.value?.id
+    })
+
     const submittedDate = computed(() => {
         return request.value.request_events.find(event => event.status === 'STATUS_CREATED')?.created_at ?? null
     })
@@ -109,6 +113,10 @@ export function useFetchRequest(req = null) {
 
     const requestLabel = computed(() => {
         return request.value.vendor_label ?? request.value.client_label ?? request.value.original_title ?? 'Untitled'
+    })
+
+    const hasRepositoryAccess = computed(() => {
+        return userRepos?.value.some(repo => repo.id === request.value?.repository?.id)
     })
 
     const canService = computed(() => {
@@ -140,7 +148,9 @@ export function useFetchRequest(req = null) {
         isUnassigned,
         isPublic,
         isClaimed,
+        isServicer,
         isOwner,
+        hasRepositoryAccess,
         isReported,
         confirmedDate,
         completedDate,

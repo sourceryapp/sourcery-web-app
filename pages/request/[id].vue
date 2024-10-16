@@ -1,5 +1,7 @@
 <template>
     <div id="page-request-id" class="py-5">
+
+
         <v-container>
             <h1 class="mb-6">Request Summary</h1>
             <v-row class="mb-5">
@@ -107,26 +109,22 @@
             </template>
 
 
-            <v-card title="Service Details" class="pa-2 mb-4" id="service">
+            <v-card title="Service Details" class="pa-2 mb-4" id="service" v-if="isInProgress">
                 <v-card-text>
-                    <p>Pricing: {{ request.pricing }}</p>
+                    <p><strong>Servicer:</strong> {{ request.user.name }}</p>
+                    <p><strong>Pricing:</strong> {{ getPricingLabel(request.pricing) }} ({{ $utils.currencyFormat(getPricingCost(request.pricing)) }})</p>
                 </v-card-text>
             </v-card>
 
 
             <v-card title="Pending Actions" class="pa-2" id="actions">
+                <v-card-text v-if="(canClaim || canService) && isSubmitted">
+                    <v-divider class="mb-4"></v-divider>
+                    <p>This request is yet to be claimed. Claiming a request will notify the user that you intend to facilitate and produce reference documents for the requesting user.  If the request is not progressed within 48 hours, it will be returned to a queue for others to claim.</p>
 
-                <v-card-text v-if="canClaim || canService">
-                    <template v-if="isSubmitted">
-                        <v-divider class="mb-4"></v-divider>
-                        <p>This request is yet to be claimed. Claiming a request will notify the user that you intend to facilitate and produce reference documents for the requesting user.  If the request is not progressed within 48 hours, it will be returned to a queue for others to claim.</p>
+                    <p class="text-caption">**Sourcery will take 10% of the fee as a service charge.  The remaining 90% will be paid to the servicing organization or user.</p>
 
-                        <requests-claim-quote :request="request"></requests-claim-quote>
-                    </template>
-                    <template v-if="isInProgress">
-                        <v-divider class="mb-4"></v-divider>
-                        <p>This request is currently in progress.  If you need to update the pricing or other details, you can do so here.</p>
-                    </template>
+                    <requests-claim-quote :request="request" @claimed="fetchRequest()"></requests-claim-quote>
                 </v-card-text>
 
                 <v-card-text v-if="isSubmitted">
@@ -141,10 +139,20 @@
                     </template>
                 </v-card-text>
                 <v-card-text v-if="(isSubmitted || isInProgress) && canService">
-                    <v-divider class="mb-4"></v-divider>
-                    <p v-if="canService">Is this request not serviceable by your insitution, or contain spam/harmful content? In any similar case, a request can be cancelled.  This will notify the requesting user as well.</p>
-                    <p v-else>A request can be cancelled at any time.  This will make the request unserviceable, and change the status to "Cancelled".</p>
-                    <requests-cancel-button :request="request"></requests-cancel-button>
+                    <template v-if="hasRepositoryAccess">
+                        <v-divider class="mb-4"></v-divider>
+                        <p>Is this request not serviceable by your insitution, or contain spam/harmful content? In any similar case, a request can be cancelled.  This will notify the requesting user as well.</p>
+                    </template>
+                    <template v-if="isOwner">
+                        <v-divider class="mb-4"></v-divider>
+                        <p >A request can be cancelled at any time.  This will make the request unserviceable, and change the status to "Cancelled".</p>
+                        <requests-cancel-button :request="request"></requests-cancel-button>
+                    </template>
+                    <template v-if="isServicer">
+                        <v-divider class="mb-4"></v-divider>
+                        <p>If you feel you cannot service this request properly or in the time frame, you can release the request back to the public here.</p>
+                        <requests-release-button :request="request" @released="fetchRequest()"></requests-release-button>
+                    </template>
                 </v-card-text>
                 <v-card-text v-if="isInProgress && canService">
                     <v-divider class="mb-4"></v-divider>
@@ -153,7 +161,7 @@
                 </v-card-text>
                 <v-card-text v-if="isCompleted">
                     <v-divider class="mb-4"></v-divider>
-                    <template v-if="canService">
+                    <template v-if="isOwner">
                         <p>This request has been completed.  Sourcery provides an option to archive requests, which will prevent changes and signal to us that documents can be moved to cold storage (they are still available for download).</p>
                         <requests-archive-button :request="request"></requests-archive-button>
                     </template>
@@ -182,11 +190,14 @@ const config = useRuntimeConfig()
 const { 
     request, requestLabel,
     isSubmitted, isInProgress, isCompleted, isArchived, isReported, isCancelled, isUnassigned,
-    canService, isOwner, canClaim, isClaimed,
+    canService, isOwner, hasRepositoryAccess, isServicer,
     fetchRequest
 } = useFetchRequest()
+const { canClaim } = useAuthUser()
 const route = useRoute()
 const { textToAnchors } = useHtmlFilters()
+const { getPricingCost, getPricingLabel } = usePricing()
+const { $utils } = useNuxtApp()
 
 await fetchRequest()
 
