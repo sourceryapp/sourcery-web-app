@@ -6,7 +6,10 @@ const { request: managedRequest, claimRequest, deleteRequest, canManage, canClai
 
 managedRequest.value = props.request
 
-const loading = ref(false)
+// Placeholders
+const totalPrice = computed(() => {
+    return ((managedRequest.value.pages * 0.4) + 10) * 100
+})
 
 async function claim() {
     console.log('Claiming request', props.request)
@@ -21,12 +24,14 @@ async function claim() {
 
 <template>
     <div>
-        <v-radio-group v-model="pricing">
-            <v-radio label="Free ($0.00)" value="PRICING_FREE"></v-radio>
-            <v-radio label="Small ($10.00)" value="PRICING_SMALL"></v-radio>
-            <v-radio label="Medium ($25.00)" value="PRICING_MEDIUM"></v-radio>
-            <v-radio label="Large ($50.00)" value="PRICING_LARGE"></v-radio>
-        </v-radio-group>
+        <v-row align="center" class="py-3">
+            <v-col>
+                <span class="d-block">{{ managedRequest.pages }} pages</span>
+                <!-- Placeholder PRicing -->
+                <span class="text-h3">{{ $utils.currencyFormat(totalPrice - (totalPrice * 0.1)) }}</span>
+            </v-col>
+        </v-row>
+        
 
         <v-alert color="warning" icon="$warning" variant="tonal" class="mb-4" v-if="pricing !== 'free'" title="Payment Action" text="The requesting user will be required to pay for the invoice before receiving documents.  You must add a payout account to receive funds."></v-alert>
 

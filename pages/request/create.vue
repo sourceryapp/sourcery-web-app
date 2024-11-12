@@ -45,6 +45,19 @@
                         <p>Help the folks on the other end locate your document(s) by providing as much relevant information as you have (e.g. page numbers, box or folder numbers, collections, links, citations).</p>
                         <v-textarea v-model="requestFields.details" variant="outlined" class="mb-2" label="Request Details" :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]" counter="6000"></v-textarea>
 
+
+                        <div class="mb-4">
+                            <p>Estimate the expected size and expected cost of the request:</p>
+                            <v-row>
+                                <v-col>
+                                    <span class="d-block mb-2">{{ requestFields.pages }} pages</span>
+                                    <!-- Placeholder Pricing -->
+                                    <span class="text-h3 mb-2">{{ $utils.currencyFormat(((requestFields.pages * 0.4) + 10) * 100) }}</span>
+                                </v-col>
+                            </v-row>
+                            <v-slider min="1" max="100" color="primary" hide-details step="1" v-model="requestFields.pages"></v-slider>
+                        </div>
+
                         <v-alert color="error" icon="$error" :text="requestFormError" class="mb-4" v-if="requestFormError"></v-alert>
 
                         <v-card v-if="requestFields.customRepository" title="A Note on Requests" class="mb-5">

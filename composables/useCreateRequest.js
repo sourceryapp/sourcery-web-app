@@ -19,7 +19,8 @@ export default function useCreateRequest() {
         customRepository: '',
         customRepositoryLocation: '',
         referrer: null,
-        referrer_data: null
+        referrer_data: null,
+        pages: 1
     })
     const createdRequest = ref()
 
@@ -58,78 +59,62 @@ export default function useCreateRequest() {
         if ( requestFormValid.value ) {
             requestCreatedSubmitDialog.value = true
 
-            if ( !requestFields.value.customRepository ) {
-                const { data, error } = await supabase.from('requests').insert({
-                    repository_id: requestFields.value.repository.id,
-                    citation: requestFields.value.details,
-                    status: 'STATUS_CREATED',
-                    user_id: requestFields.value.user.id,
-                    original_title: requestFields.value.title,
-                    referrer: requestFields.value.referrer,
-                    referrer_data: requestFields.value.referrer_data
-                }).select().single()
-
-                requestFormLoading.value = false
-
-                if ( error ) {
-                    requestFormError.value = error
-                } else {
-                    localStorage.removeItem('sourceryInProgressRequest')
-                    createdRequest.value = data
-
-                    // Notifies team of NPI request.
-                    await supabase.functions.invoke('notify', {
-                        body: {
-                            user_id: createdRequest.value.user_id,
-                            request_id: createdRequest.value.id,
-                            action: 'request_submitted_to_your_org'
-                        }
-                    })
-
-
-                    navigateTo(`/request/${data.id}`)
-                }
-            } else {
-
-                const { data, error } = await supabase.from('requests').insert({
-                    user_id: requestFields.value.user.id,
-                    original_title: requestFields.value.title,
-                    citation: requestFields.value.details,
-                    repository_name: requestFields.value.customRepository,
-                    repository_location: requestFields.value.customRepositoryLocation,
-                    referrer: requestFields.value.referrer,
-                    referrer_data: requestFields.value.referrer_data,
-                    status: 'STATUS_CREATED'
-                }).select().single()
-
-                requestFormLoading.value = false
-
-                if ( error ) {
-                    requestFormError.value = error
-                } else {
-                    localStorage.removeItem('sourceryInProgressRequest')
-                    createdRequest.value = data
-
-                    // Optional / Can Fails after this comment.
-                    // Populates spreadsheet with NPI request.
-                    await supabase.functions.invoke('prospective', {
-                        body: createdRequest.value
-                    })
-
-                    // Notifies team of NPI request.
-                    await supabase.functions.invoke('notify', {
-                        body: {
-                            user_id: createdRequest.value.user_id,
-                            rp_id: createdRequest.value.id,
-                            action: 'npi_request_to_requester'
-                        }
-                    })
-
-
-
-                    navigateTo(`/dashboard`)
-                }
+            const insertData = {
+                repository_id: requestFields.value.repository.id,
+                citation: requestFields.value.details,
+                status: 'STATUS_CREATED',
+                user_id: requestFields.value.user.id,
+                original_title: requestFields.value.title,
+                referrer: requestFields.value.referrer,
+                referrer_data: requestFields.value.referrer_data,
+                pages: requestFields.value.pages
             }
+
+            if (requestFields.value.customRepository) {
+                delete insertData.repository_id
+                insertData.repository_location = requestFields.value.customRepositoryLocation
+                insertData.repository_name = requestFields.value.customRepository
+            }
+
+            const { data, error } = await supabase.from('requests').insert(insertData).select().single()
+
+            requestFormLoading.value = false
+
+            if ( error ) {
+                requestFormError.value = error
+                return null
+            }
+
+            localStorage.removeItem('sourceryInProgressRequest')
+            createdRequest.value = data
+
+            if ( requestFields.value.customRepository ) {
+                // Optional / Can Fails after this comment.
+                // Populates spreadsheet with NPI request.
+                await supabase.functions.invoke('prospective', {
+                    body: createdRequest.value
+                })
+
+                // Notifies team of NPI request.
+                await supabase.functions.invoke('notify', {
+                    body: {
+                        user_id: createdRequest.value.user_id,
+                        rp_id: createdRequest.value.id,
+                        action: 'npi_request_to_requester'
+                    }
+                })
+            } else {
+                // Notifies team of NPI request.
+                await supabase.functions.invoke('notify', {
+                    body: {
+                        user_id: createdRequest.value.user_id,
+                        request_id: createdRequest.value.id,
+                        action: 'request_submitted_to_your_org'
+                    }
+                })
+            }
+
+            navigateTo(`/request/${data.id}`)
         }
         return null
     }

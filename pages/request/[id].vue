@@ -122,7 +122,7 @@
                     <v-divider class="mb-4"></v-divider>
                     <p>This request is yet to be claimed. Claiming a request will notify the user that you intend to facilitate and produce reference documents for the requesting user.  If the request is not progressed within 48 hours, it will be returned to a queue for others to claim.</p>
 
-                    <p class="text-caption">**Sourcery will take 10% of the fee as a service charge.  The remaining 90% will be paid to the servicing organization or user.</p>
+                    <p>The client has estimated the request at the following:</p>
 
                     <requests-claim-quote :request="request" @claimed="fetchRequest()"></requests-claim-quote>
                 </v-card-text>
