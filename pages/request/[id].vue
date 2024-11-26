@@ -51,12 +51,18 @@
             </v-row>
 
 
+            <template>
+                <p>Payment Time</p>
+            </template>
+
+
             <template v-if="!isSubmitted">
                 <v-expansion-panels model-value="attachments" class="mb-6">
                     <v-expansion-panel :title="`Attachments (${request.attachments.length})`" value="attachments">
                         <v-expansion-panel-text class="py-4">
-                            <requests-file-manager :request="request" v-if="canService || isCompleted || isArchived"></requests-file-manager>
-                            <p class="mb-0" v-else-if="isInProgress">The vendor is working on this request - check back later for attachments.</p>
+                            <requests-file-manager :request="request" v-if="canViewAttachments"></requests-file-manager>
+                            <p class="mb-0" v-else-if="isInProgress && !isServicer">The vendor is working on this request - check back later for attachments.</p>
+                            <p class="mb-0" v-else-if="!isServicer && isCompleted">The vendor has completed this request.  Please finish payment before retrieving attachments.</p>
                             <p class="mb-0" v-else>Nothing here yet.</p>
                         </v-expansion-panel-text>
                     </v-expansion-panel>
@@ -112,13 +118,14 @@
             <v-card title="Service Details" class="pa-2 mb-4" id="service" v-if="isInProgress">
                 <v-card-text>
                     <p><strong>Servicer:</strong> {{ request.user.name }}</p>
-                    <p><strong>Pricing:</strong> {{ getPricingLabel(request.pricing) }} ({{ $utils.currencyFormat(getPricingCost(request.pricing)) }})</p>
+                    <p><strong>Pricing:</strong> {{ $utils.currencyFormat(totalPrice) }}</p>
+                    <p><strong>Time Remaining:</strong> {{ $filters.timeRemainingGivenHours(request.servicer_claimed_at, 48) }}</p>
                 </v-card-text>
             </v-card>
 
 
             <v-card title="Pending Actions" class="pa-2" id="actions">
-                <v-card-text v-if="(canClaim || canService) && isSubmitted">
+                <v-card-text v-if="(canClaim || canService) && isSubmitted && !isOwner">
                     <v-divider class="mb-4"></v-divider>
                     <p>This request is yet to be claimed. Claiming a request will notify the user that you intend to facilitate and produce reference documents for the requesting user.  If the request is not progressed within 48 hours, it will be returned to a queue for others to claim.</p>
 
@@ -190,16 +197,16 @@ const config = useRuntimeConfig()
 const { 
     request, requestLabel,
     isSubmitted, isInProgress, isCompleted, isArchived, isReported, isCancelled, isUnassigned,
-    canService, isOwner, hasRepositoryAccess, isServicer,
+    canService, isOwner, hasRepositoryAccess, isServicer, canViewAttachments,
     fetchRequest
 } = useFetchRequest()
 const { canClaim } = useAuthUser()
 const route = useRoute()
 const { textToAnchors } = useHtmlFilters()
-const { getPricingCost, getPricingLabel } = usePricing()
 const { $utils } = useNuxtApp()
 
 await fetchRequest()
+const { totalPrice } = useManageUriRequest(request.value)
 
 const { hasUnread, clearUnread } = useRequestMessenger(request.value)
 

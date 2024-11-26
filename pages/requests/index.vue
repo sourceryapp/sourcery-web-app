@@ -1,6 +1,8 @@
 <script setup>
 const supabase = useSupabaseClient()
+const { requestCount, countUriRequests } = useFetchUriRequests()
 
+await countUriRequests()
 const { data: requests, error } = await supabase.from('requests')
     .select('*')
     .is('servicer_id', null)
@@ -14,8 +16,16 @@ const { data: requests, error } = await supabase.from('requests')
 <template>
     <div id="page-requests">
         <v-container>
-            <h1>Claim Requests</h1>
-            <p>Requests here can be claimed by Sourcery users to fulfill.</p>
+            <v-row>
+                <v-col>
+                    <h1>Claim Requests</h1>
+                    <p>Requests here can be claimed by Sourcery users to fulfill.</p>
+                </v-col>
+                <v-col>
+                    <v-alert type="info" variant="tonal">You have {{ requestCount }} request(s) awaiting claim.</v-alert>
+                </v-col>
+            </v-row>
+            
 
             <div class="mb-4">
                 <npi-card v-for="request in requests" :request="request" :key="request.id"></npi-card>

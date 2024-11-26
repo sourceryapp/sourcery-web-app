@@ -60,11 +60,15 @@ export function useFetchRequest(req = null) {
     })
 
     const isInProgress = computed(() => {
-        return ['STATUS_UNPAID', 'STATUS_PAID'].includes(request.value?.status)
+        return ['STATUS_UNPAID'].includes(request.value?.status)
     })
 
     const isCompleted = computed(() => {
         return request.value?.status === 'STATUS_COMPLETE'
+    })
+
+    const isPaid = computed(() => {
+        return request.value?.status === 'STATUS_PAID'
     })
 
     const isArchived = computed(() => {
@@ -130,6 +134,12 @@ export function useFetchRequest(req = null) {
         return valid
     })
 
+    const canViewAttachments = computed(() => {
+        return isServicer.value || (
+            isOwner.value && isPaid.value
+        )
+    })
+
     const isReported = computed(() => {
         return request.value?.reports.length > 0
     })
@@ -143,6 +153,7 @@ export function useFetchRequest(req = null) {
         isSubmitted,
         isInProgress,
         isCompleted,
+        isPaid,
         isArchived,
         isCancelled,
         isUnassigned,
@@ -156,6 +167,7 @@ export function useFetchRequest(req = null) {
         completedDate,
         archivedDate,
         cancelledDate,
-        canService
+        canService,
+        canViewAttachments
     }
 }

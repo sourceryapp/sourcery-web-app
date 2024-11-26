@@ -8,7 +8,6 @@ export function useManageUriRequest(req = null) {
     const uriId = ref(req?.id ?? route.params.id ?? null)
     const repository = ref(null)
     const publicAccess = ref(false)
-    const pricing = ref('PRICING_FREE')
 
     const canManage = computed(() => {
         return authUser.value.admin
@@ -37,7 +36,6 @@ export function useManageUriRequest(req = null) {
             console.error(error)
         } else {
             request.value = data
-            pricing.value = request.value.pricing
         }
     }
 
@@ -150,18 +148,19 @@ export function useManageUriRequest(req = null) {
         return false
     }
 
-    watch(request, (value) => {
-        pricing.value = value?.pricing ?? 'PRICING_FREE'
+    // Placeholders
+    const totalPrice = computed(() => {
+        return ((request.value.pages * 0.4) + 10) * 100
     })
 
     return {
         uriId,
         request,
-        pricing,
         repository,
         publicAccess,
         canManage,
         canClaim,
+        totalPrice,
         fetchUriRequest,
         convert,
         claimRequest,

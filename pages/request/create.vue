@@ -48,9 +48,10 @@
 
                         <div class="mb-4">
                             <p>Estimate the expected size and expected cost of the request:</p>
+                            <p><em>The final total will be confirmed by the fulfilling user, unless claimed by an organization.</em></p>
                             <v-row>
                                 <v-col>
-                                    <span class="d-block mb-2">{{ requestFields.pages }} pages</span>
+                                    <span class="d-block mb-2">{{ pagesNumber }} pages</span>
                                     <!-- Placeholder Pricing -->
                                     <span class="text-h3 mb-2">{{ $utils.currencyFormat(((requestFields.pages * 0.4) + 10) * 100) }}</span>
                                 </v-col>
@@ -102,7 +103,6 @@
 
 <script setup>
 const { repository } = useSelectRepository()
-// const { fetchRepositories } = useFetchRepositories()
 const { authUser, isOrgOwner, userRepos } = useAuthUser()
 const { $sourceryForms } = useNuxtApp()
 const {
@@ -120,11 +120,17 @@ const {
     setSessionDraft,
     populateFromQuery
 } = useCreateRequest()
-// const route = useRoute()
 
 const requestType = ref('normal');
 
-// await fetchRepositories()
+const pagesNumber = computed(() => {
+    let p = requestFields.value.pages
+    if ( requestFields.value.pages >= 100 ) {
+        p = '100+'
+    }
+    return p
+})
+
 populateFromQuery()
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
