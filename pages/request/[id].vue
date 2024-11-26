@@ -51,9 +51,14 @@
             </v-row>
 
 
-            <template>
-                <p>Payment Time</p>
-            </template>
+
+                <v-expansion-panels model-value="payment" class="mb-6">
+                    <v-expansion-panel :title="`Payment`" value="payment">
+                        <v-expansion-panel-text class="py-4">
+                            <v-btn @click="settleBill">Settle Request Bill</v-btn>
+                        </v-expansion-panel-text>
+                    </v-expansion-panel>
+                </v-expansion-panels>
 
 
             <template v-if="!isSubmitted">
@@ -204,6 +209,7 @@ const { canClaim } = useAuthUser()
 const route = useRoute()
 const { textToAnchors } = useHtmlFilters()
 const { $utils } = useNuxtApp()
+const supabase = useSupabaseClient()
 
 await fetchRequest()
 const { totalPrice } = useManageUriRequest(request.value)
@@ -211,4 +217,8 @@ const { totalPrice } = useManageUriRequest(request.value)
 const { hasUnread, clearUnread } = useRequestMessenger(request.value)
 
 const messengerAlertAgree = ref(true)
+
+async function settleBill() {
+    const resp = await supabase.functions.invoke('claim_request', { body: { request_id: request.value.id } })
+}
 </script>

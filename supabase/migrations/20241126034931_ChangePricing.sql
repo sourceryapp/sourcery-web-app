@@ -25,3 +25,9 @@ BEGIN
       AND status IN ('STATUS_UNPAID');
 END;
 $$;
+
+ALTER TABLE public.user
+ADD COLUMN stripe_customer_id text DEFAULT NULL;
+
+ALTER TABLE public.requests
+ADD COLUMN stripe_invoice_id text DEFAULT NULL;
