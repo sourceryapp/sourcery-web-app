@@ -5,7 +5,7 @@ BEGIN
     UPDATE public.requests
     SET servicer_id = auth.uid(),
         servicer_claimed_at = NOW(),
-        status = 'STATUS_PAID'::status_enum
+        status = 'STATUS_UNPAID'::status_enum
     WHERE id = input_request_id
       AND servicer_id IS NULL
       AND status = 'STATUS_CREATED'

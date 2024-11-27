@@ -10,6 +10,8 @@ export function useCompleteRequest(req) {
     async function completeRequest() {
         completeLoading.value = true
 
+        const invoiceResp = await supabase.functions.invoke('generate_invoice', { body: { request_id: request.value.id } })
+
         // Update the request status to completed
         const { data, error } = await supabase.from('requests').update({
             status: 'STATUS_COMPLETE'

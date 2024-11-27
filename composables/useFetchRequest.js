@@ -47,6 +47,16 @@ export function useFetchRequest(req = null) {
                 })
             }
 
+            if (data.stripe_invoice_id) {
+                const { data: invoiceData, error: invoiceError } = await supabase.functions.invoke('retrieve_invoice', {
+                    body: { request_id: data.id }
+                })
+
+                if (!invoiceError) {
+                    data.stripe_invoice = invoiceData
+                }
+            }
+
             request.value = data
         }
     }
@@ -127,7 +137,6 @@ export function useFetchRequest(req = null) {
         // If a user has access to the repository that the request is assigned to, they can service it.
         let valid = userRepos?.value.some(repo => repo.id === request.value?.repository?.id)
 
-        // If the user does not have that access, they can still service the request if it is claimed and the repository is null.
         if ( isClaimed.value && request.value?.servicer_id && request.value?.servicer_id === user.value?.id && request.value.repository_id === null ) {
             valid = true
         }

@@ -52,13 +52,14 @@
 
 
 
-                <v-expansion-panels model-value="payment" class="mb-6">
-                    <v-expansion-panel :title="`Payment`" value="payment">
-                        <v-expansion-panel-text class="py-4">
-                            <v-btn @click="settleBill">Settle Request Bill</v-btn>
-                        </v-expansion-panel-text>
-                    </v-expansion-panel>
-                </v-expansion-panels>
+            <v-expansion-panels model-value="payment" class="mb-6" v-if="request.stripe_invoice_id">
+                <v-expansion-panel :title="`Payment`" value="payment">
+                    <v-expansion-panel-text class="py-4">
+                        <p>Amount Remaining: {{ $utils.currencyFormat(request.stripe_invoice.amount_remaining )}}</p>
+                        <v-btn color="success" :href="request.stripe_invoice.hosted_invoice_url" target="_blank">Purchase Request Documents</v-btn>
+                    </v-expansion-panel-text>
+                </v-expansion-panel>
+            </v-expansion-panels>
 
 
             <template v-if="!isSubmitted">
@@ -217,8 +218,4 @@ const { totalPrice } = useManageUriRequest(request.value)
 const { hasUnread, clearUnread } = useRequestMessenger(request.value)
 
 const messengerAlertAgree = ref(true)
-
-async function settleBill() {
-    const resp = await supabase.functions.invoke('claim_request', { body: { request_id: request.value.id } })
-}
 </script>
