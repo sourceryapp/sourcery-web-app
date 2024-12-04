@@ -30,6 +30,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@nuxt/scripts": "^0.9.5",
     "@nuxtjs/supabase": "^1.1.6",
     "@pinia/nuxt": "^0.5.1",
     "concurrently": "^6.0.2",

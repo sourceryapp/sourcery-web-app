@@ -204,7 +204,7 @@ export default defineNuxtConfig({
               }))
           })
       },
-      'nuxt-gtag',
+      '@nuxt/scripts',
       '@nuxtjs/supabase',
       '@pinia/nuxt'
   ],
@@ -268,5 +268,16 @@ export default defineNuxtConfig({
       }
   },
 
-  compatibilityDate: '2024-08-12'
+  compatibilityDate: '2024-08-12',
+  
+  $production: {
+    scripts: {
+        registry: {
+            googleTagManager: {
+                id: 'AW-16751318238'
+            }
+        }
+      }
+  }
+  
 })
