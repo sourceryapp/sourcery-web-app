@@ -30,7 +30,6 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@nuxt/scripts": "^0.9.5",
     "@nuxtjs/supabase": "^1.1.6",
     "@pinia/nuxt": "^0.5.1",
     "concurrently": "^6.0.2",
@@ -39,7 +38,6 @@
     "husky": "^6.0.0",
     "nuxi": "^3.10",
     "nuxt": "^3.11",
-    "nuxt-gtag": "^1.2.0",
     "prettier-eslint": "^15.0.0",
     "sass": "^1.70.0",
     "supabase": "^1.127.4",

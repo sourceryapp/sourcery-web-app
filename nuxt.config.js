@@ -98,7 +98,10 @@ export default defineNuxtConfig({
               { src: '/js/sw-registration.js' },
 
               // Add to homescreen popup
-              { src: '/js/addtohomescreen.js' }
+              { src: '/js/addtohomescreen.js' },
+
+              // GAW
+              { src: 'https://www.googletagmanager.com/gtag/js?id=AW-16751318238', async: true }
           ],
       }
   },
@@ -204,7 +207,6 @@ export default defineNuxtConfig({
               }))
           })
       },
-      '@nuxt/scripts',
       '@nuxtjs/supabase',
       '@pinia/nuxt'
   ],
@@ -269,15 +271,5 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-08-12',
-  
-  $production: {
-    scripts: {
-        registry: {
-            googleTagManager: {
-                id: 'AW-16751318238'
-            }
-        }
-      }
-  }
   
 })

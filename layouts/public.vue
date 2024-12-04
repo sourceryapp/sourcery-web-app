@@ -43,6 +43,8 @@ const route = useRoute()
 const theme = useTheme()
 const isHome = computed(() => route.path === '/')
 
+const config = useRuntimeConfig()
+
 // Set up some show/hide for the header based on section intersect
 const headerIntersectStore = useHeaderIntersectStore()
 headerIntersectStore.setHeaderIntersect(isHome.value)
@@ -59,4 +61,9 @@ useHead({
         }
     ]
 })
+
+if (config.public.SOURCERY_ENV === 'production') {
+    window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-16751318238');
+}
+
 </script>
