@@ -55,7 +55,7 @@
 
         <div class="py-10 bg-surface-variant">
             <v-container>
-                <h1 class="text-h3 font-weight-medium text-center mb-16">Meet the Team</h1>
+                <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Meet the Team</h2>
                 <v-row>
                     <v-col cols="12" sm="10" offset-sm="1">
                         <template v-for="member in members">
@@ -80,7 +80,7 @@
             <v-container>
             <v-row class="pb-10">
                 <v-col cols="12" sm="10" offset-sm="1">
-                    <h2 class="text-h4 mb-8">Advisory Board</h2>
+                    <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Advisory Board</h2>
                     <v-row>
                         <v-col cols="12" sm="6" v-for="member in advisoryBoard">
                             <h2 class="text-h6">{{ member.name }}</h2>
@@ -96,7 +96,7 @@
             <v-container>
             <v-row class="pb-10">
                 <v-col cols="12" sm="10" offset-sm="1">
-                    <h2 class="text-h4 mb-8">Alumni</h2>
+                    <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Alumni</h2>
                     <v-row>
                         <v-col cols="12" sm="6" md="4" v-for="member in alumni">
                             <h2 class="text-h6">{{ member.name }}</h2>
@@ -112,8 +112,8 @@
             <v-container>
                 <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Partners</h2>
                 <v-row justify="center" align="center" v-for="logoGroup in logos">
-                    <v-col cols="6" sm="4" :md="Math.floor(8 / logoGroup.length)" v-for="logo in logoGroup" :key="logo.name" class="text-center mb-6" align="start">
-                        <v-img :src="logo.src" :alt="logo.name" contain :height="logo.height ?? 100" position="top" class="grayscale"></v-img>
+                    <v-col cols="6" sm="4" :md="Math.floor(8 / logoGroup.items.length)" v-for="logo in logoGroup.items" :key="logo.name" class="text-center mb-6" align="start">
+                        <v-img :src="logo.src" :alt="logo.name" contain :height="logo.height ?? 100" :position="logoGroup.position ?? 'top'" class="grayscale"></v-img>
                     </v-col>
                 </v-row>
             </v-container>
@@ -167,88 +167,16 @@ const members = ref([
     }
 ])
 
-const alumni = ref([
-    {
-        name: 'Carly Wanner-Hyde',
-        title: 'Project Lead / Head Designer',
-        image: 'wanner-hyde.jpg',
-        bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
-    },
-    {
-        name: 'Raven Morris',
-        title: 'Graduate Research Assistant',
-        image: 'raven-morris.jpg',
-        bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
-    },
-    {
-        name: 'Lauren Harland',
-        title: 'Undergraduate Research Assistant',
-        image: 'harland.jpg',
-        bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She\'s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
-    },
-    {
-        name: 'Jailyn Murphy',
-        title: 'Undergraduate Research Assistant',
-        image: 'murphy.jpg',
-        bio: 'Jailyn (she/her) is a digital media enthusiast who has a particular interest in social media data analysis. She has a passion for design that serves a clear purpose and targets its audience successfully. Digital history is another topic of interest for her because of the influence her father, a US History teacher, has on her. She hopes to work in advertising in Boston, MA soon after college. Additionally, she coaches a professional hip-hop competition team and has a love for cooking.'
-    },
-    {
-        name: 'Lauren Ciulla',
-        title: 'Design Intern',
-        image: 'ciulla.jpg'
-    },
+const alumni = ref([  
     {
         name: 'Emmet de Barra',
         title: 'Graduate Assistant',
         image: 'barra.jpg'
     },
     {
-        name: 'Eri Lauer',
+        name: 'Lauren Ciulla',
         title: 'Design Intern',
-        image: 'lauer.jpg'
-    },
-    {
-        name: 'Shunyi Li',
-        title: 'Social Media Assistant',
-        image: 'li.jpg'
-    },
-    {
-        name: 'Elijah Matthews',
-        title: 'Design Intern',
-        image: 'matthews.jpg'
-    },
-    {
-        name: 'Tim Morris',
-        title: 'Developer',
-        image: 'morris.jpg'
-    },
-    {
-        name: 'Lily Pashapour',
-        title: 'Design Intern',
-        image: 'pashapour.jpg'
-    },
-    {
-        name: 'Sophia Valentin',
-        title: 'Social Media Assistant',
-        image: 'valentin.jpg'
-    },
-    {
-        name: 'Wenchao Lou',
-        title: 'UI/UX Designer',
-        image: 'lou.jpg',
-        bio: 'Wenchao Lou is a Digital Media & Design major student at the University of Connecticut. Within the Digital Media & Design program, she concentrates in Game Design. She has experience in video production, web design, UI/UX design and game design.'
-    },
-    {
-        name: 'Samson Weiner',
-        title: 'Developer',
-        image: 'weiner.jpg',
-        bio: 'Samson joined the Sourcery team in the Fall of 2018 while an undergraduate. He is continuing his studies as a graduate student at the University of Connecticut studying computer science. His main area of research involves applying algorithms to evolutionary and biological problems, though his interests extend to computational theory as a whole. Outside of research and Sourcery, Samson enjoys exploring new media outlets and technology. His favorite quarantine activities have been cooking, reading, and art.'
-    },
-    {
-        name: 'Alex Mueller',
-        title: 'UX Designer & Developer',
-        image: 'mueller.jpg',
-        bio: 'Alex Mueller is a senior studying Digital Media and Design with a concentration in Web and Interactive Media. He has loved doing design work as a hobby for the past 5 years and is looking forward to pursuing design as a career. He also has been interested in programming since he was a child and likes to combine both his design and development skills wherever he can. Outside of school, he enjoys playing the drums and photography.'
+        image: 'ciulla.jpg'
     },
     {
         name: 'Greg Colati',
@@ -263,10 +191,82 @@ const alumni = ref([
         bio: 'Wes Hamrick is a postdoctoral fellow at Greenhouse Studios at the University of Connecticut, where he serves as project manager on a number of digital humanities projects, including an AR (augmented reality) experience, the document delivery app Sourcery, and a digital game for learning Early Modern Irish. He specialises in British and Irish literature of the long eighteenth century.'
     },
     {
+        name: 'Lauren Harland',
+        title: 'Undergraduate Research Assistant',
+        image: 'harland.jpg',
+        bio: 'Lauren is a designer and strategist with a love for teaming up with fellow creatives to make meaningful work. She\'s interested in many facets of her field, including graphic design, project management, branding, and marketing strategy. She is currently a senior at UConn studying design, digital business strategies, and entrepreneurship. In her free time, you can find her cooking, reading, or in the student section at Gampel Pavilion.'
+    },
+    {
+        name: 'Eri Lauer',
+        title: 'Design Intern',
+        image: 'lauer.jpg'
+    },
+    {
+        name: 'Shunyi Li',
+        title: 'Social Media Assistant',
+        image: 'li.jpg'
+    },
+    {
+        name: 'Wenchao Lou',
+        title: 'UI/UX Designer',
+        image: 'lou.jpg',
+        bio: 'Wenchao Lou is a Digital Media & Design major student at the University of Connecticut. Within the Digital Media & Design program, she concentrates in Game Design. She has experience in video production, web design, UI/UX design and game design.'
+    },
+    {
+        name: 'Elijah Matthews',
+        title: 'Design Intern',
+        image: 'matthews.jpg'
+    },
+    {
         name: 'Garrett McComas',
         title: 'Outreach Coordinator',
         image: 'mccomas.jpg',
         bio: 'Garrett McComas has a MLIS from University of Illinois at Urbana-Champaign and began working at Greenhouse Studios in 2020. He enjoys creating sustainable digital humanities projects with researchers and libraries. As a part of the Sourcery team, he leverages his background as a researcher and his experiences working with libraries and archives to work on Community Outreach for the project.'
+    },
+    {
+        name: 'Raven Morris',
+        title: 'Graduate Research Assistant',
+        image: 'raven-morris.jpg',
+        bio: 'Raven (she/her) studied engineering and computer science before jumping into digital media design, where she will focus on bringing characters and worlds to life through animation and extended reality. She aspires to tell imaginative and impactful stories through a Black lens, and enjoys reading and writing in her spare time. An avid Studio Ghibli fan, she hopes to travel to Japan someday.'
+    },
+    {
+        name: 'Tim Morris',
+        title: 'Developer',
+        image: 'morris.jpg'
+    },
+    {
+        name: 'Alex Mueller',
+        title: 'UX Designer & Developer',
+        image: 'mueller.jpg',
+        bio: 'Alex Mueller is a senior studying Digital Media and Design with a concentration in Web and Interactive Media. He has loved doing design work as a hobby for the past 5 years and is looking forward to pursuing design as a career. He also has been interested in programming since he was a child and likes to combine both his design and development skills wherever he can. Outside of school, he enjoys playing the drums and photography.'
+    },
+    {
+        name: 'Jailyn Murphy',
+        title: 'Undergraduate Research Assistant',
+        image: 'murphy.jpg',
+        bio: 'Jailyn (she/her) is a digital media enthusiast who has a particular interest in social media data analysis. She has a passion for design that serves a clear purpose and targets its audience successfully. Digital history is another topic of interest for her because of the influence her father, a US History teacher, has on her. She hopes to work in advertising in Boston, MA soon after college. Additionally, she coaches a professional hip-hop competition team and has a love for cooking.'
+    },
+    {
+        name: 'Lily Pashapour',
+        title: 'Design Intern',
+        image: 'pashapour.jpg'
+    },
+    {
+        name: 'Sophia Valentin',
+        title: 'Social Media Assistant',
+        image: 'valentin.jpg'
+    },
+    {
+        name: 'Carly Wanner-Hyde',
+        title: 'Project Lead / Head Designer',
+        image: 'wanner-hyde.jpg',
+        bio: 'Carly is a Design Technologist at Greenhouse Studios, an interdisciplinary research unit which aims to reframe the workflows of collaborative scholarly production. She holds a BFA in Digital Media and Design with a concentration in 3D Animation from the University of Connecticut. She is passionate about using her creative platform to amplify the voices and experiences of others through digital mediums. She specializes in team leadership, communication design, and fine arts. In her free time, she enjoys rock climbing, playing outside with her dog Momo, and creating things.'
+    },
+    {
+        name: 'Samson Weiner',
+        title: 'Developer',
+        image: 'weiner.jpg',
+        bio: 'Samson joined the Sourcery team in the Fall of 2018 while an undergraduate. He is continuing his studies as a graduate student at the University of Connecticut studying computer science. His main area of research involves applying algorithms to evolutionary and biological problems, though his interests extend to computational theory as a whole. Outside of research and Sourcery, Samson enjoys exploring new media outlets and technology. His favorite quarantine activities have been cooking, reading, and art.'
     }
 ])
 
@@ -307,25 +307,34 @@ const advisoryBoard = ref([
 ])
 
 const logos = ref([
-    [
-        { name: 'Greenhouse Studios', src: '/img/partners/greenhouse-studios.png', height: 200 },
-        { name: 'Digital Scholar', src: '/img/partners/digital-scholar.png' },
-    ],
-    [
-        { name: 'Mellon Foundation', src: '/img/partners/mellon.png' },
-        { name: 'Internal Insights & Innovation', src: '/img/partners/internal-insights-innovation.png' }
-    ],
-    [
-        { name: 'Connecticut Center for Entrepreneurship and Innovation', src: '/img/partners/connecticut-center-for-entrepreneurship-and-innovation.png' },
-        { name: 'UConn College of Liberal Arts & Sciences', src: '/img/partners/uconn-clas.png' },
-        { name: 'UConn Library', src: '/img/partners/uconn-library.png' },
-        { name: 'UConn Digital Media & Design', src: '/img/partners/uconn-dmd.png' },
-    ],
-    [
-        { name: 'Northeastern University', src: '/img/partners/northeastern-university.png' },
-        { name: 'Folger Shakespeare Library', src: '/img/partners/folger.png' },
-        { name: 'Hartford Public Library', src: '/img/partners/hartford-public-library.png' },
-    ]   
+    {
+        items: [
+            { name: 'Greenhouse Studios', src: '/img/partners/greenhouse-studios.png', height: 200 },
+            { name: 'Digital Scholar', src: '/img/partners/digital-scholar.png' },
+        ]
+    },
+    {
+        position: 'center',
+        items: [
+            { name: 'Mellon Foundation', src: '/img/partners/mellon.png' },
+            { name: 'Internal Insights & Innovation', src: '/img/partners/internal-insights-innovation.png' }
+        ]
+    },
+    {
+        items: [
+            { name: 'Connecticut Center for Entrepreneurship and Innovation', src: '/img/partners/connecticut-center-for-entrepreneurship-and-innovation.png' },
+            { name: 'UConn College of Liberal Arts & Sciences', src: '/img/partners/uconn-clas.png' },
+            { name: 'UConn Library', src: '/img/partners/uconn-library.png' },
+            { name: 'UConn Digital Media & Design', src: '/img/partners/uconn-dmd.png' },
+        ]
+    },
+    {
+        items: [
+            { name: 'Northeastern University', src: '/img/partners/northeastern-university.png' },
+            { name: 'Folger Shakespeare Library', src: '/img/partners/folger.png' },
+            { name: 'Hartford Public Library', src: '/img/partners/hartford-public-library.png' },
+        ]
+    }
 ])
 </script>
 
