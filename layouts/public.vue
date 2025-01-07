@@ -29,7 +29,7 @@
                         <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" border="none" class="mx-2"></v-btn>
                     </div>
 
-                    <p class="text-body-2 text-center">Sourcery is a project of the <a href="https://digitalscholar.org/">Digital Scholar</a>, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with <a href="https://greenhousestudios.uconn.edu/">Greenhouse Studios | Scholarly Communications Design</a> at UConn.</p>
+                    <p class="text-body-2 text-center">Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with <a href="https://greenhousestudios.uconn.edu/">Greenhouse Studios | Scholarly Communications Design</a> at UConn.</p>
                 </v-container>
             </footer>
         </v-app>
@@ -42,6 +42,8 @@ import { useTheme } from 'vuetify'
 const route = useRoute()
 const theme = useTheme()
 const isHome = computed(() => route.path === '/')
+
+const config = useRuntimeConfig()
 
 // Set up some show/hide for the header based on section intersect
 const headerIntersectStore = useHeaderIntersectStore()
@@ -59,4 +61,9 @@ useHead({
         }
     ]
 })
+
+if (config.public.SOURCERY_ENV === 'production') {
+    window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-16751318238');
+}
+
 </script>

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nuxi dev",
+    "dev": "nuxi dev --host 127.0.0.1",
     "build": "nuxi generate",
     "start": "nuxi preview",
     "generate": "nuxi generate"
@@ -38,7 +38,6 @@
     "husky": "^6.0",
     "nuxi": "^3.14",
     "nuxt": "^3.13",
-    "nuxt-gtag": "^1.2",
     "prettier-eslint": "^16.3",
     "sass": "^1.70",
     "supabase": "^1.127",

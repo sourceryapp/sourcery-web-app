@@ -1,3 +1,10 @@
-# Temporarily ignore this file until archives reopen
-supabase/**
-tropy/**
+*/* # Ignore Everything
+!./components/** # Unignore src folder
+!./compostables/** # Unignore folder
+!./assets/**/* # Unignore folder
+!./layouts/**/* # Unignore folder
+!./middleware/**/* # Unignore folder
+!./pages/**/* # Unignore folder
+!./plugins/**/* # Unignore folder
+!./public/**/* # Unignore folder
+!./stores/**/* # Unignore folder

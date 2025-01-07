@@ -54,26 +54,41 @@
 
 
         <div class="py-10 bg-surface-variant">
-          <v-container>
-            <h1 class="text-h3 font-weight-medium text-center mb-16">Meet the Team</h1>
-            <v-row>
-                <v-col cols="12" sm="10" offset-sm="1">
-                    <template v-for="member in members">
-                        <v-row>
-                            <v-col cols="6" sm="3">
-                                <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" />
-                            </v-col>
-                            <v-col cols="12" sm="9">
-                                <h2 class="text-h4">{{ member.name }}</h2>
-                                <p class="text-h6 text-primary">{{ member.title }}</p>
-                                <p>{{ member.bio }}</p>
-                            </v-col>
-                            <v-divider class="my-12" />
-                        </v-row>
-                    </template>
-                </v-col>
-            </v-row>
+            <v-container>
+                <h1 class="text-h3 font-weight-medium text-center mb-16">Meet the Team</h1>
+                <v-row>
+                    <v-col cols="12" sm="10" offset-sm="1">
+                        <template v-for="member in members">
+                            <v-row>
+                                <v-col cols="6" sm="3">
+                                    <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" />
+                                </v-col>
+                                <v-col cols="12" sm="9">
+                                    <h2 class="text-h4">{{ member.name }}</h2>
+                                    <p class="text-h6 text-primary">{{ member.title }}</p>
+                                    <p>{{ member.bio }}</p>
+                                </v-col>
+                                <v-divider class="my-12" />
+                            </v-row>
+                        </template>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
 
+        <div class="py-10">
+            <v-container>
+                <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Advisory Board</h2>
+                <v-row justify="center" align="center" v-for="logoGroup in logos">
+                    <v-col cols="6" sm="4" :md="Math.floor(8 / logoGroup.length)" v-for="logo in logoGroup" :key="logo.name" class="text-center mb-6" align="start">
+                        <v-img :src="logo.src" :alt="logo.name" contain :height="logo.height ?? 100" position="top" class="grayscale"></v-img>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </div>
+
+        <div class="py-10 bg-surface-variant">
+            <v-container>
             <v-row class="pb-10">
                 <v-col cols="12" sm="10" offset-sm="1">
                     <h2 class="text-h4 mb-8">Consulting Partners</h2>
@@ -86,7 +101,6 @@
                 </v-col>
             </v-row>
           </v-container>
-          
         </div>
       </div>
     </div>
@@ -238,6 +252,28 @@ const alumni = ref([
         image: 'mccomas.jpg',
         bio: 'Garrett McComas has a MLIS from University of Illinois at Urbana-Champaign and began working at Greenhouse Studios in 2020. He enjoys creating sustainable digital humanities projects with researchers and libraries. As a part of the Sourcery team, he leverages his background as a researcher and his experiences working with libraries and archives to work on Community Outreach for the project.'
     }
+])
+
+const logos = ref([
+    [
+        { name: 'Greenhouse Studios', src: '/img/partners/greenhouse-studios.png', height: 200 },
+        { name: 'Digital Scholar', src: '/img/partners/digital-scholar.png' },
+    ],
+    [
+        { name: 'Mellon Foundation', src: '/img/partners/mellon.png' },
+        { name: 'Internal Insights & Innovation', src: '/img/partners/internal-insights-innovation.png' }
+    ],
+    [
+        { name: 'Connecticut Center for Entrepreneurship and Innovation', src: '/img/partners/connecticut-center-for-entrepreneurship-and-innovation.png' },
+        { name: 'UConn College of Liberal Arts & Sciences', src: '/img/partners/uconn-clas.png' },
+        { name: 'UConn Library', src: '/img/partners/uconn-library.png' },
+        { name: 'UConn Digital Media & Design', src: '/img/partners/uconn-dmd.png' },
+    ],
+    [
+        { name: 'Northeastern University', src: '/img/partners/northeastern-university.png' },
+        { name: 'Folger Shakespeare Library', src: '/img/partners/folger.png' },
+        { name: 'Hartford Public Library', src: '/img/partners/hartford-public-library.png' },
+    ]   
 ])
 </script>
 
