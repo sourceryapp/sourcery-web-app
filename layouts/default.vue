@@ -155,6 +155,7 @@ const primaryNavigationItems = ref([
 const secondaryNavigationItems = ref([
     { title: 'Notifications', icon: 'mdi-message', link: '/notifications' },
     { title: 'Settings', icon: 'mdi-cog', link: '/account/settings' },
+    { title: 'Tax Documents', icon: 'mdi-file-document', link: '/account/tax' }
 ])
 const bottomNavigationItems = ref([
     { title: 'Tools & Integrations', link: '/tools' },

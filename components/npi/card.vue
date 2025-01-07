@@ -4,15 +4,15 @@
             <v-col cols="12" md="auto">
                 <StatusChip :status="request.status"></StatusChip>
             </v-col>
-            <v-col cols="12" md="auto">
+            <v-col cols="12" md="auto" class="text-break">
                 <span class="text-body-2 d-block">{{ request.repository_name }} - {{ request.repository_location }}</span>
                 <span class="text-body-2 d-block text-muted"><em>Created: {{ $filters.normalDate(request.created_at) }}</em></span>
             </v-col>
         </v-row>
-        <h3>{{ request.title ?? request.original_title }}</h3>
-        <p>{{ request.description ?? request.citation }}</p>
+        <h3 class="text-break">{{ request.title ?? request.original_title }}</h3>
+        <p class="text-break">{{ request.description ?? request.citation }}</p>
         <v-divider class="mb-4"></v-divider>
-        <div class="d-flex align-center justify-start">
+        <div class="d-flex align-center justify-start flex-wrap">
             <v-btn v-if="request.status_id !== 6" variant="text" border="0" color="primary" class="me-2 mb-2" :to="`/request/${request.id}`">View Request</v-btn>
             <v-dialog v-model="deleteRequestDialog" max-width="500" v-if="!request.deleted && canManage">
                 <template v-slot:activator="{ props }">
