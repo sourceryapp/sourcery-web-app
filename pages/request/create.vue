@@ -9,7 +9,7 @@
                 <v-col sm="10" md="8">
 
                     <v-row justify="center" class="mb-4">
-                        <v-col cols="12" md="8">
+                        <v-col cols="12" md="10">
                             <v-autocomplete
                                 v-model="sel"
                                 label="Where are your documents?"
@@ -19,31 +19,26 @@
                                 density="comfortable"
                                 prepend-inner-icon="mdi-magnify"
                                 variant="solo"
+                                item-title="text.text"
+                                item-value="text.placeId"
                                 v-on:update:search="retrievePlaces"
+                                v-on:update:model-value="onAutocompleteChange"
+                                :return-object="true"
                             ></v-autocomplete>
-                            <v-alert v-if="sel">
-                                <strong>Selected</strong><br> {{ sel}}
+                            <v-alert v-if="sel" class="mb-5">
+                                <p><strong>{{ sel.text.text }}</strong></p>
+                                <!-- <p>{{ placeSelected.location.latitude }}, {{ placeSelected.location.longitude }}</p> -->
+                                <p>Does this look right?</p>
+                                <v-btn color="error" @click="placeSelected.value = null;sel = null; ">Clear</v-btn>
                             </v-alert>
+
+                            <div>
+                                <iframe v-if="googleMapsEmbedUrl" width="500" height="600" :src="googleMapsEmbedUrl" frameborder="0" loading="lazy" class="w-100"></iframe>
+                            </div>
                         </v-col>
                     </v-row>
 
                     <v-form v-model="requestFormValid" validate-on="submit" @submit.prevent="createRequest">
-                        <h2 class="mb-4">Repository Location</h2>
-
-                        <template v-if="requestType === 'normal'">
-                            <p>Location must be in US or Canada.</p>
-                            <v-text-field v-model="requestFields.customRepository" variant="outlined" class="mb-2" label="Repository Name" :rules="[$sourceryForms.rules.required || requestType !== 'normal']"></v-text-field>
-
-                            <div>
-                                <h3 class="mb-3">Let's make sure we have enough information to locate this repository.</h3>
-                                <p>Please provide any relevant contact or location information that would help the Sourcery team track down this repository.</p>
-                                <v-textarea v-model="requestFields.customRepositoryLocation" label="Location and Contact Details" variant="outlined" class="mb-4" rows="3" :rules="[$sourceryForms.rules.required || requestType !== 'normal']"></v-textarea>
-                            </div>
-                        </template>
-
-                        <template v-else>
-                            <v-alert color="primary" icon="$info" v-if="requestFields.repository" class="mb-4">You are requesting directly to {{ requestFields.repository.name }} at {{ requestFields.repository.organization.name }}.</v-alert>
-                        </template>
                         
 
                         <h2 class="mb-4 mt-10">Document Information</h2>
@@ -177,17 +172,8 @@ function unregisteredNavigate(to) {
 }
 
 const sel = ref(null)
-const queryTerm = ref('')
 const places = ref([])
-const search = computed({
-    get() {
-        return queryTerm.value
-    },
-    set(value) {
-        queryTerm.value = value
-        retrievePlaces(value)
-    }
-})
+const placeSelected = ref(null)
 function debounce(func, wait) {
     let timeout
     return function(...args) {
@@ -195,6 +181,14 @@ function debounce(func, wait) {
         timeout = setTimeout(() => func.apply(this, args), wait)
     }
 }
+
+const googleMapsEmbedUrl = computed(() => {
+    if ( !sel.value) {
+        return ''
+    }
+
+    return `https://www.google.com/maps/embed/v1/place?key=${config.public.GOOGLE_PLACES_API_KEY}&q=place_id:${sel.value.placeId}`
+})
 
 const retrievePlaces = debounce((value) => {
     if (!value) {
@@ -221,12 +215,28 @@ const retrievePlaces = debounce((value) => {
     })
     .then(response => response.json())
     .then(data => {
-        places.value = data.suggestions.map(prediction => prediction.placePrediction.text.text)
+        places.value = data.suggestions.map(prediction => prediction.placePrediction)
     })
     .catch(error => {
         console.error('Error fetching places:', error)
     })
 }, 300)
+
+function onAutocompleteChange(value) {
+    retrievePlace(value.placeId)
+}
+
+function retrievePlace(placeId) {
+    fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents,location&key=${config.public.GOOGLE_PLACES_API_KEY}`)
+        .then(response => response.json())
+        .then(data => {
+            placeSelected.value = data
+        })
+        .catch(error => {
+            console.error('Error fetching place:', error)
+        })
+
+}
 </script>
 
 <style scoped lang="scss">
