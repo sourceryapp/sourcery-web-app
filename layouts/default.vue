@@ -113,6 +113,20 @@
                 <slot />
                 <banners-cookie></banners-cookie>
             </v-main>
+            <v-bottom-navigation class="d-print-none" grow>
+                <v-btn value="requests" class="border-background" to="/dashboard">
+                    <v-icon>mdi-view-dashboard</v-icon>
+                    <span>Requests</span>
+                </v-btn>
+                <v-btn value="create" class="border-background" to="/request/create">
+                    <v-icon>mdi-plus</v-icon>
+                    <span>New</span>
+                </v-btn>
+                <v-btn value="account" class="border-background" to="/account/settings">
+                    <v-icon>mdi-account</v-icon>
+                    <span>Account</span>
+                </v-btn>
+            </v-bottom-navigation>
         </v-app>
     </div>
 </template>
@@ -183,8 +197,6 @@ const navigationDrawerClasses = computed(() => {
 </script>
 
 <style scoped lang="scss">
-@use '../assets/src/scss/vuetify-settings';
-
 .bg-purple-gradient-alt {
     background: rgb(146, 79, 190);
     background: linear-gradient(135deg, rgba(146, 79, 190, 1) 0%, rgba(111, 77, 170, 1) 50%);

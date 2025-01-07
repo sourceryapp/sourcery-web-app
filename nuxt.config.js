@@ -23,6 +23,7 @@ const publicPaths = [
 ]
 
 export default defineNuxtConfig({
+    devtools: false,
   bridge: {
       typescript: false,
       nitro: true,
@@ -53,7 +54,8 @@ export default defineNuxtConfig({
           SUPABASE_KEY: process.env.SUPABASE_KEY,
           SOURCERY_ENV: process.env.SOURCERY_ENV || 'development',
           STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
-          STRIPE_OPTIONS: process.env.STRIPE_OPTIONS
+          STRIPE_OPTIONS: process.env.STRIPE_OPTIONS,
+          GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY
       },
   },
 

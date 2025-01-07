@@ -2,14 +2,6 @@
     <div id="page-dashboard" class="py-4">
         <v-container>
             <template v-if="authUser">
-                <h1 class="mb-4">Dashboard</h1>
-
-                <RequestsCreateAlert v-if="userOrgs.length === 0"></RequestsCreateAlert>
-
-                <template v-else>
-                    <organization-view-alert :organization="userOrgs[0]"></organization-view-alert>
-                </template>
-
                 <v-row>
                     <v-col md="8">
                         <requests-search ref="search"></requests-search>

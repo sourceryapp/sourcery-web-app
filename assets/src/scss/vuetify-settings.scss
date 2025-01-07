@@ -3,7 +3,8 @@ $sourcery-font-family: 'Barlow', sans-serif;
 @forward 'vuetify/settings' with (
     $button-font-weight: 600,
     $button-text-letter-spacing: 0.05em,
-    $button-border-width: .125rem,
+    $button-border-width: .125rem, // Causes issues with the bottom-navigation styles
+    // $bottom-navigation-border-width: 0,
     $card-title-word-break: break-word,
     $body-font-family: $sourcery-font-family
 );

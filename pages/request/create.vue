@@ -1,16 +1,31 @@
 <template>
     <div id="page-request-create" class="pb-5">
+        <div class="bg-primary py-4 position-relative mb-4">
+            <h1 class="text-center">Create a Request</h1>
+            <div class="triangle-bottom-center"></div>
+        </div>
         <v-container>
             <v-row justify="center">
                 <v-col sm="10" md="8">
-                    <h1 class="mb-4">Create a Request</h1>
 
-                    <template v-if="isOrgOwner">
-                        <v-radio-group v-model="requestType">
-                            <v-radio v-for="(repo, ind) in userRepos" :label="`Submit directly to ${repo.name}`" :value="ind" class="mb-2"></v-radio>
-                            <v-radio value="normal" label="Submit a General Sourcery Request" class="mb-2"></v-radio>
-                        </v-radio-group>
-                    </template>
+                    <v-row justify="center" class="mb-4">
+                        <v-col cols="12" md="8">
+                            <v-autocomplete
+                                v-model="sel"
+                                label="Where are your documents?"
+                                class="text-center"
+                                :rules="[$sourceryForms.rules.required]"
+                                :items="places"
+                                density="comfortable"
+                                prepend-inner-icon="mdi-magnify"
+                                variant="solo"
+                                v-on:update:search="retrievePlaces"
+                            ></v-autocomplete>
+                            <v-alert v-if="sel">
+                                <strong>Selected</strong><br> {{ sel}}
+                            </v-alert>
+                        </v-col>
+                    </v-row>
 
                     <v-form v-model="requestFormValid" validate-on="submit" @submit.prevent="createRequest">
                         <h2 class="mb-4">Repository Location</h2>
@@ -120,6 +135,7 @@ const {
     setSessionDraft,
     populateFromQuery
 } = useCreateRequest()
+const config = useRuntimeConfig();
 
 const requestType = ref('normal');
 
@@ -159,10 +175,74 @@ function unregisteredNavigate(to) {
         }
     })
 }
+
+const sel = ref(null)
+const queryTerm = ref('')
+const places = ref([])
+const search = computed({
+    get() {
+        return queryTerm.value
+    },
+    set(value) {
+        queryTerm.value = value
+        retrievePlaces(value)
+    }
+})
+function debounce(func, wait) {
+    let timeout
+    return function(...args) {
+        clearTimeout(timeout)
+        timeout = setTimeout(() => func.apply(this, args), wait)
+    }
+}
+
+const retrievePlaces = debounce((value) => {
+    if (!value) {
+        places.value = []
+        return
+    }
+
+    fetch('https://places.googleapis.com/v1/places:autocomplete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': config.public.GOOGLE_PLACES_API_KEY
+        },
+        body: JSON.stringify({
+            input: value,
+            includedPrimaryTypes: [
+                'library',
+                'primary_school',
+                'school',
+                'secondary_school',
+                'university'
+            ]
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        places.value = data.suggestions.map(prediction => prediction.placePrediction.text.text)
+    })
+    .catch(error => {
+        console.error('Error fetching places:', error)
+    })
+}, 300)
 </script>
 
 <style scoped lang="scss">
 .icon-very-large {
     font-size: 80px;
+}
+
+.triangle-bottom-center {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 20px solid rgba(var(--v-theme-primary));
 }
 </style>

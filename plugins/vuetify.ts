@@ -18,7 +18,6 @@ export default defineNuxtPlugin((app) => {
         dark_theme = localStorage.getItem('dark_theme') === "true" ? true : false
     }
 
-
     const vuetify = createVuetify({
         theme: {
             defaultTheme: dark_theme ? 'dark' : 'light',
