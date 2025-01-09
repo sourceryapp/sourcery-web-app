@@ -60,12 +60,12 @@
                     <v-col cols="12" sm="10" offset-sm="1">
                         <template v-for="member in members">
                             <v-row>
-                                <v-col cols="6" sm="3">
-                                    <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" />
+                                <v-col cols="12" md="3">
+                                    <v-img :src="'/img/team/' + member.image" lazy-src="/img/team/team-placeholder.jpg" cover height="188" width="152" rounded="lg" class="mx-auto" />
                                 </v-col>
                                 <v-col cols="12" sm="9">
-                                    <h2 class="text-h4">{{ member.name }}</h2>
-                                    <p class="text-h6 text-primary">{{ member.title }}</p>
+                                    <h2 class="text-h4 text-center text-md-start">{{ member.name }}</h2>
+                                    <p class="text-h6 text-primary text-center text-md-start">{{ member.title }}</p>
                                     <p>{{ member.bio }}</p>
                                 </v-col>
                                 <v-divider class="my-12" />
@@ -98,7 +98,7 @@
                 <v-col cols="12" sm="10" offset-sm="1">
                     <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Alumni</h2>
                     <v-row>
-                        <v-col cols="12" sm="6" md="4" v-for="member in alumni">
+                        <v-col cols="6" sm="6" md="4" v-for="member in alumni">
                             <h2 class="text-h6">{{ member.name }}</h2>
                             <p class="text-primary">{{ member.title }}</p>
                         </v-col>
@@ -110,9 +110,9 @@
 
         <div class="py-10">
             <v-container>
-                <h2 class="text-h4 font-weight-bold mb-10 text-primary text-center">Partners</h2>
+                <h2 class="text-h4 font-weight-bold pb-6 mb-10 text-primary text-center">Partners</h2>
                 <v-row justify="center" align="center" v-for="logoGroup in logos">
-                    <v-col cols="6" sm="4" :md="Math.floor(8 / logoGroup.items.length)" v-for="logo in logoGroup.items" :key="logo.name" class="text-center mb-6" align="start">
+                    <v-col cols="12" sm="4" :md="Math.floor(8 / logoGroup.items.length)" v-for="logo in logoGroup.items" :key="logo.name" class="text-center mb-6" align="start">
                         <v-img :src="logo.src" :alt="logo.name" contain :height="logo.height ?? 100" :position="logoGroup.position ?? 'top'" class="grayscale"></v-img>
                     </v-col>
                 </v-row>

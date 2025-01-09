@@ -1,6 +1,7 @@
 $sourcery-font-family: 'Barlow', sans-serif;
 
 @forward 'vuetify/settings' with (
+    $container-padding-x: 32px,
     $button-font-weight: 600,
     $button-text-letter-spacing: 0.05em,
     $button-border-width: .125rem,
