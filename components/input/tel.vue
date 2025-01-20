@@ -53,18 +53,19 @@ function validate() {
     }    
 
     const error = telInput.value.getValidationError()
+    console.log(intlTelInput)
     switch(error) {
-        case window.intlTelInputUtils.validationError.TOO_SHORT:
+        case intlTelInput.utils.validationError.TOO_SHORT:
             return 'Phone number is too short.'
-        case window.intlTelInputUtils.validationError.TOO_LONG:
+        case intlTelInput.utils.validationError.TOO_LONG:
             return 'Phone number is too long.'
-        case window.intlTelInputUtils.validationError.NOT_A_NUMBER:
+        case intlTelInput.utils.validationError.NOT_A_NUMBER:
             return 'Phone number is not a number.'
-        case window.intlTelInputUtils.validationError.INVALID_COUNTRY_CODE:
+        case intlTelInput.utils.validationError.INVALID_COUNTRY_CODE:
             return 'Invalid country code.'
-        case window.intlTelInputUtils.validationError.TOO_SHORT_AFTER_IDD:
+        case intlTelInput.utils.validationError.TOO_SHORT_AFTER_IDD:
             return 'Phone number is too short after IDD.'
-        case window.intlTelInputUtils.validationError.TOO_LONG_AFTER_IDD:
+        case intlTelInput.utils.validationError.TOO_LONG_AFTER_IDD:
             return 'Phone number is too long after IDD.'
     }
 
