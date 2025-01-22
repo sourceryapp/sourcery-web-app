@@ -22,10 +22,20 @@ export default function useToggleTheme() {
         localStorage.setItem('dark_theme', val)
     }
 
+    function setSourcerer() {
+        setTheme(theme.global.current.value.dark ? 'dark' : 'light')
+    }
+
+    function setResearcher() {
+        setTheme(theme.global.current.value.dark ? 'darkblue' : 'blue')
+    }
+
     return {
         toggleTheme,
         setTheme,
-        setDark
+        setDark,
+        setSourcerer,
+        setResearcher
     }
 
 }

@@ -18,3 +18,18 @@ p {
 .grayscale {
     filter: grayscale(1);
 }
+
+
+// Overrides the currently loaded SVGs to match theme
+.v-theme--blue {
+    svg path {
+        fill: #53AFAC;
+    }
+}
+.v-theme--dark,
+.v-theme--darkblue {
+    svg path {
+        fill: #c5aeef;
+    }
+
+}

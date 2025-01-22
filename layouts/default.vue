@@ -102,12 +102,19 @@
                 </template>
             </v-navigation-drawer>
             <v-app-bar scroll-behavior="elevate" color="background">
-                <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
+                <template v-slot:prepend>
+                    <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
+                </template>
                 <v-spacer></v-spacer>
-                <NuxtLink to="/dashboard" class="d-block">
-                    <v-img :src="theme.global.current.value.dark ? '/img/logo-wordmark-dark.svg' : '/img/logo-wordmark.svg'" alt="Sourcery Logo" width="150"></v-img>
+                <NuxtLink to="/dashboard" class="">
+                    <div style="width: 150px; line-height:0;" class="mx-auto" >
+                        <SourceryLogo style="max-width: 100%" height="auto" width="auto" />
+                    </div>
                 </NuxtLink>
                 <v-spacer></v-spacer>
+                <template v-slot:append>
+                    <ToggleMode />
+                </template>
             </v-app-bar>
             <v-main>
                 <slot />
@@ -134,6 +141,7 @@
 <script setup>
 import md5 from 'md5'
 import { useDisplay, useTheme } from 'vuetify'
+import SourceryLogo from '../assets/img/logo-wordmark.svg'
 
 const { authUser, userOrgsAndMembers, fetchUserMetadata, possiblyRefetch, canClaim } = useAuthUser()
 const { loadStripe } = useStripe()

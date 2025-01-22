@@ -43,6 +43,28 @@ export default defineNuxtPlugin((app) => {
                         'on-surface-variant': '#ffffff',
                         'muted': '#9e9e9e'
                     }
+                },
+                blue: {
+                    colors: {
+                        background: '#f9f8fc', // This is the 'primary' color but in HSL w/ 97% lightness
+                        // surface: '#f9f8fc',
+                        primary: '#53AFAC',
+                        secondary: '#9ad0cf',
+                        error: '#b71c1c',
+                        'surface-variant': '#ffffff',
+                        'on-surface-variant': '#000000',
+                        'muted': '#9e9e9e'
+                    }
+                },
+                darkblue: {
+                    colors:  {
+                        surface: '#363636',
+                        primary: '#53AFAC',
+                        secondary: '#9ad0cf',
+                        'surface-variant': '#1a1a1a',
+                        'on-surface-variant': '#ffffff',
+                        'muted': '#9e9e9e'
+                    }
                 }
             }
         }

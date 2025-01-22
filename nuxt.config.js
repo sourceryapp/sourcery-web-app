@@ -1,4 +1,5 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import svgLoader from 'vite-svg-loader'
 
 const publicPaths = [
     '/login',
@@ -262,7 +263,23 @@ export default defineNuxtConfig({
                 api: 'modern-compiler'
             }
         }
-      }
+      },
+      plugins: [svgLoader({
+        svgoConfig: {
+            plugins: [
+                {
+                    name: 'preset-default',
+                    params: {
+                        overrides: {
+                            // customize plugin options
+                            removeViewBox: false  // https://github.com/jpkleemans/vite-svg-loader/issues/123
+                            // NO clue why the original author strips viewBox by default, it is necessary information for CSS scaling.
+                        }
+                    }
+                }
+            ]
+        }
+      })],
   },
 
   // Only included this because of the current issue with vite-plugin-vuetify
