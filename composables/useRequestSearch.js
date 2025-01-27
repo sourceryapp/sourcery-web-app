@@ -17,15 +17,18 @@ export function useRequestSearch() {
     const limit = ref(30)
     const organizationId = ref(route.query.organization_id || null)
     const owned = ref(true)
+    const servicing = ref(false)
+    const servicable = ref(false)
 
     const requests = ref([])
     const search = ref(route.query.search || '')
+    const status = ref(route.query.status || '')
 
     // Assign the first UI filters/sorting/input from query parameters.
-    const selectedStatus = ref(route.query.status
-        ? (Array.isArray(route.query.status)
-            ? route.query.status.map(x=>parseInt(x))
-                : [parseInt(route.query.status)])
+    const selectedStatus = ref(status.value
+        ? (Array.isArray(status.value)
+            ? status.value.map(x=>parseInt(x))
+                : [parseInt(status.value)])
             : [])
     const order = ref(route.query.order || defaultSort.value)
 
@@ -38,12 +41,20 @@ export function useRequestSearch() {
 
         // Chaining multiple OR statements from referenced/joined postgres is tricky (and hard to accomplish with supabase-js) so instead we filter the joined results and then OR the existence of them or not, with any core table search filters.
         let query = supabase.from('requests').select(getRequestsQuery())
-            .range(0, limit.value)
+            .range(0, limit.value - 1)
             .neq('deleted', true)
 
         // Only search on requests that are owned by the requesting user.
         if ( owned.value ) {
             query = query.or('user_id.eq.' + user.value.id + ',servicer_id.eq.' + user.value.id)
+        }
+
+        if ( servicing.value ) {
+            query = query.eq('servicer_id', user.value.id)
+        }
+
+        if ( servicable.value ) {
+            query = query.is('servicer_id', null)
         }
 
         // Apply the search query if necessary
@@ -132,9 +143,12 @@ export function useRequestSearch() {
     return {
         requests,
         search,
+        status,
         defaultSort,
         limit,
         owned,
+        servicing,
+        servicable,
         selectedStatus,
         organizationId,
         order,

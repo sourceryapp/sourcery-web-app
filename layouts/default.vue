@@ -101,14 +101,14 @@
                     </v-list>
                 </template>
             </v-navigation-drawer>
-            <v-app-bar scroll-behavior="elevate" color="background">
+            <v-app-bar scroll-behavior="elevate" color="primary">
                 <template v-slot:prepend>
                     <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" v-if="mobile" border="none"></v-app-bar-nav-icon>
                 </template>
                 <v-spacer></v-spacer>
                 <NuxtLink to="/dashboard" class="">
                     <div style="width: 150px; line-height:0;" class="mx-auto" >
-                        <SourceryLogo style="max-width: 100%" height="auto" width="auto" />
+                        <SourceryLogo style="max-width: 100%" class="sourcery-logo" />
                     </div>
                 </NuxtLink>
                 <v-spacer></v-spacer>
@@ -121,13 +121,14 @@
                 <banners-cookie></banners-cookie>
             </v-main>
             <v-bottom-navigation class="d-print-none" grow>
-                <v-btn value="requests" class="border-background" to="/dashboard">
+                <v-btn value="requests" class="border-background"
+                    :to="researching ? '/research' : '/sourcerer'">
                     <v-icon>mdi-view-dashboard</v-icon>
-                    <span>Requests</span>
+                    <span>{{ researching ? 'Your Requests' : 'Your Jobs' }}</span>
                 </v-btn>
-                <v-btn value="create" class="border-background" to="/request/create">
-                    <v-icon>mdi-plus</v-icon>
-                    <span>New</span>
+                <v-btn value="create" class="border-background" :to="researching ? '/request/create' : '/sourcerer/claim'">
+                    <v-icon>{{ researching ? 'mdi-plus' : 'mdi-briefcase' }}</v-icon>
+                    <span>{{ researching ? 'New' : 'Claim Jobs'}}</span>
                 </v-btn>
                 <v-btn value="account" class="border-background" to="/account/settings">
                     <v-icon>mdi-account</v-icon>
@@ -148,7 +149,8 @@ const { loadStripe } = useStripe()
 const user = useSupabaseUser()
 const { logout } = useLogout()
 const { mobile } = useDisplay()
-const { toggleTheme } = useToggleTheme()
+const { toggleTheme, setResearcher, setSourcerer } = useToggleTheme()
+const { fulfilling, researching, currentMode } = useChangeModes()
 const theme = useTheme()
 
 // Fetch user metadata only once on initial load/refresh from tab out
@@ -156,6 +158,17 @@ const theme = useTheme()
 await callOnce(fetchUserMetadata)
 callOnce(loadStripe)
 watch(user, possiblyRefetch)
+
+// These are necessary to set initial theme and watch for changes - doesn't like when you change it in composables
+watch(currentMode, onThemeHook)
+onThemeHook()
+function onThemeHook() {
+    if ( currentMode.value === 'researcher' ) {
+        setResearcher()
+    } else if ( currentMode.value === 'sourcerer' ) {
+        setSourcerer()
+    }
+}
 
 // All user related display helpers
 const userIcon = computed(() => {

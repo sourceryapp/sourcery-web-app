@@ -153,6 +153,10 @@ export function useFetchRequest(req = null) {
         return request.value?.reports.length > 0
     })
 
+    const repositoryLocation = computed(() => {
+        return request.value.repository_id ? `${request.value.repository.name} - ${request.value.repository.organization.name }` : request.value.repository_location
+    })
+
 
     return {
         request,
@@ -177,6 +181,7 @@ export function useFetchRequest(req = null) {
         archivedDate,
         cancelledDate,
         canService,
-        canViewAttachments
+        canViewAttachments,
+        repositoryLocation
     }
 }

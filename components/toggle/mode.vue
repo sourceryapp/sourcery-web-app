@@ -1,13 +1,13 @@
 <script setup>
 const { currentMode, setMode } = useChangeModes()
 
-function changeMode(val) {
+async function changeMode(val) {
     if ( val === 'researcher' ) {
         console.log('switching researcher')
-        setMode('researcher')
+        await setMode('researcher')
     } else {
         console.log('switching sourcerer')
-        setMode('sourcerer')
+        await setMode('sourcerer')
     }
 }
 </script>
@@ -17,7 +17,6 @@ function changeMode(val) {
         v-model="currentMode"
         v-on:update:model-value="changeMode"
         hide-details
-        color="primary"
         true-value="sourcerer"
         false-value="researcher"
         :label="currentMode === 'sourcerer' ? 'Sourcerer' : 'Researcher'"
@@ -32,9 +31,9 @@ function changeMode(val) {
 </template>
 
 <style lang="scss">
-.modeSwitch {
-    .v-switch__track {
-        background-color: rgb(var(--v-theme-primary))!important;
-    }
-}
+//.modeSwitch {
+//    .v-switch__track {
+//        background-color: rgb(var(--v-theme-primary))!important;
+//    }
+//}
 </style>

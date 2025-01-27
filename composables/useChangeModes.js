@@ -1,6 +1,8 @@
 export default function useChangeModes() {
-    const { setResearcher, setSourcerer } = useToggleTheme()
-    const currentMode = useState('mode', () => 'researcher')
+    
+    const currentMode = useState('mode', () => {
+        return 'researcher'
+    })
 
     function setMode(mode) {
         console.log('setting!', mode, currentMode.value)
@@ -8,15 +10,26 @@ export default function useChangeModes() {
 
         if (currentMode.value === 'researcher') {
             console.log('setting researcher')
-            setResearcher()
+            return navigateTo('/research')
         } else if (currentMode.value === 'sourcerer') {
             console.log('setting sourcerer')
-            setSourcerer()
+            return navigateTo('/sourcerer/verify')
         }
+        return true
     }
+
+    const fulfilling = computed(() => {
+        return ['sourcerer', 'organization'].includes(currentMode.value)
+    })
+
+    const researching = computed(() => {
+        return ['researcher', 'organization'].includes(currentMode.value)
+    })
 
     return {
         setMode,
-        currentMode
+        currentMode,
+        fulfilling,
+        researching
     }
 }

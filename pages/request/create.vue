@@ -33,7 +33,7 @@
                             </v-alert>
 
                             <div>
-                                <iframe v-if="googleMapsEmbedUrl" width="500" height="600" :src="googleMapsEmbedUrl" frameborder="0" loading="lazy" class="w-100"></iframe>
+                                <iframe v-if="googleMapsEmbedUrl" width="500" height="400" :src="googleMapsEmbedUrl" frameborder="0" loading="lazy" class="w-100" style="pointer-events: none"></iframe>
                             </div>
                         </v-col>
                     </v-row>
@@ -42,11 +42,6 @@
                         
 
                         <h2 class="mb-4 mt-10">Document Information</h2>
-
-                        <div class="mb-4" v-if="isOrgOwner">
-                            <user-invite @invite-user="invitedUser" v-if="clientIsUser"></user-invite>
-                            <v-btn v-else color="warning" @click="requestFormPopulateCurrentUser">Reset User</v-btn>
-                        </div>
                         
                         <v-text-field v-model="requestFields.user.name" variant="outlined" class="mb-2" :label="clientIsUser ? 'Your Name' : 'Client Name'" :rules="[$sourceryForms.rules.required]" counter="100"></v-text-field>
                         <v-text-field v-model="requestFields.user.email" variant="outlined" class="mb-2" disabled readonly :label="clientIsUser ? 'Your Email' : 'Client Email'" :rules="[$sourceryForms.rules.email]"></v-text-field>
@@ -59,11 +54,13 @@
                         <div class="mb-4">
                             <p>Estimate the expected size and expected cost of the request:</p>
                             <p><em>The final total will be confirmed by the fulfilling user, unless claimed by an organization.</em></p>
-                            <v-row>
+                            <v-row align="end" class="mb-1 mt-2 px-4">
                                 <v-col>
-                                    <span class="d-block mb-2">{{ pagesNumber }} pages</span>
+                                    <span class="d-block">{{ pagesNumber }} page(s)</span>
                                     <!-- Placeholder Pricing -->
-                                    <span class="text-h3 mb-2">{{ $utils.currencyFormat(((requestFields.pages * 0.4) + 10) * 100) }}</span>
+                                </v-col>
+                                <v-col>
+                                    <span class="text-h4">{{ $utils.currencyFormat(((requestFields.pages * 0.4) + 10) * 100) }}</span>
                                 </v-col>
                             </v-row>
                             <v-slider min="1" max="100" color="primary" hide-details step="1" v-model="requestFields.pages"></v-slider>

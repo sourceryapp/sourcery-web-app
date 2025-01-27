@@ -21,15 +21,20 @@ p {
 
 
 // Overrides the currently loaded SVGs to match theme
-.v-theme--blue {
-    svg path {
-        fill: #53AFAC;
-    }
-}
-.v-theme--dark,
-.v-theme--darkblue {
-    svg path {
-        fill: #c5aeef;
-    }
+// .v-theme--blue {
+//     svg path {
+//         fill: #53AFAC;
+//     }
+// }
+// .v-theme--dark,
+// .v-theme--darkblue {
+//     svg path {
+//         fill: #c5aeef;
+//     }
 
+// }
+svg.sourcery-logo {
+    path {
+        fill: #ffffff;
+    }
 }
