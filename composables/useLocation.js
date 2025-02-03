@@ -14,7 +14,7 @@ export default function useLocation() {
     }
 
     function getUserLocation() {
-        if ( navigator.geolocation ) {
+        if ( !navigator.geolocation ) {
             locationError.value = false
             navigator.geolocation.getCurrentPosition((position) => {
                 location.value = {

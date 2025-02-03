@@ -29,6 +29,7 @@
                                 <p><strong>{{ sel.text.text }}</strong></p>
                                 <!-- <p>{{ placeSelected.location.latitude }}, {{ placeSelected.location.longitude }}</p> -->
                                 <p>Does this look right?</p>
+                                {{ placeSelected }}
                                 <v-btn color="error" @click="placeSelected.value = null;sel = null; ">Clear</v-btn>
                             </v-alert>
 
@@ -50,20 +51,20 @@
                         <p>Help the folks on the other end locate your document(s) by providing as much relevant information as you have (e.g. page numbers, box or folder numbers, collections, links, citations).</p>
                         <v-textarea v-model="requestFields.details" variant="outlined" class="mb-2" label="Request Details" :rules="[$sourceryForms.rules.required, $sourceryForms.rules.largeTextAreaCounter]" counter="6000"></v-textarea>
 
-
+                        <h2 class="mb-4 mt-10">Pricing Information</h2>
                         <div class="mb-4">
-                            <p>Estimate the expected size and expected cost of the request:</p>
+                            <p>Set the maximum amount you are willing to pay for this request to be fulfilled.</p>
                             <p><em>The final total will be confirmed by the fulfilling user, unless claimed by an organization.</em></p>
                             <v-row align="end" class="mb-1 mt-2 px-4">
                                 <v-col>
-                                    <span class="d-block">{{ pagesNumber }} page(s)</span>
+                                    <span class="d-block">{{ pagesNumber }} page (s)</span>
                                     <!-- Placeholder Pricing -->
                                 </v-col>
                                 <v-col>
-                                    <span class="text-h4">{{ $utils.currencyFormat(((requestFields.pages * 0.4) + 10) * 100) }}</span>
+                                    <span class="text-h4">{{ $utils.currencyFormat(testPrice) }}</span>
                                 </v-col>
                             </v-row>
-                            <v-slider min="1" max="100" color="primary" hide-details step="1" v-model="requestFields.pages"></v-slider>
+                            <v-slider min="1" max="50" color="primary" hide-details step="1" v-model="requestFields.pages"></v-slider>
                         </div>
 
                         <v-alert color="error" icon="$error" :text="requestFormError" class="mb-4" v-if="requestFormError"></v-alert>
@@ -128,6 +129,7 @@ const {
     populateFromQuery
 } = useCreateRequest()
 const config = useRuntimeConfig();
+const supabase = useSupabaseClient()
 
 const requestType = ref('normal');
 
@@ -167,6 +169,10 @@ function unregisteredNavigate(to) {
         }
     })
 }
+
+const testPrice = computed(() => {
+    return (((requestFields.value.pages / 10) * 16) * 100)+1800
+})
 
 const sel = ref(null)
 const places = ref([])
@@ -223,16 +229,10 @@ function onAutocompleteChange(value) {
     retrievePlace(value.placeId)
 }
 
-function retrievePlace(placeId) {
-    fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=addressComponents,location&key=${config.public.GOOGLE_PLACES_API_KEY}`)
-        .then(response => response.json())
-        .then(data => {
-            placeSelected.value = data
-        })
-        .catch(error => {
-            console.error('Error fetching place:', error)
-        })
-
+async function retrievePlace(placeId) {
+    const reply = await supabase.functions.invoke('places', { body: { places_id: placeId } })
+    placeSelected.value = reply.data[0]
+    requestFields.value.place_id = reply.data[0].id
 }
 </script>
 

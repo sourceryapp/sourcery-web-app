@@ -20,7 +20,8 @@ export default function useCreateRequest() {
         customRepositoryLocation: '',
         referrer: null,
         referrer_data: null,
-        pages: 1
+        pages: 1,
+        place_id: null
     })
     const createdRequest = ref()
 
@@ -50,11 +51,11 @@ export default function useCreateRequest() {
         // Can also access the formSubmitEvent.valid property from this awaited prop.
         if ( formSubmitEvent ) await formSubmitEvent
 
-        if ( !hasValidRepository.value ) {
-            requestFormError.value = 'Please select a repository or provide a custom repository name and location.'
-            requestFormLoading.value = false
-            return null
-        }
+        // if ( !hasValidRepository.value ) {
+        //     requestFormError.value = 'Please select a repository or provide a custom repository name and location.'
+        //     requestFormLoading.value = false
+        //     return null
+        // }
 
         if ( requestFormValid.value ) {
             requestCreatedSubmitDialog.value = true
@@ -67,7 +68,8 @@ export default function useCreateRequest() {
                 original_title: requestFields.value.title,
                 referrer: requestFields.value.referrer,
                 referrer_data: requestFields.value.referrer_data,
-                pages: requestFields.value.pages
+                pages: requestFields.value.pages,
+                place_id: requestFields.value.place_id
             }
 
             if (requestFields.value.customRepository) {
