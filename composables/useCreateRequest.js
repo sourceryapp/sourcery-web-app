@@ -2,6 +2,7 @@ export default function useCreateRequest() {
     const supabase = useSupabaseClient()
     const { authUser } = useAuthUser()
     const route = useRoute()
+    const { fetchRepository } = useFetchRepository()
 
     const requestFormValid = ref(false)
     const requestFormLoading = ref(false)
@@ -176,7 +177,7 @@ export default function useCreateRequest() {
      * - ArchivesSpace
      * - Translation Server
      */
-    function populateFromQuery() {
+    async function populateFromQuery(requestType) {
         if ( route.query ) {
             if ( route.query.title ) {
                 requestFields.value.title = route.query.title
@@ -205,10 +206,12 @@ export default function useCreateRequest() {
 
 
             if ( route.query.repo_id ) {
-                const matchingRepo = repositories.value.find(repo => String(repo.id) === route.query.repo_id)
+                const matchingRepo = await fetchRepository(route.query.repo_id)
                 if ( matchingRepo ) {
                     requestFields.value.repository = matchingRepo
-                    repository.value = matchingRepo
+                    if ( requestType ) {
+                        requestType.value = matchingRepo.id
+                    }
                 }
             }
         }

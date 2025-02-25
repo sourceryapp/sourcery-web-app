@@ -7,7 +7,7 @@
 
                     <template v-if="isOrgOwner">
                         <v-radio-group v-model="requestType">
-                            <v-radio v-for="(repo, ind) in userRepos" :label="`Submit directly to ${repo.name}`" :value="ind" class="mb-2"></v-radio>
+                            <v-radio v-for="(repo, ind) in userRepos" :label="`Submit directly to ${repo.name}`" :value="repo.id" class="mb-2"></v-radio>
                             <v-radio value="normal" label="Submit a General Sourcery Request" class="mb-2"></v-radio>
                         </v-radio-group>
                     </template>
@@ -28,6 +28,8 @@
 
                         <template v-else>
                             <v-alert color="primary" icon="$info" v-if="requestFields.repository" class="mb-4">You are requesting directly to {{ requestFields.repository.name }} at {{ requestFields.repository.organization.name }}.</v-alert>
+
+                            <v-btn color="secondary" @click="requestType = 'normal'">Clear Selection</v-btn>
                         </template>
                         
 
@@ -112,7 +114,7 @@ const {
 const requestType = ref('normal');
 
 // await fetchRepositories()
-populateFromQuery()
+await populateFromQuery(requestType)
 
 // I would set this up as a normal ref, but I don't feel like keeping track of other .value calls in composables
 watch(requestType, () => {
