@@ -285,7 +285,7 @@ export default defineNuxtConfig({
     'tropy/**/*'
   ],
   gtag: {
-    // enabled: process.env.NODE_ENV === 'production',
+    enabled: process.env.NODE_ENV === 'production',
     id: process.env.GOOGLE_ANALYTICS_ID
   }
 })
