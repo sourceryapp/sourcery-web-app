@@ -38,6 +38,7 @@
     "husky": "^6.0",
     "nuxi": "^3.14",
     "nuxt": "^3.13",
+    "nuxt-gtag": "^3.0.2",
     "prettier-eslint": "^16.3",
     "sass": "^1.70",
     "supabase": "^1.127",

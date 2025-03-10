@@ -61,9 +61,4 @@ useHead({
         }
     ]
 })
-
-if (config.public.SOURCERY_ENV === 'production') {
-    window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', config.public.GOOGLE_ANALYTICS_ID);
-}
-
 </script>

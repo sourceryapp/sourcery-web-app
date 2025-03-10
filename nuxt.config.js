@@ -103,10 +103,7 @@ export default defineNuxtConfig({
               { src: '/js/sw-registration.js' },
 
               // Add to homescreen popup
-              { src: '/js/addtohomescreen.js' },
-
-              // GAW
-              { src: 'https://www.googletagmanager.com/gtag/js?id=' + process.env.GOOGLE_ANALYTICS_ID, async: true }
+              { src: '/js/addtohomescreen.js' }
           ],
       }
   },
@@ -213,7 +210,8 @@ export default defineNuxtConfig({
           })
       },
       '@nuxtjs/supabase',
-      '@pinia/nuxt'
+      '@pinia/nuxt',
+      'nuxt-gtag'
   ],
 
   build: {
@@ -285,5 +283,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-08-12',
   ignore: [
     'tropy/**/*'
-  ]
+  ],
+  gtag: {
+    // enabled: process.env.NODE_ENV === 'production',
+    id: process.env.GOOGLE_ANALYTICS_ID
+  }
 })
