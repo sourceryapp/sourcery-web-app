@@ -55,7 +55,8 @@ export default defineNuxtConfig({
           SOURCERY_ENV: process.env.SOURCERY_ENV || 'development',
           STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
           STRIPE_OPTIONS: process.env.STRIPE_OPTIONS,
-          GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY
+          GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY,
+          GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
       },
   },
 
@@ -105,7 +106,7 @@ export default defineNuxtConfig({
               { src: '/js/addtohomescreen.js' },
 
               // GAW
-              { src: 'https://www.googletagmanager.com/gtag/js?id=AW-16751318238', async: true }
+              { src: 'https://www.googletagmanager.com/gtag/js?id=' + process.env.GOOGLE_ANALYTICS_ID, async: true }
           ],
       }
   },

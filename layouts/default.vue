@@ -124,6 +124,7 @@ const { logout } = useLogout()
 const { mobile } = useDisplay()
 const { toggleTheme } = useToggleTheme()
 const theme = useTheme()
+const config = useRuntimeConfig()
 
 // Fetch user metadata only once on initial load/refresh from tab out
 // Observe the supabase user object for changes and sync user metadata
@@ -173,6 +174,11 @@ const navigationDrawerClasses = computed(() => {
         'mobile-limit-height': mobile.value
     }
 })
+
+
+if (config.public.SOURCERY_ENV === 'production') {
+    window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', config.public.GOOGLE_ANALYTICS_ID);
+}
 </script>
 
 <style scoped lang="scss">
