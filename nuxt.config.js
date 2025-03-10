@@ -24,11 +24,11 @@ const publicPaths = [
 
 export default defineNuxtConfig({
     devtools: false,
-  bridge: {
-      typescript: false,
-      nitro: true,
-      vite: true
-  },
+    bridge: {
+        typescript: false,
+        nitro: true,
+        vite: true
+    },
 
   target: 'static',
   ssr: false,
@@ -285,7 +285,12 @@ export default defineNuxtConfig({
     'tropy/**/*'
   ],
   gtag: {
-    enabled: process.env.NODE_ENV === 'production',
-    id: process.env.GOOGLE_ANALYTICS_ID
-  }
+        enabled: process.env.NODE_ENV === 'production',
+        id: process.env.GOOGLE_ANALYTICS_ID
+  },
+    nitro: {
+        prerender: {
+            ignore: ['/manifest.json']
+        }
+    }
 })
