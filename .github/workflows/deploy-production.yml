@@ -30,6 +30,7 @@ jobs:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         SOURCERY_ENV: ${{ vars.SOURCERY_ENV }}
+        GOOGLE_ANALYTICS_ID: ${{ vars.GOOGLE_ANALYTICS_ID }}
 
 
     - name: Deploy to Firebase
