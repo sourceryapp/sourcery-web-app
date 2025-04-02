@@ -28,8 +28,16 @@
     
             <p>
                 Please send your CV/Resume and a statement (1-2 paragraphs) describing your interest in digital humanities and your experience in archival research to <a href="mailto:amanda.breeden@uconn.edu">amanda.breeden@uconn.edu</a> by April 15, 2025.
-            </p> 
+            </p>
 
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-btn class="mt-8" block size="large" color="primary" href="mailto:amanda.breeden@uconn.edu" target="_blank">Send Application</v-btn>
+                </v-col>
+                <v-col cols="12" md="6">
+                    <v-btn class="mt-8" block size="large" color="secondary" href="/doc/Sourcery%20Ambassador.pdf" target="_blank">Download Details (PDF)</v-btn>
+                </v-col>
+            </v-row>
         </v-container>
     </div>
 </template>
