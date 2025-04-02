@@ -3,7 +3,7 @@
         <v-container>
             <h1 class="text-h3 font-weight-medium text-center my-16">Community Ambassador Program</h1>
             <p class="font-italic">Last Updated: April 1, 2025</p>
-            <p class="my-8 readable-text-width mx-auto">Sourcery, an open source, not-for-profit archival document delivery app based out of the University of Connecticut, invites applications for community ambassadors to act as local advocates for Sourcery and to help beta test the new version of the app. <strong>We are seeking current PhD or MLIS students based in the Boston and Washington, DC areas</strong> who are passionate about digital humanities, archival research, and digital research tools. Sourcery is produced by the University of Connecticut's Greenhouse Studios in collaboration with <a href="https://digitalscholar.org">Digital Scholar</a>, the same non-profit corporation behind <a href="https://zotero.org">Zotero</a>, <a href="https://tropy.org">Tropy</a>, and <a href="https://omeka.org">Omeka</a>. Sourcery creates one place for researchers to submit requests for digital copies of archival documents and a place for paid researchers (called "Sourcerers") to fill them.</p>
+            <p class="my-8 readable-text-width mx-auto">Sourcery, an open source, not-for-profit archival document delivery app based out of the University of Connecticut, invites applications for community ambassadors to act as local advocates for Sourcery and to help beta test the new version of the app. <strong>We are seeking current PhD or MLIS students based in the Boston and Washington, DC areas</strong> who are passionate about digital humanities, archival research, and digital research tools. Sourcery is produced by the University of Connecticut's Greenhouse Studios in collaboration with <a class="text-primary" href="https://digitalscholar.org">Digital Scholar</a>, the same non-profit corporation behind <a class="text-primary" href="https://zotero.org">Zotero</a>, <a class="text-primary" href="https://tropy.org">Tropy</a>, and <a class="text-primary" href="https://omeka.org">Omeka</a>. Sourcery creates one place for researchers to submit requests for digital copies of archival documents and a place for paid researchers (called "Sourcerers") to fill them.</p>
 
             <h2 class="mb-2">Responsibilities & Duties:</h2>
 
@@ -27,7 +27,7 @@
             </p>
     
             <p>
-                Please send your CV/Resume and a statement (1-2 paragraphs) describing your interest in digital humanities and your experience in archival research to <a href="mailto:amanda.breeden@uconn.edu">amanda.breeden@uconn.edu</a> by April 15, 2025.
+                Please send your CV/Resume and a statement (1-2 paragraphs) describing your interest in digital humanities and your experience in archival research to <a class="text-primary" href="mailto:amanda.breeden@uconn.edu">amanda.breeden@uconn.edu</a> by April 15, 2025.
             </p>
 
             <v-row>

@@ -18,7 +18,7 @@
                 <v-container>
                     <v-row align="center" justify="center">
                         <v-col cols="auto">
-                            <NuxtLink to="/" class="text-center">
+                            <NuxtLink to="/" class="text-center" name="Sourcery App Home">
                                 <img :width="300" :src="theme.global.current.value.dark ? '/img/logo-wordmark-dark.svg' : '/img/logo-wordmark.svg'" alt="">
                             </NuxtLink>
                         </v-col>
@@ -26,7 +26,7 @@
 
                     <div class="d-flex justify-center align-center my-3">
                         <IconsGooglePlay :width="150" />
-                        <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" border="none" class="mx-2"></v-btn>
+                        <v-btn href="https://twitter.com/Sourcery_App" size="x-large" variant="text" color="primary" icon="mdi-twitter" name="Sourcery App X Account" border="none" class="mx-2"></v-btn>
                     </div>
 
                     <p class="text-body-2 text-center">Sourcery is a project of <a href="https://digitalscholar.org/">Digital Scholar</a>, a nonprofit organization dedicated to the development of software and services for researchers and cultural heritage institutions, in partnership with <a href="https://greenhousestudios.uconn.edu/">Greenhouse Studios | Scholarly Communications Design</a> at UConn.</p>

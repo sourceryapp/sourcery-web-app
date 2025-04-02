@@ -72,6 +72,9 @@ export default defineNuxtConfig({
    ** Configuration for the <head> element of the page.  Also configurable per layout/page/component.
    */
   app: {
+    htmlAttrs: {
+        lang: 'en'
+    },
       head: {
           title: 'Sourcery',
           meta: [
