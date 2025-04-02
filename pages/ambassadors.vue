@@ -1,0 +1,41 @@
+<template>
+    <div id="page-ambassadors">
+        <v-container>
+            <h1 class="text-h3 font-weight-medium text-center my-16">Community Ambassador Program</h1>
+            <p class="font-italic">Last Updated: April 1, 2025</p>
+            <p class="my-8 readable-text-width mx-auto">Sourcery, an open source, not-for-profit archival document delivery app based out of the University of Connecticut, invites applications for community ambassadors to act as local advocates for Sourcery and to help beta test the new version of the app. <strong>We are seeking current PhD or MLIS students based in the Boston and Washington, DC areas</strong> who are passionate about digital humanities, archival research, and digital research tools. Sourcery is produced by the University of Connecticut's Greenhouse Studios in collaboration with <a href="https://digitalscholar.org">Digital Scholar</a>, the same non-profit corporation behind <a href="https://zotero.org">Zotero</a>, <a href="https://tropy.org">Tropy</a>, and <a href="https://omeka.org">Omeka</a>. Sourcery creates one place for researchers to submit requests for digital copies of archival documents and a place for paid researchers (called "Sourcerers") to fill them.</p>
+
+            <h2 class="mb-2">Responsibilities & Duties:</h2>
+
+            <ul class="ml-5 mb-8">
+                <li>Act as a beta tester for Sourcery (complete requests and provide constructive feedback);</li>
+                <li>Attend virtual testing workshops, place and fulfill test requests in local archives, contribute to design and UX discussions, and participate in dialogue and provide other feedback as needed;</li>
+                <li>Introduce Sourcery to your research/social circles and act as a local point of contact for other "Sourcerers."</li>
+            </ul>
+
+            <h2 class="mb-2">Qualified applicants will demonstrate the following:</h2>
+            <ul class="ml-5 mb-8">
+                <li>Must be currently enrolled as a Ph.D. or MLIS student at a university in the Boston or Washington, DC areas;</li>
+                <li>Access to an iPhone or Android device running a recent version of the iOS or Android operating system;</li>
+                <li>Experience researching in closed archives;</li>
+                <li>Interest in the digital humanities.</li>
+            </ul>
+
+            <p>
+                <strong>Compensation is $1,000 for approximately 40 hours of work over a 6-week period.</strong><br>
+                Ends June 30, 2025.  
+            </p>
+    
+            <p>
+                Please send your CV/Resume and a statement (1-2 paragraphs) describing your interest in digital humanities and your experience in archival research to <a href="mailto:amanda.breeden@uconn.edu">amanda.breeden@uconn.edu</a> by April 15, 2025.
+            </p> 
+
+        </v-container>
+    </div>
+</template>
+
+<script setup>
+definePageMeta({
+    layout: 'public'
+})
+</script>

@@ -19,7 +19,8 @@ const publicPaths = [
     '/roadmap',
     '/email/reset',
     '/tools',
-    '/feedback'
+    '/feedback',
+    '/ambassadors'
 ]
 
 export default defineNuxtConfig({

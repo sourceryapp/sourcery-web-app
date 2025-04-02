@@ -1,8 +1,10 @@
 /**
  * Typography Overrides
  */
-#public-layout p {
-    font-size: 1.2rem;
+#public-layout {
+    p,li {
+        font-size: 1.2rem;
+    }
 }
 
 p {
