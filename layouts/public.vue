@@ -2,7 +2,7 @@
     <div id="public-layout">
         <v-app>
             <BannersPurpleCallout :show="isHome && headerIntersectStore.headerIntersect">
-                <p class="text-white mb-0">We're hiring Community Ambassadors in Boston and Washington, DC. For more information, visit our <NuxtLink to="ambassadors" class="text-white">ambassadors page</NuxtLink>!</p>
+                <p class="text-white mb-0">We're hiring Community Ambassadors in Washington, DC. For more information, visit our <NuxtLink to="ambassadors" class="text-white">ambassadors page</NuxtLink>!</p>
             </BannersPurpleCallout>
 
             <v-fade-transition>
