@@ -23,7 +23,6 @@
 
             <p>
                 <strong>Compensation is $1,000 for approximately 40 hours of work over a 6-week period this summer.</strong><br>
-                Ends June 30, 2025.  
             </p>
     
             <p>
