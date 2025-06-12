@@ -5,7 +5,7 @@
 
             <v-tabs fixed-tabs v-model="tab">
                 <v-tab text="NYC Community Ambassador" value="nyc_community"></v-tab>
-                <v-tab text="NYC Research Ambassador" value="nyc_research"></v-tab>
+                <v-tab text="Research Ambassador" value="research"></v-tab>
             </v-tabs>
 
             <v-tabs-window v-model="tab">
@@ -48,7 +48,7 @@
                     </v-row>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="nyc_research" key="nyc_research">
+                <v-tabs-window-item value="research" key="research">
                     <h1 class="text-h3 font-weight-medium text-center my-16">Sourcery Research Ambassadors</h1>
                     <p class="font-italic">Last Updated: June 11, 2025</p>
                     <p class="my-8 readable-text-width mx-auto"><a href="https://sourceryapp.org">Sourcery</a>, an open source, not-for-profit archival document delivery app based out of the University of Connecticut, invites applications for research ambassadors to help beta test the new version of the app and act as community advocates for Sourcery.</p>
